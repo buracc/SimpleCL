@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
+using System.Timers;
 using SilkroadSecurityApi;
 using SimpleCL.Model.Game;
-using SimpleCL.Model.Server;
+using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Network
 {
@@ -19,6 +19,8 @@ namespace SimpleCL.Network
         private ushort Port;
         private byte Locale;
         private uint SessionId;
+
+        private Timer _timer = new Timer(5000);
 
         public Agent(string ip, ushort port, byte locale, uint sessionId)
         {
@@ -49,6 +51,8 @@ namespace SimpleCL.Network
         
         public void Loop()
         {
+            _timer.Elapsed += HeartBeat;
+
             while (true)
             {
                 SocketError success;
@@ -103,6 +107,11 @@ namespace SimpleCL.Network
                             continue;
                         
                         case Opcodes.IDENTITY:
+                            if (!_timer.Enabled)
+                            {
+                                _timer.Start();
+                            }
+                            
                             if (packet.ReadAscii().Equals("AgentServer"))
                             {
                                 Packet login = new Packet(Opcodes.Agent.Request.AUTH, true);
@@ -267,6 +276,10 @@ namespace SimpleCL.Network
 
                 Thread.Sleep(1);
             }
+        }
+
+        public void HeartBeat(Object source, ElapsedEventArgs e)
+        { _security.Send(new Packet(Opcodes.HEARTBEAT));
         }
     }
 }

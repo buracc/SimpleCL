@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Timers;
 using SilkroadSecurityApi;
 using SimpleCL.Model.Server;
+using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Network
 {
@@ -20,6 +22,8 @@ namespace SimpleCL.Network
         private ushort Port { get; }
         private int Version { get; }
         private byte Locale { get; }
+
+        private Timer _timer = new Timer(5000);
 
         public Gateway(List<string> ips, ushort port, byte version, byte locale)
         {
@@ -52,6 +56,8 @@ namespace SimpleCL.Network
 
         public void Loop()
         {
+            _timer.Elapsed += HeartBeat;
+            
             while (true)
             {
                 SocketError success;
@@ -106,6 +112,11 @@ namespace SimpleCL.Network
                             break;
 
                         case Opcodes.IDENTITY:
+                            if (!_timer.Enabled)
+                            {
+                                _timer.Start();
+                            }
+                            
                             Packet identity = new Packet(Opcodes.Gateway.Request.PATCH, true);
                             identity.WriteUInt8(Locale);
                             identity.WriteAscii("SR_Client");
@@ -177,7 +188,6 @@ namespace SimpleCL.Network
 
                             Agent agent = new Agent(agentIp, agentPort, Locale, sessionId);
                             agent.Start();
-                            _socket.Close();
                             return;
                     }
                 }
@@ -217,6 +227,11 @@ namespace SimpleCL.Network
 
                 Thread.Sleep(1);
             }
+        }
+        
+        public void HeartBeat(Object source, ElapsedEventArgs e)
+        {
+            _security.Send(new Packet(Opcodes.HEARTBEAT));
         }
     }
 }
