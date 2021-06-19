@@ -16,14 +16,14 @@ namespace SimpleCL.Network
 
         public const byte TrsroVersion = 13;
 
-        private string Ip { get; }
-        private int Port { get; }
-        private UInt32 Version { get; }
+        private List<string> Ips { get; }
+        private ushort Port { get; }
+        private int Version { get; }
         private byte Locale { get; }
 
-        public Gateway(string ip, int port, byte version, byte locale)
+        public Gateway(List<string> ips, ushort port, byte version, byte locale)
         {
-            Ip = ip;
+            Ips = ips;
             Port = port;
             Version = version;
             Locale = locale;
@@ -31,18 +31,19 @@ namespace SimpleCL.Network
 
         public void Start()
         {
+            string ip = Ips[new Random().Next(Ips.Count)];
             try
             {
-                _socket.Connect(Ip, Port);
-                Console.WriteLine("Connected to gateway");
+                _socket.Connect(ip, Port);
+                Console.WriteLine("Connected to gateway " + ip + ":" + Port);
             }
             catch (SocketException e)
             {
-                Console.WriteLine("Unable to connect");
+                Console.WriteLine("Unable to connect gateway");
                 Console.WriteLine(e);
                 return;
             }
-            
+
             Thread gwLoop = new Thread(Loop);
             gwLoop.Start();
             _socket.Blocking = false;
@@ -96,13 +97,14 @@ namespace SimpleCL.Network
                 foreach (var packet in incomingPackets)
                 {
                     Console.WriteLine(packet.Opcode.ToString("X"));
+                    // Console.WriteLine(Utility.HexDump(_recvBuffer.Buffer, _recvBuffer.Offset, _recvBuffer.Size));
 
                     switch (packet.Opcode)
                     {
                         case Opcodes.HANDSHAKE:
                         case Opcodes.HANDSHAKE_ACCEPT:
                             break;
-                        
+
                         case Opcodes.IDENTITY:
                             Packet identity = new Packet(Opcodes.Gateway.Request.PATCH, true);
                             identity.WriteUInt8(Locale);
@@ -110,11 +112,11 @@ namespace SimpleCL.Network
                             identity.WriteUInt32(Version);
                             _security.Send(identity);
                             break;
-                        
+
                         case Opcodes.Gateway.Response.PATCH:
                             _security.Send(new Packet(Opcodes.Gateway.Request.SERVERLIST, true));
                             break;
-                        
+
                         case Opcodes.Gateway.Response.SERVERLIST:
                             while (packet.ReadUInt8() == 1)
                             {
@@ -124,47 +126,58 @@ namespace SimpleCL.Network
 
                             while (packet.ReadUInt8() == 1)
                             {
-                                SilkroadServer server = new SilkroadServer(packet.ReadUInt16(), packet.ReadAscii(),
-                                    (ServerCapacity) packet.ReadUInt8(), packet.ReadUInt8() == 1);
+                                SilkroadServer server = new SilkroadServer(
+                                    packet.ReadUInt16(),
+                                    packet.ReadAscii(),
+                                    (ServerCapacity) packet.ReadUInt8(),
+                                    packet.ReadUInt8() == 1
+                                );
 
                                 Console.WriteLine(server.ToString());
                             }
 
                             Packet login = new Packet(Opcodes.Gateway.Request.LOGIN2, true);
                             login.WriteUInt8(Locale);
-                            login.WriteAscii(Program.Username);
-                            login.WriteAscii(Program.Password);
+                            login.WriteAscii(Credentials.Username);
+                            login.WriteAscii(Credentials.Password);
                             login.WriteUInt16(123);
                             login.WriteUInt16(123);
                             login.WriteUInt16(123);
                             login.WriteUInt16(356);
                             login.WriteUInt8(1);
-                            
+
                             _security.Send(login);
                             break;
-                        
+
                         case Opcodes.Gateway.Response.LOGIN2:
-                            byte[] key = { 0x0F, 0x07, 0x3D, 0x20, 0x56, 0x62, 0xC9, 0xEB };
+                            byte[] key = {0x0F, 0x07, 0x3D, 0x20, 0x56, 0x62, 0xC9, 0xEB};
                             Blowfish blowfish = new Blowfish();
                             blowfish.Initialize(key);
-                            byte[] encodedPasscode = Encoding.ASCII.GetBytes(Program.Passcode);
+                            byte[] encodedPasscode = Encoding.ASCII.GetBytes(Credentials.Passcode);
                             byte[] encryptedPasscode = blowfish.Encode(encodedPasscode);
 
                             Packet passcode = new Packet(Opcodes.Gateway.Request.PASSCODE, true);
                             passcode.WriteUInt8(4);
-                            passcode.WriteUInt16(Program.Passcode.Length);
+                            passcode.WriteUInt16(Credentials.Passcode.Length);
                             passcode.WriteUInt8Array(encryptedPasscode);
 
                             _security.Send(passcode);
                             break;
-                        
+
                         case Opcodes.Gateway.Response.PASSCODE:
                             Console.WriteLine("Passcode entered");
                             break;
-                        
+
                         case Opcodes.Gateway.Response.AGENT_AUTH:
-                            Console.WriteLine("Agent auth");
-                            break;
+                            packet.ReadUInt8();
+                            packet.ReadUInt32();
+                            string agentIp = packet.ReadAscii();
+                            ushort agentPort = packet.ReadUInt16();
+
+                            Agent agent = new Agent(agentIp, agentPort);
+                            agent.Start();
+                            _socket.Close();
+                            return;
                     }
                 }
 

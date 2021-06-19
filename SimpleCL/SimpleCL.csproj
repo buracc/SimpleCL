@@ -41,8 +41,10 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Credentials.cs" />
         <Compile Include="Model\Server\ServerCapacity.cs" />
         <Compile Include="Model\Server\SilkroadServer.cs" />
+        <Compile Include="Network\Agent.cs" />
         <Compile Include="Network\Gateway.cs" />
         <Compile Include="Network\Locale.cs" />
         <Compile Include="Network\Opcodes.cs" />

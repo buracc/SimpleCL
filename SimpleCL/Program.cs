@@ -1,19 +1,22 @@
-﻿using SimpleCL.Network;
+﻿using System.Collections.Generic;
+using SimpleCL.Network;
 
 namespace SimpleCL
 {
     internal class Program
     {
-        public const string Username = "";
-        public const string Password = "";
-        public const string Passcode = "";
-
-        private const string GgGateway = "srogw01.gamegami.com";
-        private const int GgPort = 15779;
+        private static List<string> GgGateways = new List<string>
+        {
+            "94.199.103.68",
+            "94.199.103.69",
+            "94.199.103.70",
+        };
+        
+        private const ushort GgPort = 15779;
         
         public static void Main(string[] args)
         {
-            Gateway gw = new Gateway(GgGateway, GgPort, Gateway.TrsroVersion, (byte) Locale.SRO_TR_Official_GameGami);
+            Gateway gw = new Gateway(GgGateways, GgPort, Gateway.TrsroVersion, (byte) Locale.SRO_TR_Official_GameGami);
             
             gw.Start();
         }
