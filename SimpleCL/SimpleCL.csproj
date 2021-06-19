@@ -42,6 +42,10 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Credentials.cs" />
+        <Compile Include="Model\Game\Character.cs" />
+        <Compile Include="Model\Game\CharSelect.cs" />
+        <Compile Include="Model\Game\ChatChannel.cs" />
+        <Compile Include="Model\Game\ChatMessage.cs" />
         <Compile Include="Model\Server\ServerCapacity.cs" />
         <Compile Include="Model\Server\SilkroadServer.cs" />
         <Compile Include="Network\Agent.cs" />

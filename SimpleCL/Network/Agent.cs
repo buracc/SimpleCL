@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using SilkroadSecurityApi;
+using SimpleCL.Model.Game;
 using SimpleCL.Model.Server;
 
 namespace SimpleCL.Network
@@ -16,11 +17,15 @@ namespace SimpleCL.Network
 
         private string Ip;
         private ushort Port;
+        private byte Locale;
+        private uint SessionId;
 
-        public Agent(string ip, ushort port)
+        public Agent(string ip, ushort port, byte locale, uint sessionId)
         {
             Ip = ip;
             Port = port;
+            Locale = locale;
+            SessionId = sessionId;
         }
 
         public void Start()
@@ -88,13 +93,141 @@ namespace SimpleCL.Network
 
                 foreach (var packet in incomingPackets)
                 {
-                    Console.WriteLine(packet.Opcode.ToString("X"));
-                    Console.WriteLine(Utility.HexDump(_recvBuffer.Buffer, _recvBuffer.Offset, _recvBuffer.Size));
+                    // Console.WriteLine(packet.Opcode.ToString("X"));
+                    // Console.WriteLine(Utility.HexDump(packet.GetBytes()));
 
                     switch (packet.Opcode)
                     {
                         case Opcodes.HANDSHAKE:
                         case Opcodes.HANDSHAKE_ACCEPT:
+                            continue;
+                        
+                        case Opcodes.IDENTITY:
+                            if (packet.ReadAscii().Equals("AgentServer"))
+                            {
+                                Packet login = new Packet(Opcodes.Agent.Request.AUTH, true);
+                                login.WriteUInt32(SessionId);
+                                login.WriteAscii(Credentials.Username);
+                                login.WriteAscii(Credentials.Password);
+                                login.WriteUInt8(Locale);
+                                login.WriteUInt16(123);
+                                login.WriteUInt16(123);
+                                login.WriteUInt16(123);
+                            
+                                _security.Send(login);
+                            }
+                            
+                            break;
+                        
+                        case Opcodes.Agent.Response.AUTH:
+                            if (packet.ReadUInt8() == 1)
+                            {
+                                Packet charSelect = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_ACTION);
+                                charSelect.WriteUInt8(2);
+                                _security.Send(charSelect);
+                            }
+                            
+                            break;
+                        
+                        case Opcodes.Agent.Response.CHARACTER_SELECTION_ACTION:
+                            byte action = packet.ReadUInt8();
+                            bool succeeded = packet.ReadUInt8() == 1;
+
+                            if (action == 2 && succeeded)
+                            {
+                                byte charCount = packet.ReadUInt8();
+
+                                Dictionary<string, CharSelect> characters = new Dictionary<string, CharSelect>();
+
+                                for (int i = 0; i < charCount; i++)
+                                {
+                                    packet.ReadUInt32();
+                                    string name = packet.ReadAscii();
+
+                                    if (Locale == (byte) Network.Locale.SRO_TR_Official_GameGami)
+                                    {
+                                        packet.ReadUInt16();
+                                    }
+
+                                    packet.ReadUInt8();
+                                    byte level = packet.ReadUInt8();
+                                    packet.ReadUInt64();
+                                    packet.ReadUInt16();
+                                    packet.ReadUInt16();
+                                    packet.ReadUInt16();
+                                    
+                                    if (Locale == (byte) Network.Locale.SRO_TR_Official_GameGami)
+                                    {
+                                        packet.ReadUInt32();
+                                    }
+
+                                    packet.ReadUInt32();
+                                    packet.ReadUInt32();
+                                    
+                                    if (Locale == (byte) Network.Locale.SRO_TR_Official_GameGami)
+                                    {
+                                        packet.ReadUInt16();
+                                    }
+
+                                    bool deleting = packet.ReadUInt8() == 1;
+                                    
+                                    if (Locale == (byte) Network.Locale.SRO_TR_Official_GameGami)
+                                    {
+                                        packet.ReadUInt32();
+                                    }
+                                    
+                                    CharSelect character = new CharSelect(name, level, deleting);
+
+                                    if (deleting)
+                                    {
+                                        uint minutes = packet.ReadUInt32();
+                                        character.DeletionTime = DateTime.Now.AddMinutes(minutes);;
+                                    }
+
+                                    characters[character.Name] = character;
+                                }
+
+                                Console.WriteLine("Characters:");
+                                foreach (var c in characters)
+                                {
+                                    Console.WriteLine(c.Value);
+                                }
+
+                                Packet characterJoin = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_JOIN);
+                                characterJoin.WriteAscii(Credentials.CharName);
+                                _security.Send(characterJoin);
+                            }
+                            
+                            break;
+                        
+                        case Opcodes.Agent.Response.CHAR_DATA_CHUNK:
+                            Console.WriteLine("Successfully joined the game");
+                            break;
+                        
+                        case Opcodes.Agent.Response.CHAR_CELESTIAL_POSITION:
+                            _security.Send(new Packet(Opcodes.Agent.Request.GAME_READY));
+                            break;
+                        
+                        case Opcodes.Agent.Response.CHAT_UPDATE:
+                            ChatChannel channel = (ChatChannel) packet.ReadUInt8();
+                            ChatMessage chatMessage = new ChatMessage(channel);
+
+                            if (channel == ChatChannel.General || channel == ChatChannel.GM ||
+                                channel == ChatChannel.NPC)
+                            {
+                                uint senderID = packet.ReadUInt32();
+                                chatMessage.SenderID = senderID;
+                            }
+                            else
+                            {
+                                string senderName = packet.ReadAscii();
+                                chatMessage.SenderName = senderName;
+                            }
+
+                            string message = packet.ReadUnicode();
+                            chatMessage.Message = message;
+                            
+                            Console.WriteLine(chatMessage.ToString());
                             break;
                     }
                 }

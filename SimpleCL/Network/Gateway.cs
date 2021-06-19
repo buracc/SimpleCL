@@ -97,7 +97,7 @@ namespace SimpleCL.Network
                 foreach (var packet in incomingPackets)
                 {
                     Console.WriteLine(packet.Opcode.ToString("X"));
-                    // Console.WriteLine(Utility.HexDump(_recvBuffer.Buffer, _recvBuffer.Offset, _recvBuffer.Size));
+                    Console.WriteLine(Utility.HexDump(packet.GetBytes()));
 
                     switch (packet.Opcode)
                     {
@@ -124,6 +124,7 @@ namespace SimpleCL.Network
                                 string farmName = packet.ReadAscii();
                             }
 
+                            Console.WriteLine("Servers:");
                             while (packet.ReadUInt8() == 1)
                             {
                                 SilkroadServer server = new SilkroadServer(
@@ -170,11 +171,11 @@ namespace SimpleCL.Network
 
                         case Opcodes.Gateway.Response.AGENT_AUTH:
                             packet.ReadUInt8();
-                            packet.ReadUInt32();
+                            uint sessionId = packet.ReadUInt32();
                             string agentIp = packet.ReadAscii();
                             ushort agentPort = packet.ReadUInt16();
 
-                            Agent agent = new Agent(agentIp, agentPort);
+                            Agent agent = new Agent(agentIp, agentPort, Locale, sessionId);
                             agent.Start();
                             _socket.Close();
                             return;
