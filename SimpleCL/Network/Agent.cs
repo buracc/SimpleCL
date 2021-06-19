@@ -5,6 +5,8 @@ using System.Threading;
 using System.Timers;
 using SilkroadSecurityApi;
 using SimpleCL.Model.Game;
+using SimpleCL.Network.Enums;
+using SimpleCL.Util;
 using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Network
@@ -119,9 +121,7 @@ namespace SimpleCL.Network
                                 login.WriteAscii(Credentials.Username);
                                 login.WriteAscii(Credentials.Password);
                                 login.WriteUInt8(Locale);
-                                login.WriteUInt16(123);
-                                login.WriteUInt16(123);
-                                login.WriteUInt16(123);
+                                login.WriteUInt8Array(NetworkUtils.GetMacAddressBytes());
                             
                                 _security.Send(login);
                             }
@@ -129,8 +129,21 @@ namespace SimpleCL.Network
                             break;
                         
                         case Opcodes.Agent.Response.AUTH:
-                            if (packet.ReadUInt8() == 1)
+                            bool result = packet.ReadUInt8() == 1;
+                            if (result)
                             {
+                                AuthErrorCode error = (AuthErrorCode) packet.ReadUInt8();
+                                switch (error)
+                                {
+                                    case AuthErrorCode.IpLimit:
+                                        Log("IP limit exceeded.");    
+                                        return;
+                                    
+                                    case AuthErrorCode.ServerFull:
+                                        Log("Server is full.");
+                                        return;
+                                }
+                                
                                 Packet charSelect = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_ACTION);
                                 charSelect.WriteUInt8(2);
                                 _security.Send(charSelect);
@@ -153,7 +166,7 @@ namespace SimpleCL.Network
                                     packet.ReadUInt32();
                                     string name = packet.ReadAscii();
 
-                                    if (Locale == (byte) Network.Locale.SRO_TR_Official_GameGami)
+                                    if (Locale == (byte) Enums.Locale.SRO_TR_Official_GameGami)
                                     {
                                         packet.ReadUInt16();
                                     }
@@ -165,7 +178,7 @@ namespace SimpleCL.Network
                                     packet.ReadUInt16();
                                     packet.ReadUInt16();
                                     
-                                    if (Locale == (byte) Network.Locale.SRO_TR_Official_GameGami)
+                                    if (Locale == (byte) Enums.Locale.SRO_TR_Official_GameGami)
                                     {
                                         packet.ReadUInt32();
                                     }
@@ -173,14 +186,14 @@ namespace SimpleCL.Network
                                     packet.ReadUInt32();
                                     packet.ReadUInt32();
                                     
-                                    if (Locale == (byte) Network.Locale.SRO_TR_Official_GameGami)
+                                    if (Locale == (byte) Enums.Locale.SRO_TR_Official_GameGami)
                                     {
                                         packet.ReadUInt16();
                                     }
 
                                     bool deleting = packet.ReadUInt8() == 1;
                                     
-                                    if (Locale == (byte) Network.Locale.SRO_TR_Official_GameGami)
+                                    if (Locale == (byte) Enums.Locale.SRO_TR_Official_GameGami)
                                     {
                                         packet.ReadUInt32();
                                     }
@@ -196,10 +209,10 @@ namespace SimpleCL.Network
                                     characters[character.Name] = character;
                                 }
 
-                                Console.WriteLine("Characters:");
+                                Log("Characters:");
                                 foreach (var c in characters)
                                 {
-                                    Console.WriteLine(c.Value);
+                                    Log(c.Value.ToString());
                                 }
 
                                 Packet characterJoin = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_JOIN);
@@ -210,7 +223,7 @@ namespace SimpleCL.Network
                             break;
                         
                         case Opcodes.Agent.Response.CHAR_DATA_CHUNK:
-                            Console.WriteLine("Successfully joined the game");
+                            Log("Successfully joined the game");
                             break;
                         
                         case Opcodes.Agent.Response.CHAR_CELESTIAL_POSITION:
@@ -279,7 +292,13 @@ namespace SimpleCL.Network
         }
 
         public void HeartBeat(Object source, ElapsedEventArgs e)
-        { _security.Send(new Packet(Opcodes.HEARTBEAT));
+        { 
+            _security.Send(new Packet(Opcodes.HEARTBEAT));
+        }
+
+        public void Log(string message)
+        {
+            Console.WriteLine("[Agent] " + message);
         }
     }
 }

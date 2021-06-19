@@ -49,11 +49,15 @@
         <Compile Include="Model\Server\ServerCapacity.cs" />
         <Compile Include="Model\Server\SilkroadServer.cs" />
         <Compile Include="Network\Agent.cs" />
+        <Compile Include="Network\Enums\AuthErrorCode.cs" />
+        <Compile Include="Network\Enums\Locale.cs" />
+        <Compile Include="Network\Enums\LoginBlockType.cs" />
+        <Compile Include="Network\Enums\LoginErrorCode.cs" />
+        <Compile Include="Network\Enums\Opcodes.cs" />
         <Compile Include="Network\Gateway.cs" />
-        <Compile Include="Network\Locale.cs" />
-        <Compile Include="Network\Opcodes.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Util\NetworkUtils.cs" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -6,6 +6,8 @@ using System.Threading;
 using System.Timers;
 using SilkroadSecurityApi;
 using SimpleCL.Model.Server;
+using SimpleCL.Network.Enums;
+using SimpleCL.Util;
 using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Network
@@ -57,7 +59,7 @@ namespace SimpleCL.Network
         public void Loop()
         {
             _timer.Elapsed += HeartBeat;
-            
+
             while (true)
             {
                 SocketError success;
@@ -116,7 +118,7 @@ namespace SimpleCL.Network
                             {
                                 _timer.Start();
                             }
-                            
+
                             Packet identity = new Packet(Opcodes.Gateway.Request.PATCH, true);
                             identity.WriteUInt8(Locale);
                             identity.WriteAscii("SR_Client");
@@ -129,13 +131,15 @@ namespace SimpleCL.Network
                             break;
 
                         case Opcodes.Gateway.Response.SERVERLIST:
+                            Dictionary<string, SilkroadServer> servers = new Dictionary<string, SilkroadServer>();
+
                             while (packet.ReadUInt8() == 1)
                             {
                                 byte farmId = packet.ReadUInt8();
                                 string farmName = packet.ReadAscii();
                             }
 
-                            Console.WriteLine("Servers:");
+                            Log("Servers:");
                             while (packet.ReadUInt8() == 1)
                             {
                                 SilkroadServer server = new SilkroadServer(
@@ -145,17 +149,17 @@ namespace SimpleCL.Network
                                     packet.ReadUInt8() == 1
                                 );
 
-                                Console.WriteLine(server.ToString());
+                                servers[server.Name] = server;
+
+                                Log(server.ToString());
                             }
 
                             Packet login = new Packet(Opcodes.Gateway.Request.LOGIN2, true);
                             login.WriteUInt8(Locale);
                             login.WriteAscii(Credentials.Username);
                             login.WriteAscii(Credentials.Password);
-                            login.WriteUInt16(123);
-                            login.WriteUInt16(123);
-                            login.WriteUInt16(123);
-                            login.WriteUInt16(356);
+                            login.WriteUInt8Array(NetworkUtils.GetMacAddressBytes());
+                            login.WriteUInt16(servers[Credentials.Server].Id);
                             login.WriteUInt8(1);
 
                             _security.Send(login);
@@ -177,17 +181,89 @@ namespace SimpleCL.Network
                             break;
 
                         case Opcodes.Gateway.Response.PASSCODE:
-                            Console.WriteLine("Passcode entered");
+                            packet.ReadUInt8();
+                            byte passcodeResult = packet.ReadUInt8();
+                            if (passcodeResult == 2)
+                            {
+                                byte attempts = packet.ReadUInt8();
+                                Log("Invalid passcode. Attempts: [" + attempts + "/" + 3 + "]");
+                                return;
+                            }
                             break;
 
                         case Opcodes.Gateway.Response.AGENT_AUTH:
-                            packet.ReadUInt8();
-                            uint sessionId = packet.ReadUInt32();
-                            string agentIp = packet.ReadAscii();
-                            ushort agentPort = packet.ReadUInt16();
+                            byte result = packet.ReadUInt8();
+                            switch (result)
+                            {
+                                case 1:
+                                    uint sessionId = packet.ReadUInt32();
+                                    string agentIp = packet.ReadAscii();
+                                    ushort agentPort = packet.ReadUInt16();
 
-                            Agent agent = new Agent(agentIp, agentPort, Locale, sessionId);
-                            agent.Start();
+                                    Agent agent = new Agent(agentIp, agentPort, Locale, sessionId);
+                                    agent.Start();
+                                    break;
+
+                                case 2:
+                                    LoginErrorCode errorCode = (LoginErrorCode) packet.ReadUInt8();
+
+                                    switch (errorCode)
+                                    {
+                                        case LoginErrorCode.InvalidCredentials:
+                                            uint maxAttempts = packet.ReadUInt32();
+                                            uint currentAttempts = packet.ReadUInt32();
+                                            Log("Invalid credentials. Attempts: [" + currentAttempts +
+                                                "/" + maxAttempts + "]");
+                                            break;
+
+                                        case LoginErrorCode.Blocked:
+                                            LoginBlockType blockType = (LoginBlockType) packet.ReadUInt8();
+
+                                            switch (blockType)
+                                            {
+                                                case LoginBlockType.Punishment:
+                                                    string reason = packet.ReadAscii();
+                                                    DateTime endDate = new DateTime(
+                                                        packet.ReadUInt16(),
+                                                        packet.ReadUInt16(),
+                                                        packet.ReadUInt16(),
+                                                        packet.ReadUInt16(),
+                                                        packet.ReadUInt16(),
+                                                        packet.ReadUInt16(),
+                                                        packet.ReadUInt16()
+                                                    );
+
+                                                    Log("Account banned: " + reason + "\nEnd date: " +
+                                                        endDate);
+                                                    break;
+                                                
+                                                case LoginBlockType.AccountInspection:
+                                                    Log("Unable to connect due to inspection.");
+                                                    break;
+                                            }
+
+                                            break;
+                                        
+                                        case LoginErrorCode.AlreadyConnected:
+                                            Log("Account is already connected.");
+                                            return;
+                                        
+                                        case LoginErrorCode.IPLimit:
+                                            Log("IP limit exceeded.");
+                                            return;
+                                        
+                                        case LoginErrorCode.ServerIsFull:
+                                            Log("Server is full.");
+                                            return;
+                                    }
+                                    
+                                    return;
+                                
+                                case 3:
+                                    Log("Unhandled login result.");
+                                    return;
+                            }
+
                             return;
                     }
                 }
@@ -228,10 +304,15 @@ namespace SimpleCL.Network
                 Thread.Sleep(1);
             }
         }
-        
+
         public void HeartBeat(Object source, ElapsedEventArgs e)
         {
             _security.Send(new Packet(Opcodes.HEARTBEAT));
+        }
+
+        public void Log(string message)
+        {
+            Console.WriteLine("[Gateway] " + message);
         }
     }
 }

@@ -2,10 +2,9 @@
 {
     public enum ServerCapacity: byte
     {
-        FULL = 0,
-        CROWDED = 1
+        Full = 0,
+        Crowded = 1,
+        Populated = 2
         
-        // TODO:
-        // The other ones, don't know them right now
     }
 }

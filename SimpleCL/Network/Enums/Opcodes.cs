@@ -1,6 +1,6 @@
 ﻿//  ReSharper disable InconsistentNaming
 
-namespace SimpleCL.Network {
+namespace SimpleCL.Network.Enums {
     // / <summary>
     // / A list of <see cref="MessageID"/>s values (a.k.a. Opcodes).
     // / </summary>
