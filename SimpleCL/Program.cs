@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
+﻿using System.Collections.Generic;
 using SimpleCL.Network;
-using SimpleCL.Network.Enums;
+using SimpleCL.Service.Login;
 
 namespace SimpleCL
 {
@@ -21,7 +17,8 @@ namespace SimpleCL
 
         public static void Main(string[] args)
         {
-            Gateway gw = new Gateway(GgGateways, GgPort, Gateway.TrsroVersion, (byte) Locale.SRO_TR_Official_GameGami);
+            Gateway gw = new Gateway(GgGateways, GgPort);
+            gw.RegisterService(new LoginService());
             
             gw.Start();
         }

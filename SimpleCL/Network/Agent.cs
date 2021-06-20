@@ -11,16 +11,12 @@ using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Network
 {
-    public class Agent
+    public class Agent : Server
     {
-        private readonly Security _security = new Security();
-        private readonly TransferBuffer _recvBuffer = new TransferBuffer(0x1000, 0, 0);
-        private readonly Socket _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
         private string Ip;
         private ushort Port;
-        private byte Locale;
-        private uint SessionId;
+        public byte Locale;
+        public uint SessionId;
 
         private Timer _timer = new Timer(5000);
 
@@ -50,7 +46,7 @@ namespace SimpleCL.Network
             _socket.Blocking = false;
             _socket.NoDelay = true;
         }
-        
+
         public void Loop()
         {
             _timer.Elapsed += HeartBeat;
@@ -58,6 +54,11 @@ namespace SimpleCL.Network
             while (true)
             {
                 SocketError success;
+                
+                if (!_socket.Connected)
+                {
+                    return;
+                }
 
                 try
                 {
@@ -99,159 +100,18 @@ namespace SimpleCL.Network
 
                 foreach (var packet in incomingPackets)
                 {
-                    // Console.WriteLine(packet.Opcode.ToString("X"));
-                    // Console.WriteLine(Utility.HexDump(packet.GetBytes()));
-
-                    switch (packet.Opcode)
+                    if (Debug)
                     {
-                        case Opcodes.HANDSHAKE:
-                        case Opcodes.HANDSHAKE_ACCEPT:
-                            continue;
-                        
-                        case Opcodes.IDENTITY:
-                            if (!_timer.Enabled)
-                            {
-                                _timer.Start();
-                            }
-                            
-                            if (packet.ReadAscii().Equals("AgentServer"))
-                            {
-                                Packet login = new Packet(Opcodes.Agent.Request.AUTH, true);
-                                login.WriteUInt32(SessionId);
-                                login.WriteAscii(Credentials.Username);
-                                login.WriteAscii(Credentials.Password);
-                                login.WriteUInt8(Locale);
-                                login.WriteUInt8Array(NetworkUtils.GetMacAddressBytes());
-                            
-                                _security.Send(login);
-                            }
-                            
-                            break;
-                        
-                        case Opcodes.Agent.Response.AUTH:
-                            bool result = packet.ReadUInt8() == 1;
-                            if (result)
-                            {
-                                AuthErrorCode error = (AuthErrorCode) packet.ReadUInt8();
-                                switch (error)
-                                {
-                                    case AuthErrorCode.IpLimit:
-                                        Log("IP limit exceeded.");    
-                                        return;
-                                    
-                                    case AuthErrorCode.ServerFull:
-                                        Log("Server is full.");
-                                        return;
-                                }
-                                
-                                Packet charSelect = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_ACTION);
-                                charSelect.WriteUInt8(2);
-                                _security.Send(charSelect);
-                            }
-                            
-                            break;
-                        
-                        case Opcodes.Agent.Response.CHARACTER_SELECTION_ACTION:
-                            byte action = packet.ReadUInt8();
-                            bool succeeded = packet.ReadUInt8() == 1;
-
-                            if (action == 2 && succeeded)
-                            {
-                                byte charCount = packet.ReadUInt8();
-
-                                Dictionary<string, CharSelect> characters = new Dictionary<string, CharSelect>();
-
-                                for (int i = 0; i < charCount; i++)
-                                {
-                                    packet.ReadUInt32();
-                                    string name = packet.ReadAscii();
-
-                                    if (Locale == (byte) Enums.Locale.SRO_TR_Official_GameGami)
-                                    {
-                                        packet.ReadUInt16();
-                                    }
-
-                                    packet.ReadUInt8();
-                                    byte level = packet.ReadUInt8();
-                                    packet.ReadUInt64();
-                                    packet.ReadUInt16();
-                                    packet.ReadUInt16();
-                                    packet.ReadUInt16();
-                                    
-                                    if (Locale == (byte) Enums.Locale.SRO_TR_Official_GameGami)
-                                    {
-                                        packet.ReadUInt32();
-                                    }
-
-                                    packet.ReadUInt32();
-                                    packet.ReadUInt32();
-                                    
-                                    if (Locale == (byte) Enums.Locale.SRO_TR_Official_GameGami)
-                                    {
-                                        packet.ReadUInt16();
-                                    }
-
-                                    bool deleting = packet.ReadUInt8() == 1;
-                                    
-                                    if (Locale == (byte) Enums.Locale.SRO_TR_Official_GameGami)
-                                    {
-                                        packet.ReadUInt32();
-                                    }
-                                    
-                                    CharSelect character = new CharSelect(name, level, deleting);
-
-                                    if (deleting)
-                                    {
-                                        uint minutes = packet.ReadUInt32();
-                                        character.DeletionTime = DateTime.Now.AddMinutes(minutes);;
-                                    }
-
-                                    characters[character.Name] = character;
-                                }
-
-                                Log("Characters:");
-                                foreach (var c in characters)
-                                {
-                                    Log(c.Value.ToString());
-                                }
-
-                                Packet characterJoin = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_JOIN);
-                                characterJoin.WriteAscii(Credentials.CharName);
-                                _security.Send(characterJoin);
-                            }
-                            
-                            break;
-                        
-                        case Opcodes.Agent.Response.CHAR_DATA_CHUNK:
-                            Log("Successfully joined the game");
-                            break;
-                        
-                        case Opcodes.Agent.Response.CHAR_CELESTIAL_POSITION:
-                            _security.Send(new Packet(Opcodes.Agent.Request.GAME_READY));
-                            break;
-                        
-                        case Opcodes.Agent.Response.CHAT_UPDATE:
-                            ChatChannel channel = (ChatChannel) packet.ReadUInt8();
-                            ChatMessage chatMessage = new ChatMessage(channel);
-
-                            if (channel == ChatChannel.General || channel == ChatChannel.GM ||
-                                channel == ChatChannel.NPC)
-                            {
-                                uint senderID = packet.ReadUInt32();
-                                chatMessage.SenderID = senderID;
-                            }
-                            else
-                            {
-                                string senderName = packet.ReadAscii();
-                                chatMessage.SenderName = senderName;
-                            }
-
-                            string message = packet.ReadUnicode();
-                            chatMessage.Message = message;
-                            
-                            Console.WriteLine(chatMessage.ToString());
-                            break;
+                        Log(packet.Opcode.ToString("X"));
+                        Log(Utility.HexDump(packet.GetBytes()));
                     }
+
+                    if (packet.Opcode == Opcodes.IDENTITY && !_timer.Enabled)
+                    {
+                        _timer.Start();
+                    }
+                    
+                    Notify(packet);
                 }
 
                 List<KeyValuePair<TransferBuffer, Packet>> outgoing = _security.TransferOutgoing();
@@ -289,16 +149,6 @@ namespace SimpleCL.Network
 
                 Thread.Sleep(1);
             }
-        }
-
-        public void HeartBeat(Object source, ElapsedEventArgs e)
-        { 
-            _security.Send(new Packet(Opcodes.HEARTBEAT));
-        }
-
-        public void Log(string message)
-        {
-            Console.WriteLine("[Agent] " + message);
         }
     }
 }
