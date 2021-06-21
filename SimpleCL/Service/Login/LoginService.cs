@@ -115,9 +115,10 @@ namespace SimpleCL.Service.Login
                     string agentIp = packet.ReadAscii();
                     ushort agentPort = packet.ReadUInt16();
 
-                    Agent agent = new Agent(agentIp, agentPort, _locale, sessionId);
+                    Agent agent = new Agent(agentIp, agentPort, sessionId);
                     agent.RegisterService(this);
                     agent.RegisterService(new ChatService());
+                    agent.Debug = true;
                     agent.Start();
                     break;
 

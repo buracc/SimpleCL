@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 using SilkroadSecurityApi;
@@ -98,8 +99,8 @@ namespace SimpleCL.Network
                 {
                     if (Debug)
                     {
-                        Log(packet.Opcode.ToString("X"));
-                        Log(Utility.HexDump(packet.GetBytes()));
+                        Log(packet.Opcode.ToString("X"), false);
+                        Log("\n" + Utility.HexDump(packet.GetBytes()), false);
                     }
                     
                     if (packet.Opcode == Opcodes.IDENTITY && !_timer.Enabled)
@@ -128,7 +129,6 @@ namespace SimpleCL.Network
                             }
 
                             buffer.Offset += n;
-                            Thread.Sleep(1);
                         }
 
                         if (success != SocketError.Success)
@@ -142,8 +142,6 @@ namespace SimpleCL.Network
                         break;
                     }
                 }
-
-                Thread.Sleep(1);
             }
         }
     }

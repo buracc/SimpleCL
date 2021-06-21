@@ -60,11 +60,16 @@ namespace SimpleCL.Network
             }
         }
         
-        public void Log(string message)
+        public void Log(string message, bool toGui = true)
         {
-            if (Program.Gui != null)
+            string logMsg = "[" + GetType().Name + "] " + message;
+            if (toGui && Program.Gui != null)
             {
-                Program.Gui.Log("[" + GetType().Name + "] " + message);
+                Program.Gui.Log(logMsg);
+            }
+            else
+            {
+                Console.WriteLine(logMsg);
             }
         }
 

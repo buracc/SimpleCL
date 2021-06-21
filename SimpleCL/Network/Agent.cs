@@ -12,17 +12,14 @@ namespace SimpleCL.Network
     {
         private readonly string _ip;
         private readonly ushort _port;
-        public Locale Locale { get; }
-
         public uint SessionId { get; }
 
         private readonly Timer _timer = new Timer(5000);
 
-        public Agent(string ip, ushort port, Locale locale, uint sessionId)
+        public Agent(string ip, ushort port, uint sessionId)
         {
             _ip = ip;
             _port = port;
-            Locale = locale;
             SessionId = sessionId;
         }
 
@@ -99,10 +96,15 @@ namespace SimpleCL.Network
 
                 foreach (var packet in incomingPackets)
                 {
+                    if (packet.Opcode == Opcodes.Agent.Response.ENTITY_MOVEMENT)
+                    {
+                        continue;
+                    }
+                    
                     if (Debug)
                     {
-                        Log(packet.Opcode.ToString("X"));
-                        Log(Utility.HexDump(packet.GetBytes()));
+                        Log(packet.Opcode.ToString("X"), false);
+                        Log("\n" + Utility.HexDump(packet.GetBytes()), false);
                     }
 
                     if (packet.Opcode == Opcodes.IDENTITY && !_timer.Enabled)
@@ -131,7 +133,6 @@ namespace SimpleCL.Network
                             }
 
                             buffer.Offset += n;
-                            Thread.Sleep(1);
                         }
 
                         if (success != SocketError.Success)
@@ -145,8 +146,6 @@ namespace SimpleCL.Network
                         break;
                     }
                 }
-
-                Thread.Sleep(1);
             }
         }
     }

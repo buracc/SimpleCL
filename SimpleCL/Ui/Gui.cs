@@ -53,6 +53,7 @@ namespace SimpleCL.Ui
         {
             Gateway gw = new Gateway(gatewayComboBox.SelectedItem as string, GgPort);
             gw.RegisterService(new LoginService(usernameBox.Text, passwordBox.Text, (Locale) localeComboBox.SelectedItem));
+            gw.Debug = true;
             gw.Start();
             
             ToggleLoginButton(false);
@@ -60,7 +61,11 @@ namespace SimpleCL.Ui
 
         public void ToggleLoginButton(bool enabled)
         {
+            usernameBox.Enabled = enabled;
+            passwordBox.Enabled = enabled;
             loginButton.Enabled = enabled;
+            gatewayComboBox.Enabled = enabled;
+            localeComboBox.Enabled = enabled;
         }
 
         public void Log(string message)
