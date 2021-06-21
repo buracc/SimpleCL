@@ -6,20 +6,20 @@ namespace SimpleCL.Model.Game
     public class CharSelect
     {
         public string Name { get; }
-        private byte CurLevel;
-        private bool Deleting;
+        public byte Level { get; }
+        public bool Deleting { get; }
         public DateTime DeletionTime { get; set; }
 
-        public CharSelect(string name, byte curLevel, bool deleting)
+        public CharSelect(string name, byte level, bool deleting)
         {
             Name = name;
-            CurLevel = curLevel;
+            Level = level;
             Deleting = deleting;
         }
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder(Name + " Lvl. " + CurLevel);
+            StringBuilder sb = new StringBuilder(Name + " Lvl. " + Level);
             if (Deleting)
             {
                 sb.Append(" Deleted at: ");

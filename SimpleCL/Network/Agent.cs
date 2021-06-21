@@ -2,28 +2,26 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading;
-using System.Timers;
 using SilkroadSecurityApi;
-using SimpleCL.Model.Game;
 using SimpleCL.Network.Enums;
-using SimpleCL.Util;
 using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Network
 {
     public class Agent : Server
     {
-        private string Ip;
-        private ushort Port;
-        public byte Locale;
-        public uint SessionId;
+        private readonly string _ip;
+        private readonly ushort _port;
+        public Locale Locale { get; }
 
-        private Timer _timer = new Timer(5000);
+        public uint SessionId { get; }
 
-        public Agent(string ip, ushort port, byte locale, uint sessionId)
+        private readonly Timer _timer = new Timer(5000);
+
+        public Agent(string ip, ushort port, Locale locale, uint sessionId)
         {
-            Ip = ip;
-            Port = port;
+            _ip = ip;
+            _port = port;
             Locale = locale;
             SessionId = sessionId;
         }
@@ -32,22 +30,23 @@ namespace SimpleCL.Network
         {
             try
             {
-                _socket.Connect(Ip, Port);
-                Console.WriteLine("Connected to agent " + Ip + ":" + Port);
+                Log("Connecting to agent " + _ip + ":" + _port);
+                Socket.Connect(_ip, _port);
+                Log("Connected to agent");
             }
             catch (SocketException e)
             {
-                Console.WriteLine("Unable to connect to agent");
+                Log("Unable to connect to agent " + _ip + ":" + _port);
                 Console.WriteLine(e);
             }
 
             Thread agLoop = new Thread(Loop);
             agLoop.Start();
-            _socket.Blocking = false;
-            _socket.NoDelay = true;
+            Socket.Blocking = false;
+            Socket.NoDelay = true;
         }
 
-        public void Loop()
+        private void Loop()
         {
             _timer.Elapsed += HeartBeat;
 
@@ -55,14 +54,14 @@ namespace SimpleCL.Network
             {
                 SocketError success;
                 
-                if (!_socket.Connected)
+                if (!Socket.Connected)
                 {
                     return;
                 }
 
                 try
                 {
-                    _recvBuffer.Size = _socket.Receive(_recvBuffer.Buffer, 0, _recvBuffer.Buffer.Length,
+                    RecvBuffer.Size = Socket.Receive(RecvBuffer.Buffer, 0, RecvBuffer.Buffer.Length,
                         SocketFlags.None,
                         out success);
                 }
@@ -77,14 +76,14 @@ namespace SimpleCL.Network
                     return;
                 }
 
-                if (_recvBuffer.Size < 0)
+                if (RecvBuffer.Size < 0)
                 {
                     return;
                 }
 
                 try
                 {
-                    _security.Recv(_recvBuffer);
+                    Security.Recv(RecvBuffer);
                 }
                 catch (Exception e)
                 {
@@ -92,7 +91,7 @@ namespace SimpleCL.Network
                     return;
                 }
 
-                List<Packet> incomingPackets = _security.TransferIncoming();
+                List<Packet> incomingPackets = Security.TransferIncoming();
                 if (incomingPackets == null)
                 {
                     continue;
@@ -114,7 +113,7 @@ namespace SimpleCL.Network
                     Notify(packet);
                 }
 
-                List<KeyValuePair<TransferBuffer, Packet>> outgoing = _security.TransferOutgoing();
+                List<KeyValuePair<TransferBuffer, Packet>> outgoing = Security.TransferOutgoing();
                 if (outgoing != null)
                 {
                     foreach (var pair in outgoing)
@@ -124,7 +123,7 @@ namespace SimpleCL.Network
 
                         while (buffer.Offset != buffer.Size)
                         {
-                            int n = _socket.Send(buffer.Buffer, buffer.Offset, buffer.Size - buffer.Offset,
+                            int n = Socket.Send(buffer.Buffer, buffer.Offset, buffer.Size - buffer.Offset,
                                 SocketFlags.None, out success);
                             if (success != SocketError.Success && success != SocketError.WouldBlock)
                             {

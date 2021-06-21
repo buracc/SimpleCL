@@ -11,36 +11,36 @@ namespace SimpleCL.Network
     public class Gateway: Server
     {
         public const byte TrsroVersion = 13;
-        private List<string> Ips { get; }
-        private ushort Port { get; }
+        private readonly string _ip;
+        private readonly ushort _port;
 
-        private Timer _timer = new Timer(5000);
+        private readonly Timer _timer = new Timer(5000);
 
-        public Gateway(List<string> ips, ushort port)
+        public Gateway(string ip, ushort port)
         {
-            Ips = ips;
-            Port = port;
+            _ip = ip;
+            _port = port;
         }
 
         public void Start()
         {
-            string ip = Ips[new Random().Next(Ips.Count)];
             try
             {
-                _socket.Connect(ip, Port);
-                Console.WriteLine("Connected to gateway " + ip + ":" + Port);
+                Log("Connecting to gateway " + _ip + ":" + _port);
+                Socket.Connect(_ip, _port);
+                Log("Connected to gateway");
             }
             catch (SocketException e)
             {
-                Console.WriteLine("Unable to connect gateway");
+                Log("Unable to connect gateway " + _ip + ":" + _port);
                 Console.WriteLine(e);
                 return;
             }
 
             Thread gwLoop = new Thread(Loop);
             gwLoop.Start();
-            _socket.Blocking = false;
-            _socket.NoDelay = true;
+            Socket.Blocking = false;
+            Socket.NoDelay = true;
         }
 
         public void Loop()
@@ -51,14 +51,14 @@ namespace SimpleCL.Network
             {
                 SocketError success;
 
-                if (!_socket.Connected)
+                if (!Socket.Connected)
                 {
                     return;
                 }
 
                 try
                 {
-                    _recvBuffer.Size = _socket.Receive(_recvBuffer.Buffer, 0, _recvBuffer.Buffer.Length,
+                    RecvBuffer.Size = Socket.Receive(RecvBuffer.Buffer, 0, RecvBuffer.Buffer.Length,
                         SocketFlags.None,
                         out success);
                 }
@@ -73,14 +73,14 @@ namespace SimpleCL.Network
                     return;
                 }
 
-                if (_recvBuffer.Size < 0)
+                if (RecvBuffer.Size < 0)
                 {
                     return;
                 }
 
                 try
                 {
-                    _security.Recv(_recvBuffer);
+                    Security.Recv(RecvBuffer);
                 }
                 catch (Exception e)
                 {
@@ -88,7 +88,7 @@ namespace SimpleCL.Network
                     return;
                 }
 
-                List<Packet> incomingPackets = _security.TransferIncoming();
+                List<Packet> incomingPackets = Security.TransferIncoming();
                 if (incomingPackets == null)
                 {
                     continue;
@@ -110,7 +110,7 @@ namespace SimpleCL.Network
                     Notify(packet);
                 }
 
-                List<KeyValuePair<TransferBuffer, Packet>> outgoing = _security.TransferOutgoing();
+                List<KeyValuePair<TransferBuffer, Packet>> outgoing = Security.TransferOutgoing();
                 if (outgoing != null)
                 {
                     foreach (var pair in outgoing)
@@ -120,7 +120,7 @@ namespace SimpleCL.Network
 
                         while (buffer.Offset != buffer.Size)
                         {
-                            int n = _socket.Send(buffer.Buffer, buffer.Offset, buffer.Size - buffer.Offset,
+                            int n = Socket.Send(buffer.Buffer, buffer.Offset, buffer.Size - buffer.Offset,
                                 SocketFlags.None, out success);
                             if (success != SocketError.Success && success != SocketError.WouldBlock)
                             {

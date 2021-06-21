@@ -6,7 +6,7 @@ namespace SimpleCL.Model.Game
     {
         public ChatChannel Channel { get; }
         public string SenderName { get; set; }
-        public uint SenderID { get; set; }
+        public uint SenderId { get; set; }
         public string Message { get; set; }
 
         public ChatMessage(ChatChannel channel)
@@ -22,9 +22,9 @@ namespace SimpleCL.Model.Game
                 sb.Append(SenderName);
             }
 
-            if (SenderID != 0)
+            if (SenderId != 0)
             {
-                sb.Append(SenderID);
+                sb.Append(SenderId);
             }
             
             return sb.Append(": ").Append(Message).ToString();

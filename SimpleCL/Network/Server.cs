@@ -11,31 +11,25 @@ namespace SimpleCL.Network
 {
     public abstract class Server
     {
-        protected readonly Security _security = new Security();
-        protected readonly TransferBuffer _recvBuffer = new TransferBuffer(0x1000, 0, 0);
-        protected readonly Socket _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        protected readonly Security Security = new Security();
+        protected readonly TransferBuffer RecvBuffer = new TransferBuffer(0x1000, 0, 0);
+        protected readonly Socket Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-        private List<Service.Service> Services = new List<Service.Service>();
-        private readonly List<Tuple<ushort, PacketHandler>> Handlers = new List<Tuple<ushort, PacketHandler>>();
+        private readonly List<Service.Service> _services = new List<Service.Service>();
+        private readonly List<Tuple<ushort, PacketHandler>> _handlers = new List<Tuple<ushort, PacketHandler>>();
 
         private delegate void PacketHandler(Server server, Packet packet);
 
-        private bool _debug;
-
-        public bool Debug
-        {
-            get => _debug;
-            set => _debug = value;
-        }
+        public bool Debug { get; set; }
 
         public void RegisterService(Service.Service service)
         {
-            if (Services.Contains(service))
+            if (_services.Contains(service))
             {
                 return;
             }
             
-            Services.Add(service);
+            _services.Add(service);
 
             foreach (var method in service.GetType()
                 .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
@@ -44,20 +38,20 @@ namespace SimpleCL.Network
                 if (packetHandlerMethod != null)
                 {
                     PacketHandler handler = (PacketHandler) Delegate.CreateDelegate(typeof(PacketHandler), service, method);
-                    Handlers.Add(Tuple.Create(packetHandlerMethod.Opcode, handler));
+                    _handlers.Add(Tuple.Create(packetHandlerMethod.Opcode, handler));
                 }
             }
         }
 
         public void RemoveService<T>(T service) where T: Service.Service
         {
-            Services.Remove(service);
-            Handlers.RemoveAll(x => x.Item2.Target?.GetType() == typeof(T));
+            _services.Remove(service);
+            _handlers.RemoveAll(x => x.Item2.Target?.GetType() == typeof(T));
         }
 
-        public void Notify(Packet packet)
+        protected void Notify(Packet packet)
         {
-            foreach (var (opcode, handler) in Handlers)
+            foreach (var (opcode, handler) in _handlers)
             {
                 if (packet.Opcode == opcode)
                 {
@@ -68,22 +62,26 @@ namespace SimpleCL.Network
         
         public void Log(string message)
         {
-            Console.WriteLine("[" + GetType().Name + "] " + message);
+            if (Program.Gui != null)
+            {
+                Program.Gui.Log("[" + GetType().Name + "] " + message);
+            }
         }
 
         public void Inject(Packet packet)
         {
-            _security.Send(packet);
+            Security.Send(packet);
         }
         
-        public void HeartBeat(Object source, ElapsedEventArgs e)
+        protected void HeartBeat(Object source, ElapsedEventArgs e)
         { 
             Inject(new Packet(Opcodes.HEARTBEAT));
         }
 
         public void Close()
         {
-            _socket.Close();
+            Program.Gui.ToggleLoginButton(true);
+            Socket.Close();
         }
     }
 }

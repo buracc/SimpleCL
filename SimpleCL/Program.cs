@@ -1,26 +1,18 @@
 ﻿using System.Collections.Generic;
-using SimpleCL.Network;
-using SimpleCL.Service.Login;
+using System.Windows.Forms;
+using SimpleCL.Ui;
 
 namespace SimpleCL
 {
     internal class Program
     {
-        private static List<string> GgGateways = new List<string>
-        {
-            "94.199.103.68",
-            "94.199.103.69",
-            "94.199.103.70",
-        };
-
-        private const ushort GgPort = 15779;
+        public static Gui Gui { get; set; }
 
         public static void Main(string[] args)
         {
-            Gateway gw = new Gateway(GgGateways, GgPort);
-            gw.RegisterService(new LoginService());
-            
-            gw.Start();
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(Gui = new Gui());
         }
     }
 }

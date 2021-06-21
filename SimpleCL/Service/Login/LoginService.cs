@@ -1,24 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Forms;
 using SilkroadSecurityApi;
 using SimpleCL.Model.Game;
 using SimpleCL.Model.Server;
 using SimpleCL.Network;
 using SimpleCL.Network.Enums;
+using SimpleCL.Ui;
 using SimpleCL.Util;
 
 namespace SimpleCL.Service.Login
 {
     public class LoginService : Service
     {
+        private readonly string _username;
+        private readonly string _password;
+        private readonly Locale _locale;
+
+        public LoginService(string username, string password, Locale locale)
+        {
+            _username = username;
+            _password = password;
+            _locale = locale;
+        }
+
         [PacketHandler(Opcodes.IDENTITY)]
         public void SendIdentity(Server server, Packet packet)
         {
             if (server is Gateway)
             {
                 Packet identity = new Packet(Opcodes.Gateway.Request.PATCH, true);
-                identity.WriteUInt8(Locale.SRO_TR_Official_GameGami);
+                identity.WriteUInt8(_locale);
                 identity.WriteAscii("SR_Client");
                 identity.WriteUInt32(Gateway.TrsroVersion);
                 server.Inject(identity);
@@ -29,11 +42,11 @@ namespace SimpleCL.Service.Login
             {
                 Packet login = new Packet(Opcodes.Agent.Request.AUTH, true);
                 login.WriteUInt32(((Agent) server).SessionId);
-                login.WriteAscii(Credentials.Username);
-                login.WriteAscii(Credentials.Password);
-                login.WriteUInt8(Locale.SRO_TR_Official_GameGami);
+                login.WriteAscii(_username);
+                login.WriteAscii(_password);
+                login.WriteUInt8(_locale);
                 login.WriteUInt8Array(NetworkUtils.GetMacAddressBytes());
-
+                
                 server.Inject(login);
             }
         }
@@ -47,7 +60,7 @@ namespace SimpleCL.Service.Login
         [PacketHandler(Opcodes.Gateway.Response.SERVERLIST)]
         public void SendLogin(Server server, Packet packet)
         {
-            Dictionary<string, SilkroadServer> servers = new Dictionary<string, SilkroadServer>();
+            List<SilkroadServer> servers = new List<SilkroadServer>();
 
             while (packet.ReadUInt8() == 1)
             {
@@ -55,7 +68,6 @@ namespace SimpleCL.Service.Login
                 string farmName = packet.ReadAscii();
             }
 
-            server.Log("Servers:");
             while (packet.ReadUInt8() == 1)
             {
                 SilkroadServer silkroadServer = new SilkroadServer(
@@ -65,20 +77,10 @@ namespace SimpleCL.Service.Login
                     packet.ReadUInt8() == 1
                 );
 
-                servers[silkroadServer.Name] = silkroadServer;
-
-                server.Log(silkroadServer.ToString());
+                servers.Add(silkroadServer);
             }
-
-            Packet login = new Packet(Opcodes.Gateway.Request.LOGIN2, true);
-            login.WriteUInt8(Locale.SRO_TR_Official_GameGami);
-            login.WriteAscii(Credentials.Username);
-            login.WriteAscii(Credentials.Password);
-            login.WriteUInt8Array(NetworkUtils.GetMacAddressBytes());
-            login.WriteUInt16(servers[Credentials.Server].Id);
-            login.WriteUInt8(1);
-
-            server.Inject(login);
+            
+            Application.Run(new Serverlist(servers, server));
         }
 
         [PacketHandler(Opcodes.Gateway.Response.LOGIN2)]
@@ -122,8 +124,9 @@ namespace SimpleCL.Service.Login
                     string agentIp = packet.ReadAscii();
                     ushort agentPort = packet.ReadUInt16();
 
-                    Agent agent = new Agent(agentIp, agentPort, (byte) Locale.SRO_TR_Official_GameGami, sessionId);
+                    Agent agent = new Agent(agentIp, agentPort, _locale, sessionId);
                     agent.RegisterService(this);
+                    
                     agent.Start();
                     break;
 
@@ -193,8 +196,16 @@ namespace SimpleCL.Service.Login
         [PacketHandler(Opcodes.Agent.Response.AUTH)]
         public void EnterCharacterSelect(Server server, Packet packet)
         {
-            bool result = packet.ReadUInt8() == 1;
-            if (result)
+            byte result = packet.ReadUInt8();
+            if (result == 1)
+            {
+                Packet charSelect = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_ACTION);
+                charSelect.WriteUInt8(2);
+                server.Inject(charSelect);
+                return;
+            }
+
+            if (result == 2)
             {
                 AuthErrorCode error = (AuthErrorCode) packet.ReadUInt8();
                 switch (error)
@@ -207,10 +218,6 @@ namespace SimpleCL.Service.Login
                         server.Log("Server is full.");
                         return;
                 }
-
-                Packet charSelect = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_ACTION);
-                charSelect.WriteUInt8(2);
-                server.Inject(charSelect);
             }
         }
 
@@ -225,14 +232,14 @@ namespace SimpleCL.Service.Login
             {
                 byte charCount = packet.ReadUInt8();
 
-                Dictionary<string, CharSelect> characters = new Dictionary<string, CharSelect>();
+                List<CharSelect> chars = new List<CharSelect>();
 
                 for (int i = 0; i < charCount; i++)
                 {
                     packet.ReadUInt32();
                     string name = packet.ReadAscii();
 
-                    if (agent.Locale == (byte) Locale.SRO_TR_Official_GameGami)
+                    if (agent.Locale == Locale.SRO_TR_Official_GameGami)
                     {
                         packet.ReadUInt16();
                     }
@@ -244,7 +251,7 @@ namespace SimpleCL.Service.Login
                     packet.ReadUInt16();
                     packet.ReadUInt16();
 
-                    if (agent.Locale == (byte) Locale.SRO_TR_Official_GameGami)
+                    if (agent.Locale == Locale.SRO_TR_Official_GameGami)
                     {
                         packet.ReadUInt32();
                     }
@@ -252,14 +259,14 @@ namespace SimpleCL.Service.Login
                     packet.ReadUInt32();
                     packet.ReadUInt32();
 
-                    if (agent.Locale == (byte) Locale.SRO_TR_Official_GameGami)
+                    if (agent.Locale == Locale.SRO_TR_Official_GameGami)
                     {
                         packet.ReadUInt16();
                     }
 
                     bool deleting = packet.ReadUInt8() == 1;
 
-                    if (agent.Locale == (byte) Locale.SRO_TR_Official_GameGami)
+                    if (agent.Locale == Locale.SRO_TR_Official_GameGami)
                     {
                         packet.ReadUInt32();
                     }
@@ -270,28 +277,19 @@ namespace SimpleCL.Service.Login
                     {
                         uint minutes = packet.ReadUInt32();
                         character.DeletionTime = DateTime.Now.AddMinutes(minutes);
-                        ;
                     }
 
-                    characters[character.Name] = character;
+                    chars.Add(character);
                 }
 
-                server.Log("Characters:");
-                foreach (var c in characters)
-                {
-                    server.Log(c.Value.ToString());
-                }
-
-                Packet characterJoin = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_JOIN);
-                characterJoin.WriteAscii(Credentials.CharName);
-                server.Inject(characterJoin);
+                Application.Run(new CharacterSelect(chars, server));
             }
         }
 
         [PacketHandler(Opcodes.Agent.Response.CHAR_DATA_CHUNK)]
         public void GameJoined(Server server, Packet packet)
         {
-            server.Log("Successfully joined the game.");
+            server.Log("Successfully joined the game");
         }
         
         [PacketHandler(Opcodes.Agent.Response.CHAR_CELESTIAL_POSITION)]
@@ -310,7 +308,7 @@ namespace SimpleCL.Service.Login
                 channel == ChatChannel.NPC)
             {
                 uint senderID = packet.ReadUInt32();
-                chatMessage.SenderID = senderID;
+                chatMessage.SenderId = senderID;
             }
             else
             {
@@ -321,7 +319,7 @@ namespace SimpleCL.Service.Login
             string message = packet.ReadUnicode();
             chatMessage.Message = message;
                             
-            server.Log(chatMessage.ToString());
+            Program.Gui.AddChatMessage(chatMessage.ToString());
         }
     }
 }

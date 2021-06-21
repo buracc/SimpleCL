@@ -32,19 +32,27 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="Microsoft.CSharp" />
         <Reference Include="SilkroadSecurityApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\Desktop\yy\bin\Debug\SilkroadSecurityApi.dll</HintPath>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
+        <Reference Include="System.Data.DataSetExtensions" />
+        <Reference Include="System.Deployment" />
+        <Reference Include="System.Drawing" />
         <Reference Include="System.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
           <HintPath>..\..\..\..\..\Windows\Microsoft.NET\Framework64\v4.0.30319\System.Linq.dll</HintPath>
         </Reference>
+        <Reference Include="System.Net.Http" />
+        <Reference Include="System.Windows.Forms" />
         <Reference Include="System.Xml" />
+        <Reference Include="System.Xml.Linq" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Credentials.cs" />
+        <Compile Include="Model\Configuration.cs" />
         <Compile Include="Model\Game\Character.cs" />
         <Compile Include="Model\Game\CharSelect.cs" />
         <Compile Include="Model\Game\ChatChannel.cs" />
@@ -64,7 +72,39 @@
         <Compile Include="Service\Login\LoginService.cs" />
         <Compile Include="Service\PacketHandlerAttribute.cs" />
         <Compile Include="Service\Service.cs" />
+        <Compile Include="Ui\CharacterSelect.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="Ui\CharacterSelect.Designer.cs">
+          <DependentUpon>CharacterSelect.cs</DependentUpon>
+        </Compile>
+        <Compile Include="Ui\Gui.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="Ui\Gui.Designer.cs">
+          <DependentUpon>Gui.cs</DependentUpon>
+        </Compile>
+        <Compile Include="Ui\Serverlist.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="Ui\Serverlist.Designer.cs">
+          <DependentUpon>Serverlist.cs</DependentUpon>
+        </Compile>
         <Compile Include="Util\NetworkUtils.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="App.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="Ui\CharacterSelect.resx">
+        <DependentUpon>CharacterSelect.cs</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Ui\Gui.resx">
+        <DependentUpon>Gui.cs</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Ui\Serverlist.resx">
+        <DependentUpon>Serverlist.cs</DependentUpon>
+      </EmbeddedResource>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
