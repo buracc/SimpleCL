@@ -48,7 +48,7 @@ namespace SimpleCL.Ui
             this.characterListDataGridView.MultiSelect = false;
             this.characterListDataGridView.Name = "characterListDataGridView";
             this.characterListDataGridView.ReadOnly = true;
-            this.characterListDataGridView.Size = new System.Drawing.Size(322, 206);
+            this.characterListDataGridView.Size = new System.Drawing.Size(391, 206);
             this.characterListDataGridView.TabIndex = 1;
             // 
             // CharacterSelect
@@ -57,8 +57,9 @@ namespace SimpleCL.Ui
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(346, 226);
+            this.ClientSize = new System.Drawing.Size(415, 226);
             this.Controls.Add(this.characterListDataGridView);
+            this.MaximizeBox = false;
             this.Name = "CharacterSelect";
             this.Text = "CharacterSelect";
             ((System.ComponentModel.ISupportInitialize) (this.characterListDataGridView)).EndInit();

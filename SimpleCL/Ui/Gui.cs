@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows.Forms;
+using SimpleCL.Model.Game;
 using SimpleCL.Network;
 using SimpleCL.Network.Enums;
 using SimpleCL.Service.Login;
@@ -9,6 +11,8 @@ namespace SimpleCL.Ui
 {
     public partial class Gui : Form
     {
+        public Character Character = null;
+        
         private readonly List<string> _ggGateways = new List<string>
         {
             "94.199.103.68",
@@ -40,6 +44,9 @@ namespace SimpleCL.Ui
 
             usernameBox.Text = Credentials.Username;
             passwordBox.Text = Credentials.Password;
+
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            CenterToScreen();
         }
 
         private void LoginClicked(object sender, EventArgs e)
@@ -74,6 +81,25 @@ namespace SimpleCL.Ui
         {
             Application.Exit();
             Environment.Exit(0);
+        }
+
+        public void RefreshGui()
+        {
+            if (Character != null)
+            {
+                hpProgressBar.Value = (int) Character.getHpPercent();
+                mpProgressBar.Value = (int) Character.getMpPercent();
+                expProgressBar.Value = Character.GetExpPercent();
+
+                Console.WriteLine(Character.GetExpPercent());
+
+                levelLabelValue.Text = Character.Level.ToString();
+                spLabelValue.Text = Character.Skillpoints.ToString("N0");
+                goldLabelValue.Text = Character.Gold.ToString("N0");
+                coordsLabelValue.Text = Character.Coordinates.ToString();
+            }
+            
+            Refresh();
         }
     }
 }

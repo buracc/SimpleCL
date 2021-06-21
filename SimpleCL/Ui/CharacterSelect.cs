@@ -19,6 +19,9 @@ namespace SimpleCL.Ui
             InitializeComponent();
             characterListDataGridView.DataSource = chars;
             characterListDataGridView.RowHeaderMouseDoubleClick += SelectCharacter;
+            
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            CenterToScreen();
         }
 
         private void SelectCharacter(object sender, DataGridViewCellMouseEventArgs args)

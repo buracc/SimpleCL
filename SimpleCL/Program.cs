@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Windows.Forms;
+using SimpleCL.Database;
 using SimpleCL.Ui;
 
 namespace SimpleCL
@@ -14,5 +15,10 @@ namespace SimpleCL
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(Gui = new Gui());
         }
+
+        // public static void Main(string[] args)
+        // {
+        //     Console.WriteLine(GameDatabase.GetInstance().GetItemData(575)["name"]);
+        // }
     }
 }

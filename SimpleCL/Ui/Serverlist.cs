@@ -18,6 +18,9 @@ namespace SimpleCL.Ui
             InitializeComponent();
             serverlistDataGridView.DataSource = servers;
             serverlistDataGridView.RowHeaderMouseDoubleClick += SelectServer;
+            
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            CenterToScreen();
         }
 
         private void SelectServer(object sender, DataGridViewCellMouseEventArgs args)

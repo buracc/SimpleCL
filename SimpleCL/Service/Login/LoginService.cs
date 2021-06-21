@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Windows.Forms;
 using SilkroadSecurityApi;
+using SimpleCL.Database;
 using SimpleCL.Model.Game;
 using SimpleCL.Model.Server;
 using SimpleCL.Network;
 using SimpleCL.Network.Enums;
+using SimpleCL.Service.Game;
 using SimpleCL.Ui;
 using SimpleCL.Util;
 
@@ -46,7 +48,7 @@ namespace SimpleCL.Service.Login
                 login.WriteAscii(_password);
                 login.WriteUInt8(_locale);
                 login.WriteUInt8Array(NetworkUtils.GetMacAddressBytes());
-                
+
                 server.Inject(login);
             }
         }
@@ -79,25 +81,14 @@ namespace SimpleCL.Service.Login
 
                 servers.Add(silkroadServer);
             }
-            
+
             Application.Run(new Serverlist(servers, server));
         }
 
         [PacketHandler(Opcodes.Gateway.Response.LOGIN2)]
         public void SendPasscode(Server server, Packet packet)
         {
-            byte[] key = {0x0F, 0x07, 0x3D, 0x20, 0x56, 0x62, 0xC9, 0xEB};
-            Blowfish blowfish = new Blowfish();
-            blowfish.Initialize(key);
-            byte[] encodedPasscode = Encoding.ASCII.GetBytes(Credentials.Passcode);
-            byte[] encryptedPasscode = blowfish.Encode(encodedPasscode);
-
-            Packet passcode = new Packet(Opcodes.Gateway.Request.PASSCODE, true);
-            passcode.WriteUInt8(4);
-            passcode.WriteUInt16(Credentials.Passcode.Length);
-            passcode.WriteUInt8Array(encryptedPasscode);
-
-            server.Inject(passcode);
+            Application.Run(new PasscodeEnter(server));
         }
 
         [PacketHandler(Opcodes.Gateway.Response.PASSCODE)]
@@ -108,8 +99,8 @@ namespace SimpleCL.Service.Login
             if (passcodeResult == 2)
             {
                 byte attempts = packet.ReadUInt8();
+                Application.Run(new PasscodeEnter(server, "Invalid passcode [" + attempts + "/" + 3 + "]"));
                 server.Log("Invalid passcode. Attempts: [" + attempts + "/" + 3 + "]");
-                server.Close();
             }
         }
 
@@ -126,7 +117,7 @@ namespace SimpleCL.Service.Login
 
                     Agent agent = new Agent(agentIp, agentPort, _locale, sessionId);
                     agent.RegisterService(this);
-                    
+                    agent.RegisterService(new ChatService());
                     agent.Start();
                     break;
 
@@ -159,8 +150,8 @@ namespace SimpleCL.Service.Login
                                         packet.ReadUInt16()
                                     );
 
-                                    server.Log("Account banned: " + reason + "\nEnd date: " +
-                                               endDate);
+                                    server.Log("Account banned: " + reason);
+                                    server.Log("End date: " + endDate);
                                     break;
 
                                 case LoginBlockType.AccountInspection:
@@ -192,7 +183,7 @@ namespace SimpleCL.Service.Login
                     return;
             }
         }
-        
+
         [PacketHandler(Opcodes.Agent.Response.AUTH)]
         public void EnterCharacterSelect(Server server, Packet packet)
         {
@@ -224,7 +215,6 @@ namespace SimpleCL.Service.Login
         [PacketHandler(Opcodes.Agent.Response.CHARACTER_SELECTION_ACTION)]
         public void SelectCharacter(Server server, Packet packet)
         {
-            Agent agent = (Agent) server;
             byte action = packet.ReadUInt8();
             bool succeeded = packet.ReadUInt8() == 1;
 
@@ -239,7 +229,7 @@ namespace SimpleCL.Service.Login
                     packet.ReadUInt32();
                     string name = packet.ReadAscii();
 
-                    if (agent.Locale == Locale.SRO_TR_Official_GameGami)
+                    if (_locale == Locale.SRO_TR_Official_GameGami)
                     {
                         packet.ReadUInt16();
                     }
@@ -251,7 +241,7 @@ namespace SimpleCL.Service.Login
                     packet.ReadUInt16();
                     packet.ReadUInt16();
 
-                    if (agent.Locale == Locale.SRO_TR_Official_GameGami)
+                    if (_locale == Locale.SRO_TR_Official_GameGami)
                     {
                         packet.ReadUInt32();
                     }
@@ -259,14 +249,14 @@ namespace SimpleCL.Service.Login
                     packet.ReadUInt32();
                     packet.ReadUInt32();
 
-                    if (agent.Locale == Locale.SRO_TR_Official_GameGami)
+                    if (_locale == Locale.SRO_TR_Official_GameGami)
                     {
                         packet.ReadUInt16();
                     }
 
                     bool deleting = packet.ReadUInt8() == 1;
 
-                    if (agent.Locale == Locale.SRO_TR_Official_GameGami)
+                    if (_locale == Locale.SRO_TR_Official_GameGami)
                     {
                         packet.ReadUInt32();
                     }
@@ -289,37 +279,236 @@ namespace SimpleCL.Service.Login
         [PacketHandler(Opcodes.Agent.Response.CHAR_DATA_CHUNK)]
         public void GameJoined(Server server, Packet packet)
         {
+            var serverTime = packet.ReadUInt32();
+            var objId = packet.ReadUInt32();
+            var scale = packet.ReadUInt8();
+            var level = packet.ReadUInt8();
+            var maxLevel = packet.ReadUInt8();
+            var expGained = packet.ReadUInt64();
+            var spOffset = packet.ReadUInt32();
+            var gold = packet.ReadUInt64();
+            var sp = packet.ReadUInt32();
+            var statPoint = packet.ReadUInt16();
+            var zerkPoints = packet.ReadUInt8();
+            var unk = packet.ReadUInt32(); // GatheredExp according to DaxterSoul, but it's wrong on TRSRO
+            var maxHp = packet.ReadUInt32();
+            var maxMp = packet.ReadUInt32();
+            var icon = packet.ReadUInt8();
+            var dailyPk = packet.ReadUInt8();
+            var totalPk = packet.ReadUInt16();
+            var pkPoint = packet.ReadUInt32();
+            var zerkLevel = packet.ReadUInt8();
+            var freePvp = packet.ReadUInt8();
+
+            if (_locale == Locale.SRO_TR_Official_GameGami)
+            {
+                for (int i = 0; i < 25; i++)
+                {
+                    packet.ReadUInt8();
+                }
+            }
+
+            var inventorySize = packet.ReadUInt8();
+            var itemCount = packet.ReadUInt8();
+
+            ParseItem(packet, itemCount);
+
+            var avatarInventorySize = packet.ReadUInt8();
+            var avatarInventoryCount = packet.ReadUInt8();
+            
+            ParseItem(packet, avatarInventoryCount, false);
+
+            if (_locale == Locale.SRO_TR_Official_GameGami)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    packet.ReadUInt8();
+                }
+            }
+
+            var jobInventorySize = packet.ReadUInt8();
+            var jobInventoryCount = packet.ReadUInt8();
+            
+            ParseItem(packet, jobInventoryCount, false);
+
+            if (_locale == Locale.SRO_TR_Official_GameGami)
+            {
+                packet.ReadUInt8();
+            }
+
+            var nextMastery = packet.ReadUInt8() == 1;
+
+            while (nextMastery)
+            {
+                var masteryId = packet.ReadUInt32();
+                var masteryLevel = packet.ReadUInt8();
+                nextMastery = packet.ReadUInt8() == 1;
+            }
+
+            packet.ReadUInt8();
+
+            var nextSkill = packet.ReadUInt8() == 1;
+
+            while (nextSkill)
+            {
+                var skillId = packet.ReadUInt32();
+                var skillEnabled = packet.ReadUInt8() == 1;
+
+                if (skillEnabled)
+                {
+                    var skillData = GameDatabase.GetInstance().GetSkill(skillId);
+                }
+
+                nextSkill = packet.ReadUInt8() == 1;
+            }
+
+            Character local = new Character(
+                maxHp, maxMp, level, expGained, sp, gold, new Coordinates(0, 0, 0, 0, 0)
+            );
+
+            
+            Program.Gui.Character = local;
+            Program.Gui.RefreshGui();
+
             server.Log("Successfully joined the game");
         }
-        
+
         [PacketHandler(Opcodes.Agent.Response.CHAR_CELESTIAL_POSITION)]
         public void GameReady(Server server, Packet packet)
         {
             server.Inject(new Packet(Opcodes.Agent.Request.GAME_READY));
         }
 
-        [PacketHandler(Opcodes.Agent.Response.CHAT_UPDATE)]
-        public void ChatUpdated(Server server, Packet packet)
+        public void ParseItem(Packet packet, byte itemCount, bool inventory = true)
         {
-            ChatChannel channel = (ChatChannel) packet.ReadUInt8();
-            ChatMessage chatMessage = new ChatMessage(channel);
-
-            if (channel == ChatChannel.General || channel == ChatChannel.GM ||
-                channel == ChatChannel.NPC)
+            for (int i = 0; i < itemCount; i++)
             {
-                uint senderID = packet.ReadUInt32();
-                chatMessage.SenderId = senderID;
-            }
-            else
-            {
-                string senderName = packet.ReadAscii();
-                chatMessage.SenderName = senderName;
-            }
+                var slot = packet.ReadUInt8();
+                var rentType = packet.ReadUInt32();
 
-            string message = packet.ReadUnicode();
-            chatMessage.Message = message;
-                            
-            Program.Gui.AddChatMessage(chatMessage.ToString());
+                switch (rentType)
+                {
+                    case 1:
+                        var canDelete = packet.ReadUInt16();
+                        var beginPeriod = packet.ReadUInt64();
+                        var endPeriod = packet.ReadUInt64();
+                        break;
+
+                    case 2:
+                        var canDelete2 = packet.ReadUInt16();
+                        var canRecharge = packet.ReadUInt16();
+                        var meterRateTime = packet.ReadUInt32();
+                        break;
+
+                    case 3:
+                        var canDelete3 = packet.ReadUInt16();
+                        var canRecharge2 = packet.ReadUInt16();
+                        var beginPeriod2 = packet.ReadUInt32();
+                        var endPeriod2 = packet.ReadUInt32();
+                        var packingTime = packet.ReadUInt32();
+                        break;
+                }
+
+                var refItemId = packet.ReadUInt32();
+                var itemData = GameDatabase.GetInstance().GetItemData(refItemId);
+                var typeId2 = byte.Parse(itemData["tid1"]);
+                var typeId3 = byte.Parse(itemData["tid2"]);
+                var typeId4 = byte.Parse(itemData["tid3"]);
+
+                switch (typeId2)
+                {
+                    case 1:
+                        var plus = packet.ReadUInt8();
+                        var variance = packet.ReadUInt64();
+                        var dura = packet.ReadUInt32();
+
+                        var magicOptions = packet.ReadUInt8();
+                        for (int magicOptionIndex = 0; magicOptionIndex < magicOptions; magicOptionIndex++)
+                        {
+                            var paramType = packet.ReadUInt32();
+                            var paramValue = packet.ReadUInt32();
+                        }
+
+                        packet.ReadUInt8();
+                        var sockets = packet.ReadUInt8();
+                        for (int socketIndex = 0; socketIndex < sockets; socketIndex++)
+                        {
+                            var socketSlot = packet.ReadUInt8();
+                            var socketId = packet.ReadUInt32();
+                            var socketParam = packet.ReadUInt8();
+                        }
+
+                        packet.ReadUInt8();
+                        var advElixirs = packet.ReadUInt8();
+                        for (int advElixirIndex = 0; advElixirIndex < advElixirs; advElixirIndex++)
+                        {
+                            var advElixirSlot = packet.ReadUInt8();
+                            var advElixirId = packet.ReadUInt32();
+                            var advElixirValue = packet.ReadUInt32();
+                        }
+
+                        if (_locale == Locale.SRO_TR_Official_GameGami && inventory)
+                        {
+                            for (int j = 0; j < 4; j++)
+                            {
+                                packet.ReadUInt8();
+                            }
+                        }
+
+                        break;
+
+                    case 2:
+                        switch (typeId3)
+                        {
+                            case 1:
+                                var state = packet.ReadUInt8();
+                                var refObjId = packet.ReadUInt32();
+                                var name = packet.ReadAscii();
+
+                                if (typeId4 == 2)
+                                {
+                                    var rentTimeEndSeconds = packet.ReadUInt32();
+                                }
+
+                                if (_locale == Locale.SRO_TR_Official_GameGami && inventory)
+                                {
+                                    packet.ReadUInt8();
+                                }
+                                
+                                break;
+
+                            case 2:
+                                var refObjId2 = packet.ReadUInt32();
+                                break;
+
+                            case 3:
+                                var quantity = packet.ReadUInt32();
+                                break;
+                        }
+
+                        break;
+                    
+                    case 3:
+                        var stackCount = packet.ReadUInt16();
+                        if (typeId3 == 11 && (typeId4 == 1 || typeId4 == 2))
+                        {
+                            var assimilationProb = packet.ReadUInt8();
+                            break;
+                        }
+
+                        if (typeId3 == 14 || typeId4 == 2)
+                        {
+                            var magParams = packet.ReadUInt8();
+                            for (int magParamIndex = 0; magParamIndex < magParams; magParamIndex++)
+                            {
+                                var paramType = packet.ReadUInt32();
+                                var paramValue = packet.ReadUInt32();
+                            }
+                        }
+                        
+                        break;
+                }
+            }
         }
     }
 }

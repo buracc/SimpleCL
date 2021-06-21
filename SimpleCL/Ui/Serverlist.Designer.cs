@@ -59,6 +59,7 @@ namespace SimpleCL.Ui
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(346, 226);
             this.Controls.Add(this.serverlistDataGridView);
+            this.MaximizeBox = false;
             this.Name = "Serverlist";
             this.Text = "Serverlist";
             ((System.ComponentModel.ISupportInitialize) (this.serverlistDataGridView)).EndInit();
@@ -66,8 +67,6 @@ namespace SimpleCL.Ui
         }
 
         private System.Windows.Forms.DataGridView serverlistDataGridView;
-
-        private System.Windows.Forms.DataGridView dataGridView1;
 
         #endregion
     }
