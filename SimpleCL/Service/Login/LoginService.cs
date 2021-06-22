@@ -166,6 +166,10 @@ namespace SimpleCL.Service.Login
                         case LoginErrorCode.AlreadyConnected:
                             server.Log("Account is already connected.");
                             break;
+                        
+                        case LoginErrorCode.Inspection:
+                            server.Log("Server is under inspection.");
+                            break;
 
                         case LoginErrorCode.IPLimit:
                             server.Log("IP limit exceeded.");

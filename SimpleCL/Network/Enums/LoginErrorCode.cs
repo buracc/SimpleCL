@@ -18,6 +18,10 @@
         /// This user is already connected. The user may still be connected because of an error that forced the game to close. Please try again in 5 minutes.
         /// </summary>
         AlreadyConnected = 3,
+        
+        // Not sure
+        Inspection = 4,
+        
         /// <summary>
         /// <para>UIO_MSG_ERROR_SERVER_BUSY_CONNECT_IMPOSSIBILE</para>
         /// The server is full, please try again later.

@@ -4,7 +4,7 @@
     {
         Full = 0,
         Crowded = 1,
-        Populated = 2
-        
+        Populated = 2,
+        Easy = 3
     }
 }
