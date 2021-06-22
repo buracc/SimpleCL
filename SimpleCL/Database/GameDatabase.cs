@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data.SQLite;
-using System.Linq;
-using SimpleCL.Network.Enums;
 
 namespace SimpleCL.Database
 {

@@ -44,7 +44,7 @@
         <Reference Include="Microsoft.CSharp" />
         <Reference Include="mscorlib" />
         <Reference Include="SilkroadSecurityApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\Desktop\yy\bin\Debug\SilkroadSecurityApi.dll</HintPath>
+          <HintPath>..\Libs\SilkroadSecurityApi.dll</HintPath>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.ComponentModel.DataAnnotations" />
