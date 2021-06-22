@@ -230,11 +230,7 @@ namespace SimpleCL.Service.Login
                 {
                     packet.ReadUInt32();
                     string name = packet.ReadAscii();
-
-                    if (_locale == Locale.SRO_TR_Official_GameGami)
-                    {
-                        packet.ReadUInt16();
-                    }
+                    string jobName = packet.ReadAscii();
 
                     packet.ReadUInt8();
                     byte level = packet.ReadUInt8();
@@ -248,8 +244,8 @@ namespace SimpleCL.Service.Login
                         packet.ReadUInt32();
                     }
 
-                    packet.ReadUInt32();
-                    packet.ReadUInt32();
+                    uint hp = packet.ReadUInt32();
+                    uint mp = packet.ReadUInt32();
 
                     if (_locale == Locale.SRO_TR_Official_GameGami)
                     {
@@ -269,6 +265,32 @@ namespace SimpleCL.Service.Login
                     {
                         uint minutes = packet.ReadUInt32();
                         character.DeletionTime = DateTime.Now.AddMinutes(minutes);
+                    }
+
+                    byte guildMemberClass = packet.ReadUInt8();
+
+                    bool guildRenameRequired = packet.ReadUInt8() == 1;
+                    if (guildRenameRequired)
+                    {
+                        string guildName = packet.ReadAscii();
+                    }
+
+                    byte academyMemberClass = packet.ReadUInt8();
+                    byte itemCount = packet.ReadUInt8();
+
+                    Console.WriteLine(itemCount);
+
+                    for (int j = 0; j < itemCount; j++)
+                    {
+                        uint refItemId = packet.ReadUInt32();
+                        byte plus = packet.ReadUInt8();
+                    }
+
+                    byte avatarItemCount = packet.ReadUInt8();
+                    for (int j = 0; j < avatarItemCount; j++)
+                    {
+                        uint refItemId = packet.ReadUInt32();
+                        byte plus = packet.ReadUInt8();
                     }
 
                     chars.Add(character);
@@ -313,25 +335,22 @@ namespace SimpleCL.Service.Login
             var inventorySize = packet.ReadUInt8();
             var itemCount = packet.ReadUInt8();
 
-            ParseItem(packet, itemCount);
+            ParseInventory(packet, itemCount);
 
             var avatarInventorySize = packet.ReadUInt8();
             var avatarInventoryCount = packet.ReadUInt8();
-            
-            ParseItem(packet, avatarInventoryCount, false);
 
-            if (_locale == Locale.SRO_TR_Official_GameGami)
-            {
-                for (int i = 0; i < 5; i++)
-                {
-                    packet.ReadUInt8();
-                }
-            }
+            ParseInventory(packet, avatarInventoryCount, false);
+
+            var jobPouchSize = packet.ReadUInt8();
+            var jobPouchCount = packet.ReadUInt8();
+            
+            // parse job pouch
 
             var jobInventorySize = packet.ReadUInt8();
             var jobInventoryCount = packet.ReadUInt8();
-            
-            ParseItem(packet, jobInventoryCount, false);
+
+            ParseInventory(packet, jobInventoryCount, false);
 
             if (_locale == Locale.SRO_TR_Official_GameGami)
             {
@@ -368,7 +387,7 @@ namespace SimpleCL.Service.Login
                 maxHp, maxMp, level, expGained, sp, gold, new Coordinates(0, 0, 0, 0, 0)
             );
 
-            
+
             Program.Gui.Character = local;
             Program.Gui.RefreshGui();
 
@@ -381,7 +400,7 @@ namespace SimpleCL.Service.Login
             server.Inject(new Packet(Opcodes.Agent.Request.GAME_READY));
         }
 
-        public void ParseItem(Packet packet, byte itemCount, bool inventory = true)
+        public void ParseInventory(Packet packet, byte itemCount, bool inventory = true)
         {
             for (int i = 0; i < itemCount; i++)
             {
@@ -420,41 +439,56 @@ namespace SimpleCL.Service.Login
                 switch (typeId2)
                 {
                     case 1:
+                    case 4: // job gear
                         var plus = packet.ReadUInt8();
                         var variance = packet.ReadUInt64();
                         var dura = packet.ReadUInt32();
 
                         var magicOptions = packet.ReadUInt8();
-                        for (int magicOptionIndex = 0; magicOptionIndex < magicOptions; magicOptionIndex++)
+                        for (int j = 0; j < magicOptions; j++)
                         {
                             var paramType = packet.ReadUInt32();
                             var paramValue = packet.ReadUInt32();
                         }
 
+                        // 1 = sockets
                         packet.ReadUInt8();
                         var sockets = packet.ReadUInt8();
-                        for (int socketIndex = 0; socketIndex < sockets; socketIndex++)
+                        for (int j = 0; j < sockets; j++)
                         {
                             var socketSlot = packet.ReadUInt8();
                             var socketId = packet.ReadUInt32();
                             var socketParam = packet.ReadUInt8();
                         }
 
+                        // 2 = adv elixirs
                         packet.ReadUInt8();
                         var advElixirs = packet.ReadUInt8();
-                        for (int advElixirIndex = 0; advElixirIndex < advElixirs; advElixirIndex++)
+                        for (int j = 0; j < advElixirs; j++)
                         {
                             var advElixirSlot = packet.ReadUInt8();
                             var advElixirId = packet.ReadUInt32();
                             var advElixirValue = packet.ReadUInt32();
                         }
 
-                        if (_locale == Locale.SRO_TR_Official_GameGami && inventory)
+                        // 3 = ??
+                        packet.ReadUInt8();
+                        var unk01 = packet.ReadUInt8();
+                        for (int j = 0; j < unk01; j++)
                         {
-                            for (int j = 0; j < 4; j++)
-                            {
-                                packet.ReadUInt8();
-                            }
+                            var unkSlot = packet.ReadUInt8();
+                            var unkParam1 = packet.ReadUInt32();
+                            var unkParam2 = packet.ReadUInt32();
+                        }
+
+                        // 4 = ??
+                        packet.ReadUInt8();
+                        var unk02 = packet.ReadUInt8();
+                        for (int j = 0; j < unk01; j++)
+                        {
+                            var unkSlot = packet.ReadUInt8();
+                            var unkParam1 = packet.ReadUInt32();
+                            var unkParam2 = packet.ReadUInt32();
                         }
 
                         break;
@@ -476,7 +510,7 @@ namespace SimpleCL.Service.Login
                                 {
                                     packet.ReadUInt8();
                                 }
-                                
+
                                 break;
 
                             case 2:
@@ -489,7 +523,7 @@ namespace SimpleCL.Service.Login
                         }
 
                         break;
-                    
+
                     case 3:
                         var stackCount = packet.ReadUInt16();
                         if (typeId3 == 11 && (typeId4 == 1 || typeId4 == 2))
@@ -498,7 +532,7 @@ namespace SimpleCL.Service.Login
                             break;
                         }
 
-                        if (typeId3 == 14 || typeId4 == 2)
+                        if (typeId3 == 14 && typeId4 == 2)
                         {
                             var magParams = packet.ReadUInt8();
                             for (int magParamIndex = 0; magParamIndex < magParams; magParamIndex++)
@@ -507,7 +541,7 @@ namespace SimpleCL.Service.Login
                                 var paramValue = packet.ReadUInt32();
                             }
                         }
-                        
+
                         break;
                 }
             }
