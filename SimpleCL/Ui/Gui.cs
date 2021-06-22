@@ -56,10 +56,10 @@ namespace SimpleCL.Ui
             gw.Debug = true;
             gw.Start();
             
-            ToggleLoginButton(false);
+            ToggleControls(false);
         }
 
-        public void ToggleLoginButton(bool enabled)
+        public void ToggleControls(bool enabled)
         {
             usernameBox.Enabled = enabled;
             passwordBox.Enabled = enabled;

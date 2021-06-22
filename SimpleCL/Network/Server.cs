@@ -9,7 +9,7 @@ using SimpleCL.Service;
 
 namespace SimpleCL.Network
 {
-    public abstract class Server
+    public abstract class Server : IDisposable
     {
         protected readonly Security Security = new Security();
         protected readonly TransferBuffer RecvBuffer = new TransferBuffer(0x1000, 0, 0);
@@ -19,6 +19,9 @@ namespace SimpleCL.Network
         private readonly List<Tuple<ushort, PacketHandler>> _handlers = new List<Tuple<ushort, PacketHandler>>();
 
         private delegate void PacketHandler(Server server, Packet packet);
+        private readonly Timer _timer = new Timer(5000);
+
+        private bool _disposing;
 
         public bool Debug { get; set; }
 
@@ -28,7 +31,7 @@ namespace SimpleCL.Network
             {
                 return;
             }
-            
+
             _services.Add(service);
 
             foreach (var method in service.GetType()
@@ -37,13 +40,14 @@ namespace SimpleCL.Network
                 PacketHandlerAttribute packetHandlerMethod = method.GetCustomAttribute<PacketHandlerAttribute>();
                 if (packetHandlerMethod != null)
                 {
-                    PacketHandler handler = (PacketHandler) Delegate.CreateDelegate(typeof(PacketHandler), service, method);
+                    PacketHandler handler =
+                        (PacketHandler) Delegate.CreateDelegate(typeof(PacketHandler), service, method);
                     _handlers.Add(Tuple.Create(packetHandlerMethod.Opcode, handler));
                 }
             }
         }
 
-        public void RemoveService<T>(T service) where T: Service.Service
+        public void RemoveService<T>(T service) where T : Service.Service
         {
             _services.Remove(service);
             _handlers.RemoveAll(x => x.Item2.Target?.GetType() == typeof(T));
@@ -59,7 +63,7 @@ namespace SimpleCL.Network
                 }
             }
         }
-        
+
         public void Log(string message, bool toGui = true)
         {
             string logMsg = "[" + GetType().Name + "] " + message;
@@ -77,16 +81,130 @@ namespace SimpleCL.Network
         {
             Security.Send(packet);
         }
-        
+
         protected void HeartBeat(Object source, ElapsedEventArgs e)
-        { 
+        {
             Inject(new Packet(Opcodes.HEARTBEAT));
         }
 
-        public void Close()
+        public void Disconnect()
         {
-            Program.Gui.ToggleLoginButton(true);
-            Socket.Close();
+            Program.Gui.ToggleControls(true);
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            Socket?.Dispose();
+            _disposing = true;
+        }
+        
+        public void Loop()
+        {
+            _timer.Elapsed += HeartBeat;
+
+            while (true)
+            {
+                SocketError success;
+
+                if (!Socket.Connected)
+                {
+                    break;
+                }
+
+                try
+                {
+                    RecvBuffer.Size = Socket.Receive(RecvBuffer.Buffer, 0, RecvBuffer.Buffer.Length,
+                        SocketFlags.None,
+                        out success);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    break;
+                }
+
+                if (success != SocketError.Success && success != SocketError.WouldBlock)
+                {
+                    break;
+                }
+
+                if (RecvBuffer.Size < 0)
+                {
+                    break;
+                }
+
+                try
+                {
+                    Security.Recv(RecvBuffer);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    break;
+                }
+
+                List<Packet> incomingPackets = Security.TransferIncoming();
+                if (incomingPackets == null)
+                {
+                    continue;
+                }
+
+                foreach (var packet in incomingPackets)
+                {
+                    if (Debug)
+                    {
+                        Log(packet.Opcode.ToString("X"), false);
+                        Log("\n" + Utility.HexDump(packet.GetBytes()), false);
+                    }
+                    
+                    if (packet.Opcode == Opcodes.IDENTITY && !_timer.Enabled)
+                    {
+                        _timer.Start();
+                    }
+                    
+                    Notify(packet);
+                }
+
+                List<KeyValuePair<TransferBuffer, Packet>> outgoing = Security.TransferOutgoing();
+                if (outgoing != null)
+                {
+                    foreach (var pair in outgoing)
+                    {
+                        TransferBuffer buffer = pair.Key;
+                        success = SocketError.Success;
+
+                        while (buffer.Offset != buffer.Size)
+                        {
+                            int n = Socket.Send(buffer.Buffer, buffer.Offset, buffer.Size - buffer.Offset,
+                                SocketFlags.None, out success);
+                            if (success != SocketError.Success && success != SocketError.WouldBlock)
+                            {
+                                break;
+                            }
+
+                            buffer.Offset += n;
+                        }
+
+                        if (success != SocketError.Success)
+                        {
+                            break;
+                        }
+                    }
+
+                    if (success != SocketError.Success)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if (_disposing)
+            {
+                return;
+            }
+            
+            Disconnect();
         }
     }
 }

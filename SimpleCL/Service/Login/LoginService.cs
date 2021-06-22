@@ -110,6 +110,8 @@ namespace SimpleCL.Service.Login
             switch (result)
             {
                 case 1:
+                    server.Dispose(); // Close gateway connection
+
                     uint sessionId = packet.ReadUInt32();
                     string agentIp = packet.ReadAscii();
                     ushort agentPort = packet.ReadUInt16();
@@ -174,12 +176,12 @@ namespace SimpleCL.Service.Login
                             break;
                     }
 
-                    server.Close();
+                    server.Disconnect();
                     break;
 
                 case 3:
                     server.Log("Unhandled login result.");
-                    server.Close();
+                    server.Disconnect();
                     return;
             }
         }

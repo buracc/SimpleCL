@@ -21,11 +21,20 @@ namespace SimpleCL.Ui
             
             FormBorderStyle = FormBorderStyle.FixedSingle;
             CenterToScreen();
+            
+            serverlistDataGridView.KeyDown += (sender, args) =>
+            {
+                DataGridViewCell currentCell = serverlistDataGridView.CurrentCell;
+                if (args.KeyCode == Keys.Enter && currentCell != null)
+                {
+                    SelectServer(serverlistDataGridView.Rows[currentCell.RowIndex], args);
+                }
+            };
         }
 
-        private void SelectServer(object sender, DataGridViewCellMouseEventArgs args)
+        private void SelectServer(object sender, EventArgs args)
         {
-            SilkroadServer selected = (SilkroadServer) ((DataGridView) sender).SelectedRows[0].DataBoundItem;
+            SilkroadServer selected = (SilkroadServer) ((DataGridViewRow) sender).DataBoundItem;
             if (selected == null)
             {
                 return;

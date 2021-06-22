@@ -18,15 +18,24 @@ namespace SimpleCL.Ui
             _agent = agent;
             InitializeComponent();
             characterListDataGridView.DataSource = chars;
-            characterListDataGridView.RowHeaderMouseDoubleClick += SelectCharacter;
+            // characterListDataGridView.RowHeaderMouseDoubleClick += SelectCharacter;
             
             FormBorderStyle = FormBorderStyle.FixedSingle;
             CenterToScreen();
+
+            characterListDataGridView.KeyDown += (sender, args) =>
+            {
+                DataGridViewCell currentCell = characterListDataGridView.CurrentCell;
+                if (args.KeyCode == Keys.Enter && currentCell != null)
+                {
+                    SelectCharacter(characterListDataGridView.Rows[currentCell.RowIndex], args);
+                }
+            };
         }
 
-        private void SelectCharacter(object sender, DataGridViewCellMouseEventArgs args)
+        private void SelectCharacter(object sender, EventArgs args)
         {
-            CharSelect selected = (CharSelect) ((DataGridView) sender).SelectedRows[0].DataBoundItem;
+            CharSelect selected = (CharSelect) ((DataGridViewRow) sender).DataBoundItem;
             if (selected == null)
             {
                 return;

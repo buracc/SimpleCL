@@ -7,7 +7,7 @@ namespace SimpleCL.Service
         public readonly ushort Opcode;
 
         public PacketHandlerAttribute(ushort opcode) {
-            this.Opcode = opcode;
+            Opcode = opcode;
         }
     }
 }

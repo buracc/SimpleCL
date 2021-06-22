@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using SilkroadSecurityApi;
@@ -21,7 +20,7 @@ namespace SimpleCL.Ui
             InitializeComponent();
             Text = title;
             submitPasscode.Click += SubmitClicked;
-            passcodeBox.KeyUp += SubmitClicked;
+            passcodeBox.KeyDown += SubmitClicked;
 
             FormBorderStyle = FormBorderStyle.FixedSingle;
             CenterToScreen();
