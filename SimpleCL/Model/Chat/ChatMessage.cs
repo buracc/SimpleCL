@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using SimpleCL.Enums;
+using SimpleCL.Enums.Chat;
 
-namespace SimpleCL.Model
+namespace SimpleCL.Model.Chat
 {
     public class ChatMessage
     {

@@ -3,6 +3,7 @@ using System.Text;
 using System.Windows.Forms;
 using SilkroadSecurityApi;
 using SimpleCL.Enums;
+using SimpleCL.Enums.Common;
 using SimpleCL.Network;
 
 namespace SimpleCL.Ui

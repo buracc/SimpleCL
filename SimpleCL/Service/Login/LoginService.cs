@@ -4,11 +4,18 @@ using System.Windows.Forms;
 using SilkroadSecurityApi;
 using SimpleCL.Database;
 using SimpleCL.Enums;
+using SimpleCL.Enums.Common;
+using SimpleCL.Enums.Login;
+using SimpleCL.Enums.Server;
 using SimpleCL.Model;
+using SimpleCL.Model.Character;
+using SimpleCL.Model.Coord;
+using SimpleCL.Model.Server;
 using SimpleCL.Network;
 using SimpleCL.Service.Game;
 using SimpleCL.Ui;
 using SimpleCL.Util;
+using CharacterSelect = SimpleCL.Model.Character.CharacterSelect;
 
 namespace SimpleCL.Service.Login
 {
@@ -245,7 +252,7 @@ namespace SimpleCL.Service.Login
             {
                 byte charCount = packet.ReadUInt8();
 
-                List<CharSelect> chars = new List<CharSelect>();
+                List<CharacterSelect> chars = new List<CharacterSelect>();
 
                 for (int i = 0; i < charCount; i++)
                 {
@@ -283,7 +290,7 @@ namespace SimpleCL.Service.Login
                         packet.ReadUInt32();
                     }
 
-                    CharSelect character = new CharSelect(name, level, deleting);
+                    CharacterSelect character = new CharacterSelect(name, level, deleting);
 
                     if (deleting)
                     {
@@ -320,7 +327,7 @@ namespace SimpleCL.Service.Login
                     chars.Add(character);
                 }
 
-                Application.Run(new CharacterSelect(chars, server));
+                Application.Run(new Ui.CharacterSelect(chars, server));
             }
         }
 

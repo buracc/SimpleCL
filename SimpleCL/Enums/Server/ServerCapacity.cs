@@ -1,4 +1,4 @@
-﻿namespace SimpleCL.Enums
+﻿namespace SimpleCL.Enums.Server
 {
     public enum ServerCapacity: byte
     {

@@ -1,4 +1,4 @@
-﻿namespace SimpleCL.Model
+﻿namespace SimpleCL.Model.Coord
 {
     public class Coordinates
     {

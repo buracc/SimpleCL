@@ -1,6 +1,6 @@
 ﻿
 // ReSharper disable InconsistentNaming
-namespace SimpleCL.Enums {
+namespace SimpleCL.Enums.Common {
     /// <summary>
     /// Specifies what local was this version of Silkroad released for. Taken from Silkroad CertServer.
     /// </summary>

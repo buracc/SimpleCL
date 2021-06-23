@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using SimpleCL.Enums.Common;
 
-namespace SimpleCL.Enums
+namespace SimpleCL.Enums.Server
 {
     public class SilkroadServer
     {

@@ -1,6 +1,7 @@
 ﻿using SimpleCL.Database;
+using SimpleCL.Model.Coord;
 
-namespace SimpleCL.Model
+namespace SimpleCL.Model.Character
 {
     public class Character
     {

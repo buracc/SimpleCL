@@ -1,4 +1,4 @@
-﻿namespace SimpleCL.Enums
+﻿namespace SimpleCL.Enums.Chat
 {
     public enum ChatChannel: byte
     {

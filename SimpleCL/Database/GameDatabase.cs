@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data.SQLite;
 using SimpleCL.Enums;
+using SimpleCL.Enums.Server;
 using SimpleCL.Util;
 
 namespace SimpleCL.Database

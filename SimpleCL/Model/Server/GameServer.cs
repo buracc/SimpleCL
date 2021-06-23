@@ -1,6 +1,6 @@
-﻿using SimpleCL.Enums;
+﻿using SimpleCL.Enums.Server;
 
-namespace SimpleCL.Model
+namespace SimpleCL.Model.Server
 {
     public class GameServer
     {

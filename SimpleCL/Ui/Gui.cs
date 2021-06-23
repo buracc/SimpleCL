@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using SimpleCL.Database;
 using SimpleCL.Enums;
+using SimpleCL.Enums.Server;
 using SimpleCL.Model;
+using SimpleCL.Model.Character;
 using SimpleCL.Network;
 using SimpleCL.Service.Login;
 

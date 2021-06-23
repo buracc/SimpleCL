@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using SilkroadSecurityApi;
 using SimpleCL.Enums;
+using SimpleCL.Enums.Common;
 using SimpleCL.Model;
+using SimpleCL.Model.Server;
 using SimpleCL.Network;
 using SimpleCL.Util;
 

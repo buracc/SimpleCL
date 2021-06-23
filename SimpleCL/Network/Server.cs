@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Timers;
 using SilkroadSecurityApi;
 using SimpleCL.Enums;
+using SimpleCL.Enums.Common;
 using SimpleCL.Service;
 
 namespace SimpleCL.Network

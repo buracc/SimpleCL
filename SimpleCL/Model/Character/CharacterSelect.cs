@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Text;
 
-namespace SimpleCL.Model
+namespace SimpleCL.Model.Character
 {
-    public class CharSelect
+    public class CharacterSelect
     {
         public string Name { get; }
         public byte Level { get; }
         public bool Deleting { get; }
         public DateTime DeletionTime { get; set; }
 
-        public CharSelect(string name, byte level, bool deleting)
+        public CharacterSelect(string name, byte level, bool deleting)
         {
             Name = name;
             Level = level;
