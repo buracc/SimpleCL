@@ -16,13 +16,13 @@ namespace SimpleCL.Service.Login
     {
         private readonly string _username;
         private readonly string _password;
-        private readonly Locale _locale;
+        private readonly SilkroadServer _silkroadServer;
 
-        public LoginService(string username, string password, Locale locale)
+        public LoginService(string username, string password, SilkroadServer silkroadServer)
         {
             _username = username;
             _password = password;
-            _locale = locale;
+            _silkroadServer = silkroadServer;
         }
 
         [PacketHandler(Opcodes.IDENTITY)]
@@ -31,7 +31,7 @@ namespace SimpleCL.Service.Login
             if (server is Gateway)
             {
                 Packet identity = new Packet(Opcodes.Gateway.Request.PATCH, true);
-                identity.WriteUInt8(_locale);
+                identity.WriteUInt8(_silkroadServer.Locale);
                 identity.WriteAscii("SR_Client");
                 identity.WriteUInt32(GameDatabase.GetInstance().GetGameVersion());
                 server.Inject(identity);
@@ -44,7 +44,7 @@ namespace SimpleCL.Service.Login
                 login.WriteUInt32(((Agent) server).SessionId);
                 login.WriteAscii(_username);
                 login.WriteAscii(_password);
-                login.WriteUInt8(_locale);
+                login.WriteUInt8(_silkroadServer.Locale);
                 login.WriteUInt8Array(NetworkUtils.GetMacAddressBytes());
 
                 server.Inject(login);
@@ -158,6 +158,10 @@ namespace SimpleCL.Service.Login
                                 case LoginBlockType.AccountInspection:
                                     server.Log("Unable to connect due to inspection.");
                                     break;
+                                
+                                default:
+                                    server.Log("Unhandled block type code: " + blockType);
+                                    break;
                             }
 
                             break;
@@ -165,7 +169,7 @@ namespace SimpleCL.Service.Login
                         case LoginErrorCode.AlreadyConnected:
                             server.Log("Account is already connected.");
                             break;
-                        
+
                         case LoginErrorCode.Inspection:
                             server.Log("Server is under inspection.");
                             break;
@@ -176,6 +180,9 @@ namespace SimpleCL.Service.Login
 
                         case LoginErrorCode.ServerIsFull:
                             server.Log("Server is full.");
+                            break;
+                        default:
+                            server.Log("Unhandled login error code: " + errorCode);
                             break;
                     }
 
@@ -203,17 +210,28 @@ namespace SimpleCL.Service.Login
 
             if (result == 2)
             {
-                AuthErrorCode error = (AuthErrorCode) packet.ReadUInt8();
+                byte errorCode = packet.ReadUInt8();
+                AuthErrorCode error = (AuthErrorCode) errorCode;
                 switch (error)
                 {
+                    case AuthErrorCode.InvalidCredentials:
+                        server.Log("Invalid credentials.");
+                        break;
+                        
                     case AuthErrorCode.IpLimit:
                         server.Log("IP limit exceeded.");
-                        return;
+                        break;
 
                     case AuthErrorCode.ServerFull:
                         server.Log("Server is full.");
-                        return;
+                        break;
+                    
+                    default:
+                        server.Log("Unhandled auth error code: " + error);
+                        break;
                 }
+                
+                server.Disconnect();
             }
         }
 
@@ -233,7 +251,10 @@ namespace SimpleCL.Service.Login
                 {
                     packet.ReadUInt32();
                     string name = packet.ReadAscii();
-                    string jobName = packet.ReadAscii();
+                    if (_silkroadServer.Locale.IsInternational())
+                    {
+                        string jobName = packet.ReadAscii();
+                    }
 
                     packet.ReadUInt8();
                     byte level = packet.ReadUInt8();
@@ -242,7 +263,7 @@ namespace SimpleCL.Service.Login
                     packet.ReadUInt16();
                     packet.ReadUInt16();
 
-                    if (_locale == Locale.SRO_TR_Official_GameGami)
+                    if (_silkroadServer.Locale.IsInternational())
                     {
                         packet.ReadUInt32();
                     }
@@ -250,14 +271,14 @@ namespace SimpleCL.Service.Login
                     uint hp = packet.ReadUInt32();
                     uint mp = packet.ReadUInt32();
 
-                    if (_locale == Locale.SRO_TR_Official_GameGami)
+                    if (_silkroadServer.Locale.IsInternational())
                     {
                         packet.ReadUInt16();
                     }
 
                     bool deleting = packet.ReadUInt8() == 1;
 
-                    if (_locale == Locale.SRO_TR_Official_GameGami)
+                    if (_silkroadServer.Locale.IsInternational())
                     {
                         packet.ReadUInt32();
                     }
@@ -317,7 +338,7 @@ namespace SimpleCL.Service.Login
             var sp = packet.ReadUInt32();
             var statPoint = packet.ReadUInt16();
             var zerkPoints = packet.ReadUInt8();
-            var unk = packet.ReadUInt32(); // GatheredExp according to DaxterSoul, but it's wrong on TRSRO
+            var gatheredExp = packet.ReadUInt32(); // GatheredExp according to DaxterSoul, but it's wrong on TRSRO
             var maxHp = packet.ReadUInt32();
             var maxMp = packet.ReadUInt32();
             var icon = packet.ReadUInt8();
@@ -327,7 +348,7 @@ namespace SimpleCL.Service.Login
             var zerkLevel = packet.ReadUInt8();
             var freePvp = packet.ReadUInt8();
 
-            if (_locale == Locale.SRO_TR_Official_GameGami)
+            if (_silkroadServer.Locale.IsInternational())
             {
                 for (int i = 0; i < 25; i++)
                 {
@@ -345,17 +366,20 @@ namespace SimpleCL.Service.Login
 
             ParseInventory(packet, avatarInventoryCount, false);
 
-            var jobPouchSize = packet.ReadUInt8();
-            var jobPouchCount = packet.ReadUInt8();
-            
-            // parse job pouch
+            if (_silkroadServer.Locale.IsInternational())
+            {
+                var jobPouchSize = packet.ReadUInt8();
+                var jobPouchCount = packet.ReadUInt8();
 
-            var jobInventorySize = packet.ReadUInt8();
-            var jobInventoryCount = packet.ReadUInt8();
+                // parse job pouch inventory
 
-            ParseInventory(packet, jobInventoryCount, false);
+                var jobInventorySize = packet.ReadUInt8();
+                var jobInventoryCount = packet.ReadUInt8();
 
-            if (_locale == Locale.SRO_TR_Official_GameGami)
+                ParseInventory(packet, jobInventoryCount, false);
+            }
+
+            if (_silkroadServer.Locale.IsInternational())
             {
                 packet.ReadUInt8();
             }
@@ -474,24 +498,27 @@ namespace SimpleCL.Service.Login
                             var advElixirValue = packet.ReadUInt32();
                         }
 
-                        // 3 = ??
-                        packet.ReadUInt8();
-                        var unk01 = packet.ReadUInt8();
-                        for (int j = 0; j < unk01; j++)
+                        if (_silkroadServer.Locale.IsInternational())
                         {
-                            var unkSlot = packet.ReadUInt8();
-                            var unkParam1 = packet.ReadUInt32();
-                            var unkParam2 = packet.ReadUInt32();
-                        }
+                            // 3 = ??
+                            packet.ReadUInt8();
+                            var unk01 = packet.ReadUInt8();
+                            for (int j = 0; j < unk01; j++)
+                            {
+                                var unkSlot = packet.ReadUInt8();
+                                var unkParam1 = packet.ReadUInt32();
+                                var unkParam2 = packet.ReadUInt32();
+                            }
 
-                        // 4 = ??
-                        packet.ReadUInt8();
-                        var unk02 = packet.ReadUInt8();
-                        for (int j = 0; j < unk01; j++)
-                        {
-                            var unkSlot = packet.ReadUInt8();
-                            var unkParam1 = packet.ReadUInt32();
-                            var unkParam2 = packet.ReadUInt32();
+                            // 4 = ??
+                            packet.ReadUInt8();
+                            var unk02 = packet.ReadUInt8();
+                            for (int j = 0; j < unk01; j++)
+                            {
+                                var unkSlot = packet.ReadUInt8();
+                                var unkParam1 = packet.ReadUInt32();
+                                var unkParam2 = packet.ReadUInt32();
+                            }
                         }
 
                         break;
@@ -509,7 +536,7 @@ namespace SimpleCL.Service.Login
                                     var rentTimeEndSeconds = packet.ReadUInt32();
                                 }
 
-                                if (_locale == Locale.SRO_TR_Official_GameGami && inventory)
+                                if (_silkroadServer.Locale.IsInternational() && inventory)
                                 {
                                     packet.ReadUInt8();
                                 }

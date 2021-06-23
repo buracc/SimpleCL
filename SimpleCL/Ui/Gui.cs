@@ -46,7 +46,7 @@ namespace SimpleCL.Ui
             GameDatabase.GetInstance().SelectedServer = selectedServer;
             
             Gateway gw = new Gateway(selectedServer.GatewayIps[new Random().Next(selectedServer.GatewayIps.Length)], GatewayPort);
-            gw.RegisterService(new LoginService(usernameBox.Text, passwordBox.Text, selectedServer.Locale));
+            gw.RegisterService(new LoginService(usernameBox.Text, passwordBox.Text, selectedServer));
             gw.Debug = true;
             gw.Start();
             

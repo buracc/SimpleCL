@@ -54,4 +54,13 @@ namespace SimpleCL.Enums {
         SRO_R_CH_RealLocal_CIMO = 48,
         SRO_TR_Official_GameGami = 56,
     }
+
+    static class Extensions
+    {
+        public static bool IsInternational(this Locale locale)
+        {
+            return locale == Locale.SRO_TR_Official_GameGami
+                   || locale == Locale.SRO_Global_TestBed;
+        }
+    }
 }
