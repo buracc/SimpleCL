@@ -6,7 +6,6 @@ namespace SimpleCL.Network
 {
     public class Gateway: Server
     {
-        public const byte TrsroVersion = 13;
         private readonly string _ip;
         private readonly ushort _port;
         

@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data.SQLite;
+using SimpleCL.Enums;
+using SimpleCL.Util;
 
 namespace SimpleCL.Database
 {
     public class GameDatabase
     {
         private static GameDatabase _instance;
+        public SilkroadServer SelectedServer { get; set; }
 
         private GameDatabase()
         {
@@ -20,9 +23,20 @@ namespace SimpleCL.Database
 
         private List<NameValueCollection> GetData(string sql)
         {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\AppData\Local\Programs\phBot Testing\Data\TRSRO";
+            if (SelectedServer == null)
+            {
+                throw new SystemException("Current server wasn't set");
+            }
+
+            string dbFile = DirectoryUtils.GetDbFile(SelectedServer.Name);
+
+            if (dbFile == "")
+            {
+                throw new SystemException("DB file not found");
+            }
+            
             List<NameValueCollection> data = new List<NameValueCollection>();
-            using (var conn = new SQLiteConnection("Data Source=" + path + ".db3;Version=3;"))
+            using (var conn = new SQLiteConnection("Data Source=" + dbFile + ";Version=3;"))
             {
                 conn.Open();
                 SQLiteCommand comm = conn.CreateCommand();
@@ -80,6 +94,17 @@ namespace SimpleCL.Database
             }
             
             return result[0];
+        }
+
+        public uint GetGameVersion()
+        {
+            var result = GetData("SELECT * FROM data WHERE k = 'version'");
+            if (result.Count == 0)
+            {
+                throw new SystemException("Server data not found");
+            }
+
+            return uint.Parse(result[0]["v"]);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using SimpleCL.Network.Enums;
 
 namespace SimpleCL.Ui
 {
@@ -35,13 +34,11 @@ namespace SimpleCL.Ui
         private void InitializeComponent()
         {
             System.Windows.Forms.GroupBox credentialsGroup;
+            this.serverComboBox = new System.Windows.Forms.ComboBox();
+            this.serverLabel = new System.Windows.Forms.Label();
             this.loginButton = new System.Windows.Forms.Button();
-            this.localeComboBox = new System.Windows.Forms.ComboBox();
-            this.localeLabel = new System.Windows.Forms.Label();
             this.usernameLabel = new System.Windows.Forms.Label();
-            this.gatewayComboBox = new System.Windows.Forms.ComboBox();
             this.passwordBox = new System.Windows.Forms.TextBox();
-            this.gatewayLabel = new System.Windows.Forms.Label();
             this.usernameBox = new System.Windows.Forms.TextBox();
             this.passwordLabel = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
@@ -76,13 +73,11 @@ namespace SimpleCL.Ui
             // 
             // credentialsGroup
             // 
+            credentialsGroup.Controls.Add(this.serverComboBox);
+            credentialsGroup.Controls.Add(this.serverLabel);
             credentialsGroup.Controls.Add(this.loginButton);
-            credentialsGroup.Controls.Add(this.localeComboBox);
-            credentialsGroup.Controls.Add(this.localeLabel);
             credentialsGroup.Controls.Add(this.usernameLabel);
-            credentialsGroup.Controls.Add(this.gatewayComboBox);
             credentialsGroup.Controls.Add(this.passwordBox);
-            credentialsGroup.Controls.Add(this.gatewayLabel);
             credentialsGroup.Controls.Add(this.usernameBox);
             credentialsGroup.Controls.Add(this.passwordLabel);
             credentialsGroup.Location = new System.Drawing.Point(6, 6);
@@ -91,6 +86,21 @@ namespace SimpleCL.Ui
             credentialsGroup.TabIndex = 6;
             credentialsGroup.TabStop = false;
             credentialsGroup.Text = "Credentials";
+            // 
+            // serverComboBox
+            // 
+            this.serverComboBox.Location = new System.Drawing.Point(69, 74);
+            this.serverComboBox.Name = "serverComboBox";
+            this.serverComboBox.Size = new System.Drawing.Size(122, 20);
+            this.serverComboBox.TabIndex = 9;
+            // 
+            // serverLabel
+            // 
+            this.serverLabel.Location = new System.Drawing.Point(6, 77);
+            this.serverLabel.Name = "serverLabel";
+            this.serverLabel.Size = new System.Drawing.Size(57, 17);
+            this.serverLabel.TabIndex = 10;
+            this.serverLabel.Text = "Server";
             // 
             // loginButton
             // 
@@ -102,23 +112,6 @@ namespace SimpleCL.Ui
             this.loginButton.UseVisualStyleBackColor = true;
             this.loginButton.Click += new System.EventHandler(this.LoginClicked);
             // 
-            // localeComboBox
-            // 
-            this.localeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.localeComboBox.FormattingEnabled = true;
-            this.localeComboBox.Location = new System.Drawing.Point(69, 101);
-            this.localeComboBox.Name = "localeComboBox";
-            this.localeComboBox.Size = new System.Drawing.Size(185, 21);
-            this.localeComboBox.TabIndex = 7;
-            // 
-            // localeLabel
-            // 
-            this.localeLabel.Location = new System.Drawing.Point(6, 104);
-            this.localeLabel.Name = "localeLabel";
-            this.localeLabel.Size = new System.Drawing.Size(57, 17);
-            this.localeLabel.TabIndex = 6;
-            this.localeLabel.Text = "Locale";
-            // 
             // usernameLabel
             // 
             this.usernameLabel.Location = new System.Drawing.Point(6, 25);
@@ -127,15 +120,6 @@ namespace SimpleCL.Ui
             this.usernameLabel.TabIndex = 1;
             this.usernameLabel.Text = "Username";
             // 
-            // gatewayComboBox
-            // 
-            this.gatewayComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.gatewayComboBox.FormattingEnabled = true;
-            this.gatewayComboBox.Location = new System.Drawing.Point(69, 74);
-            this.gatewayComboBox.Name = "gatewayComboBox";
-            this.gatewayComboBox.Size = new System.Drawing.Size(122, 21);
-            this.gatewayComboBox.TabIndex = 5;
-            // 
             // passwordBox
             // 
             this.passwordBox.Location = new System.Drawing.Point(69, 48);
@@ -143,14 +127,6 @@ namespace SimpleCL.Ui
             this.passwordBox.Size = new System.Drawing.Size(122, 20);
             this.passwordBox.TabIndex = 2;
             this.passwordBox.UseSystemPasswordChar = true;
-            // 
-            // gatewayLabel
-            // 
-            this.gatewayLabel.Location = new System.Drawing.Point(6, 78);
-            this.gatewayLabel.Name = "gatewayLabel";
-            this.gatewayLabel.Size = new System.Drawing.Size(57, 17);
-            this.gatewayLabel.TabIndex = 4;
-            this.gatewayLabel.Text = "Gateway";
             // 
             // usernameBox
             // 
@@ -385,6 +361,9 @@ namespace SimpleCL.Ui
             this.ResumeLayout(false);
         }
 
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label1;
+
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar2;
 
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
@@ -419,12 +398,7 @@ namespace SimpleCL.Ui
 
         private System.Windows.Forms.ListBox loggerBox;
 
-        private System.Windows.Forms.ComboBox gatewayComboBox;
-        private System.Windows.Forms.ComboBox localeComboBox;
-        private System.Windows.Forms.Label localeLabel;
         private System.Windows.Forms.Button loginButton;
-
-        private System.Windows.Forms.Label gatewayLabel;
 
         private System.Windows.Forms.TextBox passwordBox;
         private System.Windows.Forms.TabControl tabControl;
@@ -432,6 +406,9 @@ namespace SimpleCL.Ui
 
         private System.Windows.Forms.TextBox usernameBox;
         private System.Windows.Forms.Label usernameLabel;
+
+        private System.Windows.Forms.Label serverLabel;
+        private System.Windows.Forms.ComboBox serverComboBox;
 
         #endregion
     }

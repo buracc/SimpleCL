@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Timers;
 using SilkroadSecurityApi;
-using SimpleCL.Network.Enums;
+using SimpleCL.Enums;
 using SimpleCL.Service;
 
 namespace SimpleCL.Network

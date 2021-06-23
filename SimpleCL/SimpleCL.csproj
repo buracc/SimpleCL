@@ -77,20 +77,20 @@
     <ItemGroup>
         <Compile Include="Credentials.cs" />
         <Compile Include="Database\GameDatabase.cs" />
-        <Compile Include="Model\Configuration.cs" />
-        <Compile Include="Model\Game\Character.cs" />
-        <Compile Include="Model\Game\CharSelect.cs" />
-        <Compile Include="Model\Game\ChatChannel.cs" />
-        <Compile Include="Model\Game\ChatMessage.cs" />
-        <Compile Include="Model\Game\Coordinates.cs" />
-        <Compile Include="Model\Server\ServerCapacity.cs" />
-        <Compile Include="Model\Server\SilkroadServer.cs" />
+        <Compile Include="Enums\AuthErrorCode.cs" />
+        <Compile Include="Enums\ChatChannel.cs" />
+        <Compile Include="Enums\Locale.cs" />
+        <Compile Include="Enums\LoginBlockType.cs" />
+        <Compile Include="Enums\LoginErrorCode.cs" />
+        <Compile Include="Enums\Opcodes.cs" />
+        <Compile Include="Enums\ServerCapacity.cs" />
+        <Compile Include="Enums\SilkroadServer.cs" />
+        <Compile Include="Model\Character.cs" />
+        <Compile Include="Model\CharSelect.cs" />
+        <Compile Include="Model\ChatMessage.cs" />
+        <Compile Include="Model\Coordinates.cs" />
+        <Compile Include="Model\GameServer.cs" />
         <Compile Include="Network\Agent.cs" />
-        <Compile Include="Network\Enums\AuthErrorCode.cs" />
-        <Compile Include="Network\Enums\Locale.cs" />
-        <Compile Include="Network\Enums\LoginBlockType.cs" />
-        <Compile Include="Network\Enums\LoginErrorCode.cs" />
-        <Compile Include="Network\Enums\Opcodes.cs" />
         <Compile Include="Network\Gateway.cs" />
         <Compile Include="Network\Server.cs" />
         <Compile Include="Program.cs" />
@@ -123,6 +123,7 @@
         <Compile Include="Ui\Serverlist.Designer.cs">
           <DependentUpon>Serverlist.cs</DependentUpon>
         </Compile>
+        <Compile Include="Util\DirectoryUtils.cs" />
         <Compile Include="Util\NetworkUtils.cs" />
         <Compile Include="Util\Pk2Reader\Pk2Extractor.cs" />
         <Compile Include="Util\Pk2Reader\Pk2File.cs" />

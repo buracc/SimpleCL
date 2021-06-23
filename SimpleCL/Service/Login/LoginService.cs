@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using SilkroadSecurityApi;
 using SimpleCL.Database;
-using SimpleCL.Model.Game;
-using SimpleCL.Model.Server;
+using SimpleCL.Enums;
+using SimpleCL.Model;
 using SimpleCL.Network;
-using SimpleCL.Network.Enums;
 using SimpleCL.Service.Game;
 using SimpleCL.Ui;
 using SimpleCL.Util;
@@ -34,7 +33,7 @@ namespace SimpleCL.Service.Login
                 Packet identity = new Packet(Opcodes.Gateway.Request.PATCH, true);
                 identity.WriteUInt8(_locale);
                 identity.WriteAscii("SR_Client");
-                identity.WriteUInt32(Gateway.TrsroVersion);
+                identity.WriteUInt32(GameDatabase.GetInstance().GetGameVersion());
                 server.Inject(identity);
                 return;
             }
@@ -61,7 +60,7 @@ namespace SimpleCL.Service.Login
         [PacketHandler(Opcodes.Gateway.Response.SERVERLIST)]
         public void SendLogin(Server server, Packet packet)
         {
-            List<SilkroadServer> servers = new List<SilkroadServer>();
+            List<GameServer> servers = new List<GameServer>();
 
             while (packet.ReadUInt8() == 1)
             {
@@ -71,14 +70,14 @@ namespace SimpleCL.Service.Login
 
             while (packet.ReadUInt8() == 1)
             {
-                SilkroadServer silkroadServer = new SilkroadServer(
+                GameServer gameServer = new GameServer(
                     packet.ReadUInt16(),
                     packet.ReadAscii(),
                     (ServerCapacity) packet.ReadUInt8(),
                     packet.ReadUInt8() == 1
                 );
 
-                servers.Add(silkroadServer);
+                servers.Add(gameServer);
             }
 
             Application.Run(new Serverlist(servers, server));

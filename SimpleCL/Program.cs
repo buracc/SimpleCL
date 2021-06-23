@@ -1,7 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
-using SimpleCL.Database;
 using SimpleCL.Ui;
+using SimpleCL.Util;
 
 namespace SimpleCL
 {
@@ -18,7 +19,7 @@ namespace SimpleCL
 
         // public static void Main(string[] args)
         // {
-        //     Console.WriteLine(GameDatabase.GetInstance().GetItemData(575)["name"]);
+        //     Console.WriteLine(DirectoryUtils.GetDbFile("TRSRO"));
         // }
     }
 }

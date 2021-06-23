@@ -1,7 +1,7 @@
 ﻿using SilkroadSecurityApi;
-using SimpleCL.Model.Game;
+using SimpleCL.Enums;
+using SimpleCL.Model;
 using SimpleCL.Network;
-using SimpleCL.Network.Enums;
 
 namespace SimpleCL.Service.Game
 {

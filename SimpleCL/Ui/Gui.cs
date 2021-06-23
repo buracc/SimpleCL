@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Windows.Forms;
-using SimpleCL.Model.Game;
+using SimpleCL.Database;
+using SimpleCL.Enums;
+using SimpleCL.Model;
 using SimpleCL.Network;
-using SimpleCL.Network.Enums;
 using SimpleCL.Service.Login;
 
 namespace SimpleCL.Ui
@@ -13,14 +13,7 @@ namespace SimpleCL.Ui
     {
         public Character Character = null;
         
-        private readonly List<string> _ggGateways = new List<string>
-        {
-            "94.199.103.68",
-            "94.199.103.69",
-            "94.199.103.70"
-        };
-
-        private const ushort GgPort = 15779;
+        private const ushort GatewayPort = 15779;
         
         public Gui()
         {
@@ -28,19 +21,12 @@ namespace SimpleCL.Ui
 
             FormClosed += ExitApplication;
 
-            foreach (string ip in _ggGateways)
+            foreach (SilkroadServer server in SilkroadServer.Values)
             {
-                gatewayComboBox.Items.Add(ip);
+                serverComboBox.Items.Add(server);
             }
 
-            gatewayComboBox.SelectedIndex = new Random().Next(gatewayComboBox.Items.Count);
-
-            foreach (Locale locale in Enum.GetValues(typeof(Locale)))
-            {
-                localeComboBox.Items.Add(locale);
-            }
-
-            localeComboBox.SelectedItem = Locale.SRO_TR_Official_GameGami;
+            serverComboBox.SelectedIndex = 0;
 
             usernameBox.Text = Credentials.Username;
             passwordBox.Text = Credentials.Password;
@@ -51,8 +37,16 @@ namespace SimpleCL.Ui
 
         private void LoginClicked(object sender, EventArgs e)
         {
-            Gateway gw = new Gateway(gatewayComboBox.SelectedItem as string, GgPort);
-            gw.RegisterService(new LoginService(usernameBox.Text, passwordBox.Text, (Locale) localeComboBox.SelectedItem));
+            SilkroadServer selectedServer = serverComboBox.SelectedItem as SilkroadServer;
+            if (selectedServer == null)
+            {
+                return;
+            }
+
+            GameDatabase.GetInstance().SelectedServer = selectedServer;
+            
+            Gateway gw = new Gateway(selectedServer.GatewayIps[new Random().Next(selectedServer.GatewayIps.Length)], GatewayPort);
+            gw.RegisterService(new LoginService(usernameBox.Text, passwordBox.Text, selectedServer.Locale));
             gw.Debug = true;
             gw.Start();
             
@@ -64,8 +58,7 @@ namespace SimpleCL.Ui
             usernameBox.Enabled = enabled;
             passwordBox.Enabled = enabled;
             loginButton.Enabled = enabled;
-            gatewayComboBox.Enabled = enabled;
-            localeComboBox.Enabled = enabled;
+            serverComboBox.Enabled = enabled;
         }
 
         public void Log(string message)

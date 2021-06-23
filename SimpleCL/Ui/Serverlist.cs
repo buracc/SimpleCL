@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using SilkroadSecurityApi;
-using SimpleCL.Model.Server;
+using SimpleCL.Enums;
+using SimpleCL.Model;
 using SimpleCL.Network;
-using SimpleCL.Network.Enums;
 using SimpleCL.Util;
 
 namespace SimpleCL.Ui
@@ -12,7 +12,7 @@ namespace SimpleCL.Ui
     public partial class Serverlist : Form
     {
         private readonly Server _gateway;
-        public Serverlist(List<SilkroadServer> servers, Server gateway)
+        public Serverlist(List<GameServer> servers, Server gateway)
         {
             _gateway = gateway;
             InitializeComponent();
@@ -34,7 +34,7 @@ namespace SimpleCL.Ui
 
         private void SelectServer(object sender, EventArgs args)
         {
-            SilkroadServer selected = (SilkroadServer) ((DataGridViewRow) sender).DataBoundItem;
+            GameServer selected = (GameServer) ((DataGridViewRow) sender).DataBoundItem;
             if (selected == null)
             {
                 return;

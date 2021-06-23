@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using SilkroadSecurityApi;
-using SimpleCL.Model.Game;
-using SimpleCL.Model.Server;
+using SimpleCL.Enums;
+using SimpleCL.Model;
 using SimpleCL.Network;
-using SimpleCL.Network.Enums;
 using SimpleCL.Util;
 
 namespace SimpleCL.Ui
