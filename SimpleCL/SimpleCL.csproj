@@ -95,15 +95,17 @@
         <Compile Include="Network\Server.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Service\Game\ChatService.cs" />
+        <Compile Include="Service\Game\Chat\ChatService.cs" />
+        <Compile Include="Service\Game\Common\CharacterService.cs" />
+        <Compile Include="Service\Login\CharacterSelectService.cs" />
         <Compile Include="Service\Login\LoginService.cs" />
         <Compile Include="Service\PacketHandlerAttribute.cs" />
         <Compile Include="Service\Service.cs" />
-        <Compile Include="Ui\CharacterSelect.cs">
+        <Compile Include="Ui\CharacterSelection.cs">
           <SubType>Form</SubType>
         </Compile>
-        <Compile Include="Ui\CharacterSelect.Designer.cs">
-          <DependentUpon>CharacterSelect.cs</DependentUpon>
+        <Compile Include="Ui\CharacterSelection.Designer.cs">
+          <DependentUpon>CharacterSelection.cs</DependentUpon>
         </Compile>
         <Compile Include="Ui\Gui.cs">
           <SubType>Form</SubType>
@@ -135,8 +137,8 @@
       <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
-      <EmbeddedResource Include="Ui\CharacterSelect.resx">
-        <DependentUpon>CharacterSelect.cs</DependentUpon>
+      <EmbeddedResource Include="Ui\CharacterSelection.resx">
+        <DependentUpon>CharacterSelection.cs</DependentUpon>
       </EmbeddedResource>
       <EmbeddedResource Include="Ui\Gui.resx">
         <DependentUpon>Gui.cs</DependentUpon>

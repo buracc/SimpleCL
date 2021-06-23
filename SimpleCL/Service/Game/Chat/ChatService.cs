@@ -1,12 +1,10 @@
 ﻿using SilkroadSecurityApi;
-using SimpleCL.Enums;
 using SimpleCL.Enums.Chat;
 using SimpleCL.Enums.Common;
-using SimpleCL.Model;
 using SimpleCL.Model.Chat;
 using SimpleCL.Network;
 
-namespace SimpleCL.Service.Game
+namespace SimpleCL.Service.Game.Chat
 {
     public class ChatService : Service
     {

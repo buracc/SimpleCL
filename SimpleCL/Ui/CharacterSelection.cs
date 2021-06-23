@@ -11,10 +11,10 @@ using SimpleCL.Util;
 
 namespace SimpleCL.Ui
 {
-    public partial class CharacterSelect : Form
+    public partial class CharacterSelection : Form
     {
         private readonly Server _agent;
-        public CharacterSelect(List<Model.Character.CharacterSelect> chars, Server agent)
+        public CharacterSelection(List<Model.Character.CharacterSelect> chars, Server agent)
         {
             _agent = agent;
             InitializeComponent();

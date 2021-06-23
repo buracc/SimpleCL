@@ -2,7 +2,7 @@
 
 namespace SimpleCL.Ui
 {
-    partial class CharacterSelect
+    partial class CharacterSelection
     {
         /// <summary>
         /// Required designer variable.
@@ -60,7 +60,7 @@ namespace SimpleCL.Ui
             this.ClientSize = new System.Drawing.Size(415, 226);
             this.Controls.Add(this.characterListDataGridView);
             this.MaximizeBox = false;
-            this.Name = "CharacterSelect";
+            this.Name = "CharacterSelection";
             this.Text = "CharacterSelect";
             ((System.ComponentModel.ISupportInitialize) (this.characterListDataGridView)).EndInit();
             this.ResumeLayout(false);
