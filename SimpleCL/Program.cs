@@ -1,8 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Windows.Forms;
+using SimpleCL.Enums.Item;
+using SimpleCL.Enums.Item.Type;
 using SimpleCL.Ui;
-using SimpleCL.Util;
 
 namespace SimpleCL
 {
@@ -19,7 +19,7 @@ namespace SimpleCL
 
         // public static void Main(string[] args)
         // {
-        //     Console.WriteLine(DirectoryUtils.GetDbFile("TRSRO"));
+        //     Console.WriteLine(ItemParser.GetItemSubType(ItemCategory.Equipment, 6, 2).GetType());
         // }
     }
 }

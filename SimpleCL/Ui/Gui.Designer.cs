@@ -58,6 +58,16 @@ namespace SimpleCL.Ui
             this.levelLabel = new System.Windows.Forms.Label();
             this.mpLabel = new System.Windows.Forms.Label();
             this.hpLabel = new System.Windows.Forms.Label();
+            this.inventoryPage = new System.Windows.Forms.TabPage();
+            this.inventoryTabControl = new System.Windows.Forms.TabControl();
+            this.inventoryInvTab = new System.Windows.Forms.TabPage();
+            this.inventoryDataGridView = new System.Windows.Forms.DataGridView();
+            this.equipmentInvTab = new System.Windows.Forms.TabPage();
+            this.equipmentDataGridView = new System.Windows.Forms.DataGridView();
+            this.avatarInvTab = new System.Windows.Forms.TabPage();
+            this.avatarDataGridView = new System.Windows.Forms.DataGridView();
+            this.jobEquipmentInvTab = new System.Windows.Forms.TabPage();
+            this.jobEquipmentDataGridView = new System.Windows.Forms.DataGridView();
             this.chatTab = new System.Windows.Forms.TabPage();
             this.chatBox = new System.Windows.Forms.ListBox();
             this.loggerBox = new System.Windows.Forms.ListBox();
@@ -68,6 +78,16 @@ namespace SimpleCL.Ui
             this.tabControl.SuspendLayout();
             this.homeTab.SuspendLayout();
             this.statisticsBox.SuspendLayout();
+            this.inventoryPage.SuspendLayout();
+            this.inventoryTabControl.SuspendLayout();
+            this.inventoryInvTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize) (this.inventoryDataGridView)).BeginInit();
+            this.equipmentInvTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize) (this.equipmentDataGridView)).BeginInit();
+            this.avatarInvTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize) (this.avatarDataGridView)).BeginInit();
+            this.jobEquipmentInvTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize) (this.jobEquipmentDataGridView)).BeginInit();
             this.chatTab.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -91,7 +111,7 @@ namespace SimpleCL.Ui
             // 
             this.serverComboBox.Location = new System.Drawing.Point(69, 74);
             this.serverComboBox.Name = "serverComboBox";
-            this.serverComboBox.Size = new System.Drawing.Size(122, 20);
+            this.serverComboBox.Size = new System.Drawing.Size(122, 21);
             this.serverComboBox.TabIndex = 9;
             // 
             // serverLabel
@@ -146,6 +166,7 @@ namespace SimpleCL.Ui
             // tabControl
             // 
             this.tabControl.Controls.Add(this.homeTab);
+            this.tabControl.Controls.Add(this.inventoryPage);
             this.tabControl.Controls.Add(this.chatTab);
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
@@ -303,6 +324,128 @@ namespace SimpleCL.Ui
             this.hpLabel.TabIndex = 0;
             this.hpLabel.Text = "HP";
             // 
+            // inventoryPage
+            // 
+            this.inventoryPage.Controls.Add(this.inventoryTabControl);
+            this.inventoryPage.Location = new System.Drawing.Point(4, 22);
+            this.inventoryPage.Name = "inventoryPage";
+            this.inventoryPage.Size = new System.Drawing.Size(768, 272);
+            this.inventoryPage.TabIndex = 2;
+            this.inventoryPage.Text = "Inventory";
+            this.inventoryPage.UseVisualStyleBackColor = true;
+            // 
+            // inventoryTabControl
+            // 
+            this.inventoryTabControl.Controls.Add(this.inventoryInvTab);
+            this.inventoryTabControl.Controls.Add(this.equipmentInvTab);
+            this.inventoryTabControl.Controls.Add(this.avatarInvTab);
+            this.inventoryTabControl.Controls.Add(this.jobEquipmentInvTab);
+            this.inventoryTabControl.Location = new System.Drawing.Point(3, 3);
+            this.inventoryTabControl.Name = "inventoryTabControl";
+            this.inventoryTabControl.SelectedIndex = 0;
+            this.inventoryTabControl.Size = new System.Drawing.Size(762, 269);
+            this.inventoryTabControl.TabIndex = 0;
+            // 
+            // inventoryInvTab
+            // 
+            this.inventoryInvTab.Controls.Add(this.inventoryDataGridView);
+            this.inventoryInvTab.Location = new System.Drawing.Point(4, 22);
+            this.inventoryInvTab.Name = "inventoryInvTab";
+            this.inventoryInvTab.Padding = new System.Windows.Forms.Padding(3);
+            this.inventoryInvTab.Size = new System.Drawing.Size(754, 243);
+            this.inventoryInvTab.TabIndex = 0;
+            this.inventoryInvTab.Text = "Inventory";
+            this.inventoryInvTab.UseVisualStyleBackColor = true;
+            // 
+            // inventoryDataGridView
+            // 
+            this.inventoryDataGridView.AllowUserToAddRows = false;
+            this.inventoryDataGridView.AllowUserToDeleteRows = false;
+            this.inventoryDataGridView.AllowUserToResizeColumns = false;
+            this.inventoryDataGridView.AllowUserToResizeRows = false;
+            this.inventoryDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.inventoryDataGridView.Location = new System.Drawing.Point(0, 0);
+            this.inventoryDataGridView.MultiSelect = false;
+            this.inventoryDataGridView.Name = "inventoryDataGridView";
+            this.inventoryDataGridView.ReadOnly = true;
+            this.inventoryDataGridView.Size = new System.Drawing.Size(754, 243);
+            this.inventoryDataGridView.TabIndex = 0;
+            // 
+            // equipmentInvTab
+            // 
+            this.equipmentInvTab.Controls.Add(this.equipmentDataGridView);
+            this.equipmentInvTab.Location = new System.Drawing.Point(4, 22);
+            this.equipmentInvTab.Name = "equipmentInvTab";
+            this.equipmentInvTab.Padding = new System.Windows.Forms.Padding(3);
+            this.equipmentInvTab.Size = new System.Drawing.Size(754, 243);
+            this.equipmentInvTab.TabIndex = 1;
+            this.equipmentInvTab.Text = "Equipment";
+            this.equipmentInvTab.UseVisualStyleBackColor = true;
+            // 
+            // equipmentDataGridView
+            // 
+            this.equipmentDataGridView.AllowUserToAddRows = false;
+            this.equipmentDataGridView.AllowUserToDeleteRows = false;
+            this.equipmentDataGridView.AllowUserToResizeColumns = false;
+            this.equipmentDataGridView.AllowUserToResizeRows = false;
+            this.equipmentDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.equipmentDataGridView.Location = new System.Drawing.Point(0, 0);
+            this.equipmentDataGridView.MultiSelect = false;
+            this.equipmentDataGridView.Name = "equipmentDataGridView";
+            this.equipmentDataGridView.ReadOnly = true;
+            this.equipmentDataGridView.Size = new System.Drawing.Size(754, 243);
+            this.equipmentDataGridView.TabIndex = 1;
+            // 
+            // avatarInvTab
+            // 
+            this.avatarInvTab.Controls.Add(this.avatarDataGridView);
+            this.avatarInvTab.Location = new System.Drawing.Point(4, 22);
+            this.avatarInvTab.Name = "avatarInvTab";
+            this.avatarInvTab.Size = new System.Drawing.Size(754, 243);
+            this.avatarInvTab.TabIndex = 2;
+            this.avatarInvTab.Text = "Avatar";
+            this.avatarInvTab.UseVisualStyleBackColor = true;
+            // 
+            // avatarDataGridView
+            // 
+            this.avatarDataGridView.AllowUserToAddRows = false;
+            this.avatarDataGridView.AllowUserToDeleteRows = false;
+            this.avatarDataGridView.AllowUserToOrderColumns = true;
+            this.avatarDataGridView.AllowUserToResizeColumns = false;
+            this.avatarDataGridView.AllowUserToResizeRows = false;
+            this.avatarDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.avatarDataGridView.Location = new System.Drawing.Point(0, 0);
+            this.avatarDataGridView.MultiSelect = false;
+            this.avatarDataGridView.Name = "avatarDataGridView";
+            this.avatarDataGridView.ReadOnly = true;
+            this.avatarDataGridView.Size = new System.Drawing.Size(754, 243);
+            this.avatarDataGridView.TabIndex = 1;
+            // 
+            // jobEquipmentInvTab
+            // 
+            this.jobEquipmentInvTab.Controls.Add(this.jobEquipmentDataGridView);
+            this.jobEquipmentInvTab.Location = new System.Drawing.Point(4, 22);
+            this.jobEquipmentInvTab.Name = "jobEquipmentInvTab";
+            this.jobEquipmentInvTab.Size = new System.Drawing.Size(754, 243);
+            this.jobEquipmentInvTab.TabIndex = 3;
+            this.jobEquipmentInvTab.Text = "Job Equipment";
+            this.jobEquipmentInvTab.UseVisualStyleBackColor = true;
+            // 
+            // jobEquipmentDataGridView
+            // 
+            this.jobEquipmentDataGridView.AllowUserToAddRows = false;
+            this.jobEquipmentDataGridView.AllowUserToDeleteRows = false;
+            this.jobEquipmentDataGridView.AllowUserToOrderColumns = true;
+            this.jobEquipmentDataGridView.AllowUserToResizeColumns = false;
+            this.jobEquipmentDataGridView.AllowUserToResizeRows = false;
+            this.jobEquipmentDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.jobEquipmentDataGridView.Location = new System.Drawing.Point(0, 0);
+            this.jobEquipmentDataGridView.MultiSelect = false;
+            this.jobEquipmentDataGridView.Name = "jobEquipmentDataGridView";
+            this.jobEquipmentDataGridView.ReadOnly = true;
+            this.jobEquipmentDataGridView.Size = new System.Drawing.Size(754, 243);
+            this.jobEquipmentDataGridView.TabIndex = 1;
+            // 
             // chatTab
             // 
             this.chatTab.Controls.Add(this.chatBox);
@@ -357,9 +500,37 @@ namespace SimpleCL.Ui
             this.tabControl.ResumeLayout(false);
             this.homeTab.ResumeLayout(false);
             this.statisticsBox.ResumeLayout(false);
+            this.inventoryPage.ResumeLayout(false);
+            this.inventoryTabControl.ResumeLayout(false);
+            this.inventoryInvTab.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize) (this.inventoryDataGridView)).EndInit();
+            this.equipmentInvTab.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize) (this.equipmentDataGridView)).EndInit();
+            this.avatarInvTab.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize) (this.avatarDataGridView)).EndInit();
+            this.jobEquipmentInvTab.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize) (this.jobEquipmentDataGridView)).EndInit();
             this.chatTab.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.DataGridView inventoryDataGridView;
+        private System.Windows.Forms.DataGridView equipmentDataGridView;
+        private System.Windows.Forms.DataGridView avatarDataGridView;
+        private System.Windows.Forms.DataGridView jobEquipmentDataGridView;
+
+        private System.Windows.Forms.DataGridView dataGridView1;
+
+        private System.Windows.Forms.TabPage inventoryInvTab;
+        private System.Windows.Forms.TabPage equipmentInvTab;
+        private System.Windows.Forms.TabPage avatarInvTab;
+        private System.Windows.Forms.TabPage jobEquipmentInvTab;
+
+        private System.Windows.Forms.TabControl inventoryTabControl;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+
+        private System.Windows.Forms.TabPage inventoryPage;
 
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;

@@ -1,5 +1,8 @@
-﻿using SimpleCL.Database;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
+using SimpleCL.Database;
 using SimpleCL.Model.Coord;
+using SimpleCL.Model.Inventory;
 
 namespace SimpleCL.Model.Character
 {
@@ -25,6 +28,7 @@ namespace SimpleCL.Model.Character
         public uint Skillpoints { get; }
         public ulong Gold { get;  }
         public Coordinates Coordinates { get; }
+        public Dictionary<string, List<Item>> Inventories = new Dictionary<string, List<Item>>();
 
         public Character(uint hp, uint mp, byte level, ulong expGained, uint skillpoints, ulong gold, Coordinates coordinates)
         {

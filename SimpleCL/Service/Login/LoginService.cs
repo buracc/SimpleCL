@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using SilkroadSecurityApi;
 using SimpleCL.Database;
 using SimpleCL.Enums.Common;
-using SimpleCL.Enums.Login;
+using SimpleCL.Enums.Login.Error;
 using SimpleCL.Enums.Server;
 using SimpleCL.Model.Server;
 using SimpleCL.Network;
@@ -125,7 +125,7 @@ namespace SimpleCL.Service.Login
                     agent.RegisterService(new CharacterSelectService(_silkroadServer));
                     agent.RegisterService(new CharacterService(_silkroadServer));
                     
-                    agent.Debug = true;
+                    // agent.Debug = true;
                     agent.Start();
                     break;
 

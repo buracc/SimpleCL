@@ -1,4 +1,4 @@
-﻿namespace SimpleCL.Enums.Login
+﻿namespace SimpleCL.Enums.Login.Error
 {
     public enum AuthErrorCode: byte
     {

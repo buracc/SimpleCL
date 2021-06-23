@@ -34,6 +34,12 @@ namespace SimpleCL.Ui
             passwordBox.Text = Credentials.Password;
 
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            
+            inventoryDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            equipmentDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            avatarDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            jobEquipmentDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            
             CenterToScreen();
         }
 
@@ -49,7 +55,7 @@ namespace SimpleCL.Ui
             
             Gateway gw = new Gateway(selectedServer.GatewayIps[new Random().Next(selectedServer.GatewayIps.Length)], GatewayPort);
             gw.RegisterService(new LoginService(usernameBox.Text, passwordBox.Text, selectedServer));
-            gw.Debug = true;
+            // gw.Debug = true;
             gw.Start();
             
             ToggleControls(false);
@@ -91,12 +97,17 @@ namespace SimpleCL.Ui
                 mpProgressBar.Value = (int) Character.getMpPercent();
                 expProgressBar.Value = Character.GetExpPercent();
 
-                Console.WriteLine(Character.GetExpPercent());
-
                 levelLabelValue.Text = Character.Level.ToString();
                 spLabelValue.Text = Character.Skillpoints.ToString("N0");
                 goldLabelValue.Text = Character.Gold.ToString("N0");
                 coordsLabelValue.Text = Character.Coordinates.ToString();
+
+                inventoryDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+                inventoryDataGridView.DataSource = Character.Inventories["inventory"];
+                equipmentDataGridView.DataSource = Character.Inventories["equipment"];
+                avatarDataGridView.DataSource = Character.Inventories["avatar"];
+                jobEquipmentDataGridView.DataSource = Character.Inventories["jobEquipment"];
             }
             
             Refresh();

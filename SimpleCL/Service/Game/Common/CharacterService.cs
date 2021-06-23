@@ -1,9 +1,14 @@
-﻿using SilkroadSecurityApi;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using SilkroadSecurityApi;
 using SimpleCL.Database;
 using SimpleCL.Enums.Common;
+using SimpleCL.Enums.Item;
 using SimpleCL.Enums.Server;
 using SimpleCL.Model.Character;
 using SimpleCL.Model.Coord;
+using SimpleCL.Model.Inventory;
 using SimpleCL.Network;
 
 namespace SimpleCL.Service.Game.Common
@@ -51,13 +56,20 @@ namespace SimpleCL.Service.Game.Common
 
             var inventorySize = packet.ReadUInt8();
             var itemCount = packet.ReadUInt8();
+            
+            Character local = new Character(
+                maxHp, maxMp, level, expGained, sp, gold, new Coordinates(0, 0, 0, 0, 0)
+            );
 
-            ParseInventory(packet, itemCount);
+            List<Item> inv = ParseInventory(packet, itemCount);
+            
+            local.Inventories["inventory"] = inv.Where(x => x.Slot > 12).ToList();
+            local.Inventories["equipment"] = inv.Where(x => x.Slot < 13).ToList();
 
             var avatarInventorySize = packet.ReadUInt8();
             var avatarInventoryCount = packet.ReadUInt8();
 
-            ParseInventory(packet, avatarInventoryCount, false);
+            local.Inventories["avatar"] = ParseInventory(packet, avatarInventoryCount, false);
 
             if (_silkroadServer.Locale.IsInternational())
             {
@@ -69,7 +81,7 @@ namespace SimpleCL.Service.Game.Common
                 var jobInventorySize = packet.ReadUInt8();
                 var jobInventoryCount = packet.ReadUInt8();
 
-                ParseInventory(packet, jobInventoryCount, false);
+                local.Inventories["jobEquipment"] = ParseInventory(packet, jobInventoryCount, false);
             }
 
             if (_silkroadServer.Locale.IsInternational())
@@ -103,9 +115,7 @@ namespace SimpleCL.Service.Game.Common
                 nextSkill = packet.ReadUInt8() == 1;
             }
 
-            Character local = new Character(
-                maxHp, maxMp, level, expGained, sp, gold, new Coordinates(0, 0, 0, 0, 0)
-            );
+            
 
 
             Program.Gui.Character = local;
@@ -120,8 +130,10 @@ namespace SimpleCL.Service.Game.Common
             server.Inject(new Packet(Opcodes.Agent.Request.GAME_READY));
         }
 
-        public void ParseInventory(Packet packet, byte itemCount, bool inventory = true)
+        public List<Item> ParseInventory(Packet packet, byte itemCount, bool inventory = true)
         {
+            List<Item> items = new List<Item>();
+            
             for (int i = 0; i < itemCount; i++)
             {
                 var slot = packet.ReadUInt8();
@@ -155,6 +167,8 @@ namespace SimpleCL.Service.Game.Common
                 var typeId2 = byte.Parse(itemData["tid1"]);
                 var typeId3 = byte.Parse(itemData["tid2"]);
                 var typeId4 = byte.Parse(itemData["tid3"]);
+
+                Item item = new Item(slot, refItemId, itemData["servername"], itemData["name"]);
 
                 switch (typeId2)
                 {
@@ -249,6 +263,9 @@ namespace SimpleCL.Service.Game.Common
 
                     case 3:
                         var stackCount = packet.ReadUInt16();
+                        
+                        item.Quantity = stackCount;
+                        
                         if (typeId3 == 11 && (typeId4 == 1 || typeId4 == 2))
                         {
                             var assimilationProb = packet.ReadUInt8();
@@ -267,7 +284,11 @@ namespace SimpleCL.Service.Game.Common
 
                         break;
                 }
+                
+                items.Add(item);
             }
+
+            return items;
         }
     }
 }
