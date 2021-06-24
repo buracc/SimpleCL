@@ -44,13 +44,21 @@ namespace SimpleCL.Ui
             this.tabControl = new System.Windows.Forms.TabControl();
             this.homeTab = new System.Windows.Forms.TabPage();
             this.statisticsBox = new System.Windows.Forms.GroupBox();
+            this.jobExpProgressBar = new SimpleCL.Ui.Comp.TextProgressBar();
+            this.hpProgressBar = new SimpleCL.Ui.Comp.TextProgressBar();
+            this.mpProgressBar = new SimpleCL.Ui.Comp.TextProgressBar();
+            this.expProgressBar = new SimpleCL.Ui.Comp.TextProgressBar();
+            this.jobExpLabel = new System.Windows.Forms.Label();
+            this.jobLevelLabelValue = new System.Windows.Forms.Label();
+            this.jobLevelLabel = new System.Windows.Forms.Label();
+            this.jobNameLabelValue = new System.Windows.Forms.Label();
+            this.jobNameLabel = new System.Windows.Forms.Label();
+            this.nameLabelValue = new System.Windows.Forms.Label();
+            this.nameLabel = new System.Windows.Forms.Label();
             this.coordsLabelValue = new System.Windows.Forms.Label();
             this.goldLabelValue = new System.Windows.Forms.Label();
             this.spLabelValue = new System.Windows.Forms.Label();
-            this.expProgressBar = new System.Windows.Forms.ProgressBar();
             this.levelLabelValue = new System.Windows.Forms.Label();
-            this.mpProgressBar = new System.Windows.Forms.ProgressBar();
-            this.hpProgressBar = new System.Windows.Forms.ProgressBar();
             this.coordsLabel = new System.Windows.Forms.Label();
             this.goldLabel = new System.Windows.Forms.Label();
             this.spLabel = new System.Windows.Forms.Label();
@@ -188,13 +196,21 @@ namespace SimpleCL.Ui
             // 
             // statisticsBox
             // 
+            this.statisticsBox.Controls.Add(this.jobExpProgressBar);
+            this.statisticsBox.Controls.Add(this.hpProgressBar);
+            this.statisticsBox.Controls.Add(this.mpProgressBar);
+            this.statisticsBox.Controls.Add(this.expProgressBar);
+            this.statisticsBox.Controls.Add(this.jobExpLabel);
+            this.statisticsBox.Controls.Add(this.jobLevelLabelValue);
+            this.statisticsBox.Controls.Add(this.jobLevelLabel);
+            this.statisticsBox.Controls.Add(this.jobNameLabelValue);
+            this.statisticsBox.Controls.Add(this.jobNameLabel);
+            this.statisticsBox.Controls.Add(this.nameLabelValue);
+            this.statisticsBox.Controls.Add(this.nameLabel);
             this.statisticsBox.Controls.Add(this.coordsLabelValue);
             this.statisticsBox.Controls.Add(this.goldLabelValue);
             this.statisticsBox.Controls.Add(this.spLabelValue);
-            this.statisticsBox.Controls.Add(this.expProgressBar);
             this.statisticsBox.Controls.Add(this.levelLabelValue);
-            this.statisticsBox.Controls.Add(this.mpProgressBar);
-            this.statisticsBox.Controls.Add(this.hpProgressBar);
             this.statisticsBox.Controls.Add(this.coordsLabel);
             this.statisticsBox.Controls.Add(this.goldLabel);
             this.statisticsBox.Controls.Add(this.spLabel);
@@ -209,17 +225,121 @@ namespace SimpleCL.Ui
             this.statisticsBox.TabStop = false;
             this.statisticsBox.Text = "Statistics";
             // 
+            // jobExpProgressBar
+            // 
+            this.jobExpProgressBar.CustomText = "";
+            this.jobExpProgressBar.Location = new System.Drawing.Point(90, 134);
+            this.jobExpProgressBar.Name = "jobExpProgressBar";
+            this.jobExpProgressBar.ProgressColor = System.Drawing.Color.LightGreen;
+            this.jobExpProgressBar.Size = new System.Drawing.Size(371, 20);
+            this.jobExpProgressBar.TabIndex = 29;
+            this.jobExpProgressBar.TextColor = System.Drawing.Color.Black;
+            this.jobExpProgressBar.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.jobExpProgressBar.VisualMode = SimpleCL.Ui.Comp.ProgressBarDisplayMode.CustomText;
+            // 
+            // hpProgressBar
+            // 
+            this.hpProgressBar.CustomText = "";
+            this.hpProgressBar.Location = new System.Drawing.Point(90, 45);
+            this.hpProgressBar.Name = "hpProgressBar";
+            this.hpProgressBar.ProgressColor = System.Drawing.Color.LightGreen;
+            this.hpProgressBar.Size = new System.Drawing.Size(371, 20);
+            this.hpProgressBar.TabIndex = 28;
+            this.hpProgressBar.TextColor = System.Drawing.Color.Black;
+            this.hpProgressBar.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.hpProgressBar.VisualMode = SimpleCL.Ui.Comp.ProgressBarDisplayMode.CurrProgress;
+            // 
+            // mpProgressBar
+            // 
+            this.mpProgressBar.CustomText = "";
+            this.mpProgressBar.Location = new System.Drawing.Point(90, 68);
+            this.mpProgressBar.Name = "mpProgressBar";
+            this.mpProgressBar.ProgressColor = System.Drawing.Color.LightGreen;
+            this.mpProgressBar.Size = new System.Drawing.Size(371, 20);
+            this.mpProgressBar.TabIndex = 27;
+            this.mpProgressBar.TextColor = System.Drawing.Color.Black;
+            this.mpProgressBar.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.mpProgressBar.VisualMode = SimpleCL.Ui.Comp.ProgressBarDisplayMode.CurrProgress;
+            // 
+            // expProgressBar
+            // 
+            this.expProgressBar.CustomText = "";
+            this.expProgressBar.Location = new System.Drawing.Point(90, 111);
+            this.expProgressBar.Name = "expProgressBar";
+            this.expProgressBar.ProgressColor = System.Drawing.Color.LightGreen;
+            this.expProgressBar.Size = new System.Drawing.Size(371, 20);
+            this.expProgressBar.TabIndex = 26;
+            this.expProgressBar.TextColor = System.Drawing.Color.Black;
+            this.expProgressBar.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.expProgressBar.VisualMode = SimpleCL.Ui.Comp.ProgressBarDisplayMode.CustomText;
+            // 
+            // jobExpLabel
+            // 
+            this.jobExpLabel.Location = new System.Drawing.Point(6, 135);
+            this.jobExpLabel.Name = "jobExpLabel";
+            this.jobExpLabel.Size = new System.Drawing.Size(78, 22);
+            this.jobExpLabel.TabIndex = 24;
+            this.jobExpLabel.Text = "Job EXP";
+            // 
+            // jobLevelLabelValue
+            // 
+            this.jobLevelLabelValue.Location = new System.Drawing.Point(258, 91);
+            this.jobLevelLabelValue.Name = "jobLevelLabelValue";
+            this.jobLevelLabelValue.Size = new System.Drawing.Size(78, 22);
+            this.jobLevelLabelValue.TabIndex = 23;
+            this.jobLevelLabelValue.Text = "-1";
+            // 
+            // jobLevelLabel
+            // 
+            this.jobLevelLabel.Location = new System.Drawing.Point(174, 91);
+            this.jobLevelLabel.Name = "jobLevelLabel";
+            this.jobLevelLabel.Size = new System.Drawing.Size(78, 22);
+            this.jobLevelLabel.TabIndex = 22;
+            this.jobLevelLabel.Text = "Job level";
+            // 
+            // jobNameLabelValue
+            // 
+            this.jobNameLabelValue.Location = new System.Drawing.Point(258, 22);
+            this.jobNameLabelValue.Name = "jobNameLabelValue";
+            this.jobNameLabelValue.Size = new System.Drawing.Size(78, 22);
+            this.jobNameLabelValue.TabIndex = 21;
+            this.jobNameLabelValue.Text = "-";
+            // 
+            // jobNameLabel
+            // 
+            this.jobNameLabel.Location = new System.Drawing.Point(174, 22);
+            this.jobNameLabel.Name = "jobNameLabel";
+            this.jobNameLabel.Size = new System.Drawing.Size(78, 22);
+            this.jobNameLabel.TabIndex = 20;
+            this.jobNameLabel.Text = "Job alias";
+            // 
+            // nameLabelValue
+            // 
+            this.nameLabelValue.Location = new System.Drawing.Point(90, 22);
+            this.nameLabelValue.Name = "nameLabelValue";
+            this.nameLabelValue.Size = new System.Drawing.Size(78, 22);
+            this.nameLabelValue.TabIndex = 19;
+            this.nameLabelValue.Text = "-";
+            // 
+            // nameLabel
+            // 
+            this.nameLabel.Location = new System.Drawing.Point(6, 22);
+            this.nameLabel.Name = "nameLabel";
+            this.nameLabel.Size = new System.Drawing.Size(78, 22);
+            this.nameLabel.TabIndex = 18;
+            this.nameLabel.Text = "Name";
+            // 
             // coordsLabelValue
             // 
-            this.coordsLabelValue.Location = new System.Drawing.Point(94, 155);
+            this.coordsLabelValue.Location = new System.Drawing.Point(90, 202);
             this.coordsLabelValue.Name = "coordsLabelValue";
-            this.coordsLabelValue.Size = new System.Drawing.Size(78, 22);
+            this.coordsLabelValue.Size = new System.Drawing.Size(371, 22);
             this.coordsLabelValue.TabIndex = 17;
             this.coordsLabelValue.Text = "-1, -1";
             // 
             // goldLabelValue
             // 
-            this.goldLabelValue.Location = new System.Drawing.Point(94, 133);
+            this.goldLabelValue.Location = new System.Drawing.Point(90, 180);
             this.goldLabelValue.Name = "goldLabelValue";
             this.goldLabelValue.Size = new System.Drawing.Size(78, 22);
             this.goldLabelValue.TabIndex = 16;
@@ -227,50 +347,23 @@ namespace SimpleCL.Ui
             // 
             // spLabelValue
             // 
-            this.spLabelValue.Location = new System.Drawing.Point(94, 111);
+            this.spLabelValue.Location = new System.Drawing.Point(90, 158);
             this.spLabelValue.Name = "spLabelValue";
             this.spLabelValue.Size = new System.Drawing.Size(78, 22);
             this.spLabelValue.TabIndex = 13;
             this.spLabelValue.Text = "-1";
             // 
-            // expProgressBar
-            // 
-            this.expProgressBar.Location = new System.Drawing.Point(94, 88);
-            this.expProgressBar.Name = "expProgressBar";
-            this.expProgressBar.Size = new System.Drawing.Size(371, 20);
-            this.expProgressBar.Step = 1;
-            this.expProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.expProgressBar.TabIndex = 12;
-            // 
             // levelLabelValue
             // 
-            this.levelLabelValue.Location = new System.Drawing.Point(94, 66);
+            this.levelLabelValue.Location = new System.Drawing.Point(90, 91);
             this.levelLabelValue.Name = "levelLabelValue";
             this.levelLabelValue.Size = new System.Drawing.Size(78, 22);
             this.levelLabelValue.TabIndex = 11;
             this.levelLabelValue.Text = "-1";
             // 
-            // mpProgressBar
-            // 
-            this.mpProgressBar.Location = new System.Drawing.Point(94, 44);
-            this.mpProgressBar.Name = "mpProgressBar";
-            this.mpProgressBar.Size = new System.Drawing.Size(371, 20);
-            this.mpProgressBar.Step = 1;
-            this.mpProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.mpProgressBar.TabIndex = 10;
-            // 
-            // hpProgressBar
-            // 
-            this.hpProgressBar.Location = new System.Drawing.Point(94, 22);
-            this.hpProgressBar.Name = "hpProgressBar";
-            this.hpProgressBar.Size = new System.Drawing.Size(371, 20);
-            this.hpProgressBar.Step = 1;
-            this.hpProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.hpProgressBar.TabIndex = 9;
-            // 
             // coordsLabel
             // 
-            this.coordsLabel.Location = new System.Drawing.Point(10, 155);
+            this.coordsLabel.Location = new System.Drawing.Point(6, 202);
             this.coordsLabel.Name = "coordsLabel";
             this.coordsLabel.Size = new System.Drawing.Size(78, 22);
             this.coordsLabel.TabIndex = 8;
@@ -278,7 +371,7 @@ namespace SimpleCL.Ui
             // 
             // goldLabel
             // 
-            this.goldLabel.Location = new System.Drawing.Point(10, 133);
+            this.goldLabel.Location = new System.Drawing.Point(6, 180);
             this.goldLabel.Name = "goldLabel";
             this.goldLabel.Size = new System.Drawing.Size(78, 22);
             this.goldLabel.TabIndex = 7;
@@ -286,7 +379,7 @@ namespace SimpleCL.Ui
             // 
             // spLabel
             // 
-            this.spLabel.Location = new System.Drawing.Point(10, 111);
+            this.spLabel.Location = new System.Drawing.Point(6, 158);
             this.spLabel.Name = "spLabel";
             this.spLabel.Size = new System.Drawing.Size(78, 22);
             this.spLabel.TabIndex = 4;
@@ -294,7 +387,7 @@ namespace SimpleCL.Ui
             // 
             // expLabel
             // 
-            this.expLabel.Location = new System.Drawing.Point(10, 88);
+            this.expLabel.Location = new System.Drawing.Point(6, 113);
             this.expLabel.Name = "expLabel";
             this.expLabel.Size = new System.Drawing.Size(78, 22);
             this.expLabel.TabIndex = 3;
@@ -302,7 +395,7 @@ namespace SimpleCL.Ui
             // 
             // levelLabel
             // 
-            this.levelLabel.Location = new System.Drawing.Point(10, 66);
+            this.levelLabel.Location = new System.Drawing.Point(6, 91);
             this.levelLabel.Name = "levelLabel";
             this.levelLabel.Size = new System.Drawing.Size(78, 22);
             this.levelLabel.TabIndex = 2;
@@ -310,7 +403,7 @@ namespace SimpleCL.Ui
             // 
             // mpLabel
             // 
-            this.mpLabel.Location = new System.Drawing.Point(10, 44);
+            this.mpLabel.Location = new System.Drawing.Point(6, 69);
             this.mpLabel.Name = "mpLabel";
             this.mpLabel.Size = new System.Drawing.Size(78, 22);
             this.mpLabel.TabIndex = 1;
@@ -318,7 +411,7 @@ namespace SimpleCL.Ui
             // 
             // hpLabel
             // 
-            this.hpLabel.Location = new System.Drawing.Point(10, 22);
+            this.hpLabel.Location = new System.Drawing.Point(6, 47);
             this.hpLabel.Name = "hpLabel";
             this.hpLabel.Size = new System.Drawing.Size(78, 22);
             this.hpLabel.TabIndex = 0;
@@ -514,6 +607,19 @@ namespace SimpleCL.Ui
             this.ResumeLayout(false);
         }
 
+        private SimpleCL.Ui.Comp.TextProgressBar expProgressBar;
+
+        private SimpleCL.Ui.Comp.TextProgressBar textProgressBar1;
+
+        private System.Windows.Forms.ProgressBar progressBar1;
+
+        private System.Windows.Forms.Label nameLabel;
+        private System.Windows.Forms.Label nameLabelValue;
+        private System.Windows.Forms.Label jobNameLabelValue;
+        private System.Windows.Forms.Label jobNameLabel;
+        private System.Windows.Forms.Label jobLevelLabelValue;
+        private System.Windows.Forms.Label jobLevelLabel;
+
         private System.Windows.Forms.DataGridView inventoryDataGridView;
         private System.Windows.Forms.DataGridView equipmentDataGridView;
         private System.Windows.Forms.DataGridView avatarDataGridView;
@@ -533,7 +639,7 @@ namespace SimpleCL.Ui
         private System.Windows.Forms.TabPage inventoryPage;
 
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label jobExpLabel;
 
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar2;
 
@@ -544,12 +650,6 @@ namespace SimpleCL.Ui
         private System.Windows.Forms.Label spLabelValue;
 
         private System.Windows.Forms.Label goldLabelValue;
-
-        private System.Windows.Forms.ProgressBar hpProgressBar;
-
-        private System.Windows.Forms.ProgressBar mpProgressBar;
-
-        private System.Windows.Forms.ProgressBar expProgressBar;
 
         private System.Windows.Forms.Label levelLabelValue;
 
@@ -582,5 +682,9 @@ namespace SimpleCL.Ui
         private System.Windows.Forms.ComboBox serverComboBox;
 
         #endregion
+
+        private SimpleCL.Ui.Comp.TextProgressBar hpProgressBar;
+        private SimpleCL.Ui.Comp.TextProgressBar mpProgressBar;
+        private SimpleCL.Ui.Comp.TextProgressBar jobExpProgressBar;
     }
 }

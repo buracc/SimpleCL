@@ -14,7 +14,7 @@ namespace SimpleCL.Ui
     public partial class CharacterSelection : Form
     {
         private readonly Server _agent;
-        public CharacterSelection(List<Model.Character.CharacterSelect> chars, Server agent)
+        public CharacterSelection(List<Model.Character.Character> chars, Server agent)
         {
             _agent = agent;
             InitializeComponent();
@@ -36,7 +36,7 @@ namespace SimpleCL.Ui
 
         private void SelectCharacter(object sender, EventArgs args)
         {
-            Model.Character.CharacterSelect selected = (Model.Character.CharacterSelect) ((DataGridViewRow) sender).DataBoundItem;
+            Model.Character.Character selected = (Model.Character.Character) ((DataGridViewRow) sender).DataBoundItem;
             if (selected == null)
             {
                 return;

@@ -1,59 +1,32 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
-using SimpleCL.Database;
-using SimpleCL.Model.Coord;
-using SimpleCL.Model.Inventory;
+﻿using System;
+using System.Text;
 
 namespace SimpleCL.Model.Character
 {
     public class Character
     {
-        private ulong _nextLevelExp;
-        
-        public uint Hp { get; }
-        public uint Mp { get; }
+        public string Name { get; }
+        public byte Level { get; }
+        public bool Deleting { get; }
+        public DateTime DeletionTime { get; set; }
 
-        private byte _level;
-        public byte Level
+        public Character(string name, byte level, bool deleting)
         {
-            get => _level;
-            set
-            {
-                _level = value;
-                _nextLevelExp = GameDatabase.GetInstance().GetNextLevelExp(Level);
-            }
-        }
-
-        public ulong ExpGained { get; }
-        public uint Skillpoints { get; }
-        public ulong Gold { get;  }
-        public Coordinates Coordinates { get; }
-        public Dictionary<string, List<Item>> Inventories = new Dictionary<string, List<Item>>();
-
-        public Character(uint hp, uint mp, byte level, ulong expGained, uint skillpoints, ulong gold, Coordinates coordinates)
-        {
-            Hp = hp;
-            Mp = mp;
+            Name = name;
             Level = level;
-            ExpGained = expGained;
-            Skillpoints = skillpoints;
-            Gold = gold;
-            Coordinates = coordinates;
+            Deleting = deleting;
         }
 
-        public uint getHpPercent()
+        public override string ToString()
         {
-            return 100;
-        }
-        
-        public uint getMpPercent()
-        {
-            return 100;
-        }
-
-        public int GetExpPercent()
-        {
-            return (int) (100.0 / _nextLevelExp * ExpGained);
+            StringBuilder sb = new StringBuilder(Name + " Lvl. " + Level);
+            if (Deleting)
+            {
+                sb.Append(" Deleted at: ");
+                sb.Append(DeletionTime);
+            }
+            
+            return sb.ToString();
         }
     }
 }

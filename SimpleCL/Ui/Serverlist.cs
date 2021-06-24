@@ -8,6 +8,7 @@ using SimpleCL.Model;
 using SimpleCL.Model.Server;
 using SimpleCL.Network;
 using SimpleCL.Util;
+using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Ui
 {
@@ -43,12 +44,12 @@ namespace SimpleCL.Ui
             }
             
             Packet login = new Packet(Opcodes.Gateway.Request.LOGIN2, true);
-            login.WriteUInt8(Locale.SRO_TR_Official_GameGami);
+            login.WriteByte(Locale.SRO_TR_Official_GameGami);
             login.WriteAscii(Credentials.Username);
             login.WriteAscii(Credentials.Password);
-            login.WriteUInt8Array(NetworkUtils.GetMacAddressBytes());
-            login.WriteUInt16(selected.Id);
-            login.WriteUInt8(1);
+            login.WriteByteArray(NetworkUtils.GetMacAddressBytes());
+            login.WriteUShort(selected.Id);
+            login.WriteByte(1);
             
             _gateway.Inject(login);
             Dispose(true);

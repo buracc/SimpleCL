@@ -20,6 +20,7 @@ namespace SimpleCL.Network
         private readonly List<Tuple<ushort, PacketHandler>> _handlers = new List<Tuple<ushort, PacketHandler>>();
 
         private delegate void PacketHandler(Server server, Packet packet);
+
         private readonly Timer _timer = new Timer(5000);
 
         private bool _disposing;
@@ -54,7 +55,7 @@ namespace SimpleCL.Network
             _handlers.RemoveAll(x => x.Item2.Target?.GetType() == typeof(T));
         }
 
-        protected void Notify(Packet packet)
+        private void Notify(Packet packet)
         {
             foreach (var (opcode, handler) in _handlers)
             {
@@ -83,7 +84,7 @@ namespace SimpleCL.Network
             Security.Send(packet);
         }
 
-        protected void HeartBeat(Object source, ElapsedEventArgs e)
+        private void HeartBeat(Object source, ElapsedEventArgs e)
         {
             Inject(new Packet(Opcodes.HEARTBEAT));
         }
@@ -99,8 +100,8 @@ namespace SimpleCL.Network
             Socket?.Dispose();
             _disposing = true;
         }
-        
-        public void Loop()
+
+        protected void Loop()
         {
             _timer.Elapsed += HeartBeat;
 
@@ -158,12 +159,12 @@ namespace SimpleCL.Network
                         Log(packet.Opcode.ToString("X"), false);
                         Log("\n" + Utility.HexDump(packet.GetBytes()), false);
                     }
-                    
+
                     if (packet.Opcode == Opcodes.IDENTITY && !_timer.Enabled)
                     {
                         _timer.Start();
                     }
-                    
+
                     Notify(packet);
                 }
 
@@ -204,7 +205,7 @@ namespace SimpleCL.Network
             {
                 return;
             }
-            
+
             Disconnect();
         }
     }

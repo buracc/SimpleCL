@@ -27,6 +27,8 @@
         /// The server is full, please try again later.
         /// </summary>
         ServerIsFull = 6,
+        
+        LoginQueue = 0x1A,
 
         /// <summary>
         /// Cannot connect to the server because access to the current IP has exceeded its limit.

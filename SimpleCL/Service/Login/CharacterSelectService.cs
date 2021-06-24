@@ -6,6 +6,8 @@ using SimpleCL.Enums.Common;
 using SimpleCL.Enums.Server;
 using SimpleCL.Model.Character;
 using SimpleCL.Network;
+using SimpleCL.Util;
+using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Service.Login
 {
@@ -21,85 +23,84 @@ namespace SimpleCL.Service.Login
         [PacketHandler(Opcodes.Agent.Response.CHARACTER_SELECTION_ACTION)]
         public void SelectCharacter(Server server, Packet packet)
         {
-            byte action = packet.ReadUInt8();
-            bool succeeded = packet.ReadUInt8() == 1;
+            byte action = packet.ReadByte();
+            bool succeeded = packet.ReadByte() == 1;
 
             if (action == 2 && succeeded)
             {
-                byte charCount = packet.ReadUInt8();
+                byte charCount = packet.ReadByte();
 
-                List<CharacterSelect> chars = new List<CharacterSelect>();
-
-                for (int i = 0; i < charCount; i++)
+                List<Character> chars = new List<Character>();
+                charCount.Repeat(i =>
                 {
-                    packet.ReadUInt32();
+                    packet.ReadUInt();
                     string name = packet.ReadAscii();
                     if (_silkroadServer.Locale.IsInternational())
                     {
                         string jobName = packet.ReadAscii();
                     }
 
-                    packet.ReadUInt8();
-                    byte level = packet.ReadUInt8();
-                    packet.ReadUInt64();
-                    packet.ReadUInt16();
-                    packet.ReadUInt16();
-                    packet.ReadUInt16();
+                    packet.ReadByte();
+                    byte level = packet.ReadByte();
+                    packet.ReadULong();
+                    packet.ReadUShort();
+                    packet.ReadUShort();
+                    packet.ReadUShort();
 
                     if (_silkroadServer.Locale.IsInternational())
                     {
-                        packet.ReadUInt32();
+                        packet.ReadUInt();
                     }
 
-                    uint hp = packet.ReadUInt32();
-                    uint mp = packet.ReadUInt32();
+                    uint hp = packet.ReadUInt();
+                    uint mp = packet.ReadUInt();
 
                     if (_silkroadServer.Locale.IsInternational())
                     {
-                        packet.ReadUInt16();
+                        packet.ReadUShort();
                     }
 
-                    bool deleting = packet.ReadUInt8() == 1;
+                    bool deleting = packet.ReadByte() == 1;
 
                     if (_silkroadServer.Locale.IsInternational())
                     {
-                        packet.ReadUInt32();
+                        packet.ReadUInt();
                     }
 
-                    CharacterSelect character = new CharacterSelect(name, level, deleting);
+                    Character character = new Character(name, level, deleting);
 
                     if (deleting)
                     {
-                        uint minutes = packet.ReadUInt32();
+                        uint minutes = packet.ReadUInt();
                         character.DeletionTime = DateTime.Now.AddMinutes(minutes);
                     }
 
-                    byte guildMemberClass = packet.ReadUInt8();
+                    byte guildMemberClass = packet.ReadByte();
 
-                    bool guildRenameRequired = packet.ReadUInt8() == 1;
+                    bool guildRenameRequired = packet.ReadByte() == 1;
                     if (guildRenameRequired)
                     {
                         string guildName = packet.ReadAscii();
                     }
 
-                    byte academyMemberClass = packet.ReadUInt8();
-                    byte itemCount = packet.ReadUInt8();
+                    byte academyMemberClass = packet.ReadByte();
+                    byte itemCount = packet.ReadByte();
 
-                    for (int j = 0; j < itemCount; j++)
+                    itemCount.Repeat(j =>
                     {
-                        uint refItemId = packet.ReadUInt32();
-                        byte plus = packet.ReadUInt8();
-                    }
+                        uint refItemId = packet.ReadUInt();
+                        byte plus = packet.ReadByte();
+                    });
 
-                    byte avatarItemCount = packet.ReadUInt8();
-                    for (int j = 0; j < avatarItemCount; j++)
+                    byte avatarItemCount = packet.ReadByte();
+                    avatarItemCount.Repeat(j =>
                     {
-                        uint refItemId = packet.ReadUInt32();
-                        byte plus = packet.ReadUInt8();
-                    }
+                        uint refItemId = packet.ReadUInt();
+                        byte plus = packet.ReadByte();
+                    });
 
                     chars.Add(character);
-                }
+                });
 
                 Application.Run(new Ui.CharacterSelection(chars, server));
             }

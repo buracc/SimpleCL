@@ -2,9 +2,9 @@
 using System.Text;
 using System.Windows.Forms;
 using SilkroadSecurityApi;
-using SimpleCL.Enums;
 using SimpleCL.Enums.Common;
 using SimpleCL.Network;
+using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Ui
 {
@@ -51,9 +51,9 @@ namespace SimpleCL.Ui
             byte[] encryptedPasscode = _blowfish.Encode(encodedPasscode);
 
             Packet passcode = new Packet(Opcodes.Gateway.Request.PASSCODE, true);
-            passcode.WriteUInt8(4);
-            passcode.WriteUInt16(passcodeString.Length);
-            passcode.WriteUInt8Array(encryptedPasscode);
+            passcode.WriteByte(4);
+            passcode.WriteUShort(passcodeString.Length);
+            passcode.WriteByteArray(encryptedPasscode);
 
             _gateway.Inject(passcode);
             Dispose(true);

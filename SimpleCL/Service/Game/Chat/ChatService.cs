@@ -3,6 +3,7 @@ using SimpleCL.Enums.Chat;
 using SimpleCL.Enums.Common;
 using SimpleCL.Model.Chat;
 using SimpleCL.Network;
+using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Service.Game.Chat
 {
@@ -11,13 +12,13 @@ namespace SimpleCL.Service.Game.Chat
         [PacketHandler(Opcodes.Agent.Response.CHAT_UPDATE)]
         public void ChatUpdated(Server server, Packet packet)
         {
-            ChatChannel channel = (ChatChannel) packet.ReadUInt8();
+            ChatChannel channel = (ChatChannel) packet.ReadByte();
             ChatMessage chatMessage = new ChatMessage(channel);
 
             if (channel == ChatChannel.General || channel == ChatChannel.GM ||
                 channel == ChatChannel.NPC)
             {
-                uint senderId = packet.ReadUInt32();
+                uint senderId = packet.ReadUInt();
                 chatMessage.SenderId = senderId;
             }
             else

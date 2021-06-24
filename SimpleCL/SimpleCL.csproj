@@ -1,181 +1,189 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A8234766-5836-494E-AD6D-FAEBF008D840}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SimpleCL</RootNamespace>
+    <AssemblyName>SimpleCL</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="mscorlib" />
+    <Reference Include="SilkroadSecurityApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Libs\SilkroadSecurityApi.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.SQLite, Version=1.0.114.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139">
+      <HintPath>..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\lib\net46\System.Data.SQLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.114.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.114.0\lib\net46\System.Data.SQLite.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.114.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.114.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\Framework64\v4.0.30319\System.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Credentials.cs" />
+    <Compile Include="Database\GameDatabase.cs" />
+    <Compile Include="Enums\Chat\ChatChannel.cs" />
+    <Compile Include="Enums\Common\Locale.cs" />
+    <Compile Include="Enums\Common\Opcodes.cs" />
+    <Compile Include="Enums\Event\InventoryAction.cs" />
+    <Compile Include="Enums\Item\ItemCategory.cs" />
+    <Compile Include="Enums\Item\ItemParser.cs" />
+    <Compile Include="Enums\Item\Type\Consumable.cs" />
+    <Compile Include="Enums\Item\Type\COS.cs" />
+    <Compile Include="Enums\Item\Type\Equipment.cs" />
+    <Compile Include="Enums\Item\Type\FellowEquipment.cs" />
+    <Compile Include="Enums\Item\Type\JobEquipment.cs" />
+    <Compile Include="Enums\Login\Error\AuthErrorCode.cs" />
+    <Compile Include="Enums\Login\Error\LoginBlockType.cs" />
+    <Compile Include="Enums\Login\Error\LoginErrorCode.cs" />
+    <Compile Include="Enums\Quest\QuestType.cs" />
+    <Compile Include="Enums\Server\ServerCapacity.cs" />
+    <Compile Include="Enums\Server\SilkroadServer.cs" />
+    <Compile Include="Enums\Skill\BuffInfo.cs" />
+    <Compile Include="Model\Character\LocalPlayer.cs" />
+    <Compile Include="Model\Character\Character.cs" />
+    <Compile Include="Model\Chat\ChatMessage.cs" />
+    <Compile Include="Model\Coord\LocalPoint.cs" />
+    <Compile Include="Model\Inventory\Item.cs" />
+    <Compile Include="Model\Server\GameServer.cs" />
+    <Compile Include="Network\Agent.cs" />
+    <Compile Include="Network\Gateway.cs" />
+    <Compile Include="Network\Server.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\Game\Chat\ChatService.cs" />
+    <Compile Include="Service\Game\Common\CharacterService.cs" />
+    <Compile Include="Service\Login\CharacterSelectService.cs" />
+    <Compile Include="Service\Login\LoginService.cs" />
+    <Compile Include="Service\PacketHandlerAttribute.cs" />
+    <Compile Include="Service\Service.cs" />
+    <Compile Include="Ui\CharacterSelection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\CharacterSelection.Designer.cs">
+      <DependentUpon>CharacterSelection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Comp\TextProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Ui\Gui.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\Gui.Designer.cs">
+      <DependentUpon>Gui.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\PasscodeEnter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\PasscodeEnter.Designer.cs">
+      <DependentUpon>PasscodeEnter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Serverlist.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\Serverlist.Designer.cs">
+      <DependentUpon>Serverlist.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Util\DirectoryUtils.cs" />
+    <Compile Include="Util\Extension\NumberExt.cs" />
+    <Compile Include="Util\Extension\PacketReadExt.cs" />
+    <Compile Include="Util\Extension\PacketWriteExt.cs" />
+    <Compile Include="Util\NetworkUtils.cs" />
+    <Compile Include="Util\Pk2Reader\Pk2Extractor.cs" />
+    <Compile Include="Util\Pk2Reader\Pk2File.cs" />
+    <Compile Include="Util\Pk2Reader\Pk2Folder.cs" />
+    <Compile Include="Util\Pk2Reader\Pk2Reader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Ui\CharacterSelection.resx">
+      <DependentUpon>CharacterSelection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\Gui.resx">
+      <DependentUpon>Gui.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\PasscodeEnter.resx">
+      <DependentUpon>PasscodeEnter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\Serverlist.resx">
+      <DependentUpon>Serverlist.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{A8234766-5836-494E-AD6D-FAEBF008D840}</ProjectGuid>
-        <OutputType>Exe</OutputType>
-        <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>SimpleCL</RootNamespace>
-        <AssemblyName>SimpleCL</AssemblyName>
-        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-        <FileAlignment>512</FileAlignment>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
-        <Optimize>false</Optimize>
-        <OutputPath>bin\Debug\</OutputPath>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugType>pdbonly</DebugType>
-        <Optimize>true</Optimize>
-        <OutputPath>bin\Release\</OutputPath>
-        <DefineConstants>TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
-    <ItemGroup>
-        <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="Microsoft.CSharp" />
-        <Reference Include="mscorlib" />
-        <Reference Include="SilkroadSecurityApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\Libs\SilkroadSecurityApi.dll</HintPath>
-        </Reference>
-        <Reference Include="System" />
-        <Reference Include="System.ComponentModel.DataAnnotations" />
-        <Reference Include="System.Core" />
-        <Reference Include="System.Data" />
-        <Reference Include="System.Data.DataSetExtensions" />
-        <Reference Include="System.Data.SQLite, Version=1.0.114.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139">
-          <HintPath>..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\lib\net46\System.Data.SQLite.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="System.Data.SQLite.EF6, Version=1.0.114.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139">
-          <HintPath>..\packages\System.Data.SQLite.EF6.1.0.114.0\lib\net46\System.Data.SQLite.EF6.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="System.Data.SQLite.Linq, Version=1.0.114.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139">
-          <HintPath>..\packages\System.Data.SQLite.Linq.1.0.114.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="System.Deployment" />
-        <Reference Include="System.Drawing" />
-        <Reference Include="System.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-          <HintPath>..\..\..\..\..\Windows\Microsoft.NET\Framework64\v4.0.30319\System.Linq.dll</HintPath>
-        </Reference>
-        <Reference Include="System.Net.Http" />
-        <Reference Include="System.Numerics" />
-        <Reference Include="System.Windows.Forms" />
-        <Reference Include="System.Xml" />
-        <Reference Include="System.Xml.Linq" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="Credentials.cs" />
-        <Compile Include="Database\GameDatabase.cs" />
-        <Compile Include="Enums\Chat\ChatChannel.cs" />
-        <Compile Include="Enums\Common\Locale.cs" />
-        <Compile Include="Enums\Common\Opcodes.cs" />
-        <Compile Include="Enums\Event\InventoryAction.cs" />
-        <Compile Include="Enums\Item\ItemCategory.cs" />
-        <Compile Include="Enums\Item\ItemParser.cs" />
-        <Compile Include="Enums\Item\Type\Consumable.cs" />
-        <Compile Include="Enums\Item\Type\COS.cs" />
-        <Compile Include="Enums\Item\Type\Equipment.cs" />
-        <Compile Include="Enums\Item\Type\FellowEquipment.cs" />
-        <Compile Include="Enums\Item\Type\JobEquipment.cs" />
-        <Compile Include="Enums\Login\Error\AuthErrorCode.cs" />
-        <Compile Include="Enums\Login\Error\LoginBlockType.cs" />
-        <Compile Include="Enums\Login\Error\LoginErrorCode.cs" />
-        <Compile Include="Enums\Server\ServerCapacity.cs" />
-        <Compile Include="Enums\Server\SilkroadServer.cs" />
-        <Compile Include="Model\Character\Character.cs" />
-        <Compile Include="Model\Character\CharacterSelect.cs" />
-        <Compile Include="Model\Chat\ChatMessage.cs" />
-        <Compile Include="Model\Coord\Coordinates.cs" />
-        <Compile Include="Model\Inventory\Item.cs" />
-        <Compile Include="Model\Server\GameServer.cs" />
-        <Compile Include="Network\Agent.cs" />
-        <Compile Include="Network\Gateway.cs" />
-        <Compile Include="Network\Server.cs" />
-        <Compile Include="Program.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Service\Game\Chat\ChatService.cs" />
-        <Compile Include="Service\Game\Common\CharacterService.cs" />
-        <Compile Include="Service\Login\CharacterSelectService.cs" />
-        <Compile Include="Service\Login\LoginService.cs" />
-        <Compile Include="Service\PacketHandlerAttribute.cs" />
-        <Compile Include="Service\Service.cs" />
-        <Compile Include="Ui\CharacterSelection.cs">
-          <SubType>Form</SubType>
-        </Compile>
-        <Compile Include="Ui\CharacterSelection.Designer.cs">
-          <DependentUpon>CharacterSelection.cs</DependentUpon>
-        </Compile>
-        <Compile Include="Ui\Gui.cs">
-          <SubType>Form</SubType>
-        </Compile>
-        <Compile Include="Ui\Gui.Designer.cs">
-          <DependentUpon>Gui.cs</DependentUpon>
-        </Compile>
-        <Compile Include="Ui\PasscodeEnter.cs">
-          <SubType>Form</SubType>
-        </Compile>
-        <Compile Include="Ui\PasscodeEnter.Designer.cs">
-          <DependentUpon>PasscodeEnter.cs</DependentUpon>
-        </Compile>
-        <Compile Include="Ui\Serverlist.cs">
-          <SubType>Form</SubType>
-        </Compile>
-        <Compile Include="Ui\Serverlist.Designer.cs">
-          <DependentUpon>Serverlist.cs</DependentUpon>
-        </Compile>
-        <Compile Include="Util\DirectoryUtils.cs" />
-        <Compile Include="Util\NetworkUtils.cs" />
-        <Compile Include="Util\Pk2Reader\Pk2Extractor.cs" />
-        <Compile Include="Util\Pk2Reader\Pk2File.cs" />
-        <Compile Include="Util\Pk2Reader\Pk2Folder.cs" />
-        <Compile Include="Util\Pk2Reader\Pk2Reader.cs" />
-    </ItemGroup>
-    <ItemGroup>
-      <None Include="App.config" />
-      <None Include="packages.config" />
-    </ItemGroup>
-    <ItemGroup>
-      <EmbeddedResource Include="Ui\CharacterSelection.resx">
-        <DependentUpon>CharacterSelection.cs</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Include="Ui\Gui.resx">
-        <DependentUpon>Gui.cs</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Include="Ui\PasscodeEnter.resx">
-        <DependentUpon>PasscodeEnter.cs</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Include="Ui\Serverlist.resx">
-        <DependentUpon>Serverlist.cs</DependentUpon>
-      </EmbeddedResource>
-    </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-    <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-      <PropertyGroup>
-        <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
-      </PropertyGroup>
-      <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
-      <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
-      <Error Condition="!Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets'))" />
-    </Target>
-    <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
-    <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
     <Target Name="BeforeBuild">
     </Target>
     <Target Name="AfterBuild">
     </Target>
     -->
-
 </Project>

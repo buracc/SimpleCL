@@ -9,7 +9,7 @@ namespace SimpleCL.Network
         private readonly string _ip;
         private readonly ushort _port;
         public uint SessionId { get; }
-        
+
         public Agent(string ip, ushort port, uint sessionId)
         {
             _ip = ip;

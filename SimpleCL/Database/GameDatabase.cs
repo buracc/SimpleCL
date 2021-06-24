@@ -11,15 +11,12 @@ namespace SimpleCL.Database
     public class GameDatabase
     {
         private static GameDatabase _instance;
+
+        public static GameDatabase Get => _instance ?? (_instance = new GameDatabase());
         public SilkroadServer SelectedServer { get; set; }
 
         private GameDatabase()
         {
-        }
-
-        public static GameDatabase GetInstance()
-        {
-            return _instance ?? (_instance = new GameDatabase());
         }
 
         private List<NameValueCollection> GetData(string sql)
@@ -56,12 +53,17 @@ namespace SimpleCL.Database
 
         public ulong GetNextLevelExp(byte level)
         {
-            return ulong.Parse(GetData("SELECT player FROM leveldata WHERE level = " + level)[0]["player"]);
+            return ulong.Parse(GetData("SELECT * FROM leveldata WHERE level = " + level)[0]["player"]);
+        }
+        
+        public ulong GetJobNextLevelExp(byte level)
+        {
+            return ulong.Parse(GetData("SELECT * FROM leveldata WHERE level = " + level)[0]["job"]);
         }
 
         public ulong GetFellowNextLevelExp(byte level)
         {
-            return ulong.Parse(GetData("SELECT player FROM leveldata WHERE level = " + level)[0]["fellow"]);
+            return ulong.Parse(GetData("SELECT * FROM leveldata WHERE level = " + level)[0]["fellow"]);
         }
 
         public NameValueCollection GetItemData(uint id)

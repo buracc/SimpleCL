@@ -12,6 +12,7 @@ using SimpleCL.Service.Game.Chat;
 using SimpleCL.Service.Game.Common;
 using SimpleCL.Ui;
 using SimpleCL.Util;
+using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Service.Login
 {
@@ -34,9 +35,9 @@ namespace SimpleCL.Service.Login
             if (server is Gateway)
             {
                 Packet identity = new Packet(Opcodes.Gateway.Request.PATCH, true);
-                identity.WriteUInt8(_silkroadServer.Locale);
+                identity.WriteByte(_silkroadServer.Locale);
                 identity.WriteAscii("SR_Client");
-                identity.WriteUInt32(GameDatabase.GetInstance().GetGameVersion());
+                identity.WriteUInt(GameDatabase.Get.GetGameVersion());
                 server.Inject(identity);
                 return;
             }
@@ -44,11 +45,11 @@ namespace SimpleCL.Service.Login
             if (server is Agent)
             {
                 Packet login = new Packet(Opcodes.Agent.Request.AUTH, true);
-                login.WriteUInt32(((Agent) server).SessionId);
+                login.WriteUInt(((Agent) server).SessionId);
                 login.WriteAscii(_username);
                 login.WriteAscii(_password);
-                login.WriteUInt8(_silkroadServer.Locale);
-                login.WriteUInt8Array(NetworkUtils.GetMacAddressBytes());
+                login.WriteByte(_silkroadServer.Locale);
+                login.WriteByteArray(NetworkUtils.GetMacAddressBytes());
 
                 server.Inject(login);
             }
@@ -65,19 +66,19 @@ namespace SimpleCL.Service.Login
         {
             List<GameServer> servers = new List<GameServer>();
 
-            while (packet.ReadUInt8() == 1)
+            while (packet.ReadByte() == 1)
             {
-                byte farmId = packet.ReadUInt8();
+                byte farmId = packet.ReadByte();
                 string farmName = packet.ReadAscii();
             }
 
-            while (packet.ReadUInt8() == 1)
+            while (packet.ReadByte() == 1)
             {
                 GameServer gameServer = new GameServer(
-                    packet.ReadUInt16(),
+                    packet.ReadUShort(),
                     packet.ReadAscii(),
-                    (ServerCapacity) packet.ReadUInt8(),
-                    packet.ReadUInt8() == 1
+                    (ServerCapacity) packet.ReadByte(),
+                    packet.ReadByte() == 1
                 );
 
                 servers.Add(gameServer);
@@ -95,11 +96,11 @@ namespace SimpleCL.Service.Login
         [PacketHandler(Opcodes.Gateway.Response.PASSCODE)]
         public void PasscodeResponse(Server server, Packet packet)
         {
-            packet.ReadUInt8();
-            byte passcodeResult = packet.ReadUInt8();
+            packet.ReadByte();
+            byte passcodeResult = packet.ReadByte();
             if (passcodeResult == 2)
             {
-                byte attempts = packet.ReadUInt8();
+                byte attempts = packet.ReadByte();
                 Application.Run(new PasscodeEnter(server, "Invalid passcode [" + attempts + "/" + 3 + "]"));
                 server.Log("Invalid passcode. Attempts: [" + attempts + "/" + 3 + "]");
             }
@@ -108,54 +109,52 @@ namespace SimpleCL.Service.Login
         [PacketHandler(Opcodes.Gateway.Response.AGENT_AUTH)]
         public void AgentAuth(Server server, Packet packet)
         {
-            byte result = packet.ReadUInt8();
+            byte result = packet.ReadByte();
             switch (result)
             {
                 case 1:
-                    server.Dispose(); // Close gateway connection
-
-                    uint sessionId = packet.ReadUInt32();
+                    uint sessionId = packet.ReadUInt();
                     string agentIp = packet.ReadAscii();
-                    ushort agentPort = packet.ReadUInt16();
+                    ushort agentPort = packet.ReadUShort();
 
                     Agent agent = new Agent(agentIp, agentPort, sessionId);
                     
                     agent.RegisterService(this);
                     agent.RegisterService(new ChatService());
                     agent.RegisterService(new CharacterSelectService(_silkroadServer));
-                    agent.RegisterService(new CharacterService(_silkroadServer));
+                    agent.RegisterService(new CharacterService(_silkroadServer, (Gateway) server));
                     
                     // agent.Debug = true;
                     agent.Start();
                     break;
 
                 case 2:
-                    LoginErrorCode errorCode = (LoginErrorCode) packet.ReadUInt8();
+                    LoginErrorCode errorCode = (LoginErrorCode) packet.ReadByte();
 
                     switch (errorCode)
                     {
                         case LoginErrorCode.InvalidCredentials:
-                            uint maxAttempts = packet.ReadUInt32();
-                            uint currentAttempts = packet.ReadUInt32();
+                            uint maxAttempts = packet.ReadUInt();
+                            uint currentAttempts = packet.ReadUInt();
                             server.Log("Invalid credentials. Attempts: [" + currentAttempts +
                                        "/" + maxAttempts + "]");
                             break;
 
                         case LoginErrorCode.Blocked:
-                            LoginBlockType blockType = (LoginBlockType) packet.ReadUInt8();
+                            LoginBlockType blockType = (LoginBlockType) packet.ReadByte();
 
                             switch (blockType)
                             {
                                 case LoginBlockType.Punishment:
                                     string reason = packet.ReadAscii();
                                     DateTime endDate = new DateTime(
-                                        packet.ReadUInt16(),
-                                        packet.ReadUInt16(),
-                                        packet.ReadUInt16(),
-                                        packet.ReadUInt16(),
-                                        packet.ReadUInt16(),
-                                        packet.ReadUInt16(),
-                                        packet.ReadUInt16()
+                                        packet.ReadUShort(),
+                                        packet.ReadUShort(),
+                                        packet.ReadUShort(),
+                                        packet.ReadUShort(),
+                                        packet.ReadUShort(),
+                                        packet.ReadUShort(),
+                                        packet.ReadUShort()
                                     );
 
                                     server.Log("Account banned: " + reason);
@@ -188,6 +187,9 @@ namespace SimpleCL.Service.Login
                         case LoginErrorCode.ServerIsFull:
                             server.Log("Server is full.");
                             break;
+                        case LoginErrorCode.LoginQueue:
+                            server.Log("Login queue");
+                            return;
                         default:
                             server.Log("Unhandled login error code: " + errorCode);
                             break;
@@ -206,18 +208,18 @@ namespace SimpleCL.Service.Login
         [PacketHandler(Opcodes.Agent.Response.AUTH)]
         public void EnterCharacterSelect(Server server, Packet packet)
         {
-            byte result = packet.ReadUInt8();
+            byte result = packet.ReadByte();
             if (result == 1)
             {
                 Packet charSelect = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_ACTION);
-                charSelect.WriteUInt8(2);
+                charSelect.WriteByte(2);
                 server.Inject(charSelect);
                 return;
             }
 
             if (result == 2)
             {
-                byte errorCode = packet.ReadUInt8();
+                byte errorCode = packet.ReadByte();
                 AuthErrorCode error = (AuthErrorCode) errorCode;
                 switch (error)
                 {

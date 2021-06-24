@@ -4,11 +4,11 @@ using System.Threading;
 
 namespace SimpleCL.Network
 {
-    public class Gateway: Server
+    public class Gateway : Server
     {
         private readonly string _ip;
         private readonly ushort _port;
-        
+
         public Gateway(string ip, ushort port)
         {
             _ip = ip;

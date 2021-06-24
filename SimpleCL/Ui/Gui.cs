@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.Windows.Forms;
 using SimpleCL.Database;
-using SimpleCL.Enums;
 using SimpleCL.Enums.Server;
-using SimpleCL.Model;
 using SimpleCL.Model.Character;
 using SimpleCL.Network;
 using SimpleCL.Service.Login;
@@ -13,8 +11,6 @@ namespace SimpleCL.Ui
 {
     public partial class Gui : Form
     {
-        public Character Character = null;
-        
         private const ushort GatewayPort = 15779;
         
         public Gui()
@@ -51,7 +47,7 @@ namespace SimpleCL.Ui
                 return;
             }
 
-            GameDatabase.GetInstance().SelectedServer = selectedServer;
+            GameDatabase.Get.SelectedServer = selectedServer;
             
             Gateway gw = new Gateway(selectedServer.GatewayIps[new Random().Next(selectedServer.GatewayIps.Length)], GatewayPort);
             gw.RegisterService(new LoginService(usernameBox.Text, passwordBox.Text, selectedServer));
@@ -91,23 +87,31 @@ namespace SimpleCL.Ui
 
         public void RefreshGui()
         {
-            if (Character != null)
+            LocalPlayer local = LocalPlayer.Get;
+            if (local != null)
             {
-                hpProgressBar.Value = (int) Character.getHpPercent();
-                mpProgressBar.Value = (int) Character.getMpPercent();
-                expProgressBar.Value = Character.GetExpPercent();
+                nameLabelValue.Text = local.Name;
+                jobNameLabelValue.Text = local.JobName;
+                
+                hpProgressBar.Maximum = (int) local.Hp;
+                mpProgressBar.Maximum = (int) local.Mp;
+                expProgressBar.Value = (int) local.GetExpPercent();
+                expProgressBar.CustomText = local.GetExpPercentDecimal().ToString("P", CultureInfo.CurrentCulture);
+                jobExpProgressBar.Value = (int) local.GetJobExpPercent();
+                jobExpProgressBar.CustomText = local.GetJobExpPercentDecimal().ToString("P", CultureInfo.CurrentCulture);
 
-                levelLabelValue.Text = Character.Level.ToString();
-                spLabelValue.Text = Character.Skillpoints.ToString("N0");
-                goldLabelValue.Text = Character.Gold.ToString("N0");
-                coordsLabelValue.Text = Character.Coordinates.ToString();
+                levelLabelValue.Text = local.Level.ToString();
+                jobLevelLabelValue.Text = local.JobLevel.ToString();
+                spLabelValue.Text = local.Skillpoints.ToString("N0");
+                goldLabelValue.Text = local.Gold.ToString("N0");
+                coordsLabelValue.Text = local.LocalPoint.ToString();
 
                 inventoryDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
-                inventoryDataGridView.DataSource = Character.Inventories["inventory"];
-                equipmentDataGridView.DataSource = Character.Inventories["equipment"];
-                avatarDataGridView.DataSource = Character.Inventories["avatar"];
-                jobEquipmentDataGridView.DataSource = Character.Inventories["jobEquipment"];
+                inventoryDataGridView.DataSource = local.Inventories["inventory"];
+                equipmentDataGridView.DataSource = local.Inventories["equipment"];
+                avatarDataGridView.DataSource = local.Inventories["avatar"];
+                jobEquipmentDataGridView.DataSource = local.Inventories["jobEquipment"];
             }
             
             Refresh();
