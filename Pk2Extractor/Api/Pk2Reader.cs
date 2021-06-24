@@ -4,20 +4,18 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using SilkroadSecurityApi;
-using xBot.PK2Extractor.PK2ReaderAPI;
 
-namespace SimpleCL.Util.Pk2Reader
+namespace Pk2Extractor.Api
 {
     public class Pk2Reader : IDisposable
     {
         private readonly Blowfish _blowfish = new Blowfish();
-
         public long Size { get; private set; }
         public byte[] Key { get; private set; }
         public string AsciiKey { get; private set; }
         public string FullPath { get; }
-
         public SPk2Header Header { get; private set; }
+        
         private Dictionary<string, Pk2File> _files = new Dictionary<string, Pk2File>();
 
         public List<Pk2File> Files
@@ -36,7 +34,7 @@ namespace SimpleCL.Util.Pk2Reader
         private Pk2Folder _mainFolder;
         private FileStream _fileStream;
 
-        public Pk2Reader(string filePath, string blowfishKey)
+        public Pk2Reader(string filePath, string blowfishKey = "169841")
         {
             if (!File.Exists(filePath))
             {
@@ -45,28 +43,22 @@ namespace SimpleCL.Util.Pk2Reader
 
             FullPath = Path.GetFullPath(filePath);
 
-            if (blowfishKey == "")
-            {
-                AsciiKey = "169841";
-            }
-            else
-            {
-                AsciiKey = blowfishKey;
-            }
-
-            Key = GenerateFinalBlowfishKey(AsciiKey);
+            Key = GenerateFinalBlowfishKey(AsciiKey = blowfishKey);
 
             _fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             Size = _fileStream.Length;
 
             _blowfish.Initialize(Key);
+            
             BinaryReader reader = new BinaryReader(_fileStream);
             Header = (SPk2Header) BufferToStruct(reader.ReadBytes(256), typeof(SPk2Header));
 
-            _currentFolder = new Pk2Folder();
-            _currentFolder.Name = filePath;
-            _currentFolder.Files = new List<Pk2File>();
-            _currentFolder.SubFolders = new List<Pk2Folder>();
+            _currentFolder = new Pk2Folder
+            {
+                Name = filePath,
+                Files = new List<Pk2File>(),
+                SubFolders = new List<Pk2Folder>()
+            };
 
             _mainFolder = _currentFolder;
             Read(reader.BaseStream.Position, "");
@@ -255,7 +247,9 @@ namespace SimpleCL.Util.Pk2Reader
             _folders.TryGetValue(path, out folder);
 
             if (folder != null)
+            {
                 files.AddRange(folder.Files);
+            }
             return files;
         }
         

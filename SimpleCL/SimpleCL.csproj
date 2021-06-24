@@ -144,10 +144,6 @@
     <Compile Include="Util\Extension\PacketReadExt.cs" />
     <Compile Include="Util\Extension\PacketWriteExt.cs" />
     <Compile Include="Util\NetworkUtils.cs" />
-    <Compile Include="Util\Pk2Reader\Pk2Extractor.cs" />
-    <Compile Include="Util\Pk2Reader\Pk2File.cs" />
-    <Compile Include="Util\Pk2Reader\Pk2Folder.cs" />
-    <Compile Include="Util\Pk2Reader\Pk2Reader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -167,7 +163,6 @@
       <DependentUpon>Serverlist.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
