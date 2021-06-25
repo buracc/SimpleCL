@@ -98,7 +98,9 @@
     <Compile Include="Model\Character\LocalPlayer.cs" />
     <Compile Include="Model\Character\Character.cs" />
     <Compile Include="Model\Chat\ChatMessage.cs" />
+    <Compile Include="Model\Coord\ICoord.cs" />
     <Compile Include="Model\Coord\LocalPoint.cs" />
+    <Compile Include="Model\Coord\WorldPoint.cs" />
     <Compile Include="Model\Inventory\Item.cs" />
     <Compile Include="Model\Server\GameServer.cs" />
     <Compile Include="Network\Agent.cs" />

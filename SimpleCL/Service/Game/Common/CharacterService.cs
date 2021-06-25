@@ -161,6 +161,8 @@ namespace SimpleCL.Service.Game.Common
                     });
                 }
             });
+            
+            packet.ReadByte(); // structure changes
 
             var collectionBookStartedCount = packet.ReadUInt();
             collectionBookStartedCount.Repeat(i =>
@@ -170,16 +172,15 @@ namespace SimpleCL.Service.Game.Common
                 var bookPageCount = packet.ReadUInt();
             });
 
-            packet.ReadByte(); // structure changes
-            
             local.Uid = packet.ReadUInt();
             var localPoint = new LocalPoint(
                 packet.ReadUShort(),
                 packet.ReadFloat(),
                 packet.ReadFloat(),
-                packet.ReadFloat(),
-                packet.ReadUShort()
+                packet.ReadFloat()
             );
+
+            var angle = packet.ReadUShort();
 
             var destinationSet = packet.ReadByte() == 1;
             var walkType = packet.ReadByte();
@@ -204,7 +205,7 @@ namespace SimpleCL.Service.Game.Common
             else
             {
                 var movementType = packet.ReadByte();
-                localPoint.Angle = packet.ReadUShort();
+                angle = packet.ReadUShort();
             }
 
             var lifeState = packet.ReadByte();
@@ -259,6 +260,13 @@ namespace SimpleCL.Service.Game.Common
             var jid = packet.ReadUInt();
 
             local.LocalPoint = localPoint;
+
+            var worldPoint = WorldPoint.FromLocal(localPoint);
+            var localP = LocalPoint.FromWorld(worldPoint);
+            
+            Console.WriteLine(localPoint);
+            Console.WriteLine(localP);
+            Console.WriteLine(worldPoint);
             
             Program.Gui.RefreshGui();
 
