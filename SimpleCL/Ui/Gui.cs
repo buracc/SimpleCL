@@ -93,8 +93,11 @@ namespace SimpleCL.Ui
                 nameLabelValue.Text = local.Name;
                 jobNameLabelValue.Text = local.JobName;
                 
-                hpProgressBar.Maximum = (int) local.Hp;
-                mpProgressBar.Maximum = (int) local.Mp;
+                hpProgressBar.Maximum = (int) local.MaxHp;
+                mpProgressBar.Maximum = (int) local.MaxMp;
+                hpProgressBar.Value = (int) local.MaxHp;
+                mpProgressBar.Value = (int) local.MaxMp;
+                
                 expProgressBar.Value = (int) local.GetExpPercent();
                 expProgressBar.CustomText = local.GetExpPercentDecimal().ToString("P", CultureInfo.CurrentCulture);
                 jobExpProgressBar.Value = (int) local.GetJobExpPercent();
@@ -115,6 +118,16 @@ namespace SimpleCL.Ui
             }
             
             Refresh();
+        }
+
+        public bool DebugGateway()
+        {
+            return debugGwCheckbox.Checked;
+        }
+        
+        public bool DebugAgent()
+        {
+            return debugAgCheckbox.Checked;
         }
     }
 }

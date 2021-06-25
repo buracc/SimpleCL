@@ -11,13 +11,17 @@ namespace SimpleCL.Model.Character
         
         private static LocalPlayer _instance;
         public static LocalPlayer Get => _instance ?? (_instance = new LocalPlayer());
-        public uint Uid { get; set; }
+
         private ulong _nextLevelExp;
         private ulong _jobNextLevelExp;
+        private byte _level;
+        private byte _jobLevel;
+        public uint Uid { get; set; }
         public uint Hp { get; set; }
         public uint Mp { get; set; }
+        public uint MaxHp { get; set; }
+        public uint MaxMp { get; set; }
 
-        private byte _level;
         public byte Level
         {
             get => _level;
@@ -27,12 +31,12 @@ namespace SimpleCL.Model.Character
                 _nextLevelExp = GameDatabase.Get.GetNextLevelExp(value);
             }
         }
-
+        
+        public string Name { get; set; }
+        public string JobName { get; set; }
         public ulong NextLevelExp => _nextLevelExp;
-
         public ulong JobNextLevelExp => _jobNextLevelExp;
 
-        private byte _jobLevel;
         public byte JobLevel
         {
             get => _jobLevel;
@@ -48,9 +52,8 @@ namespace SimpleCL.Model.Character
         public uint Skillpoints { get; set; }
         public ulong Gold { get; set; }
         public LocalPoint LocalPoint { get; set; }
+        
         public Dictionary<string, List<InventoryItem>> Inventories = new Dictionary<string, List<InventoryItem>>();
-        public string Name { get; set; }
-        public string JobName { get; set; }
 
         public double GetExpPercent()
         {

@@ -11,7 +11,7 @@ namespace SimpleCL.Model.Entity
     {
         public readonly uint Id;
         public readonly string ServerName;
-        public readonly string Name;
+        public string Name { get; set; }
         public readonly byte TypeId1;
         public readonly byte TypeId2;
         public readonly byte TypeId3;
@@ -46,7 +46,7 @@ namespace SimpleCL.Model.Entity
             }
             else
             {
-                Console.WriteLine("Unable to parse entity with id: " + id);
+                // Console.WriteLine("Unable to parse entity with id: " + id);
             }
         }
 

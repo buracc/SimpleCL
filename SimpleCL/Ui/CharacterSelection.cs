@@ -36,12 +36,14 @@ namespace SimpleCL.Ui
 
         private void SelectCharacter(object sender, EventArgs args)
         {
-            Model.Character.Character selected = (Model.Character.Character) ((DataGridViewRow) sender).DataBoundItem;
+            Character selected = (Character) ((DataGridViewRow) sender).DataBoundItem;
             if (selected == null)
             {
                 return;
             }
-            
+
+            LocalPlayer.Get.MaxHp = selected.Hp;
+            LocalPlayer.Get.MaxMp = selected.Mp;
             Packet characterJoin = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_JOIN);
             characterJoin.WriteAscii(selected.Name);
             _agent.Inject(characterJoin);

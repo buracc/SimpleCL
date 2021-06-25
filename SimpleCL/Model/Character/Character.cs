@@ -7,6 +7,8 @@ namespace SimpleCL.Model.Character
     {
         public string Name { get; }
         public byte Level { get; }
+        public uint Hp { get; set; }
+        public uint Mp { get; set; }
         public bool Deleting { get; }
         public DateTime DeletionTime { get; set; }
 

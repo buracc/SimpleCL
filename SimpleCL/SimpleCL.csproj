@@ -80,6 +80,7 @@
     <Compile Include="Enums\Chat\ChatChannel.cs" />
     <Compile Include="Enums\Common\Locale.cs" />
     <Compile Include="Enums\Common\Opcodes.cs" />
+    <Compile Include="Enums\Event\EntityStateEvent.cs" />
     <Compile Include="Enums\Event\InventoryAction.cs" />
     <Compile Include="Enums\Item\ItemCategory.cs" />
     <Compile Include="Enums\Item\ItemParser.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Model\Entity\Fortress\Structure\FortressObstacle.cs" />
     <Compile Include="Model\Entity\Fortress\Structure\FortressTower.cs" />
     <Compile Include="Model\Entity\GroundItem.cs" />
+    <Compile Include="Model\Entity\Mask.cs" />
     <Compile Include="Model\Entity\Pet\AttackPet.cs" />
     <Compile Include="Model\Entity\Pet\FellowPet.cs" />
     <Compile Include="Model\Entity\Pet\Flower.cs" />
@@ -140,8 +142,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\Game\Chat\ChatService.cs" />
-    <Compile Include="Service\Game\Entity\CharacterService.cs" />
+    <Compile Include="Service\Game\Entity\LocalPlayerService.cs" />
     <Compile Include="Service\Game\Entity\SpawnService.cs" />
+    <Compile Include="Service\Game\Entity\StatusService.cs" />
     <Compile Include="Service\Login\CharacterSelectService.cs" />
     <Compile Include="Service\Login\LoginService.cs" />
     <Compile Include="Service\PacketHandlerAttribute.cs" />

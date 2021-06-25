@@ -81,6 +81,9 @@ namespace SimpleCL.Ui
             this.loggerBox = new System.Windows.Forms.ListBox();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripProgressBar2 = new System.Windows.Forms.ToolStripProgressBar();
+            this.devTab = new System.Windows.Forms.TabPage();
+            this.debugGwCheckbox = new System.Windows.Forms.CheckBox();
+            this.debugAgCheckbox = new System.Windows.Forms.CheckBox();
             credentialsGroup = new System.Windows.Forms.GroupBox();
             credentialsGroup.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -97,6 +100,7 @@ namespace SimpleCL.Ui
             this.jobEquipmentInvTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.jobEquipmentDataGridView)).BeginInit();
             this.chatTab.SuspendLayout();
+            this.devTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // credentialsGroup
@@ -176,6 +180,7 @@ namespace SimpleCL.Ui
             this.tabControl.Controls.Add(this.homeTab);
             this.tabControl.Controls.Add(this.inventoryPage);
             this.tabControl.Controls.Add(this.chatTab);
+            this.tabControl.Controls.Add(this.devTab);
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
@@ -578,6 +583,34 @@ namespace SimpleCL.Ui
             this.toolStripProgressBar2.Name = "toolStripProgressBar2";
             this.toolStripProgressBar2.Size = new System.Drawing.Size(100, 15);
             // 
+            // devTab
+            // 
+            this.devTab.Controls.Add(this.debugAgCheckbox);
+            this.devTab.Controls.Add(this.debugGwCheckbox);
+            this.devTab.Location = new System.Drawing.Point(4, 22);
+            this.devTab.Name = "devTab";
+            this.devTab.Size = new System.Drawing.Size(768, 272);
+            this.devTab.TabIndex = 3;
+            this.devTab.Text = "Developer";
+            // 
+            // debugGwCheckbox
+            // 
+            this.debugGwCheckbox.Location = new System.Drawing.Point(14, 13);
+            this.debugGwCheckbox.Name = "debugGwCheckbox";
+            this.debugGwCheckbox.Size = new System.Drawing.Size(104, 24);
+            this.debugGwCheckbox.TabIndex = 0;
+            this.debugGwCheckbox.Text = "Debug gateway";
+            this.debugGwCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // debugAgCheckbox
+            // 
+            this.debugAgCheckbox.Location = new System.Drawing.Point(14, 43);
+            this.debugAgCheckbox.Name = "debugAgCheckbox";
+            this.debugAgCheckbox.Size = new System.Drawing.Size(104, 24);
+            this.debugAgCheckbox.TabIndex = 1;
+            this.debugAgCheckbox.Text = "Debug agent";
+            this.debugAgCheckbox.UseVisualStyleBackColor = true;
+            // 
             // Gui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -604,8 +637,13 @@ namespace SimpleCL.Ui
             this.jobEquipmentInvTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize) (this.jobEquipmentDataGridView)).EndInit();
             this.chatTab.ResumeLayout(false);
+            this.devTab.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.TabPage devTab;
+        private System.Windows.Forms.CheckBox debugGwCheckbox;
+        private System.Windows.Forms.CheckBox debugAgCheckbox;
 
         private SimpleCL.Ui.Comp.TextProgressBar expProgressBar;
 

@@ -15,5 +15,12 @@
         {
             return TypeId1 == 4 && TypeId2 == 0 && TypeId3 == 0 && TypeId4 == 0;
         }
+
+        public enum Type : byte
+        {
+            None = 0,
+            Regular = 1,
+            Dimensional = 6
+        }
     }
 }

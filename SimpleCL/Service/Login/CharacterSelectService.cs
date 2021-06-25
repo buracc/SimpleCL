@@ -69,6 +69,9 @@ namespace SimpleCL.Service.Login
 
                     Character character = new Character(name, level, deleting);
 
+                    character.Hp = hp;
+                    character.Mp = mp;
+
                     if (deleting)
                     {
                         uint minutes = packet.ReadUInt();

@@ -33,7 +33,7 @@
         /// <summary>
         /// Cannot connect to the server because access to the current IP has exceeded its limit.
         /// </summary>
-        IPLimit = 0xB,
+        IPLimit = 8,
 
         /// <summary>
         /// <para>TRANSLATION MISSING</para>

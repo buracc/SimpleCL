@@ -87,6 +87,7 @@ namespace SimpleCL.Network
         private void HeartBeat(Object source, ElapsedEventArgs e)
         {
             Inject(new Packet(Opcodes.HEARTBEAT));
+            Program.Gui.RefreshGui();
         }
 
         public void Disconnect()
@@ -154,10 +155,9 @@ namespace SimpleCL.Network
 
                 foreach (var packet in incomingPackets)
                 {
-                    if (Debug)
+                    if (Debug || this is Agent && Program.Gui.DebugAgent() || this is Gateway && Program.Gui.DebugGateway())
                     {
-                        Log(packet.Opcode.ToString("X"), false);
-                        Log("\n" + Utility.HexDump(packet.GetBytes()), false);
+                        DebugPacket(packet);
                     }
 
                     if (packet.Opcode == Opcodes.IDENTITY && !_timer.Enabled)
@@ -207,6 +207,12 @@ namespace SimpleCL.Network
             }
 
             Disconnect();
+        }
+
+        public void DebugPacket(Packet packet, bool toGui = false)
+        {
+            Log(packet.Opcode.ToString("X"), toGui);
+            Log("\n" + Utility.HexDump(packet.GetBytes()), toGui);
         }
     }
 }
