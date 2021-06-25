@@ -207,6 +207,17 @@ namespace SimpleCL.Service.Login
             }
         }
 
+        [PacketHandler(Opcodes.Gateway.Response.QUEUE_POSITION)]
+        public void LoginQueuePosition(Server server, Packet packet)
+        {
+            packet.ReadByte();
+            ushort playersInQueue = packet.ReadUShort();
+            packet.ReadUInt();
+            ushort currentPosition = packet.ReadUShort();
+            
+            server.Log("Queue position: [" + currentPosition + "/" + playersInQueue + "]");
+        }
+
         [PacketHandler(Opcodes.Agent.Response.AUTH)]
         public void EnterCharacterSelect(Server server, Packet packet)
         {

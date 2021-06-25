@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data.SQLite;
-using SimpleCL.Enums;
 using SimpleCL.Enums.Server;
 using SimpleCL.Util;
 
@@ -14,6 +13,12 @@ namespace SimpleCL.Database
 
         public static GameDatabase Get => _instance ?? (_instance = new GameDatabase());
         public SilkroadServer SelectedServer { get; set; }
+
+        private Dictionary<uint, NameValueCollection> _itemCache = new Dictionary<uint, NameValueCollection>();
+        private Dictionary<uint, NameValueCollection> _modelCache = new Dictionary<uint, NameValueCollection>();
+        private Dictionary<uint, NameValueCollection> _skillCache = new Dictionary<uint, NameValueCollection>();
+        private Dictionary<uint, NameValueCollection> _teleBuildingCache = new Dictionary<uint, NameValueCollection>();
+        private Dictionary<uint, NameValueCollection> _teleLinkCache = new Dictionary<uint, NameValueCollection>();
 
         private GameDatabase()
         {
@@ -86,13 +91,18 @@ namespace SimpleCL.Database
 
         public NameValueCollection GetItemData(uint id)
         {
+            if (_itemCache.ContainsKey(id))
+            {
+                return _itemCache[id];
+            }
+            
             var result = GetData("SELECT * FROM items WHERE id = " + id);
             if (result.Count == 0)
             {
                 return null;
             }
             
-            return result[0];
+            return _itemCache[id] = result[0];
         }
 
         public NameValueCollection GetMagicOption(uint id)
@@ -108,46 +118,66 @@ namespace SimpleCL.Database
 
         public NameValueCollection GetSkill(uint id)
         {
+            if (_skillCache.ContainsKey(id))
+            {
+                return _skillCache[id];
+            }
+            
             var result = GetData("SELECT * FROM skills WHERE id = " + id);
             if (result.Count == 0)
             {
                 return null;
             }
             
-            return result[0];
+            return _skillCache[id] = result[0];
         }
         
         public NameValueCollection GetModel(uint id)
         {
+            if (_modelCache.ContainsKey(id))
+            {
+                return _modelCache[id];
+            }
+            
             var result = GetData("SELECT * FROM models WHERE id = " + id);
             if (result.Count == 0)
             {
                 return null;
             }
             
-            return result[0];
+            return _modelCache[id] = result[0];
         }
         
         public NameValueCollection GetTeleportBuilding(uint id)
         {
+            if (_teleBuildingCache.ContainsKey(id))
+            {
+                return _teleBuildingCache[id];
+            }
+            
             var result = GetData("SELECT * FROM teleportbuildings WHERE id = " + id);
             if (result.Count == 0)
             {
                 return null;
             }
             
-            return result[0];
+            return _teleBuildingCache[id] = result[0];
         }
         
         public NameValueCollection GetTeleportLink(uint id)
         {
+            if (_teleLinkCache.ContainsKey(id))
+            {
+                return _teleLinkCache[id];
+            }
+            
             var result = GetData("SELECT * FROM teleportlinks WHERE id = " + id);
             if (result.Count == 0)
             {
                 return null;
             }
             
-            return result[0];
+            return _teleLinkCache[id] = result[0];
         }
 
         public uint GetGameVersion()

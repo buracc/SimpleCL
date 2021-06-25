@@ -55,7 +55,7 @@ namespace SimpleCL.Service.Game.Entity
             if (_spawnPacket != null)
             {
                 _spawnPacket.Lock();
-                
+
                 if (_spawnType == 1)
                 {
                     EntitySpawn(server, _spawnPacket);
@@ -70,15 +70,15 @@ namespace SimpleCL.Service.Game.Entity
 
         private void EntitySpawn(Server server, Packet packet)
         {
-            server.DebugPacket(packet);
             try
             {
                 var refObjId = packet.ReadUInt();
                 var entity = Model.Entity.Entity.FromId(refObjId);
 
-                if (entity is SkillZone skillZone)
+                if (entity is SkillAoe skillAoe)
                 {
-                    Console.WriteLine("skillzone");
+                    Console.WriteLine("Skill AoE spawned");
+                    Console.WriteLine(skillAoe.Name);
                     packet.ReadUShort();
                     var skillId = packet.ReadUInt();
                     var uid = packet.ReadUInt();
@@ -88,13 +88,15 @@ namespace SimpleCL.Service.Game.Entity
                         packet.ReadFloat(),
                         packet.ReadFloat()
                     );
+                    Console.WriteLine(position);
                     var angle = packet.ReadUShort();
                     return;
                 }
 
                 if (entity is Teleport teleport)
                 {
-                    Console.WriteLine("teleport");
+                    Console.WriteLine("Teleport spawned");
+                    Console.WriteLine(teleport.Name);
                     var uid = packet.ReadUInt();
                     var position = new LocalPoint(
                         packet.ReadUShort(),
@@ -104,12 +106,12 @@ namespace SimpleCL.Service.Game.Entity
                     );
 
                     Console.WriteLine(position);
+
                     var angle = packet.ReadUShort();
                     packet.ReadByte();
                     var unk = packet.ReadByte();
                     packet.ReadByte();
                     var type = (Teleport.Type) packet.ReadByte();
-                    Console.WriteLine(type);
                     switch (type)
                     {
                         case Teleport.Type.Regular:
@@ -136,7 +138,8 @@ namespace SimpleCL.Service.Game.Entity
 
                 if (entity is GroundItem groundItem)
                 {
-                    Console.WriteLine("grounditem");
+                    Console.WriteLine("Grounditem spawned");
+                    Console.WriteLine(groundItem.Name);
                     if (groundItem.IsEquipment())
                     {
                         var plus = packet.ReadByte();
@@ -180,57 +183,61 @@ namespace SimpleCL.Service.Game.Entity
 
                 if (entity is PathingEntity pathingEntity)
                 {
-                    Console.WriteLine("--------------------------------------------");
-                    Console.WriteLine("pathingentity");
-
-                    if (pathingEntity is Player player)
+                    switch (pathingEntity)
                     {
-                        Console.WriteLine("player");
-                        var scale = packet.ReadByte();
-                        var zerkLevel = packet.ReadByte();
-                        var pvpCapeType = packet.ReadByte();
-                        packet.ReadByte();
-                        var expIconType = packet.ReadByte();
-
-                        var invSize = packet.ReadByte();
-                        var equipmentCount = packet.ReadByte();
-                        equipmentCount.Repeat(i =>
+                        case Player player:
                         {
-                            InventoryItem item = InventoryItem.FromId(packet.ReadUInt());
-                            if (item.IsEquipment())
-                            {
-                                var plus = packet.ReadByte();
-                            }
-                        });
+                            Console.WriteLine("Player spawned");
+                            var scale = packet.ReadByte();
+                            var zerkLevel = packet.ReadByte();
+                            var pvpCapeType = packet.ReadByte();
+                            packet.ReadByte();
+                            var expIconType = packet.ReadByte();
 
-                        var avatarInvSize = packet.ReadByte();
-                        var avatarCount = packet.ReadByte();
-                        avatarCount.Repeat(i =>
-                        {
-                            InventoryItem item = InventoryItem.FromId(packet.ReadUInt());
-                            if (item.IsEquipment())
+                            var invSize = packet.ReadByte();
+                            var equipmentCount = packet.ReadByte();
+                            player.InventoryItems.Clear();
+                            equipmentCount.Repeat(i =>
                             {
-                                var plus = packet.ReadByte();
-                            }
-                        });
+                                InventoryItem item = InventoryItem.FromId(packet.ReadUInt());
+                                player.InventoryItems.Add(item);
+                                if (item.IsEquipment())
+                                {
+                                    var plus = packet.ReadByte();
+                                }
+                            });
 
-                        var hasMask = packet.ReadByte() == 1;
-                        if (hasMask)
-                        {
-                            Mask mask = new Mask(packet.ReadUInt());
-                            if (mask.TypeId1 == player.TypeId1 && mask.TypeId2 == player.TypeId2)
+                            var avatarInvSize = packet.ReadByte();
+                            var avatarCount = packet.ReadByte();
+                            avatarCount.Repeat(i =>
                             {
-                                var maskScale = packet.ReadByte();
-                                var maskInventory = packet.ReadUIntArray(packet.ReadByte());
+                                InventoryItem item = InventoryItem.FromId(packet.ReadUInt());
+                                if (item.IsEquipment())
+                                {
+                                    var plus = packet.ReadByte();
+                                }
+                            });
+
+                            var hasMask = packet.ReadByte() == 1;
+                            if (hasMask)
+                            {
+                                Mask mask = new Mask(packet.ReadUInt());
+                                if (mask.TypeId1 == player.TypeId1 && mask.TypeId2 == player.TypeId2)
+                                {
+                                    var maskScale = packet.ReadByte();
+                                    var maskInventory = packet.ReadUIntArray(packet.ReadByte());
+                                }
                             }
+
+                            break;
                         }
-                    }
-
-                    if (pathingEntity is FortressStructure structure)
-                    {
-                        var hp = packet.ReadUInt();
-                        var refEventStructId = packet.ReadUInt();
-                        var state = packet.ReadUShort();
+                        case FortressStructure structure:
+                        {
+                            var hp = packet.ReadUInt();
+                            var refEventStructId = packet.ReadUInt();
+                            var state = packet.ReadUShort();
+                            break;
+                        }
                     }
 
                     var uid = packet.ReadUInt();
@@ -241,6 +248,7 @@ namespace SimpleCL.Service.Game.Entity
                         packet.ReadFloat()
                     );
 
+                    Console.WriteLine(localPoint);
                     var angle = packet.ReadUShort();
 
                     var destinationSet = packet.ReadByte() == 1;
@@ -280,7 +288,7 @@ namespace SimpleCL.Service.Game.Entity
                     var walkSpeed = packet.ReadFloat();
                     var runSpeed = packet.ReadFloat();
                     var zerkSpeed = packet.ReadFloat();
-                    
+
                     var buffCount = packet.ReadByte();
                     buffCount.Repeat(i =>
                     {
@@ -300,31 +308,34 @@ namespace SimpleCL.Service.Game.Entity
                     if (pathingEntity is Player p)
                     {
                         p.Name = packet.ReadAscii();
-                        Console.WriteLine(p.Name);
-                        var jobType = packet.ReadByte();
-                        Console.WriteLine(jobType);
-                        var jobName = packet.ReadAscii();
-                        Console.WriteLine(jobName);
-                        packet.ReadByte();
-                        packet.ReadByte();
-                        var jobLevel = packet.ReadByte();
-                        Console.WriteLine(jobLevel);
-                        var pvpState = packet.ReadByte();
-                        var transportFlag = packet.ReadByte();
+
                         var inCombat = packet.ReadByte();
-                        
+
+                        // no clue how this works but theres 3 extra bytes without any boolean flag
+                        // if player is in job mode
+                        if (p.IsWearingJobSuit())
+                        {
+                            packet.ReadByte();
+                            var level = packet.ReadByte();
+                            packet.ReadByte();
+                        }
+
+                        var transportFlag = packet.ReadByte();
+                        var pvpState = packet.ReadByte();
+
                         if (transportFlag == 1)
                         {
                             var transportUid = packet.ReadUInt();
                         }
-                        
+
                         var scrollingType = packet.ReadByte();
-                        Console.WriteLine(scrollingType);
                         var interactionType = packet.ReadByte();
-                        packet.ReadByte();
 
                         var guildName = packet.ReadAscii();
-                        Console.WriteLine(guildName);
+                    }
+                    else if (pathingEntity is Npc npc)
+                    {
+                        //todo
                     }
                 }
             }

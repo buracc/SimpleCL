@@ -132,7 +132,7 @@
     <Compile Include="Model\Entity\Npc.cs" />
     <Compile Include="Model\Entity\PathingEntity.cs" />
     <Compile Include="Model\Entity\Player.cs" />
-    <Compile Include="Model\Entity\SkillZone.cs" />
+    <Compile Include="Model\Entity\SkillAoe.cs" />
     <Compile Include="Model\Entity\Teleport.cs" />
     <Compile Include="Model\Inventory\InventoryItem.cs" />
     <Compile Include="Model\Server\GameServer.cs" />

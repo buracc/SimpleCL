@@ -21,8 +21,8 @@ namespace SimpleCL.Model.Entity
         {
             Id = id;
 
-            NameValueCollection data = GameDatabase.Get.GetModel(id);
-            if (data != null)
+            NameValueCollection data;
+            if ((data = GameDatabase.Get.GetModel(id)) != null)
             {
                 TypeId1 = 1;
             }
@@ -38,24 +38,27 @@ namespace SimpleCL.Model.Entity
 
             if (data != null)
             {
+                var tid2 = TypeId1 == 3 ? "tid1" : "tid2";
+                var tid3 = TypeId1 == 3 ? "tid2" : "tid3";
+                var tid4 = TypeId1 == 3 ? "tid3" : "tid4";
                 ServerName = data["servername"];
                 Name = data["name"];
-                TypeId2 = byte.Parse(data["tid2"]);
-                TypeId3 = byte.Parse(data["tid3"]);
-                TypeId4 = byte.Parse(data["tid4"]);
+                TypeId2 = byte.Parse(data[tid2]);
+                TypeId3 = byte.Parse(data[tid3]);
+                TypeId4 = byte.Parse(data[tid4]);
             }
             else
             {
-                // Console.WriteLine("Unable to parse entity with id: " + id);
+                Console.WriteLine("Unable to parse entity with id: " + id);
             }
         }
 
         public static Entity FromId(uint id)
         {
             Entity entity = new Entity(id);
-            if (entity.IsSkillZone())
+            if (entity.IsSkillAoe())
             {
-                return new SkillZone(id);
+                return new SkillAoe(id);
             }
 
             if (entity.IsPathingEntity())
@@ -201,7 +204,7 @@ namespace SimpleCL.Model.Entity
             return entity;
         }
 
-        public bool IsSkillZone()
+        public bool IsSkillAoe()
         {
             return Id == uint.MaxValue;
         }

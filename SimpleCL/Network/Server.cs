@@ -21,7 +21,7 @@ namespace SimpleCL.Network
 
         private delegate void PacketHandler(Server server, Packet packet);
 
-        private readonly Timer _timer = new Timer(5000);
+        private readonly Timer _timer = new Timer(6666);
 
         private bool _disposing;
 

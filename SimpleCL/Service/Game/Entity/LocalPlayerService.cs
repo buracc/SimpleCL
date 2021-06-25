@@ -77,7 +77,13 @@ namespace SimpleCL.Service.Game.Entity
                 if (jobPouchSize > 0)
                 {
                     var jobPouchCount = packet.ReadByte();
-                    // parse job pouch inventory
+                    jobPouchCount.Repeat(j =>
+                    {
+                        var slot = packet.ReadByte();
+                        packet.ReadUInt();
+                        var itemId = packet.ReadUInt();
+                        var stackSize = packet.ReadUInt();
+                    });
                 }
 
                 var jobInventorySize = packet.ReadByte();
@@ -467,7 +473,7 @@ namespace SimpleCL.Service.Game.Entity
 
                         break;
                 }
-
+                
                 items.Add(inventoryItem);
             });
 

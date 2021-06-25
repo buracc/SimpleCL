@@ -14,12 +14,11 @@ namespace SimpleCL.Ui
     public partial class CharacterSelection : Form
     {
         private readonly Server _agent;
-        public CharacterSelection(List<Model.Character.Character> chars, Server agent)
+        public CharacterSelection(List<Character> chars, Server agent)
         {
             _agent = agent;
             InitializeComponent();
             characterListDataGridView.DataSource = chars;
-            // characterListDataGridView.RowHeaderMouseDoubleClick += SelectCharacter;
             
             FormBorderStyle = FormBorderStyle.FixedSingle;
             CenterToScreen();
