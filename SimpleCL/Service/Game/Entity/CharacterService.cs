@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SilkroadSecurityApi;
 using SimpleCL.Database;
 using SimpleCL.Enums.Common;
-using SimpleCL.Enums.Item;
 using SimpleCL.Enums.Quest;
 using SimpleCL.Enums.Server;
 using SimpleCL.Enums.Skill;
@@ -14,7 +12,7 @@ using SimpleCL.Model.Inventory;
 using SimpleCL.Network;
 using SimpleCL.Util.Extension;
 
-namespace SimpleCL.Service.Game.Common
+namespace SimpleCL.Service.Game.Entity
 {
     public class CharacterService : Service
     {
@@ -62,7 +60,7 @@ namespace SimpleCL.Service.Game.Common
             var inventorySize = packet.ReadByte();
             var itemCount = packet.ReadByte();
 
-            List<Item> inv = ParseInventory(packet, itemCount);
+            List<InventoryItem> inv = ParseInventory(packet, itemCount);
 
             local.Inventories["inventory"] = inv.Where(x => x.Slot > 12).ToList();
             local.Inventories["equipment"] = inv.Where(x => x.Slot < 13).ToList();
@@ -226,7 +224,7 @@ namespace SimpleCL.Service.Game.Common
                 var skillData = GameDatabase.Get.GetSkill(refSkillId);
                 var autoTransferEffect = skillData["attributes"]
                     .Split(',')
-                    .Contains(BuffInfo.Attribute.AutoTransferEffect.ToString());
+                    .Contains(BuffData.Attribute.AutoTransferEffect.ToString());
 
                 if (autoTransferEffect)
                 {
@@ -261,13 +259,6 @@ namespace SimpleCL.Service.Game.Common
 
             local.LocalPoint = localPoint;
 
-            var worldPoint = WorldPoint.FromLocal(localPoint);
-            var localP = LocalPoint.FromWorld(worldPoint);
-            
-            Console.WriteLine(localPoint);
-            Console.WriteLine(localP);
-            Console.WriteLine(worldPoint);
-            
             Program.Gui.RefreshGui();
 
             server.Log("Successfully joined the game");
@@ -279,9 +270,9 @@ namespace SimpleCL.Service.Game.Common
             server.Inject(new Packet(Opcodes.Agent.Request.GAME_READY));
         }
 
-        public List<Item> ParseInventory(Packet packet, byte itemCount, bool inventory = true)
+        public List<InventoryItem> ParseInventory(Packet packet, byte itemCount, bool inventory = true)
         {
-            List<Item> items = new List<Item>();
+            List<InventoryItem> items = new List<InventoryItem>();
 
             itemCount.Repeat(i =>
             {
@@ -317,7 +308,7 @@ namespace SimpleCL.Service.Game.Common
                 var typeId3 = byte.Parse(itemData["tid2"]);
                 var typeId4 = byte.Parse(itemData["tid3"]);
 
-                Item item = new Item(slot, refItemId, itemData["servername"], itemData["name"]);
+                InventoryItem inventoryItem = new InventoryItem(slot, refItemId, itemData["servername"], itemData["name"]);
 
                 switch (typeId2)
                 {
@@ -413,7 +404,7 @@ namespace SimpleCL.Service.Game.Common
                     case 3:
                         var stackCount = packet.ReadUShort();
 
-                        item.Quantity = stackCount;
+                        inventoryItem.Quantity = stackCount;
 
                         if (typeId3 == 11 && (typeId4 == 1 || typeId4 == 2))
                         {
@@ -434,7 +425,7 @@ namespace SimpleCL.Service.Game.Common
                         break;
                 }
 
-                items.Add(item);
+                items.Add(inventoryItem);
             });
 
             return items;

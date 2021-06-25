@@ -48,7 +48,7 @@ namespace SimpleCL.Model.Character
         public uint Skillpoints { get; set; }
         public ulong Gold { get; set; }
         public LocalPoint LocalPoint { get; set; }
-        public Dictionary<string, List<Item>> Inventories = new Dictionary<string, List<Item>>();
+        public Dictionary<string, List<InventoryItem>> Inventories = new Dictionary<string, List<InventoryItem>>();
         public string Name { get; set; }
         public string JobName { get; set; }
 

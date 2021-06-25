@@ -19,14 +19,14 @@ namespace SimpleCL.Database
         {
         }
 
-        private List<NameValueCollection> GetData(string sql)
+        private List<NameValueCollection> GetData(string sql, string dbNameExtra = "_DB")
         {
             if (SelectedServer == null)
             {
                 throw new SystemException("Current server wasn't set");
             }
 
-            string dbFile = DirectoryUtils.GetDbFile(SelectedServer.Name);
+            string dbFile = DirectoryUtils.GetDbFile(SelectedServer.Name + dbNameExtra);
 
             if (dbFile == "")
             {
@@ -53,17 +53,35 @@ namespace SimpleCL.Database
 
         public ulong GetNextLevelExp(byte level)
         {
-            return ulong.Parse(GetData("SELECT * FROM leveldata WHERE level = " + level)[0]["player"]);
+            var data = GetData("SELECT * FROM leveldata WHERE level = " + level);
+            if (data.Count == 0)
+            {
+                return 0;
+            }
+            
+            return ulong.Parse(data[0]["player"]);
         }
         
         public ulong GetJobNextLevelExp(byte level)
         {
-            return ulong.Parse(GetData("SELECT * FROM leveldata WHERE level = " + level)[0]["job"]);
+            var data = GetData("SELECT * FROM leveldata WHERE level = " + level);
+            if (data.Count == 0)
+            {
+                return 0;
+            }
+            
+            return ulong.Parse(data[0]["job"]);
         }
 
         public ulong GetFellowNextLevelExp(byte level)
         {
-            return ulong.Parse(GetData("SELECT * FROM leveldata WHERE level = " + level)[0]["fellow"]);
+            var data = GetData("SELECT * FROM leveldata WHERE level = " + level);
+            if (data.Count == 0)
+            {
+                return 0;
+            }
+            
+            return ulong.Parse(data[0]["fellow"]);
         }
 
         public NameValueCollection GetItemData(uint id)
@@ -71,7 +89,7 @@ namespace SimpleCL.Database
             var result = GetData("SELECT * FROM items WHERE id = " + id);
             if (result.Count == 0)
             {
-                throw new SystemException("Item " + id + " not found");
+                return null;
             }
             
             return result[0];
@@ -82,7 +100,7 @@ namespace SimpleCL.Database
             var result = GetData("SELECT * FROM magicoption WHERE id = " + id);
             if (result.Count == 0)
             {
-                throw new SystemException("Magic option " + id + " not found");
+                return null;
             }
             
             return result[0];
@@ -93,7 +111,40 @@ namespace SimpleCL.Database
             var result = GetData("SELECT * FROM skills WHERE id = " + id);
             if (result.Count == 0)
             {
-                throw new SystemException("Skill " + id + " not found");
+                return null;
+            }
+            
+            return result[0];
+        }
+        
+        public NameValueCollection GetModel(uint id)
+        {
+            var result = GetData("SELECT * FROM models WHERE id = " + id);
+            if (result.Count == 0)
+            {
+                return null;
+            }
+            
+            return result[0];
+        }
+        
+        public NameValueCollection GetTeleportBuilding(uint id)
+        {
+            var result = GetData("SELECT * FROM teleportbuildings WHERE id = " + id);
+            if (result.Count == 0)
+            {
+                return null;
+            }
+            
+            return result[0];
+        }
+        
+        public NameValueCollection GetTeleportLink(uint id)
+        {
+            var result = GetData("SELECT * FROM teleportlinks WHERE id = " + id);
+            if (result.Count == 0)
+            {
+                return null;
             }
             
             return result[0];
@@ -104,7 +155,7 @@ namespace SimpleCL.Database
             var result = GetData("SELECT * FROM data WHERE k = 'version'");
             if (result.Count == 0)
             {
-                throw new SystemException("Server data not found");
+                return 0;
             }
 
             return uint.Parse(result[0]["v"]);

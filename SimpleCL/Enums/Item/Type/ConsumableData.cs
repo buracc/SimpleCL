@@ -1,7 +1,7 @@
 ﻿namespace SimpleCL.Enums.Item.Type
 {
     // ItemCategory == 3
-    public static class Consumable
+    public static class ConsumableData
     {
         public enum Type : byte
         {

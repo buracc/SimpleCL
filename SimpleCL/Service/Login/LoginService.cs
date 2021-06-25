@@ -9,7 +9,7 @@ using SimpleCL.Enums.Server;
 using SimpleCL.Model.Server;
 using SimpleCL.Network;
 using SimpleCL.Service.Game.Chat;
-using SimpleCL.Service.Game.Common;
+using SimpleCL.Service.Game.Entity;
 using SimpleCL.Ui;
 using SimpleCL.Util;
 using SimpleCL.Util.Extension;
@@ -123,6 +123,7 @@ namespace SimpleCL.Service.Login
                     agent.RegisterService(new ChatService());
                     agent.RegisterService(new CharacterSelectService(_silkroadServer));
                     agent.RegisterService(new CharacterService(_silkroadServer, (Gateway) server));
+                    agent.RegisterService(new SpawnService(_silkroadServer));
                     
                     // agent.Debug = true;
                     agent.Start();

@@ -1,7 +1,7 @@
 ﻿namespace SimpleCL.Enums.Item.Type
 {
     // ItemCategory == 2
-    public static class COS
+    public static class CosData
     {
         public enum Type : byte
         {

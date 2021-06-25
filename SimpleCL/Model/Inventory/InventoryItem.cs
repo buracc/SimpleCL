@@ -2,7 +2,7 @@
 
 namespace SimpleCL.Model.Inventory
 {
-    public class Item : IComparable<Item>
+    public class InventoryItem : IComparable<InventoryItem>
     {
         public byte Slot { get;  }
         public uint Id { get; }
@@ -17,7 +17,7 @@ namespace SimpleCL.Model.Inventory
             set => _quantity = value;
         }
 
-        public Item(byte slot, uint id, string serverName, string name)
+        public InventoryItem(byte slot, uint id, string serverName, string name)
         {
             Slot = slot;
             Id = id;
@@ -25,7 +25,7 @@ namespace SimpleCL.Model.Inventory
             Name = name;
         }
 
-        public int CompareTo(Item other)
+        public int CompareTo(InventoryItem other)
         {
             return Slot - other.Slot;
         }

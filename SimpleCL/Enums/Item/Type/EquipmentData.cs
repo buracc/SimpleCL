@@ -1,7 +1,7 @@
 ﻿namespace SimpleCL.Enums.Item.Type
 {
     // ItemCategory == 1
-    public class Equipment
+    public class EquipmentData
     {
         public enum Type : byte
         {

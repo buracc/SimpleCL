@@ -1,6 +1,6 @@
 ﻿namespace SimpleCL.Enums.Skill
 {
-    public class BuffInfo
+    public class BuffData
     {
         public enum Attribute: uint
         {
