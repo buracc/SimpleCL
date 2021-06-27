@@ -23,8 +23,6 @@ namespace SimpleCL.Service.Game.Entity
         [PacketHandler(Opcodes.Agent.Response.ENTITY_SOLO_SPAWN)]
         public void SingleEntitySpawn(Server server, Packet packet)
         {
-            // server.DebugPacket(packet);
-            // Console.WriteLine();
             EntitySpawn(server, packet);
         }
 
@@ -48,8 +46,6 @@ namespace SimpleCL.Service.Game.Entity
         {
             if (_spawnPacket != null)
             {
-                // server.DebugPacket(_spawnPacket);
-                // Console.WriteLine();
                 _spawnPacket.Lock();
                 _spawnCount.Repeat(i =>
                 {
@@ -63,6 +59,9 @@ namespace SimpleCL.Service.Game.Entity
 
         private void EntitySpawn(Server server, Packet packet)
         {
+            // todo: not done yet, there are still some parsing problems whenever a fellow spawns 
+            // only on groupspawn i think
+            
             try
             {
                 // Console.WriteLine("------------");
