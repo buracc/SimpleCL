@@ -44,6 +44,8 @@ namespace SimpleCL.Ui
             this.tabControl = new System.Windows.Forms.TabControl();
             this.homeTab = new System.Windows.Forms.TabPage();
             this.statisticsBox = new System.Windows.Forms.GroupBox();
+            this.worldCoordsLabelValue = new System.Windows.Forms.Label();
+            this.worldCoordsLabel = new System.Windows.Forms.Label();
             this.jobExpProgressBar = new SimpleCL.Ui.Comp.TextProgressBar();
             this.hpProgressBar = new SimpleCL.Ui.Comp.TextProgressBar();
             this.mpProgressBar = new SimpleCL.Ui.Comp.TextProgressBar();
@@ -55,11 +57,11 @@ namespace SimpleCL.Ui
             this.jobNameLabel = new System.Windows.Forms.Label();
             this.nameLabelValue = new System.Windows.Forms.Label();
             this.nameLabel = new System.Windows.Forms.Label();
-            this.coordsLabelValue = new System.Windows.Forms.Label();
+            this.localCoordsLabelValue = new System.Windows.Forms.Label();
             this.goldLabelValue = new System.Windows.Forms.Label();
             this.spLabelValue = new System.Windows.Forms.Label();
             this.levelLabelValue = new System.Windows.Forms.Label();
-            this.coordsLabel = new System.Windows.Forms.Label();
+            this.localCoordsLabel = new System.Windows.Forms.Label();
             this.goldLabel = new System.Windows.Forms.Label();
             this.spLabel = new System.Windows.Forms.Label();
             this.expLabel = new System.Windows.Forms.Label();
@@ -78,12 +80,18 @@ namespace SimpleCL.Ui
             this.jobEquipmentDataGridView = new System.Windows.Forms.DataGridView();
             this.chatTab = new System.Windows.Forms.TabPage();
             this.chatBox = new System.Windows.Forms.ListBox();
+            this.movementTab = new System.Windows.Forms.TabPage();
+            this.map1 = new SimpleCL.Ui.Comp.Map();
+            this.currWorldLabel = new System.Windows.Forms.Label();
+            this.currWorldLabelValue = new System.Windows.Forms.Label();
+            this.currLocalLabel = new System.Windows.Forms.Label();
+            this.currLocalLabelValue = new System.Windows.Forms.Label();
+            this.devTab = new System.Windows.Forms.TabPage();
+            this.debugAgCheckbox = new System.Windows.Forms.CheckBox();
+            this.debugGwCheckbox = new System.Windows.Forms.CheckBox();
             this.loggerBox = new System.Windows.Forms.ListBox();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripProgressBar2 = new System.Windows.Forms.ToolStripProgressBar();
-            this.devTab = new System.Windows.Forms.TabPage();
-            this.debugGwCheckbox = new System.Windows.Forms.CheckBox();
-            this.debugAgCheckbox = new System.Windows.Forms.CheckBox();
             credentialsGroup = new System.Windows.Forms.GroupBox();
             credentialsGroup.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -100,6 +108,7 @@ namespace SimpleCL.Ui
             this.jobEquipmentInvTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.jobEquipmentDataGridView)).BeginInit();
             this.chatTab.SuspendLayout();
+            this.movementTab.SuspendLayout();
             this.devTab.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -114,7 +123,7 @@ namespace SimpleCL.Ui
             credentialsGroup.Controls.Add(this.passwordLabel);
             credentialsGroup.Location = new System.Drawing.Point(6, 6);
             credentialsGroup.Name = "credentialsGroup";
-            credentialsGroup.Size = new System.Drawing.Size(262, 131);
+            credentialsGroup.Size = new System.Drawing.Size(262, 113);
             credentialsGroup.TabIndex = 6;
             credentialsGroup.TabStop = false;
             credentialsGroup.Text = "Credentials";
@@ -180,11 +189,12 @@ namespace SimpleCL.Ui
             this.tabControl.Controls.Add(this.homeTab);
             this.tabControl.Controls.Add(this.inventoryPage);
             this.tabControl.Controls.Add(this.chatTab);
+            this.tabControl.Controls.Add(this.movementTab);
             this.tabControl.Controls.Add(this.devTab);
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(776, 298);
+            this.tabControl.Size = new System.Drawing.Size(776, 305);
             this.tabControl.TabIndex = 4;
             // 
             // homeTab
@@ -194,13 +204,15 @@ namespace SimpleCL.Ui
             this.homeTab.Location = new System.Drawing.Point(4, 22);
             this.homeTab.Name = "homeTab";
             this.homeTab.Padding = new System.Windows.Forms.Padding(3);
-            this.homeTab.Size = new System.Drawing.Size(768, 272);
+            this.homeTab.Size = new System.Drawing.Size(768, 279);
             this.homeTab.TabIndex = 0;
             this.homeTab.Text = "Home";
             this.homeTab.UseVisualStyleBackColor = true;
             // 
             // statisticsBox
             // 
+            this.statisticsBox.Controls.Add(this.worldCoordsLabelValue);
+            this.statisticsBox.Controls.Add(this.worldCoordsLabel);
             this.statisticsBox.Controls.Add(this.jobExpProgressBar);
             this.statisticsBox.Controls.Add(this.hpProgressBar);
             this.statisticsBox.Controls.Add(this.mpProgressBar);
@@ -212,11 +224,11 @@ namespace SimpleCL.Ui
             this.statisticsBox.Controls.Add(this.jobNameLabel);
             this.statisticsBox.Controls.Add(this.nameLabelValue);
             this.statisticsBox.Controls.Add(this.nameLabel);
-            this.statisticsBox.Controls.Add(this.coordsLabelValue);
+            this.statisticsBox.Controls.Add(this.localCoordsLabelValue);
             this.statisticsBox.Controls.Add(this.goldLabelValue);
             this.statisticsBox.Controls.Add(this.spLabelValue);
             this.statisticsBox.Controls.Add(this.levelLabelValue);
-            this.statisticsBox.Controls.Add(this.coordsLabel);
+            this.statisticsBox.Controls.Add(this.localCoordsLabel);
             this.statisticsBox.Controls.Add(this.goldLabel);
             this.statisticsBox.Controls.Add(this.spLabel);
             this.statisticsBox.Controls.Add(this.expLabel);
@@ -225,10 +237,26 @@ namespace SimpleCL.Ui
             this.statisticsBox.Controls.Add(this.hpLabel);
             this.statisticsBox.Location = new System.Drawing.Point(274, 6);
             this.statisticsBox.Name = "statisticsBox";
-            this.statisticsBox.Size = new System.Drawing.Size(488, 260);
+            this.statisticsBox.Size = new System.Drawing.Size(488, 254);
             this.statisticsBox.TabIndex = 7;
             this.statisticsBox.TabStop = false;
             this.statisticsBox.Text = "Statistics";
+            // 
+            // worldCoordsLabelValue
+            // 
+            this.worldCoordsLabelValue.Location = new System.Drawing.Point(90, 224);
+            this.worldCoordsLabelValue.Name = "worldCoordsLabelValue";
+            this.worldCoordsLabelValue.Size = new System.Drawing.Size(371, 22);
+            this.worldCoordsLabelValue.TabIndex = 31;
+            this.worldCoordsLabelValue.Text = "-1, -1";
+            // 
+            // worldCoordsLabel
+            // 
+            this.worldCoordsLabel.Location = new System.Drawing.Point(6, 224);
+            this.worldCoordsLabel.Name = "worldCoordsLabel";
+            this.worldCoordsLabel.Size = new System.Drawing.Size(78, 22);
+            this.worldCoordsLabel.TabIndex = 30;
+            this.worldCoordsLabel.Text = "World";
             // 
             // jobExpProgressBar
             // 
@@ -334,13 +362,13 @@ namespace SimpleCL.Ui
             this.nameLabel.TabIndex = 18;
             this.nameLabel.Text = "Name";
             // 
-            // coordsLabelValue
+            // localCoordsLabelValue
             // 
-            this.coordsLabelValue.Location = new System.Drawing.Point(90, 202);
-            this.coordsLabelValue.Name = "coordsLabelValue";
-            this.coordsLabelValue.Size = new System.Drawing.Size(371, 22);
-            this.coordsLabelValue.TabIndex = 17;
-            this.coordsLabelValue.Text = "-1, -1";
+            this.localCoordsLabelValue.Location = new System.Drawing.Point(90, 202);
+            this.localCoordsLabelValue.Name = "localCoordsLabelValue";
+            this.localCoordsLabelValue.Size = new System.Drawing.Size(371, 22);
+            this.localCoordsLabelValue.TabIndex = 17;
+            this.localCoordsLabelValue.Text = "-1, -1";
             // 
             // goldLabelValue
             // 
@@ -366,13 +394,13 @@ namespace SimpleCL.Ui
             this.levelLabelValue.TabIndex = 11;
             this.levelLabelValue.Text = "-1";
             // 
-            // coordsLabel
+            // localCoordsLabel
             // 
-            this.coordsLabel.Location = new System.Drawing.Point(6, 202);
-            this.coordsLabel.Name = "coordsLabel";
-            this.coordsLabel.Size = new System.Drawing.Size(78, 22);
-            this.coordsLabel.TabIndex = 8;
-            this.coordsLabel.Text = "Coordinates";
+            this.localCoordsLabel.Location = new System.Drawing.Point(6, 202);
+            this.localCoordsLabel.Name = "localCoordsLabel";
+            this.localCoordsLabel.Size = new System.Drawing.Size(78, 22);
+            this.localCoordsLabel.TabIndex = 8;
+            this.localCoordsLabel.Text = "Local";
             // 
             // goldLabel
             // 
@@ -427,7 +455,7 @@ namespace SimpleCL.Ui
             this.inventoryPage.Controls.Add(this.inventoryTabControl);
             this.inventoryPage.Location = new System.Drawing.Point(4, 22);
             this.inventoryPage.Name = "inventoryPage";
-            this.inventoryPage.Size = new System.Drawing.Size(768, 272);
+            this.inventoryPage.Size = new System.Drawing.Size(768, 279);
             this.inventoryPage.TabIndex = 2;
             this.inventoryPage.Text = "Inventory";
             this.inventoryPage.UseVisualStyleBackColor = true;
@@ -550,7 +578,7 @@ namespace SimpleCL.Ui
             this.chatTab.Location = new System.Drawing.Point(4, 22);
             this.chatTab.Name = "chatTab";
             this.chatTab.Padding = new System.Windows.Forms.Padding(3);
-            this.chatTab.Size = new System.Drawing.Size(768, 272);
+            this.chatTab.Size = new System.Drawing.Size(768, 279);
             this.chatTab.TabIndex = 1;
             this.chatTab.Text = "Chat";
             this.chatTab.UseVisualStyleBackColor = true;
@@ -564,10 +592,92 @@ namespace SimpleCL.Ui
             this.chatBox.Size = new System.Drawing.Size(765, 264);
             this.chatBox.TabIndex = 0;
             // 
+            // movementTab
+            // 
+            this.movementTab.Controls.Add(this.map1);
+            this.movementTab.Controls.Add(this.currWorldLabel);
+            this.movementTab.Controls.Add(this.currWorldLabelValue);
+            this.movementTab.Controls.Add(this.currLocalLabel);
+            this.movementTab.Controls.Add(this.currLocalLabelValue);
+            this.movementTab.Location = new System.Drawing.Point(4, 22);
+            this.movementTab.Name = "movementTab";
+            this.movementTab.Size = new System.Drawing.Size(768, 279);
+            this.movementTab.TabIndex = 4;
+            this.movementTab.Text = "Movement";
+            this.movementTab.UseVisualStyleBackColor = true;
+            // 
+            // map1
+            // 
+            this.map1.Location = new System.Drawing.Point(3, 3);
+            this.map1.Name = "map1";
+            this.map1.Size = new System.Drawing.Size(762, 250);
+            this.map1.TabIndex = 10;
+            this.map1.Zoom = ((byte) (0));
+            // 
+            // currWorldLabel
+            // 
+            this.currWorldLabel.Location = new System.Drawing.Point(293, 256);
+            this.currWorldLabel.Name = "currWorldLabel";
+            this.currWorldLabel.Size = new System.Drawing.Size(39, 23);
+            this.currWorldLabel.TabIndex = 9;
+            this.currWorldLabel.Text = "World";
+            // 
+            // currWorldLabelValue
+            // 
+            this.currWorldLabelValue.Location = new System.Drawing.Point(338, 256);
+            this.currWorldLabelValue.Name = "currWorldLabelValue";
+            this.currWorldLabelValue.Size = new System.Drawing.Size(278, 23);
+            this.currWorldLabelValue.TabIndex = 8;
+            this.currWorldLabelValue.Text = "0, 0";
+            // 
+            // currLocalLabel
+            // 
+            this.currLocalLabel.Location = new System.Drawing.Point(2, 256);
+            this.currLocalLabel.Name = "currLocalLabel";
+            this.currLocalLabel.Size = new System.Drawing.Size(46, 23);
+            this.currLocalLabel.TabIndex = 7;
+            this.currLocalLabel.Text = "Local";
+            // 
+            // currLocalLabelValue
+            // 
+            this.currLocalLabelValue.Location = new System.Drawing.Point(54, 256);
+            this.currLocalLabelValue.Name = "currLocalLabelValue";
+            this.currLocalLabelValue.Size = new System.Drawing.Size(278, 23);
+            this.currLocalLabelValue.TabIndex = 4;
+            this.currLocalLabelValue.Text = "0, 0";
+            // 
+            // devTab
+            // 
+            this.devTab.Controls.Add(this.debugAgCheckbox);
+            this.devTab.Controls.Add(this.debugGwCheckbox);
+            this.devTab.Location = new System.Drawing.Point(4, 22);
+            this.devTab.Name = "devTab";
+            this.devTab.Size = new System.Drawing.Size(768, 279);
+            this.devTab.TabIndex = 3;
+            this.devTab.Text = "Developer";
+            // 
+            // debugAgCheckbox
+            // 
+            this.debugAgCheckbox.Location = new System.Drawing.Point(14, 43);
+            this.debugAgCheckbox.Name = "debugAgCheckbox";
+            this.debugAgCheckbox.Size = new System.Drawing.Size(104, 24);
+            this.debugAgCheckbox.TabIndex = 1;
+            this.debugAgCheckbox.Text = "Debug agent";
+            this.debugAgCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // debugGwCheckbox
+            // 
+            this.debugGwCheckbox.Location = new System.Drawing.Point(14, 13);
+            this.debugGwCheckbox.Name = "debugGwCheckbox";
+            this.debugGwCheckbox.Size = new System.Drawing.Size(104, 24);
+            this.debugGwCheckbox.TabIndex = 0;
+            this.debugGwCheckbox.Text = "Debug gateway";
+            this.debugGwCheckbox.UseVisualStyleBackColor = true;
+            // 
             // loggerBox
             // 
             this.loggerBox.FormattingEnabled = true;
-            this.loggerBox.Location = new System.Drawing.Point(12, 313);
+            this.loggerBox.Location = new System.Drawing.Point(12, 323);
             this.loggerBox.Name = "loggerBox";
             this.loggerBox.ScrollAlwaysVisible = true;
             this.loggerBox.Size = new System.Drawing.Size(776, 121);
@@ -583,39 +693,12 @@ namespace SimpleCL.Ui
             this.toolStripProgressBar2.Name = "toolStripProgressBar2";
             this.toolStripProgressBar2.Size = new System.Drawing.Size(100, 15);
             // 
-            // devTab
-            // 
-            this.devTab.Controls.Add(this.debugAgCheckbox);
-            this.devTab.Controls.Add(this.debugGwCheckbox);
-            this.devTab.Location = new System.Drawing.Point(4, 22);
-            this.devTab.Name = "devTab";
-            this.devTab.Size = new System.Drawing.Size(768, 272);
-            this.devTab.TabIndex = 3;
-            this.devTab.Text = "Developer";
-            // 
-            // debugGwCheckbox
-            // 
-            this.debugGwCheckbox.Location = new System.Drawing.Point(14, 13);
-            this.debugGwCheckbox.Name = "debugGwCheckbox";
-            this.debugGwCheckbox.Size = new System.Drawing.Size(104, 24);
-            this.debugGwCheckbox.TabIndex = 0;
-            this.debugGwCheckbox.Text = "Debug gateway";
-            this.debugGwCheckbox.UseVisualStyleBackColor = true;
-            // 
-            // debugAgCheckbox
-            // 
-            this.debugAgCheckbox.Location = new System.Drawing.Point(14, 43);
-            this.debugAgCheckbox.Name = "debugAgCheckbox";
-            this.debugAgCheckbox.Size = new System.Drawing.Size(104, 24);
-            this.debugAgCheckbox.TabIndex = 1;
-            this.debugAgCheckbox.Text = "Debug agent";
-            this.debugAgCheckbox.UseVisualStyleBackColor = true;
-            // 
             // Gui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(800, 453);
             this.Controls.Add(this.loggerBox);
             this.Controls.Add(this.tabControl);
             this.MaximizeBox = false;
@@ -637,19 +720,28 @@ namespace SimpleCL.Ui
             this.jobEquipmentInvTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize) (this.jobEquipmentDataGridView)).EndInit();
             this.chatTab.ResumeLayout(false);
+            this.movementTab.ResumeLayout(false);
             this.devTab.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+
+        private SimpleCL.Ui.Comp.Map map1;
+
+        private System.Windows.Forms.Label currLocalLabel;
+        private System.Windows.Forms.Label currWorldLabel;
+        private System.Windows.Forms.Label currWorldLabelValue;
+
+        private System.Windows.Forms.Label worldCoordsLabel;
+        private System.Windows.Forms.Label localCoordsLabel;
+
+        private System.Windows.Forms.TabPage movementTab;
+        private System.Windows.Forms.Label currLocalLabelValue;
 
         private System.Windows.Forms.TabPage devTab;
         private System.Windows.Forms.CheckBox debugGwCheckbox;
         private System.Windows.Forms.CheckBox debugAgCheckbox;
 
         private SimpleCL.Ui.Comp.TextProgressBar expProgressBar;
-
-        private SimpleCL.Ui.Comp.TextProgressBar textProgressBar1;
-
-        private System.Windows.Forms.ProgressBar progressBar1;
 
         private System.Windows.Forms.Label nameLabel;
         private System.Windows.Forms.Label nameLabelValue;
@@ -663,28 +755,23 @@ namespace SimpleCL.Ui
         private System.Windows.Forms.DataGridView avatarDataGridView;
         private System.Windows.Forms.DataGridView jobEquipmentDataGridView;
 
-        private System.Windows.Forms.DataGridView dataGridView1;
-
         private System.Windows.Forms.TabPage inventoryInvTab;
         private System.Windows.Forms.TabPage equipmentInvTab;
         private System.Windows.Forms.TabPage avatarInvTab;
         private System.Windows.Forms.TabPage jobEquipmentInvTab;
 
         private System.Windows.Forms.TabControl inventoryTabControl;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
 
         private System.Windows.Forms.TabPage inventoryPage;
 
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label jobExpLabel;
 
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar2;
 
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
 
-        private System.Windows.Forms.Label coordsLabel;
-        private System.Windows.Forms.Label coordsLabelValue;
+        private System.Windows.Forms.Label localCoordsLabelValue;
+        private System.Windows.Forms.Label worldCoordsLabelValue;
         private System.Windows.Forms.Label spLabelValue;
 
         private System.Windows.Forms.Label goldLabelValue;

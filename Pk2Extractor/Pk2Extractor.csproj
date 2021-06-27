@@ -33,6 +33,9 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="DevIL.NET2, Version=1.1.2619.31671, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\Libs\DevIL.NET2.dll</HintPath>
+        </Reference>
         <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
           <Private>True</Private>
@@ -60,9 +63,11 @@
           <HintPath>..\packages\System.Data.SQLite.Linq.1.0.114.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
           <Private>True</Private>
         </Reference>
+        <Reference Include="System.Drawing" />
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Api\DdsReader.cs" />
         <Compile Include="Api\Pk2Extractor.cs" />
         <Compile Include="Api\Pk2File.cs" />
         <Compile Include="Api\Pk2Folder.cs" />

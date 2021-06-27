@@ -1,6 +1,6 @@
-﻿namespace SimpleCL.Model.Entity.Pet
+﻿namespace SimpleCL.Model.Entity.Mob
 {
-    public class Flower : Cos
+    public class Flower : Monster
     {
         public Flower(uint id) : base(id)
         {

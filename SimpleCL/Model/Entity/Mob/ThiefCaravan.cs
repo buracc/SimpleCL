@@ -1,6 +1,6 @@
-﻿namespace SimpleCL.Model.Entity.Pet
+﻿namespace SimpleCL.Model.Entity.Mob
 {
-    public class ThiefCaravan : Cos
+    public class ThiefCaravan : Monster
     {
         public ThiefCaravan(uint id) : base(id)
         {

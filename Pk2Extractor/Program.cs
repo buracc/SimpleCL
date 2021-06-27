@@ -14,10 +14,11 @@ namespace Pk2Extractor
             File.SetAttributes(dbPath, File.GetAttributes(dbPath) & ~FileAttributes.ReadOnly);
             
             var pk2Extractor = new Api.Pk2Extractor(pk2Path, dbPath);
-            pk2Extractor.StoreTextReferences();
-            pk2Extractor.StoreModels();
-            pk2Extractor.StoreTeleportBuildings();
-            pk2Extractor.StoreTeleportLinks();
+            // pk2Extractor.StoreTextReferences();
+            // pk2Extractor.StoreModels();
+            // pk2Extractor.StoreTeleportBuildings();
+            // pk2Extractor.StoreTeleportLinks();
+            pk2Extractor.AddMinimap();
             // pk2extractor.AddItems();
         }
     }

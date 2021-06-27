@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using SimpleCL.Enums.Item;
 using SimpleCL.Enums.Item.Type;
+using SimpleCL.Model.Coord;
 using SimpleCL.Ui;
 
 namespace SimpleCL
@@ -19,7 +20,13 @@ namespace SimpleCL
 
         // public static void Main(string[] args)
         // {
-        //     Console.WriteLine(ItemParser.GetItemSubType(ItemCategory.Equipment, 6, 2).GetType());
+        //     LocalPoint point = new LocalPoint(27244, 51, 1423, 180);
+        //     WorldPoint wp = WorldPoint.FromLocal(point);
+        //     LocalPoint local = LocalPoint.FromWorld(wp);
+        //
+        //     Console.WriteLine(point);
+        //     Console.WriteLine(wp);
+        //     Console.WriteLine(local);
         // }
     }
 }

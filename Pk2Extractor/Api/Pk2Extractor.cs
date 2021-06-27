@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -500,6 +501,61 @@ namespace Pk2Extractor.Api
                         }
                     }
                 }
+            }
+        }
+        
+        public void AddMinimap()
+        {
+            string folderPath;
+
+            // Check directory
+            folderPath = "Minimap\\";
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+            // Get files
+            Pk2Folder minimap = _pk2Reader.GetFolder("minimap");
+            if (minimap != null)
+            {
+                ExtractAllImages(minimap, folderPath, System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+
+            // Check directory
+            folderPath = "Minimap\\d\\";
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+            // Get files
+            minimap = _pk2Reader.GetFolder("minimap_d");
+            if (minimap != null)
+            {
+                ExtractAllImages(minimap, folderPath, System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+        }
+        public void ExtractAllImages(Pk2Folder folder, string outPutPath, System.Drawing.Imaging.ImageFormat format)
+        {
+            string ext = Equals(format, System.Drawing.Imaging.ImageFormat.Jpeg)?"jpg":format.ToString().ToLower();
+            foreach (Pk2File f in folder.Files)
+            {
+                // Check path if the file already exists
+                string saveFilePath = Path.ChangeExtension(Path.GetFullPath(outPutPath + f.Name), ext);
+                if (File.Exists(saveFilePath))
+                {
+                    continue;
+                }
+
+                Console.WriteLine(f.Name);
+
+                // Convert DDJ to DDS to Bitmap
+                Bitmap img = DdsReader.FromDdj(_pk2Reader.GetFileBytes(f));
+                img?.Save(saveFilePath,format);
+            }
+            
+            foreach (Pk2Folder f in folder.SubFolders)
+            {
+                ExtractAllImages(f, outPutPath, format);
             }
         }
 

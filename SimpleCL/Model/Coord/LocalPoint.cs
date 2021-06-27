@@ -21,6 +21,12 @@ namespace SimpleCL.Model.Coord
         {
             return "X: " + (int) X + " | Y: " + (int) Y + " | Z: " + (int) Z + " | Region: " + Region;
         }
+        
+        public LocalPoint Translate(float x = 0, float y = 0)
+        {
+            var world = WorldPoint.FromLocal(this).Translate(x, y);
+            return FromWorld(world);
+        }
 
         public bool InCave()
         {
@@ -40,14 +46,14 @@ namespace SimpleCL.Model.Coord
                 x = 1920f - x;
             }
             
-            var y = (float) Math.Abs(worldPoint.Y % 192.0f * 10.0f);
+            var y = Math.Abs(worldPoint.Y % 192.0f * 10.0f);
             if (worldPoint.Y < 0.0)
             {
                 y = 1920f - y;
             }
 
             var xSector = (byte) Math.Round((worldPoint.X - x / 10) / 192.0 + 135);
-            var ySector = (byte) Math.Round((worldPoint.X - x / 10) / 192.0 + 92);
+            var ySector = (byte) Math.Round((worldPoint.Y - y / 10) / 192.0 + 92);
             var region = (ushort) ((ySector << 8) | xSector);
             return new LocalPoint(region, x, worldPoint.Z, y);
         }

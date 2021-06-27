@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Specialized;
 using SimpleCL.Database;
+using SimpleCL.Model.Coord;
 using SimpleCL.Model.Entity.Fortress;
 using SimpleCL.Model.Entity.Fortress.Structure;
+using SimpleCL.Model.Entity.Mob;
 using SimpleCL.Model.Entity.Pet;
 
 namespace SimpleCL.Model.Entity
@@ -16,10 +18,18 @@ namespace SimpleCL.Model.Entity
         public readonly byte TypeId2;
         public readonly byte TypeId3;
         public readonly byte TypeId4;
+        public LocalPoint LocalPoint { get; set; }
+
+        public WorldPoint WorldPoint => WorldPoint.FromLocal(LocalPoint);
 
         public Entity(uint id)
         {
             Id = id;
+
+            if (id == uint.MaxValue)
+            {
+                return;
+            }
 
             NameValueCollection data;
             if ((data = GameDatabase.Get.GetModel(id)) != null)
@@ -74,12 +84,28 @@ namespace SimpleCL.Model.Entity
                     Npc npc = new Npc(id);
                     if (npc.IsMonster())
                     {
-                        return new Monster(id);
+                        Monster monster = new Monster(id);
+                        if (monster.IsFlower())
+                        {
+                            return new Flower(id);
+                        }
+
+                        if (monster.IsThiefCaravan())
+                        {
+                            return new ThiefCaravan(id);
+                        }
+
+                        if (monster.IsTraderCaravan())
+                        {
+                            return new TraderCaravan(id);
+                        }
+                        
+                        return monster;
                     }
 
-                    if (npc.IsGuide())
+                    if (npc.IsTalk())
                     {
-                        return new Guide(id);
+                        return new TalkNpc(id);
                     }
 
                     if (npc.IsCos())
@@ -113,16 +139,6 @@ namespace SimpleCL.Model.Entity
                         if (cos.IsQuestPet())
                         {
                             return new QuestPet(id);
-                        }
-
-                        if (cos.IsThiefCaravan())
-                        {
-                            return new ThiefCaravan(id);
-                        }
-
-                        if (cos.IsFlower())
-                        {
-                            return new Flower(id);
                         }
 
                         if (cos.IsFellowPet())
@@ -222,6 +238,11 @@ namespace SimpleCL.Model.Entity
         public bool IsTeleport()
         {
             return TypeId1 == 4;
+        }
+
+        public override string ToString()
+        {
+            return GetType().Name + ": " + Name + " [" + Id + "]";
         }
     }
 }

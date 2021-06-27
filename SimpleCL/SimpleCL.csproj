@@ -96,6 +96,8 @@
     <Compile Include="Enums\Server\ServerCapacity.cs" />
     <Compile Include="Enums\Server\SilkroadServer.cs" />
     <Compile Include="Enums\Skill\BuffData.cs" />
+    <Compile Include="Interaction\InteractionQueue.cs" />
+    <Compile Include="Interaction\Pathing\Movement.cs" />
     <Compile Include="Model\Character\LocalPlayer.cs" />
     <Compile Include="Model\Character\Character.cs" />
     <Compile Include="Model\Chat\ChatMessage.cs" />
@@ -111,14 +113,15 @@
     <Compile Include="Model\Entity\Fortress\Structure\FortressTower.cs" />
     <Compile Include="Model\Entity\GroundItem.cs" />
     <Compile Include="Model\Entity\Mask.cs" />
+    <Compile Include="Model\Entity\Mob\Flower.cs" />
+    <Compile Include="Model\Entity\Mob\TraderCaravan.cs" />
+    <Compile Include="Model\Entity\Mob\ThiefCaravan.cs" />
     <Compile Include="Model\Entity\Pet\AttackPet.cs" />
     <Compile Include="Model\Entity\Pet\FellowPet.cs" />
-    <Compile Include="Model\Entity\Pet\Flower.cs" />
     <Compile Include="Model\Entity\Pet\GuildGuard.cs" />
     <Compile Include="Model\Entity\Pet\Horse.cs" />
     <Compile Include="Model\Entity\Pet\PickPet.cs" />
     <Compile Include="Model\Entity\Pet\QuestPet.cs" />
-    <Compile Include="Model\Entity\Pet\ThiefCaravan.cs" />
     <Compile Include="Model\Entity\Pet\Transport.cs" />
     <Compile Include="Model\Entity\Entity.cs" />
     <Compile Include="Model\Entity\FortressCos.cs" />
@@ -127,7 +130,7 @@
     <Compile Include="Model\Entity\Fortress\FortressMonster.cs" />
     <Compile Include="Model\Entity\Fortress\FortressPatrolGuard.cs" />
     <Compile Include="Model\Entity\FortressStructure.cs" />
-    <Compile Include="Model\Entity\Guide.cs" />
+    <Compile Include="Model\Entity\TalkNpc.cs" />
     <Compile Include="Model\Entity\Monster.cs" />
     <Compile Include="Model\Entity\Npc.cs" />
     <Compile Include="Model\Entity\PathingEntity.cs" />
@@ -141,8 +144,14 @@
     <Compile Include="Network\Server.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Service\Game\Chat\ChatService.cs" />
     <Compile Include="Service\Game\Entity\LocalPlayerService.cs" />
+    <Compile Include="Service\Game\Entity\MovementService.cs" />
     <Compile Include="Service\Game\Entity\SpawnService.cs" />
     <Compile Include="Service\Game\Entity\StatusService.cs" />
     <Compile Include="Service\Login\CharacterSelectService.cs" />
@@ -158,6 +167,9 @@
     <Compile Include="Ui\Comp\TextProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Ui\Comp\Map.cs" />
+    <Compile Include="Ui\Comp\MapControl.cs" />
+    <Compile Include="Ui\Comp\MapTile.cs" />
     <Compile Include="Ui\Gui.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -187,6 +199,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ui\CharacterSelection.resx">
       <DependentUpon>CharacterSelection.cs</DependentUpon>
     </EmbeddedResource>
@@ -199,6 +215,16 @@
     <EmbeddedResource Include="Ui\Serverlist.resx">
       <DependentUpon>Serverlist.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\mm_sign_animal.png" />
+    <Content Include="Resources\mm_sign_character.png" />
+    <Content Include="Resources\mm_sign_monster.png" />
+    <Content Include="Resources\mm_sign_npc.png" />
+    <Content Include="Resources\mm_sign_otherplayer.png" />
+    <Content Include="Resources\mm_sign_unique.png" />
+    <Content Include="Resources\TRSRO_DB.db3" />
+    <Content Include="Resources\xy_gate.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Timers;
 using SilkroadSecurityApi;
 using SimpleCL.Enums;
 using SimpleCL.Enums.Common;
+using SimpleCL.Interaction;
+using SimpleCL.Model.Character;
+using SimpleCL.Model.Coord;
 using SimpleCL.Service;
 
 namespace SimpleCL.Network
@@ -87,6 +91,7 @@ namespace SimpleCL.Network
         private void HeartBeat(Object source, ElapsedEventArgs e)
         {
             Inject(new Packet(Opcodes.HEARTBEAT));
+            
             Program.Gui.RefreshGui();
         }
 
@@ -146,6 +151,12 @@ namespace SimpleCL.Network
                     Console.WriteLine(e);
                     break;
                 }
+                
+                if (InteractionQueue.PacketQueue.Any())
+                {
+                    Packet queuedPacket = InteractionQueue.PacketQueue.Dequeue();
+                    Inject(queuedPacket);
+                }
 
                 List<Packet> incomingPackets = Security.TransferIncoming();
                 if (incomingPackets == null)
@@ -167,7 +178,7 @@ namespace SimpleCL.Network
 
                     Notify(packet);
                 }
-
+                
                 List<KeyValuePair<TransferBuffer, Packet>> outgoing = Security.TransferOutgoing();
                 if (outgoing != null)
                 {

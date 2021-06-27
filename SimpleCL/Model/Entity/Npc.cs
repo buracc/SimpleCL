@@ -11,7 +11,7 @@
             return TypeId3 == 1;
         }
 
-        public bool IsGuide()
+        public bool IsTalk()
         {
             return TypeId3 == 2;
         }

@@ -36,19 +36,19 @@
             return TypeId4 == 6;
         }
 
-        public bool IsThiefCaravan()
-        {
-            return TypeId4 == 7;
-        }
-
-        public bool IsFlower()
-        {
-            return TypeId4 == 8;
-        }
-
         public bool IsFellowPet()
         {
             return TypeId4 == 9;
+        }
+
+        public bool IsRam()
+        {
+            return TypeId4 == 10;
+        }
+
+        public bool IsCatapult()
+        {
+            return TypeId4 == 11;
         }
     }
 }
