@@ -17,11 +17,11 @@ namespace SimpleCL.Database
         public static GameDatabase Get => _instance ?? (_instance = new GameDatabase());
         public SilkroadServer SelectedServer { get; set; }
 
-        private Dictionary<uint, NameValueCollection> _itemCache;
-        private Dictionary<uint, NameValueCollection> _modelCache;
-        private Dictionary<uint, NameValueCollection> _skillCache;
-        private Dictionary<uint, NameValueCollection> _teleBuildingCache;
-        private Dictionary<uint, NameValueCollection> _teleLinkCache;
+        private readonly Dictionary<uint, NameValueCollection> _itemCache;
+        private readonly Dictionary<uint, NameValueCollection> _modelCache;
+        private readonly Dictionary<uint, NameValueCollection> _skillCache;
+        private readonly Dictionary<uint, NameValueCollection> _teleBuildingCache;
+        private readonly Dictionary<uint, NameValueCollection> _teleLinkCache;
 
         private GameDatabase()
         {
@@ -180,13 +180,11 @@ namespace SimpleCL.Database
             List<NameValueCollection> result;
             if (queryBuilder != null)
             {
-                Console.WriteLine("getting model with fast query: " + id);
                 result = queryBuilder.Query("SELECT * FROM models WHERE id = " + id)
                     .ExecuteSelect(false);
             }
             else
             {
-                Console.WriteLine("getting model: " + id);
                 result = GetData("SELECT * FROM models WHERE id = " + id);
             }
 
