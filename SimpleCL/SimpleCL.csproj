@@ -192,6 +192,7 @@
     <Compile Include="Util\Extension\NumberExt.cs" />
     <Compile Include="Util\Extension\PacketReadExt.cs" />
     <Compile Include="Util\Extension\PacketWriteExt.cs" />
+    <Compile Include="Util\Extension\UiExt.cs" />
     <Compile Include="Util\NetworkUtils.cs" />
   </ItemGroup>
   <ItemGroup>

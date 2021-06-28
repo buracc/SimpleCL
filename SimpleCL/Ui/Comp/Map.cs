@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Timers;
 using System.Windows.Forms;
@@ -11,6 +12,7 @@ using SimpleCL.Interaction.Pathing;
 using SimpleCL.Model.Character;
 using SimpleCL.Model.Coord;
 using SimpleCL.Model.Entity;
+using SimpleCL.Util.Extension;
 using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Ui.Comp
@@ -37,7 +39,8 @@ namespace SimpleCL.Ui.Comp
             base.DoubleBuffered = true;
             _mapCenter = new WorldPoint(0, 0);
             base.Size = new Size(600, 600);
-            _tileSize = new Size((int)Math.Round(base.Width / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero), (int)Math.Round(base.Height / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero));
+            _tileSize = new Size((int) Math.Round(base.Width / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero),
+                (int) Math.Round(base.Height / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero));
             _tileCount = 2 * _zoom + 3;
 
             SelectMapLayer(_mapCenter.Region);
@@ -50,8 +53,9 @@ namespace SimpleCL.Ui.Comp
             set
             {
                 base.Size = value;
-                _tileSize = new Size((int)Math.Round(base.Width / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero), (int)Math.Round(base.Height / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero));
-                
+                _tileSize = new Size((int) Math.Round(base.Width / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero),
+                    (int) Math.Round(base.Height / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero));
+
                 RemoveTiles();
                 UpdateTiles();
                 UpdateMarkerLocations();
@@ -64,9 +68,10 @@ namespace SimpleCL.Ui.Comp
             set
             {
                 _zoom = value;
-                _tileSize = new Size((int)Math.Round(base.Width / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero), (int)Math.Round(base.Height / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero));
+                _tileSize = new Size((int) Math.Round(base.Width / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero),
+                    (int) Math.Round(base.Height / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero));
                 _tileCount = 2 * _zoom + 3;
-                
+
                 RemoveTiles();
                 UpdateTiles();
                 UpdateMarkerLocations();
@@ -192,7 +197,7 @@ namespace SimpleCL.Ui.Comp
                         {
                             Name = path, Size = _tileSize, Location = sectorLocation
                         };
-                        
+
                         sector.MouseClick += MapClicked;
                         sector.LoadAsyncTile(path, _tileSize);
                         _mapSectors[path] = sector;
@@ -316,23 +321,13 @@ namespace SimpleCL.Ui.Comp
 
         public void AddMarker(uint uniqueId, MapControl marker)
         {
-            if (InvokeRequired)
-            {
-                Invoke(new MethodInvoker(() =>
-                {
-                    marker.Name = Name + "_" + uniqueId;
-                    Controls.Add(marker);
-                    Controls.SetChildIndex(marker, 1);
-                    _markers[uniqueId] = marker;
-                }));
-            }
-            else
+            this.InvokeLater(() =>
             {
                 marker.Name = Name + "_" + uniqueId;
                 Controls.Add(marker);
                 Controls.SetChildIndex(marker, 1);
                 _markers[uniqueId] = marker;
-            }
+            });
         }
 
         public void RemoveMarker(uint uniqueId)
@@ -377,6 +372,21 @@ namespace SimpleCL.Ui.Comp
                 if (marker.Location.X != location.X && marker.Location.Y != location.Y)
                 {
                     marker.Location = location;
+                }
+
+                if (marker.Tag is LocalPlayer local)
+                {
+                    var image = Properties.Resources.mm_sign_character;
+                    var rotated = new Bitmap(image.Width, image.Height);
+                    var graphics = Graphics.FromImage(rotated);
+                    graphics.TranslateTransform((float) rotated.Width / 2, (float) rotated.Height / 2);
+                    graphics.RotateTransform(-local.GetAngleDegrees());
+                    graphics.TranslateTransform(-(float)rotated.Width / 2, -(float)rotated.Height / 2);
+                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    graphics.DrawImage(image, new Point(0, 0));
+                    graphics.Dispose();
+
+                    marker.InvokeLater(() => { marker.Image = rotated; });
                 }
             }
         }

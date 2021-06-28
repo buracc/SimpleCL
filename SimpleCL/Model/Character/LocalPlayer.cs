@@ -1,21 +1,29 @@
 ﻿using System.Collections.Generic;
 using SimpleCL.Database;
 using SimpleCL.Model.Coord;
+using SimpleCL.Model.Entity;
 using SimpleCL.Model.Inventory;
 
 namespace SimpleCL.Model.Character
 {
-    public class LocalPlayer
+    public class LocalPlayer : Player
     {
-        private LocalPlayer() { }
+        private LocalPlayer(uint id) : base(id)
+        { }
         
         private static LocalPlayer _instance;
-        public static LocalPlayer Get => _instance ?? (_instance = new LocalPlayer());
+        public static LocalPlayer Get => _instance ?? (_instance = new LocalPlayer(1907));
+
+        public static void Refresh(uint refObjId)
+        {
+            _instance = new LocalPlayer(refObjId);
+        }
 
         private ulong _nextLevelExp;
         private ulong _jobNextLevelExp;
         private byte _level;
         private byte _jobLevel;
+        private ushort _angle;
         public uint Uid { get; set; }
         public uint Hp { get; set; }
         public uint Mp { get; set; }
@@ -51,11 +59,15 @@ namespace SimpleCL.Model.Character
         public ulong JobExpGained { get; set; }
         public uint Skillpoints { get; set; }
         public ulong Gold { get; set; }
-        public LocalPoint LocalPoint { get; set; }
 
-        public WorldPoint WorldPoint => WorldPoint.FromLocal(LocalPoint);
+        public ushort Angle { get; set; }
 
         public Dictionary<string, List<InventoryItem>> Inventories = new Dictionary<string, List<InventoryItem>>();
+
+        public float GetAngleDegrees()
+        {
+            return Angle * 360f / ushort.MaxValue;
+        }
 
         public double GetExpPercent()
         {

@@ -27,12 +27,10 @@ namespace SimpleCL.Service.Game.Entity
             {
                 case EntityStateEvent.Health.HP:
                     newHp = packet.ReadUInt();
-                    
                     break;
 
                 case EntityStateEvent.Health.MP:
                     newMp = packet.ReadUInt();
-                    
                     break;
 
                 case EntityStateEvent.Health.EntityHPMP:

@@ -11,6 +11,7 @@ using SimpleCL.Model.Entity.Pet;
 using SimpleCL.Network;
 using SimpleCL.Service.Login;
 using SimpleCL.Ui.Comp;
+using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Ui
 {
@@ -122,14 +123,7 @@ namespace SimpleCL.Ui
                 currLocalLabelValue.Text = local.LocalPoint.ToString();
                 currWorldLabelValue.Text = worldPoint.ToString();
 
-                if (map1.InvokeRequired)
-                {
-                    map1.Invoke(new MethodInvoker(() => { map1.SetView(worldPoint); }));
-                }
-                else
-                {
-                    map1.SetView(worldPoint);
-                }
+                map1.InvokeLater(() => { map1.SetView(worldPoint); });
 
                 inventoryDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 

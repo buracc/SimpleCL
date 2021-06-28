@@ -33,6 +33,7 @@ namespace SimpleCL.Service.Game.Entity
 
             var serverTime = packet.ReadUInt();
             var refObjId = packet.ReadUInt();
+            // LocalPlayer.Refresh(refObjId);
             var scale = packet.ReadByte();
             local.Level = packet.ReadByte();
             var maxLevel = packet.ReadByte();
@@ -185,7 +186,7 @@ namespace SimpleCL.Service.Game.Entity
                 packet.ReadFloat()
             );
 
-            var angle = packet.ReadUShort();
+            local.Angle = packet.ReadUShort();
 
             var destinationSet = packet.ReadByte() == 1;
             var walkType = packet.ReadByte();
@@ -210,7 +211,7 @@ namespace SimpleCL.Service.Game.Entity
             else
             {
                 var movementType = packet.ReadByte();
-                angle = packet.ReadUShort();
+                local.Angle = packet.ReadUShort();
             }
 
             var lifeState = packet.ReadByte();
@@ -265,6 +266,8 @@ namespace SimpleCL.Service.Game.Entity
             var jid = packet.ReadUInt();
 
             local.LocalPoint = localPoint;
+            
+            Program.Gui.AddMinimapEntity(local.Uid, local);
 
             server.Log("Successfully joined the game");
         }

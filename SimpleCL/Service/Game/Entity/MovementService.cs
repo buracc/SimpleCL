@@ -42,8 +42,36 @@ namespace SimpleCL.Service.Game.Entity
 
                     if (uid == LocalPlayer.Get.Uid)
                     {
+                        var oldPos = LocalPlayer.Get.WorldPoint;
                         LocalPlayer.Get.LocalPoint = localPoint;
-                        Console.WriteLine("we are moving: " + localPoint);
+                        var xDiff = LocalPlayer.Get.WorldPoint.X - oldPos.X;
+                        var yDiff = LocalPlayer.Get.WorldPoint.Y - oldPos.Y;
+                        if (xDiff == 0)
+                        {
+                            LocalPlayer.Get.Angle = (ushort) (ushort.MaxValue / 4 * (yDiff > 0 ? 1 : 3));
+                        }
+                        else
+                        {
+                            if (yDiff == 0)
+                            {
+                                LocalPlayer.Get.Angle = (ushort) (ushort.MaxValue / 4 * (yDiff > 0 ? 1 : 3));
+                            }
+                            else
+                            {
+                                double angleRadians = Math.Atan(yDiff / xDiff);
+
+                                if(yDiff < 0 || xDiff < 0)
+                                {
+                                    angleRadians += Math.PI;
+                                    if (xDiff > 0)
+                                    {
+                                        angleRadians += Math.PI;
+                                    }
+                                }
+
+                                LocalPlayer.Get.Angle = (ushort)Math.Round(angleRadians * ushort.MaxValue / (Math.PI * 2.0));
+                            }
+                        }
                     }
                 }
             }
