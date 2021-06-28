@@ -9,6 +9,7 @@ using SimpleCL.Model.Coord;
 using SimpleCL.Model.Entity;
 using SimpleCL.Model.Entity.Mob;
 using SimpleCL.Model.Entity.Pet;
+using SimpleCL.Model.Exception;
 using SimpleCL.Model.Inventory;
 using SimpleCL.Network;
 using SimpleCL.Util;
@@ -86,7 +87,18 @@ namespace SimpleCL.Service.Game.Entity
         private void EntitySpawn(Server server, Packet packet, QueryBuilder queryBuilder = null)
         {
             var refObjId = packet.ReadUInt();
-            var entity = Model.Entity.Entity.FromId(refObjId, queryBuilder);
+            Model.Entity.Entity entity;
+            
+            try
+            {
+                entity = Model.Entity.Entity.FromId(refObjId, queryBuilder);
+            }
+            catch (EntityParseException e)
+            {
+                server.DebugPacket(packet);
+                Console.WriteLine(e);
+                return;
+            }
 
             if (entity is SkillAoe skillAoe)
             {

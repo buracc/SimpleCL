@@ -191,6 +191,9 @@ namespace SimpleCL.Ui
                 marker.Location = location;
 
                 marker.Tag = entity;
+                ToolTip toolTip = new ToolTip();
+                toolTip.SetToolTip(marker, marker.Tag.ToString());
+                
                 map1.InvokeLater(() => { map1.AddMarker(uid, marker); });
             }
         }

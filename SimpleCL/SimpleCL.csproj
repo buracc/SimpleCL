@@ -149,6 +149,7 @@
     <Compile Include="Model\Entity\Player.cs" />
     <Compile Include="Model\Entity\SkillAoe.cs" />
     <Compile Include="Model\Entity\Teleport.cs" />
+    <Compile Include="Model\Exception\EntityParseException.cs" />
     <Compile Include="Model\Inventory\InventoryItem.cs" />
     <Compile Include="Model\Server\GameServer.cs" />
     <Compile Include="Network\Agent.cs" />

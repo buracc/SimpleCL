@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Data.Entity.Core;
 using SimpleCL.Database;
 using SimpleCL.Model.Coord;
 using SimpleCL.Model.Entity.Fortress;
 using SimpleCL.Model.Entity.Fortress.Structure;
 using SimpleCL.Model.Entity.Mob;
 using SimpleCL.Model.Entity.Pet;
+using SimpleCL.Model.Exception;
 
 namespace SimpleCL.Model.Entity
 {
@@ -43,6 +45,11 @@ namespace SimpleCL.Model.Entity
                 return;
             }
 
+            if (id > ushort.MaxValue)
+            {
+                throw new EntityParseException("Entity id longer than expected: " + id);
+            }
+
             NameValueCollection data;
             if ((data = GameDatabase.Get.GetModel(id, queryBuilder)) != null)
             {
@@ -57,8 +64,7 @@ namespace SimpleCL.Model.Entity
             {
                 TypeId1 = 4;
             }
-
-
+            
             if (data != null)
             {
                 var tid2 = TypeId1 == 3 ? "tid1" : "tid2";
@@ -72,7 +78,7 @@ namespace SimpleCL.Model.Entity
             }
             else
             {
-                Console.WriteLine("Unable to parse entity with id: " + id);
+                throw new EntityParseException("Failed to parse entity: " + id);
             }
         }
 
