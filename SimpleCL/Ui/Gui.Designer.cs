@@ -81,6 +81,7 @@ namespace SimpleCL.Ui
             this.chatTab = new System.Windows.Forms.TabPage();
             this.chatBox = new System.Windows.Forms.ListBox();
             this.movementTab = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.map1 = new SimpleCL.Ui.Comp.Map();
             this.currWorldLabel = new System.Windows.Forms.Label();
             this.currWorldLabelValue = new System.Windows.Forms.Label();
@@ -109,6 +110,7 @@ namespace SimpleCL.Ui
             ((System.ComponentModel.ISupportInitialize) (this.jobEquipmentDataGridView)).BeginInit();
             this.chatTab.SuspendLayout();
             this.movementTab.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.devTab.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -194,7 +196,7 @@ namespace SimpleCL.Ui
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(776, 305);
+            this.tabControl.Size = new System.Drawing.Size(776, 407);
             this.tabControl.TabIndex = 4;
             // 
             // homeTab
@@ -204,7 +206,7 @@ namespace SimpleCL.Ui
             this.homeTab.Location = new System.Drawing.Point(4, 22);
             this.homeTab.Name = "homeTab";
             this.homeTab.Padding = new System.Windows.Forms.Padding(3);
-            this.homeTab.Size = new System.Drawing.Size(768, 279);
+            this.homeTab.Size = new System.Drawing.Size(768, 381);
             this.homeTab.TabIndex = 0;
             this.homeTab.Text = "Home";
             this.homeTab.UseVisualStyleBackColor = true;
@@ -455,7 +457,7 @@ namespace SimpleCL.Ui
             this.inventoryPage.Controls.Add(this.inventoryTabControl);
             this.inventoryPage.Location = new System.Drawing.Point(4, 22);
             this.inventoryPage.Name = "inventoryPage";
-            this.inventoryPage.Size = new System.Drawing.Size(768, 279);
+            this.inventoryPage.Size = new System.Drawing.Size(768, 381);
             this.inventoryPage.TabIndex = 2;
             this.inventoryPage.Text = "Inventory";
             this.inventoryPage.UseVisualStyleBackColor = true;
@@ -469,7 +471,7 @@ namespace SimpleCL.Ui
             this.inventoryTabControl.Location = new System.Drawing.Point(3, 3);
             this.inventoryTabControl.Name = "inventoryTabControl";
             this.inventoryTabControl.SelectedIndex = 0;
-            this.inventoryTabControl.Size = new System.Drawing.Size(762, 269);
+            this.inventoryTabControl.Size = new System.Drawing.Size(762, 375);
             this.inventoryTabControl.TabIndex = 0;
             // 
             // inventoryInvTab
@@ -478,7 +480,7 @@ namespace SimpleCL.Ui
             this.inventoryInvTab.Location = new System.Drawing.Point(4, 22);
             this.inventoryInvTab.Name = "inventoryInvTab";
             this.inventoryInvTab.Padding = new System.Windows.Forms.Padding(3);
-            this.inventoryInvTab.Size = new System.Drawing.Size(754, 243);
+            this.inventoryInvTab.Size = new System.Drawing.Size(754, 349);
             this.inventoryInvTab.TabIndex = 0;
             this.inventoryInvTab.Text = "Inventory";
             this.inventoryInvTab.UseVisualStyleBackColor = true;
@@ -494,7 +496,7 @@ namespace SimpleCL.Ui
             this.inventoryDataGridView.MultiSelect = false;
             this.inventoryDataGridView.Name = "inventoryDataGridView";
             this.inventoryDataGridView.ReadOnly = true;
-            this.inventoryDataGridView.Size = new System.Drawing.Size(754, 243);
+            this.inventoryDataGridView.Size = new System.Drawing.Size(754, 349);
             this.inventoryDataGridView.TabIndex = 0;
             // 
             // equipmentInvTab
@@ -503,7 +505,7 @@ namespace SimpleCL.Ui
             this.equipmentInvTab.Location = new System.Drawing.Point(4, 22);
             this.equipmentInvTab.Name = "equipmentInvTab";
             this.equipmentInvTab.Padding = new System.Windows.Forms.Padding(3);
-            this.equipmentInvTab.Size = new System.Drawing.Size(754, 243);
+            this.equipmentInvTab.Size = new System.Drawing.Size(754, 349);
             this.equipmentInvTab.TabIndex = 1;
             this.equipmentInvTab.Text = "Equipment";
             this.equipmentInvTab.UseVisualStyleBackColor = true;
@@ -519,7 +521,7 @@ namespace SimpleCL.Ui
             this.equipmentDataGridView.MultiSelect = false;
             this.equipmentDataGridView.Name = "equipmentDataGridView";
             this.equipmentDataGridView.ReadOnly = true;
-            this.equipmentDataGridView.Size = new System.Drawing.Size(754, 243);
+            this.equipmentDataGridView.Size = new System.Drawing.Size(754, 349);
             this.equipmentDataGridView.TabIndex = 1;
             // 
             // avatarInvTab
@@ -527,7 +529,7 @@ namespace SimpleCL.Ui
             this.avatarInvTab.Controls.Add(this.avatarDataGridView);
             this.avatarInvTab.Location = new System.Drawing.Point(4, 22);
             this.avatarInvTab.Name = "avatarInvTab";
-            this.avatarInvTab.Size = new System.Drawing.Size(754, 243);
+            this.avatarInvTab.Size = new System.Drawing.Size(754, 349);
             this.avatarInvTab.TabIndex = 2;
             this.avatarInvTab.Text = "Avatar";
             this.avatarInvTab.UseVisualStyleBackColor = true;
@@ -544,7 +546,7 @@ namespace SimpleCL.Ui
             this.avatarDataGridView.MultiSelect = false;
             this.avatarDataGridView.Name = "avatarDataGridView";
             this.avatarDataGridView.ReadOnly = true;
-            this.avatarDataGridView.Size = new System.Drawing.Size(754, 243);
+            this.avatarDataGridView.Size = new System.Drawing.Size(754, 349);
             this.avatarDataGridView.TabIndex = 1;
             // 
             // jobEquipmentInvTab
@@ -552,7 +554,7 @@ namespace SimpleCL.Ui
             this.jobEquipmentInvTab.Controls.Add(this.jobEquipmentDataGridView);
             this.jobEquipmentInvTab.Location = new System.Drawing.Point(4, 22);
             this.jobEquipmentInvTab.Name = "jobEquipmentInvTab";
-            this.jobEquipmentInvTab.Size = new System.Drawing.Size(754, 243);
+            this.jobEquipmentInvTab.Size = new System.Drawing.Size(754, 349);
             this.jobEquipmentInvTab.TabIndex = 3;
             this.jobEquipmentInvTab.Text = "Job Equipment";
             this.jobEquipmentInvTab.UseVisualStyleBackColor = true;
@@ -569,7 +571,7 @@ namespace SimpleCL.Ui
             this.jobEquipmentDataGridView.MultiSelect = false;
             this.jobEquipmentDataGridView.Name = "jobEquipmentDataGridView";
             this.jobEquipmentDataGridView.ReadOnly = true;
-            this.jobEquipmentDataGridView.Size = new System.Drawing.Size(754, 243);
+            this.jobEquipmentDataGridView.Size = new System.Drawing.Size(754, 349);
             this.jobEquipmentDataGridView.TabIndex = 1;
             // 
             // chatTab
@@ -578,7 +580,7 @@ namespace SimpleCL.Ui
             this.chatTab.Location = new System.Drawing.Point(4, 22);
             this.chatTab.Name = "chatTab";
             this.chatTab.Padding = new System.Windows.Forms.Padding(3);
-            this.chatTab.Size = new System.Drawing.Size(768, 279);
+            this.chatTab.Size = new System.Drawing.Size(768, 381);
             this.chatTab.TabIndex = 1;
             this.chatTab.Text = "Chat";
             this.chatTab.UseVisualStyleBackColor = true;
@@ -589,34 +591,42 @@ namespace SimpleCL.Ui
             this.chatBox.Location = new System.Drawing.Point(0, 1);
             this.chatBox.Name = "chatBox";
             this.chatBox.ScrollAlwaysVisible = true;
-            this.chatBox.Size = new System.Drawing.Size(765, 264);
+            this.chatBox.Size = new System.Drawing.Size(765, 342);
             this.chatBox.TabIndex = 0;
             // 
             // movementTab
             // 
-            this.movementTab.Controls.Add(this.map1);
+            this.movementTab.Controls.Add(this.panel1);
             this.movementTab.Controls.Add(this.currWorldLabel);
             this.movementTab.Controls.Add(this.currWorldLabelValue);
             this.movementTab.Controls.Add(this.currLocalLabel);
             this.movementTab.Controls.Add(this.currLocalLabelValue);
             this.movementTab.Location = new System.Drawing.Point(4, 22);
             this.movementTab.Name = "movementTab";
-            this.movementTab.Size = new System.Drawing.Size(768, 279);
+            this.movementTab.Size = new System.Drawing.Size(768, 381);
             this.movementTab.TabIndex = 4;
             this.movementTab.Text = "Movement";
             this.movementTab.UseVisualStyleBackColor = true;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.map1);
+            this.panel1.Location = new System.Drawing.Point(3, 3);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(762, 352);
+            this.panel1.TabIndex = 11;
+            // 
             // map1
             // 
-            this.map1.Location = new System.Drawing.Point(3, 3);
+            this.map1.Location = new System.Drawing.Point(-31, -214);
             this.map1.Name = "map1";
-            this.map1.Size = new System.Drawing.Size(762, 250);
+            this.map1.Size = new System.Drawing.Size(800, 800);
             this.map1.TabIndex = 10;
-            this.map1.Zoom = ((byte) (0));
+            this.map1.Zoom = ((byte) (1));
             // 
             // currWorldLabel
             // 
-            this.currWorldLabel.Location = new System.Drawing.Point(293, 256);
+            this.currWorldLabel.Location = new System.Drawing.Point(291, 358);
             this.currWorldLabel.Name = "currWorldLabel";
             this.currWorldLabel.Size = new System.Drawing.Size(39, 23);
             this.currWorldLabel.TabIndex = 9;
@@ -624,7 +634,7 @@ namespace SimpleCL.Ui
             // 
             // currWorldLabelValue
             // 
-            this.currWorldLabelValue.Location = new System.Drawing.Point(338, 256);
+            this.currWorldLabelValue.Location = new System.Drawing.Point(336, 358);
             this.currWorldLabelValue.Name = "currWorldLabelValue";
             this.currWorldLabelValue.Size = new System.Drawing.Size(278, 23);
             this.currWorldLabelValue.TabIndex = 8;
@@ -632,7 +642,7 @@ namespace SimpleCL.Ui
             // 
             // currLocalLabel
             // 
-            this.currLocalLabel.Location = new System.Drawing.Point(2, 256);
+            this.currLocalLabel.Location = new System.Drawing.Point(0, 358);
             this.currLocalLabel.Name = "currLocalLabel";
             this.currLocalLabel.Size = new System.Drawing.Size(46, 23);
             this.currLocalLabel.TabIndex = 7;
@@ -640,7 +650,7 @@ namespace SimpleCL.Ui
             // 
             // currLocalLabelValue
             // 
-            this.currLocalLabelValue.Location = new System.Drawing.Point(54, 256);
+            this.currLocalLabelValue.Location = new System.Drawing.Point(52, 358);
             this.currLocalLabelValue.Name = "currLocalLabelValue";
             this.currLocalLabelValue.Size = new System.Drawing.Size(278, 23);
             this.currLocalLabelValue.TabIndex = 4;
@@ -652,7 +662,7 @@ namespace SimpleCL.Ui
             this.devTab.Controls.Add(this.debugGwCheckbox);
             this.devTab.Location = new System.Drawing.Point(4, 22);
             this.devTab.Name = "devTab";
-            this.devTab.Size = new System.Drawing.Size(768, 279);
+            this.devTab.Size = new System.Drawing.Size(768, 381);
             this.devTab.TabIndex = 3;
             this.devTab.Text = "Developer";
             // 
@@ -677,7 +687,7 @@ namespace SimpleCL.Ui
             // loggerBox
             // 
             this.loggerBox.FormattingEnabled = true;
-            this.loggerBox.Location = new System.Drawing.Point(12, 323);
+            this.loggerBox.Location = new System.Drawing.Point(8, 425);
             this.loggerBox.Name = "loggerBox";
             this.loggerBox.ScrollAlwaysVisible = true;
             this.loggerBox.Size = new System.Drawing.Size(776, 121);
@@ -698,7 +708,7 @@ namespace SimpleCL.Ui
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(800, 453);
+            this.ClientSize = new System.Drawing.Size(800, 558);
             this.Controls.Add(this.loggerBox);
             this.Controls.Add(this.tabControl);
             this.MaximizeBox = false;
@@ -721,9 +731,12 @@ namespace SimpleCL.Ui
             ((System.ComponentModel.ISupportInitialize) (this.jobEquipmentDataGridView)).EndInit();
             this.chatTab.ResumeLayout(false);
             this.movementTab.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.devTab.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Panel panel1;
 
         private SimpleCL.Ui.Comp.Map map1;
 

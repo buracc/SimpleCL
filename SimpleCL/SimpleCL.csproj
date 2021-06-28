@@ -206,6 +206,9 @@
     <EmbeddedResource Include="Ui\CharacterSelection.resx">
       <DependentUpon>CharacterSelection.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ui\Comp\MapTile.resx">
+      <DependentUpon>MapTile.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ui\Gui.resx">
       <DependentUpon>Gui.cs</DependentUpon>
     </EmbeddedResource>

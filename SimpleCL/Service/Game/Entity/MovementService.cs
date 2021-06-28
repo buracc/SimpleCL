@@ -43,6 +43,7 @@ namespace SimpleCL.Service.Game.Entity
                     if (uid == LocalPlayer.Get.Uid)
                     {
                         LocalPlayer.Get.LocalPoint = localPoint;
+                        Console.WriteLine("we are moving: " + localPoint);
                     }
                 }
             }

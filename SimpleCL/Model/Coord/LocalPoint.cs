@@ -21,7 +21,7 @@ namespace SimpleCL.Model.Coord
         {
             return "X: " + (int) X + " | Y: " + (int) Y + " | Z: " + (int) Z + " | Region: " + Region;
         }
-        
+
         public LocalPoint Translate(float x = 0, float y = 0)
         {
             var world = WorldPoint.FromLocal(this).Translate(x, y);
@@ -39,13 +39,13 @@ namespace SimpleCL.Model.Coord
             {
                 return new LocalPoint(worldPoint.Region, worldPoint.X, worldPoint.Z, worldPoint.Y);
             }
-            
+
             var x = Math.Abs(worldPoint.X % 192.0f * 10.0f);
             if (worldPoint.X < 0.0)
             {
                 x = 1920f - x;
             }
-            
+
             var y = Math.Abs(worldPoint.Y % 192.0f * 10.0f);
             if (worldPoint.Y < 0.0)
             {
@@ -54,7 +54,9 @@ namespace SimpleCL.Model.Coord
 
             var xSector = (byte) Math.Round((worldPoint.X - x / 10) / 192.0 + 135);
             var ySector = (byte) Math.Round((worldPoint.Y - y / 10) / 192.0 + 92);
+
             var region = (ushort) ((ySector << 8) | xSector);
+
             return new LocalPoint(region, x, worldPoint.Z, y);
         }
 

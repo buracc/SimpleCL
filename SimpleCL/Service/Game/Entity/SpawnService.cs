@@ -23,6 +23,8 @@ namespace SimpleCL.Service.Game.Entity
         [PacketHandler(Opcodes.Agent.Response.ENTITY_SOLO_SPAWN)]
         public void SingleEntitySpawn(Server server, Packet packet)
         {
+            server.DebugPacket(packet);
+            Console.WriteLine();
             EntitySpawn(server, packet);
         }
 
@@ -46,6 +48,8 @@ namespace SimpleCL.Service.Game.Entity
         {
             if (_spawnPacket != null)
             {
+                server.DebugPacket(_spawnPacket);
+                Console.WriteLine();
                 _spawnPacket.Lock();
                 _spawnCount.Repeat(i =>
                 {
@@ -61,20 +65,20 @@ namespace SimpleCL.Service.Game.Entity
         {
             // todo: not done yet, there are still some parsing problems whenever a fellow spawns 
             // only on groupspawn i think
-            
+
             try
             {
-                // Console.WriteLine("------------");
+                Console.WriteLine("------------");
                 var refObjId = packet.ReadUInt();
                 var entity = Model.Entity.Entity.FromId(refObjId);
-                // Console.WriteLine(entity.ToString());
+                Console.WriteLine(entity.ToString());
                 
                 if (entity is SkillAoe skillAoe)
                 {
                     var skillId = packet.ReadUInt();
-                    // Console.WriteLine(skillId);
+                    Console.WriteLine(skillId);
                     var skillData = GameDatabase.Get.GetSkill(skillId);
-                    // Console.WriteLine(skillData["name"]);
+                    Console.WriteLine(skillData["name"]);
                     var uid = packet.ReadUInt();
                     skillAoe.LocalPoint = new LocalPoint(
                         packet.ReadUShort(),
@@ -83,13 +87,13 @@ namespace SimpleCL.Service.Game.Entity
                         packet.ReadFloat()
                     );
                     var angle = packet.ReadUShort();
-                    // Program.Gui.AddMinimapEntity(uid, skillAoe);
+                    Program.Gui.AddMinimapEntity(uid, skillAoe);
                     return;
                 }
 
                 if (entity is Teleport teleport)
                 {
-                    // Console.WriteLine(teleport.Name);
+                    Console.WriteLine(teleport.Name);
                     var uid = packet.ReadUInt();
                     teleport.LocalPoint = new LocalPoint(
                         packet.ReadUShort(),
@@ -231,7 +235,7 @@ namespace SimpleCL.Service.Game.Entity
 
                     var uid = packet.ReadUInt();
                     
-                    // Console.WriteLine("uid: " + uid);
+                    Console.WriteLine("uid: " + uid);
                     pathingEntity.LocalPoint = new LocalPoint(
                         packet.ReadUShort(),
                         packet.ReadFloat(),
@@ -316,7 +320,7 @@ namespace SimpleCL.Service.Game.Entity
                             p.Name = "*" + p.Name;
                         }
 
-                        // Console.WriteLine("player name: " + p.Name);
+                        Console.WriteLine("player name: " + p.Name);
 
                         var transportFlag = packet.ReadByte();
                         var pvpState = packet.ReadByte();
@@ -330,7 +334,7 @@ namespace SimpleCL.Service.Game.Entity
                         var interactionType = packet.ReadByte();
 
                         var guildName = packet.ReadAscii();
-                        // Console.WriteLine(guildName);
+                        Console.WriteLine(guildName);
 
                         if (p.IsWearingJobSuit())
                         {
@@ -348,7 +352,7 @@ namespace SimpleCL.Service.Game.Entity
                                 unks.Repeat(i => { packet.ReadByte(); });
 
                                 var stallName = packet.ReadUnicode();
-                                // Console.WriteLine("player is stalling: " + stallName);
+                                Console.WriteLine("player is stalling: " + stallName);
 
                                 unks = 16;
                                 unks.Repeat(i => { packet.ReadByte(); });
@@ -369,7 +373,7 @@ namespace SimpleCL.Service.Game.Entity
                             var unkByteAmount = packet.ReadByte();
                             var unkBytes = packet.ReadByteArray(unkByteAmount);
                             var mobType = (Monster.Type) unkBytes[0];
-                            // Console.WriteLine("monster type: " + mobType);
+                            Console.WriteLine("monster type: " + mobType);
                         }
                         else
                         {
@@ -378,7 +382,7 @@ namespace SimpleCL.Service.Game.Entity
                             if (hasTalk)
                             {
                                 var amount = packet.ReadByte();
-                                // Console.WriteLine("npc has " + amount + " talkoptions");
+                                Console.WriteLine("npc has " + amount + " talkoptions");
                                 var talkOptions = packet.ReadByteArray(amount);
                             }
                             
@@ -389,11 +393,12 @@ namespace SimpleCL.Service.Game.Entity
                                     if (cos is AttackPet || cos is PickPet || cos is FellowPet)
                                     {
                                         cos.Name = packet.ReadAscii();
-                                        // Console.WriteLine("cos name: " + cos.Name);
+                                        Console.WriteLine("fellow: " + uid + " " + cos);
+                                        Console.WriteLine("cos name: " + cos.Name);
                                     }
 
                                     var owner = packet.ReadAscii();
-                                    // Console.WriteLine("cos owner: " + owner);
+                                    Console.WriteLine("cos owner: " + owner);
                                     var jobType = packet.ReadByte();
 
                                     if (!cos.IsPickPet())
@@ -407,7 +412,11 @@ namespace SimpleCL.Service.Game.Entity
                                     }
 
                                     var ownerUid = packet.ReadUInt();
-                                    // Console.WriteLine("cos owner uid: " + ownerUid);
+                                    Console.WriteLine("cos owner uid: " + ownerUid);
+                                    if (cos is FellowPet)
+                                    {
+                                        packet.ReadByte();
+                                    }
                                 }
                             }
                             else if (npc is FortressCos fortressCos)

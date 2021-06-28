@@ -29,7 +29,19 @@ namespace SimpleCL.Ui.Comp
 
 		public override string ToString()
 		{
-			return SectorX + " " + SectorY;
+			return SectorX + " " + SectorY + " Size: " + Size;
+		}
+
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
+			((System.ComponentModel.ISupportInitialize) (this)).BeginInit();
+			this.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize) (this)).EndInit();
+			this.ResumeLayout(false);
 		}
 	}
 }

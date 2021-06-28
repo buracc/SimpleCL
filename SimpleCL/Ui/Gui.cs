@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.Globalization;
-using System.Threading;
 using System.Windows.Forms;
 using SimpleCL.Database;
 using SimpleCL.Enums.Server;
-using SimpleCL.Interaction;
-using SimpleCL.Interaction.Pathing;
 using SimpleCL.Model.Character;
 using SimpleCL.Model.Coord;
 using SimpleCL.Model.Entity;
@@ -195,7 +192,7 @@ namespace SimpleCL.Ui
                 marker.Size = marker.Image.Size;
 
                 Point location = map1.GetPoint(entity.WorldPoint);
-                Console.WriteLine("adding " + entity.GetType().Name + " marker at " + location);
+                // Console.WriteLine("adding " + entity.GetType().Name + " marker at " + location);
                 location.X -= marker.Image.Size.Width / 2;
                 location.Y -= marker.Image.Size.Height / 2;
                 marker.Location = location;
