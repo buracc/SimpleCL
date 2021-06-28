@@ -85,7 +85,6 @@ namespace SimpleCL.Service.Game.Entity
 
         private void EntityDespawn(Server server, Packet packet)
         {
-            server.DebugPacket(packet);
             uint uid = packet.ReadUInt();
             Entities.Despawn(uid);
         }

@@ -80,10 +80,11 @@ namespace SimpleCL.Service.Game.Entity
                     Entities.Moved(uid, localPoint);
                 }
             }
-            catch
+            catch (Exception e)
             {
                 Console.WriteLine("Failed to parse movement packet");
                 server.DebugPacket(packet);
+                Console.WriteLine(e);
             }
         }
     }
