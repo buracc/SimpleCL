@@ -39,7 +39,8 @@ namespace Pk2Extractor.Api
 
         private int ExtractLanguageIdx()
         {
-            string[] lines = _pk2Reader.GetFileText("type.txt").Split(new[] { "\n" },StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = _pk2Reader.GetFileText("type.txt")
+                .Split(new[] {"\n"}, StringSplitOptions.RemoveEmptyEntries);
             foreach (var line in lines)
             {
                 if (line.Contains("Language"))
@@ -465,7 +466,6 @@ namespace Pk2Extractor.Api
             query.Finish();
         }
 
-
         private void LoadNameReferences()
         {
             var regex = new Regex(".*\\d.*");
@@ -503,7 +503,7 @@ namespace Pk2Extractor.Api
                 }
             }
         }
-        
+
         public void AddMinimap()
         {
             string folderPath;
@@ -514,6 +514,7 @@ namespace Pk2Extractor.Api
             {
                 Directory.CreateDirectory(folderPath);
             }
+
             // Get files
             Pk2Folder minimap = _pk2Reader.GetFolder("minimap");
             if (minimap != null)
@@ -527,6 +528,7 @@ namespace Pk2Extractor.Api
             {
                 Directory.CreateDirectory(folderPath);
             }
+
             // Get files
             minimap = _pk2Reader.GetFolder("minimap_d");
             if (minimap != null)
@@ -534,9 +536,10 @@ namespace Pk2Extractor.Api
                 ExtractAllImages(minimap, folderPath, System.Drawing.Imaging.ImageFormat.Jpeg);
             }
         }
+
         public void ExtractAllImages(Pk2Folder folder, string outPutPath, System.Drawing.Imaging.ImageFormat format)
         {
-            string ext = Equals(format, System.Drawing.Imaging.ImageFormat.Jpeg)?"jpg":format.ToString().ToLower();
+            string ext = Equals(format, System.Drawing.Imaging.ImageFormat.Jpeg) ? "jpg" : format.ToString().ToLower();
             foreach (Pk2File f in folder.Files)
             {
                 // Check path if the file already exists
@@ -550,9 +553,9 @@ namespace Pk2Extractor.Api
 
                 // Convert DDJ to DDS to Bitmap
                 Bitmap img = DdsReader.FromDdj(_pk2Reader.GetFileBytes(f));
-                img?.Save(saveFilePath,format);
+                img?.Save(saveFilePath, format);
             }
-            
+
             foreach (Pk2Folder f in folder.SubFolders)
             {
                 ExtractAllImages(f, outPutPath, format);

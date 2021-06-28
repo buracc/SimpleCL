@@ -47,7 +47,7 @@ namespace SimpleCL.Model.Coord
 
         public double DistanceTo(float x, float y)
         {
-            throw new System.NotImplementedException();
+            return Math.Sqrt(Math.Pow(x - X, 2.0) + Math.Pow(y - Y, 2.0));
         }
 
         public double DistanceTo(WorldPoint other)

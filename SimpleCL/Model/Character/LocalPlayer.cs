@@ -24,7 +24,6 @@ namespace SimpleCL.Model.Character
         private byte _level;
         private byte _jobLevel;
         private ushort _angle;
-        public uint Uid { get; set; }
         public uint Hp { get; set; }
         public uint Mp { get; set; }
         public uint MaxHp { get; set; }

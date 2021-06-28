@@ -7,7 +7,6 @@ using SimpleCL.Enums.Skill;
 using SimpleCL.Interaction.Entities;
 using SimpleCL.Model.Coord;
 using SimpleCL.Model.Entity;
-using SimpleCL.Model.Entity.Mob;
 using SimpleCL.Model.Entity.Pet;
 using SimpleCL.Model.Exception;
 using SimpleCL.Model.Inventory;
@@ -28,6 +27,12 @@ namespace SimpleCL.Service.Game.Entity
         public void SingleEntitySpawn(Server server, Packet packet)
         {
             EntitySpawn(server, packet);
+        }
+        
+        [PacketHandler(Opcodes.Agent.Response.ENTITY_SOLO_DESPAWN)]
+        public void SingleEntityDespawn(Server server, Packet packet)
+        {
+            EntityDespawn(server, packet);
         }
 
         [PacketHandler(Opcodes.Agent.Response.ENTITY_GROUP_SPAWN_START)]
@@ -80,6 +85,7 @@ namespace SimpleCL.Service.Game.Entity
 
         private void EntityDespawn(Server server, Packet packet)
         {
+            server.DebugPacket(packet);
             uint uid = packet.ReadUInt();
             Entities.Despawn(uid);
         }

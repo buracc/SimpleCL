@@ -114,6 +114,8 @@
     <Compile Include="Model\Chat\ChatMessage.cs" />
     <Compile Include="Model\Coord\ICoord.cs" />
     <Compile Include="Model\Coord\LocalPoint.cs" />
+    <Compile Include="Model\Coord\ILocatable.cs" />
+    <Compile Include="Model\Coord\SpawnPoint.cs" />
     <Compile Include="Model\Coord\WorldPoint.cs" />
     <Compile Include="Model\Entity\CharacterPet.cs" />
     <Compile Include="Model\Entity\Cos.cs" />
@@ -150,6 +152,7 @@
     <Compile Include="Model\Entity\SkillAoe.cs" />
     <Compile Include="Model\Entity\Teleport.cs" />
     <Compile Include="Model\Exception\EntityParseException.cs" />
+    <Compile Include="Model\Identifiable.cs" />
     <Compile Include="Model\Inventory\InventoryItem.cs" />
     <Compile Include="Model\Server\GameServer.cs" />
     <Compile Include="Network\Agent.cs" />
@@ -240,6 +243,7 @@
     <Content Include="Resources\mm_sign_monster.png" />
     <Content Include="Resources\mm_sign_npc.png" />
     <Content Include="Resources\mm_sign_otherplayer.png" />
+    <Content Include="Resources\mm_sign_spawn.png" />
     <Content Include="Resources\mm_sign_unique.png" />
     <Content Include="Resources\TRSRO_DB.db3" />
     <Content Include="Resources\xy_gate.png" />

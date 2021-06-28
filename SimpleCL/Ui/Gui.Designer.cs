@@ -81,8 +81,8 @@ namespace SimpleCL.Ui
             this.chatTab = new System.Windows.Forms.TabPage();
             this.chatBox = new System.Windows.Forms.ListBox();
             this.movementTab = new System.Windows.Forms.TabPage();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.map1 = new global::SimpleCL.Ui.Comp.Map();
+            this.mapPanel = new System.Windows.Forms.Panel();
+            this.minimap = new global::SimpleCL.Ui.Comp.Map();
             this.currWorldLabel = new System.Windows.Forms.Label();
             this.currWorldLabelValue = new System.Windows.Forms.Label();
             this.currLocalLabel = new System.Windows.Forms.Label();
@@ -110,7 +110,7 @@ namespace SimpleCL.Ui
             ((System.ComponentModel.ISupportInitialize) (this.jobEquipmentDataGridView)).BeginInit();
             this.chatTab.SuspendLayout();
             this.movementTab.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.mapPanel.SuspendLayout();
             this.devTab.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -596,7 +596,7 @@ namespace SimpleCL.Ui
             // 
             // movementTab
             // 
-            this.movementTab.Controls.Add(this.panel1);
+            this.movementTab.Controls.Add(this.mapPanel);
             this.movementTab.Controls.Add(this.currWorldLabel);
             this.movementTab.Controls.Add(this.currWorldLabelValue);
             this.movementTab.Controls.Add(this.currLocalLabel);
@@ -610,19 +610,19 @@ namespace SimpleCL.Ui
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.map1);
-            this.panel1.Location = new System.Drawing.Point(3, 3);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(762, 352);
-            this.panel1.TabIndex = 11;
+            this.mapPanel.Controls.Add(this.minimap);
+            this.mapPanel.Location = new System.Drawing.Point(3, 3);
+            this.mapPanel.Name = "mapPanel";
+            this.mapPanel.Size = new System.Drawing.Size(762, 352);
+            this.mapPanel.TabIndex = 11;
             // 
             // map1
             // 
-            this.map1.Location = new System.Drawing.Point(-31, -214);
-            this.map1.Name = "map1";
-            this.map1.Size = new System.Drawing.Size(800, 800);
-            this.map1.TabIndex = 10;
-            this.map1.Zoom = ((byte) (1));
+            this.minimap.Location = new System.Drawing.Point(-31, -214);
+            this.minimap.Name = "minimap";
+            this.minimap.Size = new System.Drawing.Size(800, 800);
+            this.minimap.TabIndex = 10;
+            this.minimap.Zoom = ((byte) (1));
             // 
             // currWorldLabel
             // 
@@ -731,14 +731,14 @@ namespace SimpleCL.Ui
             ((System.ComponentModel.ISupportInitialize) (this.jobEquipmentDataGridView)).EndInit();
             this.chatTab.ResumeLayout(false);
             this.movementTab.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
+            this.mapPanel.ResumeLayout(false);
             this.devTab.ResumeLayout(false);
             this.ResumeLayout(false);
         }
 
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel mapPanel;
 
-        private global::SimpleCL.Ui.Comp.Map map1;
+        private global::SimpleCL.Ui.Comp.Map minimap;
 
         private System.Windows.Forms.Label currLocalLabel;
         private System.Windows.Forms.Label currWorldLabel;

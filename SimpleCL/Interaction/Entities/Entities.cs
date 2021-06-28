@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SimpleCL.Model.Coord;
 using SimpleCL.Model.Entity;
@@ -14,7 +15,7 @@ namespace SimpleCL.Interaction.Entities
             if (!AllEntities.ContainsKey(e.Uid))
             {
                 AllEntities[e.Uid] = e;
-                SimpleCL.Gui.AddMinimapEntity(e.Uid, e);
+                SimpleCL.Gui.AddMinimapMarker(e);
             }
         }
 
@@ -23,7 +24,7 @@ namespace SimpleCL.Interaction.Entities
             if (AllEntities.ContainsKey(uid))
             {
                 AllEntities.Remove(uid);
-                SimpleCL.Gui.RemoveMinimapEntity(uid);
+                SimpleCL.Gui.RemoveMinimapMarker(uid);
             }
         }
 

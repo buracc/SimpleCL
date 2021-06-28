@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Threading;
 using System.Timers;
 using SilkroadSecurityApi;
 using SimpleCL.Enums;
@@ -11,6 +12,7 @@ using SimpleCL.Interaction;
 using SimpleCL.Model.Character;
 using SimpleCL.Model.Coord;
 using SimpleCL.Service;
+using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Network
 {
@@ -91,9 +93,8 @@ namespace SimpleCL.Network
         private void HeartBeat(Object source, ElapsedEventArgs e)
         {
             Inject(new Packet(Opcodes.HEARTBEAT));
-            
+
             SimpleCL.Gui.RefreshGui();
-            SimpleCL.Gui.RefreshMap();
         }
 
         public void Disconnect()
@@ -152,11 +153,11 @@ namespace SimpleCL.Network
                     Console.WriteLine(e);
                     break;
                 }
-                
+
                 if (InteractionQueue.PacketQueue.Any())
                 {
                     Packet queuedPacket = InteractionQueue.PacketQueue.Dequeue();
-                    Inject(queuedPacket);
+                    new Thread(() => { Inject(queuedPacket); }).Start();
                 }
 
                 List<Packet> incomingPackets = Security.TransferIncoming();
@@ -167,7 +168,8 @@ namespace SimpleCL.Network
 
                 foreach (var packet in incomingPackets)
                 {
-                    if (Debug || this is Agent && SimpleCL.Gui.DebugAgent() || this is Gateway && SimpleCL.Gui.DebugGateway())
+                    if (Debug || this is Agent && SimpleCL.Gui.DebugAgent() ||
+                        this is Gateway && SimpleCL.Gui.DebugGateway())
                     {
                         DebugPacket(packet);
                     }
@@ -179,7 +181,7 @@ namespace SimpleCL.Network
 
                     Notify(packet);
                 }
-                
+
                 List<KeyValuePair<TransferBuffer, Packet>> outgoing = Security.TransferOutgoing();
                 if (outgoing != null)
                 {

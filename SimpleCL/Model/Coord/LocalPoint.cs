@@ -60,9 +60,9 @@ namespace SimpleCL.Model.Coord
             return new LocalPoint(region, x, worldPoint.Z, y);
         }
 
-        public double DistanceTo(LocalPoint other)
+        public double DistanceTo(LocalPoint point)
         {
-            throw new System.NotImplementedException();
+            return WorldPoint.FromLocal(this).DistanceTo(WorldPoint.FromLocal(point));
         }
     }
 }

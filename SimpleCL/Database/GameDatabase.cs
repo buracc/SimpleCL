@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data.SQLite;
+using System.Globalization;
 using System.IO;
 using Newtonsoft.Json;
 using SimpleCL.Enums.Server;
+using SimpleCL.Model.Coord;
 using SimpleCL.Util;
 using SimpleCL.Util.Extension;
 
@@ -15,13 +17,24 @@ namespace SimpleCL.Database
         private static GameDatabase _instance;
 
         public static GameDatabase Get => _instance ?? (_instance = new GameDatabase());
-        public SilkroadServer SelectedServer { get; set; }
+
+        private SilkroadServer _selectedServer;
+        public SilkroadServer SelectedServer
+        {
+            get => _selectedServer;
+            set
+            {
+                _selectedServer = value;
+                LoadSpawns();
+            }
+        }
 
         private readonly Dictionary<uint, NameValueCollection> _itemCache;
         private readonly Dictionary<uint, NameValueCollection> _modelCache;
         private readonly Dictionary<uint, NameValueCollection> _skillCache;
         private readonly Dictionary<uint, NameValueCollection> _teleBuildingCache;
         private readonly Dictionary<uint, NameValueCollection> _teleLinkCache;
+        public readonly Dictionary<uint, List<SpawnPoint>> SpawnPoints = new Dictionary<uint, List<SpawnPoint>>();
 
         private GameDatabase()
         {
@@ -259,6 +272,32 @@ namespace SimpleCL.Database
             return uint.Parse(result[0]["v"]);
         }
 
+        public void LoadSpawns()
+        {
+            foreach (var entry in GetData(
+                "SELECT n.*, m.name " +
+                "FROM npcpos n " +
+                "INNER JOIN monsters m " +
+                "ON m.id = n.id"))
+            {
+                var id = uint.Parse(entry["id"]);
+                var region = short.Parse(entry["region"]);
+                var x = float.Parse(entry["x"], CultureInfo.InvariantCulture);
+                var y = float.Parse(entry["y"], CultureInfo.InvariantCulture);
+                var z = float.Parse(entry["z"], CultureInfo.InvariantCulture);
+                var name = entry["name"];
+
+                if (SpawnPoints.ContainsKey(id))
+                {
+                    SpawnPoints[id].Add(new SpawnPoint(new LocalPoint((ushort) region, x, z, y), id, name));
+                }
+                else
+                {
+                    SpawnPoints[id] = new List<SpawnPoint> {new SpawnPoint(new LocalPoint((ushort) region, x, z, y), id, name)};
+                }
+            }
+        }
+
         public void CacheData()
         {
             if (!Directory.Exists("Cache"))
@@ -322,7 +361,7 @@ namespace SimpleCL.Database
                                     {
                                         nvc.Add(entry2.Key, entry2.Value);
                                     }
-                                    
+
                                     output[entry.Key] = nvc;
                                 }
                             }

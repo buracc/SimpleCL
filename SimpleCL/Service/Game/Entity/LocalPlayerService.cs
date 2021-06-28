@@ -268,9 +268,9 @@ namespace SimpleCL.Service.Game.Entity
             var jid = packet.ReadUInt();
 
             local.LocalPoint = localPoint;
-            
-            SimpleCL.Gui.AddMinimapEntity(local.Uid, local);
-            Entities.Spawn(local);
+
+            SimpleCL.Gui.StartRefreshTimer();
+            SimpleCL.Gui.AddMinimapMarker(LocalPlayer.Get);
 
             server.Log("Successfully joined the game");
         }

@@ -11,7 +11,7 @@ using SimpleCL.Model.Exception;
 
 namespace SimpleCL.Model.Entity
 {
-    public class Entity
+    public class Entity : ILocatable, Identifiable
     {
         public readonly uint Id;
         public readonly string ServerName;
@@ -281,7 +281,7 @@ namespace SimpleCL.Model.Entity
 
         public override string ToString()
         {
-            return GetType().Name + ": " + Name + " [" + Id + "]";
+            return GetType().Name + ": " + Name + " [" + Id + "] [" + Uid + "]";
         }
     }
 }

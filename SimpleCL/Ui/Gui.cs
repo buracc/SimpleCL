@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 using SimpleCL.Database;
 using SimpleCL.Enums.Server;
+using SimpleCL.Interaction.Entities;
+using SimpleCL.Model;
 using SimpleCL.Model.Character;
 using SimpleCL.Model.Coord;
 using SimpleCL.Model.Entity;
@@ -12,6 +16,7 @@ using SimpleCL.Network;
 using SimpleCL.Service.Login;
 using SimpleCL.Ui.Comp;
 using SimpleCL.Util.Extension;
+using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Ui
 {
@@ -19,8 +24,12 @@ namespace SimpleCL.Ui
     {
         private const ushort GatewayPort = 15779;
 
+        private readonly ToolTip _toolTip = new ToolTip();
+        private readonly Timer _timer = new Timer(1000);
+
         public Gui()
         {
+            base.DoubleBuffered = true;
             InitializeComponent();
 
             FormClosed += ExitApplication;
@@ -43,6 +52,8 @@ namespace SimpleCL.Ui
             jobEquipmentDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
             CenterToScreen();
+
+            _timer.Elapsed += (sender, args) => { RefreshMap(); };
         }
 
         private void LoginClicked(object sender, EventArgs e)
@@ -101,7 +112,7 @@ namespace SimpleCL.Ui
                 nameLabelValue.Text = local.Name;
                 jobNameLabelValue.Text = local.JobName;
 
-                Name = Name + "(" + local.Uid + ")";
+                Text = "SimpleCL (" + local.Uid + ")";
 
                 hpProgressBar.Maximum = (int) local.MaxHp;
                 mpProgressBar.Maximum = (int) local.MaxMp;
@@ -132,8 +143,6 @@ namespace SimpleCL.Ui
                 avatarDataGridView.DataSource = local.Inventories["avatar"];
                 jobEquipmentDataGridView.DataSource = local.Inventories["jobEquipment"];
             }
-
-            Refresh();
         }
 
         public bool DebugGateway()
@@ -146,9 +155,11 @@ namespace SimpleCL.Ui
             return debugAgCheckbox.Checked;
         }
 
-        public void AddMinimapEntity(uint uid, Entity entity)
+        public void AddMinimapMarker(Entity entity)
         {
             MapControl marker = new MapControl();
+            _toolTip.SetToolTip(marker, entity.ToString());
+
             switch (entity)
             {
                 case TalkNpc talkNpc:
@@ -159,23 +170,22 @@ namespace SimpleCL.Ui
                     marker.Image = Properties.Resources.mm_sign_monster;
                     break;
 
-                case Player player:
-                    if (uid == LocalPlayer.Get.Uid)
-                    {
-                        marker.Image = Properties.Resources.mm_sign_character;
-                    }
-                    else
-                    {
-                        marker.Image = Properties.Resources.mm_sign_otherplayer;
-                    }
-
+                case LocalPlayer localPlayer:
+                    marker.Image = Properties.Resources.mm_sign_character;
+                    _toolTip.SetToolTip(marker, "We are here");
                     break;
+
+                case Player player:
+                    marker.Image = Properties.Resources.mm_sign_otherplayer;
+                    break;
+
                 case PickPet pickPet:
                 case AttackPet attackPet:
                 case FellowPet fellowPet:
                 case Horse horse:
                     marker.Image = Properties.Resources.mm_sign_animal;
                     break;
+
                 case Teleport teleport:
                     marker.Image = Properties.Resources.xy_gate;
                     break;
@@ -185,37 +195,65 @@ namespace SimpleCL.Ui
             {
                 marker.Size = marker.Image.Size;
 
-                Point location = map1.GetPoint(entity.WorldPoint);
+                Point location = minimap.GetPoint(entity.WorldPoint);
                 location.X -= marker.Image.Size.Width / 2;
                 location.Y -= marker.Image.Size.Height / 2;
                 marker.Location = location;
 
                 marker.Tag = entity;
-                ToolTip toolTip = new ToolTip();
-                toolTip.SetToolTip(marker, marker.Tag.ToString());
-                
-                map1.InvokeLater(() => { map1.AddMarker(uid, marker); });
-            }
-        }
 
-        public void RemoveMinimapEntity(uint uid)
-        {
-            map1.InvokeLater(() =>
-            {
-                try
-                {
-                    map1.RemoveMarker(uid);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-            });
+                minimap.AddMarker(entity.Uid, marker);
+            }
         }
 
         public void RefreshMap()
         {
-            map1.InvokeLater(() => { map1.SetView(LocalPlayer.Get.WorldPoint); });
+            try
+            {
+                if (!mapPanel.Visible)
+                {
+                    return;
+                }
+
+                minimap.SetView(LocalPlayer.Get.WorldPoint);
+
+                if (!minimap.Markers.ContainsKey(LocalPlayer.Get.Uid))
+                {
+                    return;
+                }
+
+                var marker = minimap.Markers[LocalPlayer.Get.Uid];
+                var image = Properties.Resources.mm_sign_character;
+                var rotated = new Bitmap(image.Width, image.Height);
+                var graphics = Graphics.FromImage(rotated);
+                graphics.TranslateTransform((float) rotated.Width / 2, (float) rotated.Height / 2);
+                graphics.RotateTransform(-LocalPlayer.Get.GetAngleDegrees());
+                graphics.TranslateTransform(-(float) rotated.Width / 2, -(float) rotated.Height / 2);
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.DrawImage(image, new Point(0, 0));
+                graphics.Dispose();
+
+                marker.InvokeLater(() => { marker.Image = rotated; });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        public void RefreshMarkers()
+        {
+            minimap.UpdateMarkerLocations();
+        }
+
+        public void RemoveMinimapMarker(uint uid)
+        {
+            minimap.RemoveMarker(uid);
+        }
+
+        public void StartRefreshTimer()
+        {
+            _timer.Start();
         }
     }
 }
