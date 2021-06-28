@@ -46,10 +46,10 @@ namespace SimpleCL.Ui
             this.statisticsBox = new System.Windows.Forms.GroupBox();
             this.worldCoordsLabelValue = new System.Windows.Forms.Label();
             this.worldCoordsLabel = new System.Windows.Forms.Label();
-            this.jobExpProgressBar = new SimpleCL.Ui.Comp.TextProgressBar();
-            this.hpProgressBar = new SimpleCL.Ui.Comp.TextProgressBar();
-            this.mpProgressBar = new SimpleCL.Ui.Comp.TextProgressBar();
-            this.expProgressBar = new SimpleCL.Ui.Comp.TextProgressBar();
+            this.jobExpProgressBar = new global::SimpleCL.Ui.Comp.TextProgressBar();
+            this.hpProgressBar = new global::SimpleCL.Ui.Comp.TextProgressBar();
+            this.mpProgressBar = new global::SimpleCL.Ui.Comp.TextProgressBar();
+            this.expProgressBar = new global::SimpleCL.Ui.Comp.TextProgressBar();
             this.jobExpLabel = new System.Windows.Forms.Label();
             this.jobLevelLabelValue = new System.Windows.Forms.Label();
             this.jobLevelLabel = new System.Windows.Forms.Label();
@@ -82,7 +82,7 @@ namespace SimpleCL.Ui
             this.chatBox = new System.Windows.Forms.ListBox();
             this.movementTab = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.map1 = new SimpleCL.Ui.Comp.Map();
+            this.map1 = new global::SimpleCL.Ui.Comp.Map();
             this.currWorldLabel = new System.Windows.Forms.Label();
             this.currWorldLabelValue = new System.Windows.Forms.Label();
             this.currLocalLabel = new System.Windows.Forms.Label();
@@ -270,7 +270,7 @@ namespace SimpleCL.Ui
             this.jobExpProgressBar.TabIndex = 29;
             this.jobExpProgressBar.TextColor = System.Drawing.Color.Black;
             this.jobExpProgressBar.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.jobExpProgressBar.VisualMode = SimpleCL.Ui.Comp.ProgressBarDisplayMode.CustomText;
+            this.jobExpProgressBar.VisualMode = global::SimpleCL.Ui.Comp.ProgressBarDisplayMode.CustomText;
             // 
             // hpProgressBar
             // 
@@ -282,7 +282,7 @@ namespace SimpleCL.Ui
             this.hpProgressBar.TabIndex = 28;
             this.hpProgressBar.TextColor = System.Drawing.Color.Black;
             this.hpProgressBar.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.hpProgressBar.VisualMode = SimpleCL.Ui.Comp.ProgressBarDisplayMode.CurrProgress;
+            this.hpProgressBar.VisualMode = global::SimpleCL.Ui.Comp.ProgressBarDisplayMode.CurrProgress;
             // 
             // mpProgressBar
             // 
@@ -294,7 +294,7 @@ namespace SimpleCL.Ui
             this.mpProgressBar.TabIndex = 27;
             this.mpProgressBar.TextColor = System.Drawing.Color.Black;
             this.mpProgressBar.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.mpProgressBar.VisualMode = SimpleCL.Ui.Comp.ProgressBarDisplayMode.CurrProgress;
+            this.mpProgressBar.VisualMode = global::SimpleCL.Ui.Comp.ProgressBarDisplayMode.CurrProgress;
             // 
             // expProgressBar
             // 
@@ -306,7 +306,7 @@ namespace SimpleCL.Ui
             this.expProgressBar.TabIndex = 26;
             this.expProgressBar.TextColor = System.Drawing.Color.Black;
             this.expProgressBar.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.expProgressBar.VisualMode = SimpleCL.Ui.Comp.ProgressBarDisplayMode.CustomText;
+            this.expProgressBar.VisualMode = global::SimpleCL.Ui.Comp.ProgressBarDisplayMode.CustomText;
             // 
             // jobExpLabel
             // 
@@ -738,7 +738,7 @@ namespace SimpleCL.Ui
 
         private System.Windows.Forms.Panel panel1;
 
-        private SimpleCL.Ui.Comp.Map map1;
+        private global::SimpleCL.Ui.Comp.Map map1;
 
         private System.Windows.Forms.Label currLocalLabel;
         private System.Windows.Forms.Label currWorldLabel;
@@ -754,7 +754,7 @@ namespace SimpleCL.Ui
         private System.Windows.Forms.CheckBox debugGwCheckbox;
         private System.Windows.Forms.CheckBox debugAgCheckbox;
 
-        private SimpleCL.Ui.Comp.TextProgressBar expProgressBar;
+        private global::SimpleCL.Ui.Comp.TextProgressBar expProgressBar;
 
         private System.Windows.Forms.Label nameLabel;
         private System.Windows.Forms.Label nameLabelValue;
@@ -821,8 +821,8 @@ namespace SimpleCL.Ui
 
         #endregion
 
-        private SimpleCL.Ui.Comp.TextProgressBar hpProgressBar;
-        private SimpleCL.Ui.Comp.TextProgressBar mpProgressBar;
-        private SimpleCL.Ui.Comp.TextProgressBar jobExpProgressBar;
+        private global::SimpleCL.Ui.Comp.TextProgressBar hpProgressBar;
+        private global::SimpleCL.Ui.Comp.TextProgressBar mpProgressBar;
+        private global::SimpleCL.Ui.Comp.TextProgressBar jobExpProgressBar;
     }
 }

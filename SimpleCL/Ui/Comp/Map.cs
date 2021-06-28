@@ -3,24 +3,19 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Timers;
 using System.Windows.Forms;
-using SilkroadSecurityApi;
-using SimpleCL.Enums.Common;
-using SimpleCL.Interaction;
 using SimpleCL.Interaction.Pathing;
 using SimpleCL.Model.Character;
 using SimpleCL.Model.Coord;
 using SimpleCL.Model.Entity;
 using SimpleCL.Util.Extension;
-using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Ui.Comp
 {
     public class Map : Panel
     {
         private readonly Dictionary<string, MapTile> _mapSectors = new Dictionary<string, MapTile>();
-        private readonly Dictionary<uint, MapControl> _markers = new Dictionary<uint, MapControl>();
+        public readonly Dictionary<uint, MapControl> Markers = new Dictionary<uint, MapControl>();
 
         private WorldPoint _mapCenter;
         private string _filePath;
@@ -326,28 +321,28 @@ namespace SimpleCL.Ui.Comp
                 marker.Name = Name + "_" + uniqueId;
                 Controls.Add(marker);
                 Controls.SetChildIndex(marker, 1);
-                _markers[uniqueId] = marker;
+                Markers[uniqueId] = marker;
             });
         }
 
         public void RemoveMarker(uint uniqueId)
         {
-            MapControl marker = _markers[uniqueId];
+            MapControl marker = Markers[uniqueId];
             if (marker != null)
             {
                 Controls.RemoveByKey(marker.Name);
-                _markers.Remove(uniqueId);
+                Markers.Remove(uniqueId);
             }
         }
 
         public void ClearMarkers()
         {
-            for (int i = 0; i < _markers.Count; i++)
+            for (int i = 0; i < Markers.Count; i++)
             {
-                Controls.RemoveByKey(_markers.Values.ToList()[i].Name);
+                Controls.RemoveByKey(Markers.Values.ToList()[i].Name);
             }
 
-            _markers.Clear();
+            Markers.Clear();
         }
 
         public void UpdateMarkerLocations()
@@ -357,7 +352,7 @@ namespace SimpleCL.Ui.Comp
             double bX = 192.0 / _tileSize.Width;
             double bY = 192.0 / _tileSize.Height;
 
-            foreach (KeyValuePair<uint, MapControl> keyValuePair in _markers)
+            foreach (KeyValuePair<uint, MapControl> keyValuePair in Markers)
             {
                 var uid = keyValuePair.Key;
                 var marker = keyValuePair.Value;
@@ -398,7 +393,7 @@ namespace SimpleCL.Ui.Comp
             var coord = GetCoord(clickPoint);
             var world = WorldPoint.FromLocal(coord);
             Movement.WalkTo(coord);
-            Program.Gui.Log("Moving to [" + world + "]");
+            SimpleCL.Gui.Log("Moving to [" + world + "]");
         }
     }
 }

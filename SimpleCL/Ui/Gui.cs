@@ -19,7 +19,6 @@ namespace SimpleCL.Ui
     {
         private const ushort GatewayPort = 15779;
 
-
         public Gui()
         {
             InitializeComponent();
@@ -48,8 +47,7 @@ namespace SimpleCL.Ui
 
         private void LoginClicked(object sender, EventArgs e)
         {
-            SilkroadServer selectedServer = serverComboBox.SelectedItem as SilkroadServer;
-            if (selectedServer == null)
+            if (!(serverComboBox.SelectedItem is SilkroadServer selectedServer))
             {
                 return;
             }
@@ -89,6 +87,8 @@ namespace SimpleCL.Ui
 
         private void ExitApplication(object sender, EventArgs e)
         {
+            GameDatabase.Get.CacheData();
+
             Application.Exit();
             Environment.Exit(0);
         }
@@ -100,6 +100,8 @@ namespace SimpleCL.Ui
             {
                 nameLabelValue.Text = local.Name;
                 jobNameLabelValue.Text = local.JobName;
+
+                Name = Name + "(" + local.Uid + ")";
 
                 hpProgressBar.Maximum = (int) local.MaxHp;
                 mpProgressBar.Maximum = (int) local.MaxMp;
@@ -122,8 +124,6 @@ namespace SimpleCL.Ui
                 worldCoordsLabelValue.Text = worldPoint.ToString();
                 currLocalLabelValue.Text = local.LocalPoint.ToString();
                 currWorldLabelValue.Text = worldPoint.ToString();
-
-                map1.InvokeLater(() => { map1.SetView(worldPoint); });
 
                 inventoryDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
@@ -186,14 +186,33 @@ namespace SimpleCL.Ui
                 marker.Size = marker.Image.Size;
 
                 Point location = map1.GetPoint(entity.WorldPoint);
-                // Console.WriteLine("adding " + entity.GetType().Name + " marker at " + location);
                 location.X -= marker.Image.Size.Width / 2;
                 location.Y -= marker.Image.Size.Height / 2;
                 marker.Location = location;
 
                 marker.Tag = entity;
-                map1.AddMarker(uid, marker);
+                map1.InvokeLater(() => { map1.AddMarker(uid, marker); });
             }
+        }
+
+        public void RemoveMinimapEntity(uint uid)
+        {
+            map1.InvokeLater(() =>
+            {
+                try
+                {
+                    map1.RemoveMarker(uid);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            });
+        }
+
+        public void RefreshMap()
+        {
+            map1.InvokeLater(() => { map1.SetView(LocalPlayer.Get.WorldPoint); });
         }
     }
 }

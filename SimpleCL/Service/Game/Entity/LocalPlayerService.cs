@@ -7,6 +7,7 @@ using SimpleCL.Enums.Common;
 using SimpleCL.Enums.Quest;
 using SimpleCL.Enums.Server;
 using SimpleCL.Enums.Skill;
+using SimpleCL.Interaction.Entities;
 using SimpleCL.Model.Character;
 using SimpleCL.Model.Coord;
 using SimpleCL.Model.Inventory;
@@ -19,6 +20,7 @@ namespace SimpleCL.Service.Game.Entity
     {
         private readonly SilkroadServer _silkroadServer;
         private readonly Gateway _gateway;
+
         public LocalPlayerService(SilkroadServer silkroadServer, Gateway gateway)
         {
             _silkroadServer = silkroadServer;
@@ -167,7 +169,7 @@ namespace SimpleCL.Service.Game.Entity
                     });
                 }
             });
-            
+
             packet.ReadByte(); // structure changes
 
             var collectionBookStartedCount = packet.ReadUInt();
@@ -267,7 +269,8 @@ namespace SimpleCL.Service.Game.Entity
 
             local.LocalPoint = localPoint;
             
-            Program.Gui.AddMinimapEntity(local.Uid, local);
+            SimpleCL.Gui.AddMinimapEntity(local.Uid, local);
+            Entities.Spawn(local);
 
             server.Log("Successfully joined the game");
         }
@@ -305,7 +308,7 @@ namespace SimpleCL.Service.Game.Entity
                 case 1:
                     LocalPlayer.Get.Gold = packet.ReadULong();
                     break;
-                
+
                 // Sp changed
                 case 2:
                     LocalPlayer.Get.Skillpoints = packet.ReadUInt();
@@ -314,7 +317,7 @@ namespace SimpleCL.Service.Game.Entity
                 case 4:
                     var newPoints = packet.ReadByte();
                     break;
-                
+
                 default:
                     server.Log("Unhandled characterinfo changetype: " + updateType);
                     server.DebugPacket(packet);
@@ -360,7 +363,8 @@ namespace SimpleCL.Service.Game.Entity
                 var typeId3 = byte.Parse(itemData["tid2"]);
                 var typeId4 = byte.Parse(itemData["tid3"]);
 
-                InventoryItem inventoryItem = new InventoryItem(slot, refItemId, itemData["servername"], itemData["name"]);
+                InventoryItem inventoryItem =
+                    new InventoryItem(slot, refItemId, itemData["servername"], itemData["name"]);
 
                 switch (typeId2)
                 {
@@ -476,7 +480,7 @@ namespace SimpleCL.Service.Game.Entity
 
                         break;
                 }
-                
+
                 items.Add(inventoryItem);
             });
 

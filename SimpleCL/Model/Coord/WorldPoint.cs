@@ -70,9 +70,7 @@ namespace SimpleCL.Model.Coord
                 (ySector - 92) * 192 + localPoint.Y / 10,
                 localPoint.Z,
                 localPoint.Region
-            );
-            point.XSector = xSector;
-            point.YSector = ySector;
+            ) {XSector = xSector, YSector = ySector};
             return point;
         }
 

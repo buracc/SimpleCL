@@ -1,6 +1,7 @@
 ﻿using System;
 using SilkroadSecurityApi;
 using SimpleCL.Enums.Common;
+using SimpleCL.Interaction.Entities;
 using SimpleCL.Model.Character;
 using SimpleCL.Model.Coord;
 using SimpleCL.Network;
@@ -39,11 +40,13 @@ namespace SimpleCL.Service.Game.Entity
                             packet.ReadUShort()
                         );
                     }
-
+                    
                     if (uid == LocalPlayer.Get.Uid)
                     {
                         var oldPos = LocalPlayer.Get.WorldPoint;
+                        
                         LocalPlayer.Get.LocalPoint = localPoint;
+                        
                         var xDiff = LocalPlayer.Get.WorldPoint.X - oldPos.X;
                         var yDiff = LocalPlayer.Get.WorldPoint.Y - oldPos.Y;
                         if (xDiff == 0)
@@ -73,6 +76,8 @@ namespace SimpleCL.Service.Game.Entity
                             }
                         }
                     }
+                    
+                    Entities.Moved(uid, localPoint);
                 }
             }
             catch

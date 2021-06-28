@@ -73,9 +73,9 @@ namespace SimpleCL.Network
         public void Log(string message, bool toGui = true)
         {
             string logMsg = "[" + GetType().Name + "] " + message;
-            if (toGui && Program.Gui != null)
+            if (toGui && SimpleCL.Gui != null)
             {
-                Program.Gui.Log(logMsg);
+                SimpleCL.Gui.Log(logMsg);
             }
             else
             {
@@ -92,12 +92,13 @@ namespace SimpleCL.Network
         {
             Inject(new Packet(Opcodes.HEARTBEAT));
             
-            Program.Gui.RefreshGui();
+            SimpleCL.Gui.RefreshGui();
+            SimpleCL.Gui.RefreshMap();
         }
 
         public void Disconnect()
         {
-            Program.Gui.ToggleControls(true);
+            SimpleCL.Gui.ToggleControls(true);
             Dispose();
         }
 
@@ -166,7 +167,7 @@ namespace SimpleCL.Network
 
                 foreach (var packet in incomingPackets)
                 {
-                    if (Debug || this is Agent && Program.Gui.DebugAgent() || this is Gateway && Program.Gui.DebugGateway())
+                    if (Debug || this is Agent && SimpleCL.Gui.DebugAgent() || this is Gateway && SimpleCL.Gui.DebugGateway())
                     {
                         DebugPacket(packet);
                     }

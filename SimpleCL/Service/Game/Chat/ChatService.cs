@@ -30,7 +30,7 @@ namespace SimpleCL.Service.Game.Chat
             string message = packet.ReadUnicode();
             chatMessage.Message = message;
 
-            Program.Gui.AddChatMessage(chatMessage.ToString());
+            SimpleCL.Gui.AddChatMessage(chatMessage.ToString());
         }
     }
 }

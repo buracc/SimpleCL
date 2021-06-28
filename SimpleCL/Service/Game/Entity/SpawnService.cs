@@ -4,12 +4,14 @@ using SilkroadSecurityApi;
 using SimpleCL.Database;
 using SimpleCL.Enums.Common;
 using SimpleCL.Enums.Skill;
+using SimpleCL.Interaction.Entities;
 using SimpleCL.Model.Coord;
 using SimpleCL.Model.Entity;
 using SimpleCL.Model.Entity.Mob;
 using SimpleCL.Model.Entity.Pet;
 using SimpleCL.Model.Inventory;
 using SimpleCL.Network;
+using SimpleCL.Util;
 using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Service.Game.Entity
@@ -19,6 +21,7 @@ namespace SimpleCL.Service.Game.Entity
         private Packet _spawnPacket;
         private byte _spawnType;
         private ushort _spawnCount;
+
 
         [PacketHandler(Opcodes.Agent.Response.ENTITY_SOLO_SPAWN)]
         public void SingleEntitySpawn(Server server, Packet packet)
@@ -44,6 +47,14 @@ namespace SimpleCL.Service.Game.Entity
         [PacketHandler(Opcodes.Agent.Response.ENTITY_GROUP_SPAWN_END)]
         public void GroupSpawnEnd(Server server, Packet packet)
         {
+            QueryBuilder queryBuilder = null;
+
+            if (_spawnCount > 0)
+            {
+                queryBuilder = new QueryBuilder(DirectoryUtils.GetDbFile(GameDatabase.Get.SelectedServer.Name + "_DB"),
+                    true);
+            }
+
             if (_spawnPacket != null)
             {
                 _spawnPacket.Lock();
@@ -51,22 +62,37 @@ namespace SimpleCL.Service.Game.Entity
                 {
                     if (_spawnType == 1)
                     {
-                        EntitySpawn(server, _spawnPacket);
+                        EntitySpawn(server, _spawnPacket, queryBuilder);
+                    }
+                    else
+                    {
+                        EntityDespawn(server, _spawnPacket);
                     }
                 });
             }
+
+            if (queryBuilder != null)
+            {
+                queryBuilder.Finish();
+            }
         }
 
-        private void EntitySpawn(Server server, Packet packet)
+        private void EntityDespawn(Server server, Packet packet)
+        {
+            uint uid = packet.ReadUInt();
+            Entities.Despawn(uid);
+        }
+
+        private void EntitySpawn(Server server, Packet packet, QueryBuilder queryBuilder = null)
         {
             var refObjId = packet.ReadUInt();
-            var entity = Model.Entity.Entity.FromId(refObjId);
+            var entity = Model.Entity.Entity.FromId(refObjId, queryBuilder);
 
             if (entity is SkillAoe skillAoe)
             {
                 var skillId = packet.ReadUInt();
                 var skillData = GameDatabase.Get.GetSkill(skillId);
-                var uid = packet.ReadUInt();
+                skillAoe.Uid = packet.ReadUInt();
                 skillAoe.LocalPoint = new LocalPoint(
                     packet.ReadUShort(),
                     packet.ReadFloat(),
@@ -79,15 +105,13 @@ namespace SimpleCL.Service.Game.Entity
 
             if (entity is Teleport teleport)
             {
-                var uid = packet.ReadUInt();
+                teleport.Uid = packet.ReadUInt();
                 teleport.LocalPoint = new LocalPoint(
                     packet.ReadUShort(),
                     packet.ReadFloat(),
                     packet.ReadFloat(),
                     packet.ReadFloat()
                 );
-                
-                Program.Gui.AddMinimapEntity(uid, teleport);
 
                 var angle = packet.ReadUShort();
                 packet.ReadByte();
@@ -115,6 +139,7 @@ namespace SimpleCL.Service.Game.Entity
                     packet.ReadByte();
                 }
 
+                Entities.Spawn(teleport);
                 return;
             }
 
@@ -135,7 +160,7 @@ namespace SimpleCL.Service.Game.Entity
                         var owner = packet.ReadAscii();
                     }
 
-                    var uid = packet.ReadUInt();
+                    groundItem.Uid = packet.ReadUInt();
                     groundItem.LocalPoint = new LocalPoint(
                         packet.ReadUShort(),
                         packet.ReadFloat(),
@@ -219,7 +244,7 @@ namespace SimpleCL.Service.Game.Entity
                     }
                 }
 
-                var uid = packet.ReadUInt();
+                pathingEntity.Uid = packet.ReadUInt();
 
                 pathingEntity.LocalPoint = new LocalPoint(
                     packet.ReadUShort(),
@@ -227,8 +252,6 @@ namespace SimpleCL.Service.Game.Entity
                     packet.ReadFloat(),
                     packet.ReadFloat()
                 );
-
-                Program.Gui.AddMinimapEntity(uid, pathingEntity);
 
                 var angle = packet.ReadUShort();
 
@@ -344,6 +367,8 @@ namespace SimpleCL.Service.Game.Entity
                             unks.Repeat(i => { packet.ReadByte(); });
                         }
                     }
+
+                    Entities.Spawn(p);
                 }
                 else if (pathingEntity is Npc npc)
                 {
@@ -354,6 +379,7 @@ namespace SimpleCL.Service.Game.Entity
                         var unkByteAmount = packet.ReadByte();
                         var unkBytes = packet.ReadByteArray(unkByteAmount);
                         var mobType = (Monster.Type) unkBytes[0];
+                        Entities.Spawn(npc);
                     }
                     else
                     {
@@ -363,6 +389,11 @@ namespace SimpleCL.Service.Game.Entity
                         {
                             var amount = packet.ReadByte();
                             var talkOptions = packet.ReadByteArray(amount);
+                        }
+
+                        if (npc is TalkNpc talkNpc)
+                        {
+                            Entities.Spawn(talkNpc);
                         }
 
                         if (npc is Cos cos)
@@ -391,6 +422,11 @@ namespace SimpleCL.Service.Game.Entity
                                 if (cos is FellowPet)
                                 {
                                     packet.ReadByte();
+                                }
+
+                                if (cos is CharacterPet pet)
+                                {
+                                    Entities.Spawn(pet);
                                 }
                             }
                         }

@@ -19,10 +19,22 @@ namespace SimpleCL.Model.Entity
         public readonly byte TypeId3;
         public readonly byte TypeId4;
         public LocalPoint LocalPoint { get; set; }
+        public uint Uid { get; set; }
 
         public WorldPoint WorldPoint => WorldPoint.FromLocal(LocalPoint);
 
-        public Entity(uint id)
+        public Entity(uint id, string serverName, byte typeId1, byte typeId2, byte typeId3, byte typeId4, string name)
+        {
+            Id = id;
+            ServerName = serverName;
+            TypeId1 = typeId1;
+            TypeId2 = typeId2;
+            TypeId3 = typeId3;
+            TypeId4 = typeId4;
+            Name = name;
+        }
+
+        public Entity(uint id, QueryBuilder queryBuilder = null)
         {
             Id = id;
 
@@ -32,19 +44,20 @@ namespace SimpleCL.Model.Entity
             }
 
             NameValueCollection data;
-            if ((data = GameDatabase.Get.GetModel(id)) != null)
+            if ((data = GameDatabase.Get.GetModel(id, queryBuilder)) != null)
             {
                 TypeId1 = 1;
             }
-            else if ((data = GameDatabase.Get.GetItemData(id)) != null)
+            else if ((data = GameDatabase.Get.GetItemData(id, queryBuilder)) != null)
             {
                 TypeId1 = 3;
             }
-            else if ((data = GameDatabase.Get.GetTeleportBuilding(id)) != null ||
-                     (data = GameDatabase.Get.GetTeleportLink(id)) != null)
+            else if ((data = GameDatabase.Get.GetTeleportBuilding(id, queryBuilder)) != null ||
+                     (data = GameDatabase.Get.GetTeleportLink(id, queryBuilder)) != null)
             {
                 TypeId1 = 4;
             }
+
 
             if (data != null)
             {
@@ -63,9 +76,9 @@ namespace SimpleCL.Model.Entity
             }
         }
 
-        public static Entity FromId(uint id)
+        public static Entity FromId(uint id, QueryBuilder queryBuilder = null)
         {
-            Entity entity = new Entity(id);
+            Entity entity = new Entity(id, queryBuilder);
             if (entity.IsSkillAoe())
             {
                 return new SkillAoe(id);
@@ -99,7 +112,7 @@ namespace SimpleCL.Model.Entity
                         {
                             return new TraderCaravan(id);
                         }
-                        
+
                         return monster;
                     }
 
@@ -238,6 +251,26 @@ namespace SimpleCL.Model.Entity
         public bool IsTeleport()
         {
             return TypeId1 == 4;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Entity other)
+            {
+                return Uid == other.Uid;
+            }
+
+            return false;
+        }
+
+        protected bool Equals(Entity other)
+        {
+            return Uid == other.Uid;
+        }
+
+        public override int GetHashCode()
+        {
+            return (int) Uid;
         }
 
         public override string ToString()

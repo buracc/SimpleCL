@@ -50,5 +50,10 @@
         {
             return TypeId4 == 11;
         }
+
+        public bool IsCharacterPet()
+        {
+            return IsAttackPet() || IsFellowPet() || IsPickPet() || IsHorse() || IsTransport();
+        }
     }
 }

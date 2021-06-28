@@ -43,6 +43,10 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SilkroadSecurityApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Libs\SilkroadSecurityApi.dll</HintPath>
     </Reference>
@@ -77,6 +81,7 @@
   <ItemGroup>
     <Compile Include="Credentials.cs" />
     <Compile Include="Database\GameDatabase.cs" />
+    <Compile Include="Database\QueryBuilder.cs" />
     <Compile Include="Enums\Chat\ChatChannel.cs" />
     <Compile Include="Enums\Common\Locale.cs" />
     <Compile Include="Enums\Common\Opcodes.cs" />
@@ -96,6 +101,12 @@
     <Compile Include="Enums\Server\ServerCapacity.cs" />
     <Compile Include="Enums\Server\SilkroadServer.cs" />
     <Compile Include="Enums\Skill\BuffData.cs" />
+    <Compile Include="Interaction\Entities\Entities.cs" />
+    <Compile Include="Interaction\Entities\Monsters.cs" />
+    <Compile Include="Interaction\Entities\Npcs.cs" />
+    <Compile Include="Interaction\Entities\Pets.cs" />
+    <Compile Include="Interaction\Entities\Players.cs" />
+    <Compile Include="Interaction\Entities\Teleports.cs" />
     <Compile Include="Interaction\InteractionQueue.cs" />
     <Compile Include="Interaction\Pathing\Movement.cs" />
     <Compile Include="Model\Character\LocalPlayer.cs" />
@@ -104,6 +115,7 @@
     <Compile Include="Model\Coord\ICoord.cs" />
     <Compile Include="Model\Coord\LocalPoint.cs" />
     <Compile Include="Model\Coord\WorldPoint.cs" />
+    <Compile Include="Model\Entity\CharacterPet.cs" />
     <Compile Include="Model\Entity\Cos.cs" />
     <Compile Include="Model\Entity\Fortress\Structure\FortressCommandPost.cs" />
     <Compile Include="Model\Entity\Fortress\Structure\FortressDefenseCamp.cs" />
@@ -142,7 +154,7 @@
     <Compile Include="Network\Agent.cs" />
     <Compile Include="Network\Gateway.cs" />
     <Compile Include="Network\Server.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="SimpleCL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -189,6 +201,7 @@
       <DependentUpon>Serverlist.cs</DependentUpon>
     </Compile>
     <Compile Include="Util\DirectoryUtils.cs" />
+    <Compile Include="Util\Extension\CollectionExt.cs" />
     <Compile Include="Util\Extension\NumberExt.cs" />
     <Compile Include="Util\Extension\PacketReadExt.cs" />
     <Compile Include="Util\Extension\PacketWriteExt.cs" />

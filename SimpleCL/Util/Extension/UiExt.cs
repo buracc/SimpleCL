@@ -10,7 +10,7 @@ namespace SimpleCL.Util.Extension
         /// </summary>
         /// <param name="control"></param>
         /// <param name="doRun"></param>
-        public static void InvokeLater(this Control control, ThreadStart doRun)
+        public static void InvokeLater(this Control control, MethodInvoker doRun)
         {
             if (control.InvokeRequired)
             {

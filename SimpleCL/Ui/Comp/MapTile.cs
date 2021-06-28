@@ -12,6 +12,7 @@ namespace SimpleCL.Ui.Comp
 		public int SectorY { get; }
 		public MapTile(int sectorX, int sectorY)
 		{
+			base.DoubleBuffered = true;
 			SectorX = sectorX;
 			SectorY = sectorY;
 		}
