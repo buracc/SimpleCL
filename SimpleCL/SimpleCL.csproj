@@ -82,25 +82,25 @@
     <Compile Include="Credentials.cs" />
     <Compile Include="Database\GameDatabase.cs" />
     <Compile Include="Database\QueryBuilder.cs" />
-    <Compile Include="Enums\Chat\ChatChannel.cs" />
-    <Compile Include="Enums\Common\Locale.cs" />
-    <Compile Include="Enums\Common\Opcodes.cs" />
-    <Compile Include="Enums\Event\EntityStateEvent.cs" />
-    <Compile Include="Enums\Event\InventoryAction.cs" />
-    <Compile Include="Enums\Item\ItemCategory.cs" />
-    <Compile Include="Enums\Item\ItemParser.cs" />
-    <Compile Include="Enums\Item\Type\ConsumableData.cs" />
-    <Compile Include="Enums\Item\Type\CosData.cs" />
-    <Compile Include="Enums\Item\Type\EquipmentData.cs" />
-    <Compile Include="Enums\Item\Type\FellowEquipmentData.cs" />
-    <Compile Include="Enums\Item\Type\JobEquipmentData.cs" />
+    <Compile Include="Enums\Chatter\ChatChannel.cs" />
+    <Compile Include="Enums\Commons\Locale.cs" />
+    <Compile Include="Enums\Commons\Opcodes.cs" />
+    <Compile Include="Enums\Events\EntityStateEvent.cs" />
+    <Compile Include="Enums\Events\InventoryAction.cs" />
+    <Compile Include="Enums\Items\ItemCategory.cs" />
+    <Compile Include="Enums\Items\ItemParser.cs" />
+    <Compile Include="Enums\Items\Type\ConsumableData.cs" />
+    <Compile Include="Enums\Items\Type\CosData.cs" />
+    <Compile Include="Enums\Items\Type\EquipmentData.cs" />
+    <Compile Include="Enums\Items\Type\FellowEquipmentData.cs" />
+    <Compile Include="Enums\Items\Type\JobEquipmentData.cs" />
     <Compile Include="Enums\Login\Error\AuthErrorCode.cs" />
     <Compile Include="Enums\Login\Error\LoginBlockType.cs" />
     <Compile Include="Enums\Login\Error\LoginErrorCode.cs" />
-    <Compile Include="Enums\Quest\QuestType.cs" />
+    <Compile Include="Enums\Quests\QuestType.cs" />
     <Compile Include="Enums\Server\ServerCapacity.cs" />
     <Compile Include="Enums\Server\SilkroadServer.cs" />
-    <Compile Include="Enums\Skill\BuffData.cs" />
+    <Compile Include="Enums\Skills\BuffData.cs" />
     <Compile Include="Interaction\Entities\Entities.cs" />
     <Compile Include="Interaction\Entities\Monsters.cs" />
     <Compile Include="Interaction\Entities\Npcs.cs" />
@@ -109,52 +109,52 @@
     <Compile Include="Interaction\Entities\Teleports.cs" />
     <Compile Include="Interaction\InteractionQueue.cs" />
     <Compile Include="Interaction\Pathing\Movement.cs" />
-    <Compile Include="Model\Character\LocalPlayer.cs" />
-    <Compile Include="Model\Character\Character.cs" />
-    <Compile Include="Model\Chat\ChatMessage.cs" />
-    <Compile Include="Model\Coord\ICoord.cs" />
-    <Compile Include="Model\Coord\LocalPoint.cs" />
-    <Compile Include="Model\Coord\ILocatable.cs" />
-    <Compile Include="Model\Coord\SpawnPoint.cs" />
-    <Compile Include="Model\Coord\WorldPoint.cs" />
-    <Compile Include="Model\Entity\CharacterPet.cs" />
-    <Compile Include="Model\Entity\Cos.cs" />
-    <Compile Include="Model\Entity\Fortress\Structure\FortressCommandPost.cs" />
-    <Compile Include="Model\Entity\Fortress\Structure\FortressDefenseCamp.cs" />
-    <Compile Include="Model\Entity\Fortress\Structure\FortressGate.cs" />
-    <Compile Include="Model\Entity\Fortress\Structure\FortressHeart.cs" />
-    <Compile Include="Model\Entity\Fortress\Structure\FortressObstacle.cs" />
-    <Compile Include="Model\Entity\Fortress\Structure\FortressTower.cs" />
-    <Compile Include="Model\Entity\GroundItem.cs" />
-    <Compile Include="Model\Entity\Mask.cs" />
-    <Compile Include="Model\Entity\Mob\Flower.cs" />
-    <Compile Include="Model\Entity\Mob\TraderCaravan.cs" />
-    <Compile Include="Model\Entity\Mob\ThiefCaravan.cs" />
-    <Compile Include="Model\Entity\Pet\AttackPet.cs" />
-    <Compile Include="Model\Entity\Pet\FellowPet.cs" />
-    <Compile Include="Model\Entity\Pet\GuildGuard.cs" />
-    <Compile Include="Model\Entity\Pet\Horse.cs" />
-    <Compile Include="Model\Entity\Pet\PickPet.cs" />
-    <Compile Include="Model\Entity\Pet\QuestPet.cs" />
-    <Compile Include="Model\Entity\Pet\Transport.cs" />
-    <Compile Include="Model\Entity\Entity.cs" />
-    <Compile Include="Model\Entity\FortressCos.cs" />
-    <Compile Include="Model\Entity\Fortress\FortressDefenseGuard.cs" />
-    <Compile Include="Model\Entity\Fortress\FortressFlag.cs" />
-    <Compile Include="Model\Entity\Fortress\FortressMonster.cs" />
-    <Compile Include="Model\Entity\Fortress\FortressPatrolGuard.cs" />
-    <Compile Include="Model\Entity\FortressStructure.cs" />
-    <Compile Include="Model\Entity\TalkNpc.cs" />
-    <Compile Include="Model\Entity\Monster.cs" />
-    <Compile Include="Model\Entity\Npc.cs" />
-    <Compile Include="Model\Entity\PathingEntity.cs" />
-    <Compile Include="Model\Entity\Player.cs" />
-    <Compile Include="Model\Entity\SkillAoe.cs" />
-    <Compile Include="Model\Entity\Teleport.cs" />
-    <Compile Include="Model\Exception\EntityParseException.cs" />
-    <Compile Include="Model\Identifiable.cs" />
-    <Compile Include="Model\Inventory\InventoryItem.cs" />
-    <Compile Include="Model\Server\GameServer.cs" />
+    <Compile Include="Models\Character\LocalPlayer.cs" />
+    <Compile Include="Models\Character\Character.cs" />
+    <Compile Include="Models\Chatter\ChatMessage.cs" />
+    <Compile Include="Models\Coordinates\ICoord.cs" />
+    <Compile Include="Models\Coordinates\LocalPoint.cs" />
+    <Compile Include="Models\Coordinates\ILocatable.cs" />
+    <Compile Include="Models\Coordinates\SpawnPoint.cs" />
+    <Compile Include="Models\Coordinates\WorldPoint.cs" />
+    <Compile Include="Models\Entities\CharacterPet.cs" />
+    <Compile Include="Models\Entities\Cos.cs" />
+    <Compile Include="Models\Entities\Fortress\Structure\FortressCommandPost.cs" />
+    <Compile Include="Models\Entities\Fortress\Structure\FortressDefenseCamp.cs" />
+    <Compile Include="Models\Entities\Fortress\Structure\FortressGate.cs" />
+    <Compile Include="Models\Entities\Fortress\Structure\FortressHeart.cs" />
+    <Compile Include="Models\Entities\Fortress\Structure\FortressObstacle.cs" />
+    <Compile Include="Models\Entities\Fortress\Structure\FortressTower.cs" />
+    <Compile Include="Models\Entities\GroundItem.cs" />
+    <Compile Include="Models\Entities\Mask.cs" />
+    <Compile Include="Models\Entities\Mob\Flower.cs" />
+    <Compile Include="Models\Entities\Mob\TraderCaravan.cs" />
+    <Compile Include="Models\Entities\Mob\ThiefCaravan.cs" />
+    <Compile Include="Models\Entities\Pet\AttackPet.cs" />
+    <Compile Include="Models\Entities\Pet\FellowPet.cs" />
+    <Compile Include="Models\Entities\Pet\GuildGuard.cs" />
+    <Compile Include="Models\Entities\Pet\Horse.cs" />
+    <Compile Include="Models\Entities\Pet\PickPet.cs" />
+    <Compile Include="Models\Entities\Pet\QuestPet.cs" />
+    <Compile Include="Models\Entities\Pet\Transport.cs" />
+    <Compile Include="Models\Entities\Entity.cs" />
+    <Compile Include="Models\Entities\FortressCos.cs" />
+    <Compile Include="Models\Entities\Fortress\FortressDefenseGuard.cs" />
+    <Compile Include="Models\Entities\Fortress\FortressFlag.cs" />
+    <Compile Include="Models\Entities\Fortress\FortressMonster.cs" />
+    <Compile Include="Models\Entities\Fortress\FortressPatrolGuard.cs" />
+    <Compile Include="Models\Entities\FortressStructure.cs" />
+    <Compile Include="Models\Entities\TalkNpc.cs" />
+    <Compile Include="Models\Entities\Monster.cs" />
+    <Compile Include="Models\Entities\Npc.cs" />
+    <Compile Include="Models\Entities\PathingEntity.cs" />
+    <Compile Include="Models\Entities\Player.cs" />
+    <Compile Include="Models\Entities\SkillAoe.cs" />
+    <Compile Include="Models\Entities\Teleport.cs" />
+    <Compile Include="Models\Exceptions\EntityParseException.cs" />
+    <Compile Include="Models\IIdentifiable.cs" />
+    <Compile Include="Models\Items\InventoryItem.cs" />
+    <Compile Include="Models\Server\GameServer.cs" />
     <Compile Include="Network\Agent.cs" />
     <Compile Include="Network\Gateway.cs" />
     <Compile Include="Network\Server.cs" />
@@ -165,27 +165,27 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Service\Game\Chat\ChatService.cs" />
-    <Compile Include="Service\Game\Entity\LocalPlayerService.cs" />
-    <Compile Include="Service\Game\Entity\MovementService.cs" />
-    <Compile Include="Service\Game\Entity\SpawnService.cs" />
-    <Compile Include="Service\Game\Entity\StatusService.cs" />
-    <Compile Include="Service\Login\CharacterSelectService.cs" />
-    <Compile Include="Service\Login\LoginService.cs" />
-    <Compile Include="Service\PacketHandlerAttribute.cs" />
-    <Compile Include="Service\Service.cs" />
+    <Compile Include="Services\Game\Chatter\ChatService.cs" />
+    <Compile Include="Services\Game\Entities\LocalPlayerService.cs" />
+    <Compile Include="Services\Game\Entities\MovementService.cs" />
+    <Compile Include="Services\Game\Entities\SpawnService.cs" />
+    <Compile Include="Services\Game\Entities\StatusService.cs" />
+    <Compile Include="Services\Login\CharacterSelectService.cs" />
+    <Compile Include="Services\Login\LoginService.cs" />
+    <Compile Include="Services\PacketHandlerAttribute.cs" />
+    <Compile Include="Services\Service.cs" />
     <Compile Include="Ui\CharacterSelection.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Ui\CharacterSelection.Designer.cs">
       <DependentUpon>CharacterSelection.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ui\Comp\TextProgressBar.cs">
+    <Compile Include="Ui\Components\TextProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Ui\Comp\Map.cs" />
-    <Compile Include="Ui\Comp\MapControl.cs" />
-    <Compile Include="Ui\Comp\MapTile.cs" />
+    <Compile Include="Ui\Components\Map.cs" />
+    <Compile Include="Ui\Components\MapControl.cs" />
+    <Compile Include="Ui\Components\MapTile.cs" />
     <Compile Include="Ui\Gui.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -224,7 +224,7 @@
     <EmbeddedResource Include="Ui\CharacterSelection.resx">
       <DependentUpon>CharacterSelection.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Ui\Comp\MapTile.resx">
+    <EmbeddedResource Include="Ui\Components\MapTile.resx">
       <DependentUpon>MapTile.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ui\Gui.resx">

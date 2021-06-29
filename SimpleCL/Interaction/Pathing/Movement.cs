@@ -1,6 +1,6 @@
 ﻿using SilkroadSecurityApi;
-using SimpleCL.Enums.Common;
-using SimpleCL.Model.Coord;
+using SimpleCL.Enums.Commons;
+using SimpleCL.Models.Coordinates;
 using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Interaction.Pathing

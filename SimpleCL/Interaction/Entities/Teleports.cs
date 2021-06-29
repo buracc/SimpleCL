@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SimpleCL.Model.Entity;
+using SimpleCL.Models.Entities;
 using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Interaction.Entities

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SimpleCL.Model.Coord;
-using SimpleCL.Model.Entity;
+using SimpleCL.Models.Coordinates;
+using SimpleCL.Models.Entities;
 
 namespace SimpleCL.Interaction.Entities
 {

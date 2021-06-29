@@ -6,7 +6,7 @@ using System.Globalization;
 using System.IO;
 using Newtonsoft.Json;
 using SimpleCL.Enums.Server;
-using SimpleCL.Model.Coord;
+using SimpleCL.Models.Coordinates;
 using SimpleCL.Util;
 using SimpleCL.Util.Extension;
 

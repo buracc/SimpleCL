@@ -2,7 +2,7 @@
 using System.Text;
 using System.Windows.Forms;
 using SilkroadSecurityApi;
-using SimpleCL.Enums.Common;
+using SimpleCL.Enums.Commons;
 using SimpleCL.Network;
 using SimpleCL.Util.Extension;
 

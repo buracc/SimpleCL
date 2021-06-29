@@ -7,11 +7,11 @@ using System.Threading;
 using System.Timers;
 using SilkroadSecurityApi;
 using SimpleCL.Enums;
-using SimpleCL.Enums.Common;
+using SimpleCL.Enums.Commons;
 using SimpleCL.Interaction;
-using SimpleCL.Model.Character;
-using SimpleCL.Model.Coord;
-using SimpleCL.Service;
+using SimpleCL.Models.Character;
+using SimpleCL.Models.Coordinates;
+using SimpleCL.Services;
 using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Network
@@ -22,7 +22,7 @@ namespace SimpleCL.Network
         protected readonly TransferBuffer RecvBuffer = new TransferBuffer(0x1000, 0, 0);
         protected readonly Socket Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-        private readonly List<Service.Service> _services = new List<Service.Service>();
+        private readonly List<Services.Service> _services = new List<Services.Service>();
         private readonly List<Tuple<ushort, PacketHandler>> _handlers = new List<Tuple<ushort, PacketHandler>>();
 
         private delegate void PacketHandler(Server server, Packet packet);
@@ -33,7 +33,7 @@ namespace SimpleCL.Network
 
         public bool Debug { get; set; }
 
-        public void RegisterService(Service.Service service)
+        public void RegisterService(Services.Service service)
         {
             if (_services.Contains(service))
             {
@@ -55,7 +55,7 @@ namespace SimpleCL.Network
             }
         }
 
-        public void RemoveService<T>(T service) where T : Service.Service
+        public void RemoveService<T>(T service) where T : Services.Service
         {
             _services.Remove(service);
             _handlers.RemoveAll(x => x.Item2.Target?.GetType() == typeof(T));

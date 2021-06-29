@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using SimpleCL.Enums.Common;
+using SimpleCL.Enums.Commons;
 
 namespace SimpleCL.Enums.Server
 {

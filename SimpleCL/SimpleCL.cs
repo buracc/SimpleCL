@@ -5,9 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Newtonsoft.Json;
-using SimpleCL.Enums.Item;
-using SimpleCL.Enums.Item.Type;
-using SimpleCL.Model.Coord;
+using SimpleCL.Enums.Items;
+using SimpleCL.Enums.Items.Type;
+using SimpleCL.Models.Coordinates;
 using SimpleCL.Ui;
 using SimpleCL.Util.Extension;
 
