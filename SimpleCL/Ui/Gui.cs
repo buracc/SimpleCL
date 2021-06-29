@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using SimpleCL.Database;
 using SimpleCL.Enums.Server;
-using SimpleCL.Interaction.Entities;
+using SimpleCL.Interaction.Providers;
 using SimpleCL.Models;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
@@ -16,7 +16,6 @@ using SimpleCL.Network;
 using SimpleCL.Services.Login;
 using SimpleCL.Ui.Components;
 using SimpleCL.Util.Extension;
-using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Ui
 {
@@ -25,8 +24,6 @@ namespace SimpleCL.Ui
         private const ushort GatewayPort = 15779;
 
         private readonly ToolTip _toolTip = new ToolTip();
-        private readonly Timer _timer = new Timer(1000);
-
         public Gui()
         {
             base.DoubleBuffered = true;
@@ -52,8 +49,6 @@ namespace SimpleCL.Ui
             jobEquipmentDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
             CenterToScreen();
-
-            _timer.Elapsed += (sender, args) => { RefreshMap(); };
         }
 
         private void LoginClicked(object sender, EventArgs e)
@@ -249,11 +244,6 @@ namespace SimpleCL.Ui
         public void RemoveMinimapMarker(uint uid)
         {
             minimap.RemoveMarker(uid);
-        }
-
-        public void StartRefreshTimer()
-        {
-            _timer.Start();
         }
     }
 }

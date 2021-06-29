@@ -4,36 +4,36 @@ using System.Linq;
 using SimpleCL.Models.Entities;
 using SimpleCL.Util.Extension;
 
-namespace SimpleCL.Interaction.Entities
+namespace SimpleCL.Interaction.Providers
 {
-    public class Monsters
+    public class Players
     {
-        private static readonly List<Monster> EmptyList = new List<Monster>();
+        private static readonly List<Player> EmptyList = new List<Player>();
 
-        public static List<Monster> GetAll(Func<Monster, bool> filter = null)
+        public static List<Player> GetAll(Func<Player, bool> filter = null)
         {
-            var all = Entities.GetMonsters().ToList();
+            var all = Entities.GetPlayers();
             if (all.IsEmpty())
             {
                 return EmptyList;
             }
-
+            
             if (filter != null)
             {
                 return all.Where(filter).ToList();
             }
-
+            
             return all;
         }
 
-        public static Monster GetFirst(Func<Monster, bool> filter = null)
+        public static Player GetFirst(Func<Player, bool> filter = null)
         {
-            var all = Entities.GetMonsters().ToList();
+            var all = Entities.GetPlayers();
             if (all.IsEmpty())
             {
                 return null;
             }
-
+            
             return filter != null ? all.FirstOrDefault(filter) : all.FirstOrDefault();
         }
     }

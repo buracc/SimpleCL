@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using SilkroadSecurityApi;
 using SimpleCL.Database;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Quests;
 using SimpleCL.Enums.Server;
 using SimpleCL.Enums.Skills;
-using SimpleCL.Interaction.Entities;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Items;
@@ -31,11 +32,11 @@ namespace SimpleCL.Services.Game.Entities
         public void GameJoined(Server server, Packet packet)
         {
             _gateway.Dispose();
+
             LocalPlayer local = LocalPlayer.Get;
 
             var serverTime = packet.ReadUInt();
             var refObjId = packet.ReadUInt();
-            // LocalPlayer.Refresh(refObjId);
             var scale = packet.ReadByte();
             local.Level = packet.ReadByte();
             var maxLevel = packet.ReadByte();
@@ -269,7 +270,6 @@ namespace SimpleCL.Services.Game.Entities
 
             local.LocalPoint = localPoint;
 
-            SimpleCL.Gui.StartRefreshTimer();
             SimpleCL.Gui.AddMinimapMarker(LocalPlayer.Get);
 
             server.Log("Successfully joined the game");

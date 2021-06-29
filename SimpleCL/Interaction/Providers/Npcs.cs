@@ -4,7 +4,7 @@ using System.Linq;
 using SimpleCL.Models.Entities;
 using SimpleCL.Util.Extension;
 
-namespace SimpleCL.Interaction.Entities
+namespace SimpleCL.Interaction.Providers
 {
     public class Npcs
     {

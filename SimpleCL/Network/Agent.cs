@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Sockets;
-using System.Threading;
 
 namespace SimpleCL.Network
 {
@@ -30,9 +29,8 @@ namespace SimpleCL.Network
                 Log("Unable to connect to agent " + _ip + ":" + _port);
                 Console.WriteLine(e);
             }
-
-            Thread agLoop = new Thread(Loop);
-            agLoop.Start();
+            
+            ServerThread.Start();
             Socket.Blocking = false;
             Socket.NoDelay = true;
         }

@@ -120,6 +120,7 @@ namespace SimpleCL.Services.Login
                     Agent agent = new Agent(agentIp, agentPort, sessionId);
                     
                     agent.RegisterService(this);
+                    
                     agent.RegisterService(new ChatService());
                     agent.RegisterService(new CharacterSelectService(_silkroadServer));
                     agent.RegisterService(new LocalPlayerService(_silkroadServer, (Gateway) server));

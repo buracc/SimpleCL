@@ -1,7 +1,7 @@
 ﻿using System;
 using SilkroadSecurityApi;
 using SimpleCL.Enums.Commons;
-using SimpleCL.Interaction.Entities;
+using SimpleCL.Interaction.Providers;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Network;
@@ -77,7 +77,7 @@ namespace SimpleCL.Services.Game.Entities
                         }
                     }
                     
-                    Interaction.Entities.Entities.Moved(uid, localPoint);
+                    Interaction.Providers.Entities.Moved(uid, localPoint);
                 }
             }
             catch (Exception e)

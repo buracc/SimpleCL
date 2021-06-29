@@ -1,16 +1,13 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Threading;
 using System.Timers;
 using SilkroadSecurityApi;
-using SimpleCL.Enums;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Interaction;
-using SimpleCL.Models.Character;
-using SimpleCL.Models.Coordinates;
 using SimpleCL.Services;
 using Timer = System.Timers.Timer;
 
@@ -18,22 +15,26 @@ namespace SimpleCL.Network
 {
     public abstract class Server : IDisposable
     {
+        public readonly Thread ServerThread;
         protected readonly Security Security = new Security();
-        protected readonly TransferBuffer RecvBuffer = new TransferBuffer(0x1000, 0, 0);
+        protected readonly TransferBuffer RecvBuffer = new TransferBuffer(8192, 0, 0);
         protected readonly Socket Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-        private readonly List<Services.Service> _services = new List<Services.Service>();
+        private readonly List<Service> _services = new List<Service>();
         private readonly List<Tuple<ushort, PacketHandler>> _handlers = new List<Tuple<ushort, PacketHandler>>();
+        private readonly ConcurrentQueue<Action> _actions = new ConcurrentQueue<Action>();
 
         private delegate void PacketHandler(Server server, Packet packet);
 
         private readonly Timer _timer = new Timer(6666);
+        private bool _disposed;
 
-        private bool _disposing;
+        protected Server()
+        {
+            ServerThread = new Thread(Loop) {IsBackground = true};
+        }
 
-        public bool Debug { get; set; }
-
-        public void RegisterService(Services.Service service)
+        public void RegisterService(Service service)
         {
             if (_services.Contains(service))
             {
@@ -55,7 +56,7 @@ namespace SimpleCL.Network
             }
         }
 
-        public void RemoveService<T>(T service) where T : Services.Service
+        public void RemoveService<T>(T service) where T : Service
         {
             _services.Remove(service);
             _handlers.RemoveAll(x => x.Item2.Target?.GetType() == typeof(T));
@@ -105,16 +106,35 @@ namespace SimpleCL.Network
 
         public void Dispose()
         {
-            Socket?.Dispose();
-            _disposing = true;
+            _actions.Enqueue(() =>
+            {
+                _services.Clear();
+                _handlers.Clear();
+                Socket?.Dispose();
+                _disposed = true;
+            });
         }
 
-        protected void Loop()
+        private void Loop()
         {
             _timer.Elapsed += HeartBeat;
 
             while (true)
             {
+                if (_actions.TryDequeue(out var action))
+                {
+                    try
+                    {
+                        action();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+
+                    continue;
+                }
+
                 SocketError success;
 
                 if (!Socket.Connected)
@@ -154,10 +174,16 @@ namespace SimpleCL.Network
                     break;
                 }
 
-                if (InteractionQueue.PacketQueue.Any())
+                if (InteractionQueue.PacketQueue.TryDequeue(out var queuedPacket))
                 {
-                    Packet queuedPacket = InteractionQueue.PacketQueue.Dequeue();
-                    new Thread(() => { Inject(queuedPacket); }).Start();
+                    try
+                    {
+                        Inject(queuedPacket);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
                 }
 
                 List<Packet> incomingPackets = Security.TransferIncoming();
@@ -168,7 +194,12 @@ namespace SimpleCL.Network
 
                 foreach (var packet in incomingPackets)
                 {
-                    if (Debug || this is Agent && SimpleCL.Gui.DebugAgent() ||
+                    if (packet.Opcode == Opcodes.HANDSHAKE || packet.Opcode == Opcodes.HANDSHAKE_ACCEPT)
+                    {
+                        continue;
+                    }
+
+                    if (this is Agent && SimpleCL.Gui.DebugAgent() ||
                         this is Gateway && SimpleCL.Gui.DebugGateway())
                     {
                         DebugPacket(packet);
@@ -200,6 +231,7 @@ namespace SimpleCL.Network
                             }
 
                             buffer.Offset += n;
+                            Thread.Sleep(1);
                         }
 
                         if (success != SocketError.Success)
@@ -213,9 +245,11 @@ namespace SimpleCL.Network
                         break;
                     }
                 }
+
+                Thread.Sleep(1);
             }
 
-            if (_disposing)
+            if (_disposed)
             {
                 return;
             }

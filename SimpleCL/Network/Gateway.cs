@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Sockets;
-using System.Threading;
 
 namespace SimpleCL.Network
 {
@@ -30,8 +29,7 @@ namespace SimpleCL.Network
                 return;
             }
 
-            Thread gwLoop = new Thread(Loop);
-            gwLoop.Start();
+            ServerThread.Start();
             Socket.Blocking = false;
             Socket.NoDelay = true;
         }

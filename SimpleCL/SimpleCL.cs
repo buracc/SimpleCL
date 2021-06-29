@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
-using Newtonsoft.Json;
-using SimpleCL.Enums.Items;
-using SimpleCL.Enums.Items.Type;
-using SimpleCL.Models.Coordinates;
+﻿using System.Windows.Forms;
 using SimpleCL.Ui;
-using SimpleCL.Util.Extension;
 
 namespace SimpleCL
 {

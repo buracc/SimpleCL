@@ -4,15 +4,15 @@ using System.Linq;
 using SimpleCL.Models.Entities;
 using SimpleCL.Util.Extension;
 
-namespace SimpleCL.Interaction.Entities
+namespace SimpleCL.Interaction.Providers
 {
-    public class Pets
+    public class Monsters
     {
-        private static readonly List<CharacterPet> EmptyList = new List<CharacterPet>();
+        private static readonly List<Monster> EmptyList = new List<Monster>();
 
-        public static List<CharacterPet> GetAll(Func<CharacterPet, bool> filter = null)
+        public static List<Monster> GetAll(Func<Monster, bool> filter = null)
         {
-            var all = Entities.GetPets().ToList();
+            var all = Entities.GetMonsters().ToList();
             if (all.IsEmpty())
             {
                 return EmptyList;
@@ -26,9 +26,9 @@ namespace SimpleCL.Interaction.Entities
             return all;
         }
 
-        public static CharacterPet GetFirst(Func<CharacterPet, bool> filter = null)
+        public static Monster GetFirst(Func<Monster, bool> filter = null)
         {
-            var all = Entities.GetPets().ToList();
+            var all = Entities.GetMonsters().ToList();
             if (all.IsEmpty())
             {
                 return null;

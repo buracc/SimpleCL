@@ -4,7 +4,7 @@ using System.Linq;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
 
-namespace SimpleCL.Interaction.Entities
+namespace SimpleCL.Interaction.Providers
 {
     public static class Entities
     {

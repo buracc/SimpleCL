@@ -19,6 +19,7 @@ namespace SimpleCL.Database
         public static GameDatabase Get => _instance ?? (_instance = new GameDatabase());
 
         private SilkroadServer _selectedServer;
+
         public SilkroadServer SelectedServer
         {
             get => _selectedServer;
@@ -293,7 +294,8 @@ namespace SimpleCL.Database
                 }
                 else
                 {
-                    SpawnPoints[id] = new List<SpawnPoint> {new SpawnPoint(new LocalPoint((ushort) region, x, z, y), id, name)};
+                    SpawnPoints[id] = new List<SpawnPoint>
+                        {new SpawnPoint(new LocalPoint((ushort) region, x, z, y), id, name)};
                 }
             }
         }
@@ -350,6 +352,13 @@ namespace SimpleCL.Database
                             var output = new Dictionary<uint, NameValueCollection>();
                             foreach (var entry in json)
                             {
+                                if (entry.Key > ushort.MaxValue)
+                                {
+                                    Console.WriteLine("Found unusual entity with id: " + entry.Key +
+                                                      " in cache, removing it.");
+                                    continue;
+                                }
+
                                 if (entry.Value == null)
                                 {
                                     output[entry.Key] = null;

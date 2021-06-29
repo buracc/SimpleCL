@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using SimpleCL.Database;
-using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
 using SimpleCL.Models.Items;
 
@@ -9,15 +8,11 @@ namespace SimpleCL.Models.Character
     public class LocalPlayer : Player
     {
         private LocalPlayer(uint id) : base(id)
-        { }
-        
+        {
+        }
+
         private static LocalPlayer _instance;
         public static LocalPlayer Get => _instance ?? (_instance = new LocalPlayer(1907));
-
-        public static void Refresh(uint refObjId)
-        {
-            _instance = new LocalPlayer(refObjId);
-        }
 
         private ulong _nextLevelExp;
         private ulong _jobNextLevelExp;
@@ -37,7 +32,7 @@ namespace SimpleCL.Models.Character
                 _nextLevelExp = GameDatabase.Get.GetNextLevelExp(value);
             }
         }
-        
+
         public string JobName { get; set; }
         public ulong NextLevelExp => _nextLevelExp;
         public ulong JobNextLevelExp => _jobNextLevelExp;
@@ -80,7 +75,7 @@ namespace SimpleCL.Models.Character
         {
             return (double) ExpGained / _nextLevelExp;
         }
-        
+
         public double GetJobExpPercentDecimal()
         {
             return (double) JobExpGained / _jobNextLevelExp;

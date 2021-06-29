@@ -85,7 +85,7 @@ namespace SimpleCL.Services.Game.Entities
         private void EntityDespawn(Server server, Packet packet)
         {
             uint uid = packet.ReadUInt();
-            Interaction.Entities.Entities.Despawn(uid);
+            Interaction.Providers.Entities.Despawn(uid);
         }
 
         private void EntitySpawn(Server server, Packet packet, QueryBuilder queryBuilder = null)
@@ -155,7 +155,7 @@ namespace SimpleCL.Services.Game.Entities
                     packet.ReadByte();
                 }
 
-                Interaction.Entities.Entities.Spawn(teleport);
+                Interaction.Providers.Entities.Spawn(teleport);
                 return;
             }
 
@@ -384,7 +384,7 @@ namespace SimpleCL.Services.Game.Entities
                         }
                     }
 
-                    Interaction.Entities.Entities.Spawn(p);
+                    Interaction.Providers.Entities.Spawn(p);
                 }
                 else if (pathingEntity is Npc npc)
                 {
@@ -395,7 +395,7 @@ namespace SimpleCL.Services.Game.Entities
                         var unkByteAmount = packet.ReadByte();
                         var unkBytes = packet.ReadByteArray(unkByteAmount);
                         var mobType = (Monster.Type) unkBytes[0];
-                        Interaction.Entities.Entities.Spawn(npc);
+                        Interaction.Providers.Entities.Spawn(npc);
                     }
                     else
                     {
@@ -409,7 +409,7 @@ namespace SimpleCL.Services.Game.Entities
 
                         if (npc is TalkNpc talkNpc)
                         {
-                            Interaction.Entities.Entities.Spawn(talkNpc);
+                            Interaction.Providers.Entities.Spawn(talkNpc);
                         }
 
                         if (npc is Cos cos)
@@ -442,7 +442,7 @@ namespace SimpleCL.Services.Game.Entities
 
                                 if (cos is CharacterPet pet)
                                 {
-                                    Interaction.Entities.Entities.Spawn(pet);
+                                    Interaction.Providers.Entities.Spawn(pet);
                                 }
                             }
                         }
