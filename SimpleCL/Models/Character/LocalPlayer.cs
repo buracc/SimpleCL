@@ -23,7 +23,6 @@ namespace SimpleCL.Models.Character
         private ulong _jobNextLevelExp;
         private byte _level;
         private byte _jobLevel;
-        private ushort _angle;
         public uint Hp { get; set; }
         public uint Mp { get; set; }
         public uint MaxHp { get; set; }
@@ -39,7 +38,6 @@ namespace SimpleCL.Models.Character
             }
         }
         
-        public string Name { get; set; }
         public string JobName { get; set; }
         public ulong NextLevelExp => _nextLevelExp;
         public ulong JobNextLevelExp => _jobNextLevelExp;

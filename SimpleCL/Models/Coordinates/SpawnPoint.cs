@@ -6,8 +6,6 @@
         public readonly string MonsterName;
         public LocalPoint LocalPoint { get; set; }
         public WorldPoint WorldPoint => WorldPoint.FromLocal(LocalPoint);
-        private uint _uid;
-
         public uint Uid
         {
             get =>

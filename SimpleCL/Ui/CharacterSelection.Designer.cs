@@ -66,13 +66,7 @@ namespace SimpleCL.Ui
             this.ResumeLayout(false);
         }
 
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-
         private System.Windows.Forms.DataGridView characterListDataGridView;
-
-        private System.Windows.Forms.DataGridView serverlistDataGridView;
-
-        private System.Windows.Forms.DataGridView dataGridView1;
 
         #endregion
     }
