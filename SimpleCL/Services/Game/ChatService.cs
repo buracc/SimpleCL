@@ -5,7 +5,7 @@ using SimpleCL.Models.Chatter;
 using SimpleCL.Network;
 using SimpleCL.Util.Extension;
 
-namespace SimpleCL.Services.Game.Chatter
+namespace SimpleCL.Services.Game
 {
     public class ChatService : Service
     {

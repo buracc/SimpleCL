@@ -6,7 +6,7 @@ using SimpleCL.Models.Entities;
 using SimpleCL.Network;
 using SimpleCL.Util.Extension;
 
-namespace SimpleCL.Services.Game.Entities
+namespace SimpleCL.Services.Game
 {
     public class StatusService : Service
     {

@@ -2,6 +2,10 @@
 {
     public class PathingEntity : Entity
     {
+        public float WalkSpeed { get; set; }
+        public float RunSpeed { get; set; }
+        public float ZerkSpeed { get; set; }
+        public ushort Angle { get; set; }
         public PathingEntity(uint id) : base(id)
         {
             

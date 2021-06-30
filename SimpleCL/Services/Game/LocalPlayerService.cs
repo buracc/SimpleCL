@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using SilkroadSecurityApi;
 using SimpleCL.Database;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Quests;
 using SimpleCL.Enums.Server;
 using SimpleCL.Enums.Skills;
+using SimpleCL.Interaction.Providers;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Items;
 using SimpleCL.Network;
 using SimpleCL.Util.Extension;
 
-namespace SimpleCL.Services.Game.Entities
+namespace SimpleCL.Services.Game
 {
     public class LocalPlayerService : Service
     {
@@ -224,9 +222,9 @@ namespace SimpleCL.Services.Game.Entities
 
             packet.ReadByte(); // idk what position, but there is an unknown byte before walkspeed
 
-            var walkSpeed = packet.ReadFloat();
-            var runSpeed = packet.ReadFloat();
-            var zerkSpeed = packet.ReadFloat();
+            local.WalkSpeed = packet.ReadFloat();
+            local.RunSpeed = packet.ReadFloat();
+            local.ZerkSpeed = packet.ReadFloat();
             var buffCount = packet.ReadByte();
             buffCount.Repeat(i =>
             {
@@ -271,6 +269,7 @@ namespace SimpleCL.Services.Game.Entities
             local.LocalPoint = localPoint;
 
             SimpleCL.Gui.AddMinimapMarker(LocalPlayer.Get);
+            Entities.Spawn(local);
 
             server.Log("Successfully joined the game");
         }
@@ -358,15 +357,11 @@ namespace SimpleCL.Services.Game.Entities
                 }
 
                 var refItemId = packet.ReadUInt();
-                var itemData = GameDatabase.Get.GetItemData(refItemId);
-                var typeId2 = byte.Parse(itemData["tid1"]);
-                var typeId3 = byte.Parse(itemData["tid2"]);
-                var typeId4 = byte.Parse(itemData["tid3"]);
+                var inventoryItem = InventoryItem.FromId(refItemId);
 
-                InventoryItem inventoryItem =
-                    new InventoryItem(slot, refItemId, itemData["servername"], itemData["name"]);
+                inventoryItem.Slot = slot;
 
-                switch (typeId2)
+                switch (inventoryItem.TypeId2)
                 {
                     case 1:
                     case 4: // job gear
@@ -427,14 +422,14 @@ namespace SimpleCL.Services.Game.Entities
                         break;
 
                     case 2:
-                        switch (typeId3)
+                        switch (inventoryItem.TypeId3)
                         {
                             case 1:
                                 var state = packet.ReadByte();
                                 var refObjId = packet.ReadUInt();
                                 var name = packet.ReadAscii();
 
-                                if (typeId4 == 2)
+                                if (inventoryItem.TypeId4 == 2)
                                 {
                                     var rentTimeEndSeconds = packet.ReadUInt();
                                 }
@@ -462,13 +457,13 @@ namespace SimpleCL.Services.Game.Entities
 
                         inventoryItem.Quantity = stackCount;
 
-                        if (typeId3 == 11 && (typeId4 == 1 || typeId4 == 2))
+                        if (inventoryItem.TypeId3 == 11 && (inventoryItem.TypeId4 == 1 || inventoryItem.TypeId4 == 2))
                         {
                             var assimilationProb = packet.ReadByte();
                             break;
                         }
 
-                        if (typeId3 == 14 && typeId4 == 2)
+                        if (inventoryItem.TypeId3 == 14 && inventoryItem.TypeId4 == 2)
                         {
                             var magParams = packet.ReadByte();
                             magParams.Repeat(j =>

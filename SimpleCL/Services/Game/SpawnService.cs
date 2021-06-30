@@ -13,7 +13,7 @@ using SimpleCL.Network;
 using SimpleCL.Util;
 using SimpleCL.Util.Extension;
 
-namespace SimpleCL.Services.Game.Entities
+namespace SimpleCL.Services.Game
 {
     public class SpawnService : Service
     {
@@ -305,9 +305,9 @@ namespace SimpleCL.Services.Game.Entities
 
                 packet.ReadByte(); // idk what position, but there is an unknown byte before walkspeed
 
-                var walkSpeed = packet.ReadFloat();
-                var runSpeed = packet.ReadFloat();
-                var zerkSpeed = packet.ReadFloat();
+                pathingEntity.WalkSpeed = packet.ReadFloat();
+                pathingEntity.RunSpeed = packet.ReadFloat();
+                pathingEntity.ZerkSpeed = packet.ReadFloat();
 
                 var buffCount = packet.ReadByte();
                 buffCount.Repeat(i =>

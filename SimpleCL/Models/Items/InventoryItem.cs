@@ -5,7 +5,7 @@ namespace SimpleCL.Models.Items
 {
     public class InventoryItem : IComparable<InventoryItem>
     {
-        public byte Slot { get;  }
+        public byte Slot { get; set; }
         public uint Id { get; }
         public string ServerName { get; }
         public string Name { get; }
@@ -36,7 +36,7 @@ namespace SimpleCL.Models.Items
             var data = GameDatabase.Get.GetItemData(id);
             if (data == null)
             {
-                // Console.WriteLine("Couldn't parse inventory item with id " + id);
+                Console.WriteLine("Couldn't parse inventory item with id " + id);
                 return;
             }
 

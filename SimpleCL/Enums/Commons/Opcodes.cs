@@ -348,9 +348,7 @@ namespace SimpleCL.Enums.Commons {
 
                 public const ushort
                     // TEMP
-                    CHAR_MOVEMENT_ANGLE = 0xB024,
                     CHAR_STAT = 0x303D,
-                    CHAR_SPEED = 0x30D0,
                     CHAR_LEVELUP_EFFECT = 0x3054,
                     CHAR_INFO_UPDATE = 0x304E,
                     CHAR_XP_UPDATE = 0x3056,
@@ -460,9 +458,11 @@ namespace SimpleCL.Enums.Commons {
                     ENTITY_SOLO_SPAWN = 0x3015,
                     ENTITY_SOLO_DESPAWN = 0x3016,
                     ENTITY_CHANGE_STATUS = 0x30BF,
+                    ENTITY_SPEED = 0x30D0,
                     ENTITY_POTION_UPDATE = 0x3057,
                     ENTITY_MOVEMENT = 0xB021,
-                    ENTITY_PICKUP_ITEM_MOVE = 0xB023,
+                    ENTITY_MOVEMENT_HALT = 0xB023,
+                    ENTITY_MOVEMENT_ANGLE = 0xB024,
                     ENTITY_PICKUP_ITEM_ANIM = 0x3036,
                     ENTITY_SELECT_OBJECT = 0xB045,
                     ENTITY_NPC_OPEN = 0xB046,

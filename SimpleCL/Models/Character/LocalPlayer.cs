@@ -52,8 +52,6 @@ namespace SimpleCL.Models.Character
         public uint Skillpoints { get; set; }
         public ulong Gold { get; set; }
 
-        public ushort Angle { get; set; }
-
         public Dictionary<string, List<InventoryItem>> Inventories = new Dictionary<string, List<InventoryItem>>();
 
         public float GetAngleDegrees()

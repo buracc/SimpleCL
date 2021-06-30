@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
@@ -28,12 +27,38 @@ namespace SimpleCL.Interaction.Providers
             }
         }
 
-        public static void Moved(uint uid, LocalPoint point)
+        public static void Moved(uint uid, LocalPoint point = null, ushort angle = 0)
         {
             if (AllEntities.ContainsKey(uid))
             {
-                AllEntities[uid].LocalPoint = point;
+                var entity = AllEntities[uid];
+                if (entity is PathingEntity pathingEntity)
+                {
+                    if (point != null)
+                    {
+                        pathingEntity.LocalPoint = point;
+                    }
+                    
+                    if (angle > 0)
+                    {
+                        pathingEntity.Angle = angle;
+                    }
+                }
+
                 SimpleCL.Gui.RefreshMap();
+            }
+        }
+
+        public static void SpeedChanged(uint uid, float walkSpeed, float runSpeed)
+        {
+            if (AllEntities.ContainsKey(uid))
+            {
+                var entity = AllEntities[uid];
+                if (entity is PathingEntity pathingEntity)
+                {
+                    pathingEntity.WalkSpeed = walkSpeed;
+                    pathingEntity.RunSpeed = runSpeed;
+                }
             }
         }
 
