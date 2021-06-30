@@ -18,12 +18,7 @@ namespace SimpleCL.Interaction.Providers
                 return EmptyList;
             }
             
-            if (filter != null)
-            {
-                return all.Where(filter).ToList();
-            }
-            
-            return all;
+            return filter != null ? all.Where(filter).ToList() : all;
         }
 
         public static Player GetFirst(Func<Player, bool> filter = null)

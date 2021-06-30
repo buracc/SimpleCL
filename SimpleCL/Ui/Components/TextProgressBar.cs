@@ -39,10 +39,7 @@ namespace SimpleCL.Ui.Components
         [Category("Additional Options"), Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public Color ProgressColor
         {
-            get
-            {
-                return _progressColourBrush.Color;
-            }
+            get => _progressColourBrush.Color;
             set
             {
                 _progressColourBrush.Dispose();
@@ -54,10 +51,7 @@ namespace SimpleCL.Ui.Components
         [Category("Additional Options"), Browsable(true)]
         public ProgressBarDisplayMode VisualMode
         {
-            get
-            {
-                return _visualMode;
-            }
+            get => _visualMode;
             set
             {
                 _visualMode = value;
@@ -70,10 +64,7 @@ namespace SimpleCL.Ui.Components
         [Description("If it's empty, % will be shown"), Category("Additional Options"), Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public string CustomText
         {
-            get
-            {
-                return _text;
-            }
+            get => _text;
             set
             {
                 _text = value;
@@ -105,10 +96,10 @@ namespace SimpleCL.Ui.Components
 
                 return text;
             }
-            set { }
+            set => _text = value;
         }
 
-        private string _percentageStr { get { return $"{(int)((float)Value - Minimum) / ((float)Maximum - Minimum) * 100 } %"; } }
+        private string _percentageStr => $"{(int)((float)Value - Minimum) / ((float)Maximum - Minimum) * 100 } %";
 
         private string _currProgressStr
         {

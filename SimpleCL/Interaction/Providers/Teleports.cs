@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SimpleCL.Models.Entities;
 using SimpleCL.Models.Entities.Teleporters;
 using SimpleCL.Util.Extension;
 
@@ -19,12 +18,7 @@ namespace SimpleCL.Interaction.Providers
                 return EmptyList;
             }
             
-            if (filter != null)
-            {
-                return all.Where(filter).ToList();
-            }
-            
-            return all;
+            return filter != null ? all.Where(filter).ToList() : all;
         }
 
         public static Teleport GetFirst(Func<Teleport, bool> filter = null)

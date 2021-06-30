@@ -16,6 +16,7 @@ namespace SimpleCL.Ui.Components
 			SectorX = sectorX;
 			SectorY = sectorY;
 		}
+		
 		public async void LoadAsyncTile(string path,Size size)
 		{
 			if (File.Exists(path))
@@ -23,6 +24,7 @@ namespace SimpleCL.Ui.Components
 				Image = await Task.Run( () => GetTile(path, size));
 			}
 		}
+		
 		private Bitmap GetTile(string path, Size size)
 		{
 			return new Bitmap(Image.FromFile(path), size);

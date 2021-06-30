@@ -18,55 +18,65 @@ namespace SimpleCL.Interaction.Providers
 
         public static void Spawn(Entity e)
         {
-            if (!AllEntities.ContainsKey(e.Uid))
+            if (AllEntities.ContainsKey(e.Uid))
             {
-                AllEntities[e.Uid] = e;
-                SimpleCL.Gui.AddMinimapMarker(e);
+                return;
             }
+            
+            AllEntities[e.Uid] = e;
+            SimpleCL.Gui.AddMinimapMarker(e);
         }
 
         public static void Despawn(uint uid)
         {
-            if (AllEntities.ContainsKey(uid))
+            if (!AllEntities.ContainsKey(uid))
             {
-                AllEntities.Remove(uid);
-                SimpleCL.Gui.RemoveMinimapMarker(uid);
+                return;
             }
+            
+            AllEntities.Remove(uid);
+            SimpleCL.Gui.RemoveMinimapMarker(uid);
         }
 
         public static void Moved(uint uid, LocalPoint point = null, ushort angle = 0)
         {
-            if (AllEntities.ContainsKey(uid))
+            if (!AllEntities.ContainsKey(uid))
             {
-                var entity = AllEntities[uid];
-                if (entity is PathingEntity pathingEntity)
-                {
-                    if (point != null)
-                    {
-                        pathingEntity.LocalPoint = point;
-                    }
-                    
-                    if (angle > 0)
-                    {
-                        pathingEntity.Angle = angle;
-                    }
-                }
-
-                SimpleCL.Gui.RefreshMap();
+                return;
             }
+            
+            var entity = AllEntities[uid];
+            if (entity is PathingEntity pathingEntity)
+            {
+                if (point != null)
+                {
+                    pathingEntity.LocalPoint = point;
+                }
+                    
+                if (angle > 0)
+                {
+                    pathingEntity.Angle = angle;
+                }
+            }
+
+            SimpleCL.Gui.RefreshMap();
         }
 
         public static void SpeedChanged(uint uid, float walkSpeed, float runSpeed)
         {
-            if (AllEntities.ContainsKey(uid))
+            if (!AllEntities.ContainsKey(uid))
             {
-                var entity = AllEntities[uid];
-                if (entity is PathingEntity pathingEntity)
-                {
-                    pathingEntity.WalkSpeed = walkSpeed;
-                    pathingEntity.RunSpeed = runSpeed;
-                }
+                return;
             }
+            
+            var entity = AllEntities[uid];
+            if (!(entity is PathingEntity pathingEntity))
+            {
+                return;
+            }
+            
+            pathingEntity.WalkSpeed = walkSpeed;
+            pathingEntity.RunSpeed = runSpeed;
         }
 
         public static List<Player> GetPlayers()

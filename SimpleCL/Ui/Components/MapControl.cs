@@ -22,9 +22,10 @@ namespace SimpleCL.Ui.Components
 		public MapControl()
 		{
 			SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-			BackColor = Color.Transparent;
+			base.BackColor = Color.Transparent;
 			SetStyle(ControlStyles.ResizeRedraw, true);
 		}
+		
 		protected override CreateParams CreateParams
 		{
 			get {
@@ -33,6 +34,7 @@ namespace SimpleCL.Ui.Components
 				return cp;
 			}
 		}
+		
 		protected override void OnMove(EventArgs e)
 		{
 			try
@@ -41,14 +43,17 @@ namespace SimpleCL.Ui.Components
 			}
 			catch { }
 		}
+		
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			if (_image != null) e.Graphics.DrawImage(_image,0,0, _image.Size.Width, _image.Size.Height);
 		}
+		
 		protected override void OnPaintBackground(PaintEventArgs e)
 		{
 			// Do not paint background
 		}
+		
 		public void RePaint()
 		{
 			try

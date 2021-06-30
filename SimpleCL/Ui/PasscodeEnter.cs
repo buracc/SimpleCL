@@ -19,7 +19,7 @@ namespace SimpleCL.Ui
             _gateway = gateway;
             _blowfish.Initialize(_key);
             InitializeComponent();
-            Text = title;
+            base.Text = title;
             submitPasscode.Click += SubmitClicked;
             passcodeBox.KeyDown += SubmitClicked;
 

@@ -97,12 +97,14 @@ namespace SimpleCL.Services.Login
         {
             packet.ReadByte();
             byte passcodeResult = packet.ReadByte();
-            if (passcodeResult == 2)
+            if (passcodeResult != 2)
             {
-                byte attempts = packet.ReadByte();
-                Application.Run(new PasscodeEnter(server, "Invalid passcode [" + attempts + "/" + 3 + "]"));
-                server.Log("Invalid passcode. Attempts: [" + attempts + "/" + 3 + "]");
+                return;
             }
+            
+            byte attempts = packet.ReadByte();
+            Application.Run(new PasscodeEnter(server, "Invalid passcode [" + attempts + "/" + 3 + "]"));
+            server.Log("Invalid passcode. Attempts: [" + attempts + "/" + 3 + "]");
         }
 
         [PacketHandler(Opcodes.Gateway.Response.AGENT_AUTH)]
@@ -190,9 +192,11 @@ namespace SimpleCL.Services.Login
                         case LoginErrorCode.ServerIsFull:
                             server.Log("Server is full.");
                             break;
+                        
                         case LoginErrorCode.LoginQueue:
                             server.Log("Login queue");
                             return;
+                        
                         default:
                             server.Log("Unhandled login error code: " + errorCode);
                             break;
@@ -223,38 +227,42 @@ namespace SimpleCL.Services.Login
         public void EnterCharacterSelect(Server server, Packet packet)
         {
             byte result = packet.ReadByte();
-            if (result == 1)
+            switch (result)
             {
-                Packet charSelect = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_ACTION);
-                charSelect.WriteByte(2);
-                server.Inject(charSelect);
-                return;
-            }
-
-            if (result == 2)
-            {
-                byte errorCode = packet.ReadByte();
-                AuthErrorCode error = (AuthErrorCode) errorCode;
-                switch (error)
+                case 1:
                 {
-                    case AuthErrorCode.InvalidCredentials:
-                        server.Log("Invalid credentials.");
-                        break;
-                        
-                    case AuthErrorCode.IpLimit:
-                        server.Log("IP limit exceeded.");
-                        break;
-
-                    case AuthErrorCode.ServerFull:
-                        server.Log("Server is full.");
-                        break;
-                    
-                    default:
-                        server.Log("Unhandled auth error code: " + error);
-                        break;
+                    Packet charSelect = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_ACTION);
+                    charSelect.WriteByte(2);
+                    server.Inject(charSelect);
+                    return;
                 }
                 
-                server.Disconnect();
+                case 2:
+                {
+                    byte errorCode = packet.ReadByte();
+                    AuthErrorCode error = (AuthErrorCode) errorCode;
+                    switch (error)
+                    {
+                        case AuthErrorCode.InvalidCredentials:
+                            server.Log("Invalid credentials.");
+                            break;
+                        
+                        case AuthErrorCode.IpLimit:
+                            server.Log("IP limit exceeded.");
+                            break;
+
+                        case AuthErrorCode.ServerFull:
+                            server.Log("Server is full.");
+                            break;
+                    
+                        default:
+                            server.Log("Unhandled auth error code: " + error);
+                            break;
+                    }
+                
+                    server.Disconnect();
+                    break;
+                }
             }
         }
     }

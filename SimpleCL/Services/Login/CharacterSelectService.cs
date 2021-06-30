@@ -26,87 +26,89 @@ namespace SimpleCL.Services.Login
             byte action = packet.ReadByte();
             bool succeeded = packet.ReadByte() == 1;
 
-            if (action == 2 && succeeded)
+            if (action != 2 || !succeeded)
             {
-                byte charCount = packet.ReadByte();
+                return;
+            }
+            
+            byte charCount = packet.ReadByte();
 
-                List<Character> chars = new List<Character>();
-                charCount.Repeat(i =>
+            List<Character> chars = new List<Character>();
+            charCount.Repeat(i =>
+            {
+                packet.ReadUInt();
+                string name = packet.ReadAscii();
+                if (_silkroadServer.Locale.IsInternational())
+                {
+                    string jobName = packet.ReadAscii();
+                }
+
+                packet.ReadByte();
+                byte level = packet.ReadByte();
+                packet.ReadULong();
+                packet.ReadUShort();
+                packet.ReadUShort();
+                packet.ReadUShort();
+
+                if (_silkroadServer.Locale.IsInternational())
                 {
                     packet.ReadUInt();
-                    string name = packet.ReadAscii();
-                    if (_silkroadServer.Locale.IsInternational())
-                    {
-                        string jobName = packet.ReadAscii();
-                    }
+                }
 
-                    packet.ReadByte();
-                    byte level = packet.ReadByte();
-                    packet.ReadULong();
+                uint hp = packet.ReadUInt();
+                uint mp = packet.ReadUInt();
+
+                if (_silkroadServer.Locale.IsInternational())
+                {
                     packet.ReadUShort();
-                    packet.ReadUShort();
-                    packet.ReadUShort();
+                }
 
-                    if (_silkroadServer.Locale.IsInternational())
-                    {
-                        packet.ReadUInt();
-                    }
+                bool deleting = packet.ReadByte() == 1;
 
-                    uint hp = packet.ReadUInt();
-                    uint mp = packet.ReadUInt();
+                if (_silkroadServer.Locale.IsInternational())
+                {
+                    packet.ReadUInt();
+                }
 
-                    if (_silkroadServer.Locale.IsInternational())
-                    {
-                        packet.ReadUShort();
-                    }
+                Character character = new Character(name, level, deleting);
 
-                    bool deleting = packet.ReadByte() == 1;
+                character.Hp = hp;
+                character.Mp = mp;
 
-                    if (_silkroadServer.Locale.IsInternational())
-                    {
-                        packet.ReadUInt();
-                    }
+                if (deleting)
+                {
+                    uint minutes = packet.ReadUInt();
+                    character.DeletionTime = DateTime.Now.AddMinutes(minutes);
+                }
 
-                    Character character = new Character(name, level, deleting);
+                byte guildMemberClass = packet.ReadByte();
 
-                    character.Hp = hp;
-                    character.Mp = mp;
+                bool guildRenameRequired = packet.ReadByte() == 1;
+                if (guildRenameRequired)
+                {
+                    string guildName = packet.ReadAscii();
+                }
 
-                    if (deleting)
-                    {
-                        uint minutes = packet.ReadUInt();
-                        character.DeletionTime = DateTime.Now.AddMinutes(minutes);
-                    }
+                byte academyMemberClass = packet.ReadByte();
+                byte itemCount = packet.ReadByte();
 
-                    byte guildMemberClass = packet.ReadByte();
-
-                    bool guildRenameRequired = packet.ReadByte() == 1;
-                    if (guildRenameRequired)
-                    {
-                        string guildName = packet.ReadAscii();
-                    }
-
-                    byte academyMemberClass = packet.ReadByte();
-                    byte itemCount = packet.ReadByte();
-
-                    itemCount.Repeat(j =>
-                    {
-                        uint refItemId = packet.ReadUInt();
-                        byte plus = packet.ReadByte();
-                    });
-
-                    byte avatarItemCount = packet.ReadByte();
-                    avatarItemCount.Repeat(j =>
-                    {
-                        uint refItemId = packet.ReadUInt();
-                        byte plus = packet.ReadByte();
-                    });
-
-                    chars.Add(character);
+                itemCount.Repeat(j =>
+                {
+                    uint refItemId = packet.ReadUInt();
+                    byte plus = packet.ReadByte();
                 });
 
-                Application.Run(new Ui.CharacterSelection(chars, server));
-            }
+                byte avatarItemCount = packet.ReadByte();
+                avatarItemCount.Repeat(j =>
+                {
+                    uint refItemId = packet.ReadUInt();
+                    byte plus = packet.ReadByte();
+                });
+
+                chars.Add(character);
+            });
+
+            Application.Run(new Ui.CharacterSelection(chars, server));
         }
     }
 }

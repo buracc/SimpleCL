@@ -210,19 +210,21 @@ namespace SimpleCL.Ui
                     break;
             }
 
-            if (marker.Image != null)
+            if (marker.Image == null)
             {
-                marker.Size = marker.Image.Size;
-
-                Point location = minimap.GetPoint(entity.WorldPoint);
-                location.X -= marker.Image.Size.Width / 2;
-                location.Y -= marker.Image.Size.Height / 2;
-                marker.Location = location;
-
-                marker.Tag = entity;
-
-                minimap.AddMarker(entity.Uid, marker);
+                return;
             }
+            
+            marker.Size = marker.Image.Size;
+
+            Point location = minimap.GetPoint(entity.WorldPoint);
+            location.X -= marker.Image.Size.Width / 2;
+            location.Y -= marker.Image.Size.Height / 2;
+            marker.Location = location;
+
+            marker.Tag = entity;
+
+            minimap.AddMarker(entity.Uid, marker);
         }
 
         public void RefreshMap()

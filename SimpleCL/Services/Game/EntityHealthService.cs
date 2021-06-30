@@ -23,33 +23,35 @@ namespace SimpleCL.Services.Game
 
             var entity = Entities.AllEntities[uid];
 
-            if (entity is PathingEntity pathingEntity)
+            if (!(entity is PathingEntity pathingEntity))
             {
-                packet.ReadByte();
-                packet.ReadByte();
+                return;
+            }
             
-                EntityStateEvent.Health eventType = (EntityStateEvent.Health) packet.ReadByte();
+            packet.ReadByte();
+            packet.ReadByte();
             
-                switch (eventType)
-                {
-                    case EntityStateEvent.Health.HP:
-                        pathingEntity.Hp = packet.ReadUInt();
-                        break;
+            EntityStateEvent.Health eventType = (EntityStateEvent.Health) packet.ReadByte();
+            
+            switch (eventType)
+            {
+                case EntityStateEvent.Health.HP:
+                    pathingEntity.Hp = packet.ReadUInt();
+                    break;
 
-                    case EntityStateEvent.Health.MP:
-                        pathingEntity.Mp = packet.ReadUInt();
-                        break;
+                case EntityStateEvent.Health.MP:
+                    pathingEntity.Mp = packet.ReadUInt();
+                    break;
 
-                    case EntityStateEvent.Health.EntityHPMP:
-                    case EntityStateEvent.Health.HPMP:
-                        pathingEntity.Hp = packet.ReadUInt();
-                        pathingEntity.Mp = packet.ReadUInt();
-                        break;
+                case EntityStateEvent.Health.EntityHPMP:
+                case EntityStateEvent.Health.HPMP:
+                    pathingEntity.Hp = packet.ReadUInt();
+                    pathingEntity.Mp = packet.ReadUInt();
+                    break;
                 
-                    case EntityStateEvent.Health.BadStatus:
-                        pathingEntity.BadStatus = (PathingEntity.BadStatusFlag) packet.ReadUInt();
-                        break;
-                }
+                case EntityStateEvent.Health.BadStatus:
+                    pathingEntity.BadStatus = (PathingEntity.BadStatusFlag) packet.ReadUInt();
+                    break;
             }
         }
     }

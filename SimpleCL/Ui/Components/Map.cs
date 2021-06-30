@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Threading;
+using System.Linq;
 using System.Windows.Forms;
 using SimpleCL.Interaction.Pathing;
 using SimpleCL.Models.Coordinates;
@@ -216,13 +216,11 @@ namespace SimpleCL.Ui.Components
             int xSectorMin = -minAvg + MapCenter.XSector;
             int xSectorMax = minAvg + MapCenter.XSector;
 
-            foreach (MapTile tile in _mapSectors.Values)
+            foreach (var tile in _mapSectors.Values.Where(tile =>
+                tile.SectorX < xSectorMin || tile.SectorX > xSectorMax || tile.SectorY < ySectorMin ||
+                tile.SectorY > ySectorMax))
             {
-                if (tile.SectorX < xSectorMin || tile.SectorX > xSectorMax || tile.SectorY < ySectorMin ||
-                    tile.SectorY > ySectorMax)
-                {
-                    this.InvokeLater(() => { tile.Visible = false; });
-                }
+                this.InvokeLater(() => { tile.Visible = false; });
             }
         }
 
@@ -304,13 +302,9 @@ namespace SimpleCL.Ui.Components
         {
             this.InvokeLater(() =>
             {
-                foreach (KeyValuePair<uint, MapControl> keyValuePair in Markers)
+                foreach (var keyValuePair in Markers.Where(
+                    keyValuePair => Controls.ContainsKey(keyValuePair.Value.Name)))
                 {
-                    if (!Controls.ContainsKey(keyValuePair.Value.Name))
-                    {
-                        continue;
-                    }
-                    
                     Controls.RemoveByKey(keyValuePair.Value.Name);
                 }
 
