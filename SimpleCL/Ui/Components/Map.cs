@@ -361,7 +361,6 @@ namespace SimpleCL.Ui.Components
         {
             if (e.Button == MouseButtons.Right)
             {
-                ClearMarkers();
                 return;
             }
 

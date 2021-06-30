@@ -2,12 +2,19 @@
 using System.Linq;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
+using SimpleCL.Models.Entities.Teleporters;
 
 namespace SimpleCL.Interaction.Providers
 {
     public static class Entities
     {
         public static readonly Dictionary<uint, Entity> AllEntities = new Dictionary<uint, Entity>();
+
+        public static void Respawn()
+        {
+            AllEntities.Clear();
+            SimpleCL.Gui.ClearMarkers();
+        }
 
         public static void Spawn(Entity e)
         {

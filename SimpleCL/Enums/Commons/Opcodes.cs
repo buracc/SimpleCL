@@ -338,7 +338,9 @@ namespace SimpleCL.Enums.Commons {
                     // TELEPORT
                     TELEPORT_DESIGNATE = 0x7059,
                     TELEPORT_USE = 0x705A,
-                    TELEPORT_CANCEL = 0x705B;
+                    TELEPORT_CANCEL = 0x705B,
+                    TELEPORT_READY = 0x34B6
+                    ;
 
                 #endregion
             }
@@ -681,7 +683,8 @@ namespace SimpleCL.Enums.Commons {
                     // TELEPORT
                     TELEPORT_DESIGNATE = 0xB059,
                     TELEPORT_USE = 0xB05A,
-                    TELEPORT_CANCEL = 0xB05B;
+                    TELEPORT_CANCEL = 0xB05B,
+                    TELEPORT_READY = 0x34B5;
 
                 #endregion
             }

@@ -150,7 +150,8 @@
     <Compile Include="Models\Entities\PathingEntity.cs" />
     <Compile Include="Models\Entities\Player.cs" />
     <Compile Include="Models\Entities\SkillAoe.cs" />
-    <Compile Include="Models\Entities\Teleport.cs" />
+    <Compile Include="Models\Entities\Teleporters\Teleport.cs" />
+    <Compile Include="Models\Entities\Teleporters\TeleportLink.cs" />
     <Compile Include="Models\Exceptions\EntityParseException.cs" />
     <Compile Include="Models\IIdentifiable.cs" />
     <Compile Include="Models\Items\InventoryItem.cs" />

@@ -7,7 +7,9 @@ using SimpleCL.Models.Entities.Fortress;
 using SimpleCL.Models.Entities.Fortress.Structure;
 using SimpleCL.Models.Entities.Mob;
 using SimpleCL.Models.Entities.Pet;
+using SimpleCL.Models.Entities.Teleporters;
 using SimpleCL.Models.Exceptions;
+using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Models.Entities
 {
@@ -24,6 +26,8 @@ namespace SimpleCL.Models.Entities
         public uint Uid { get; set; }
 
         public WorldPoint WorldPoint => WorldPoint.FromLocal(LocalPoint);
+
+        protected readonly NameValueCollection DatabaseData;
 
         public Entity(uint id, string serverName, byte typeId1, byte typeId2, byte typeId3, byte typeId4, string name)
         {
@@ -50,31 +54,34 @@ namespace SimpleCL.Models.Entities
                 throw new EntityParseException("Entity id longer than expected: " + id);
             }
 
-            NameValueCollection data;
-            if ((data = GameDatabase.Get.GetModel(id, queryBuilder)) != null)
+            if ((DatabaseData = GameDatabase.Get.GetModel(id, queryBuilder)) != null)
             {
                 TypeId1 = 1;
             }
-            else if ((data = GameDatabase.Get.GetItemData(id, queryBuilder)) != null)
+            else if ((DatabaseData = GameDatabase.Get.GetItemData(id, queryBuilder)) != null)
             {
                 TypeId1 = 3;
             }
-            else if ((data = GameDatabase.Get.GetTeleportBuilding(id, queryBuilder)) != null ||
-                     (data = GameDatabase.Get.GetTeleportLink(id, queryBuilder)) != null)
+            else
             {
-                TypeId1 = 4;
+                var teleLinks = GameDatabase.Get.GetTeleportLinks(id, queryBuilder);
+                if (teleLinks.IsNotEmpty())
+                {
+                    DatabaseData = teleLinks[0];
+                    TypeId1 = 4;
+                }
             }
-            
-            if (data != null)
+
+            if (DatabaseData != null)
             {
                 var tid2 = TypeId1 == 3 ? "tid1" : "tid2";
                 var tid3 = TypeId1 == 3 ? "tid2" : "tid3";
                 var tid4 = TypeId1 == 3 ? "tid3" : "tid4";
-                ServerName = data["servername"];
-                Name = data["name"];
-                TypeId2 = byte.Parse(data[tid2]);
-                TypeId3 = byte.Parse(data[tid3]);
-                TypeId4 = byte.Parse(data[tid4]);
+                ServerName = DatabaseData["servername"];
+                Name = DatabaseData["name"];
+                TypeId2 = byte.Parse(DatabaseData[tid2]);
+                TypeId3 = byte.Parse(DatabaseData[tid3]);
+                TypeId4 = byte.Parse(DatabaseData[tid4]);
             }
             else
             {

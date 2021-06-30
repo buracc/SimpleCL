@@ -432,6 +432,31 @@ namespace Pk2Extractor.Api
                 }
             }
 
+            query.Query(
+                "INSERT INTO teleportlinks (sourceid,destinationid,id,servername,name,destination,tid1,tid2,tid3,tid4,gold,level,spawn_region,spawn_x,spawn_y,spawn_z,pos_region,pos_x,pos_y,pos_z) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+                .Bind("sourceid", 0)
+                .Bind("destinationid", 0)
+                .Bind("id", 19076)
+                .Bind("servername", "INS_QUEST_TELEPORT")
+                .Bind("name", "Gap of Dimensions")
+                .Bind("destination", 0)
+                .Bind("tid1", 4)
+                .Bind("tid2", 1)
+                .Bind("tid3", 2)
+                .Bind("tid4", 0)
+                .Bind("gold", 0)
+                .Bind("level", 0)
+                .Bind("spawn_region", 0)
+                .Bind("spawn_x", 0)
+                .Bind("spawn_y", 0)
+                .Bind("spawn_z", 0)
+                .Bind("pos_region", 0)
+                .Bind("pos_x", 0)
+                .Bind("pos_y", 0)
+                .Bind("pos_z", 0)
+                .ExecuteUpdate(false);
+
+
             query.Finish();
         }
 

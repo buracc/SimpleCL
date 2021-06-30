@@ -12,6 +12,7 @@ using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
 using SimpleCL.Models.Entities.Pet;
+using SimpleCL.Models.Entities.Teleporters;
 using SimpleCL.Network;
 using SimpleCL.Services.Login;
 using SimpleCL.Ui.Components;
@@ -24,6 +25,7 @@ namespace SimpleCL.Ui
         private const ushort GatewayPort = 15779;
 
         private readonly ToolTip _toolTip = new ToolTip();
+
         public Gui()
         {
             base.DoubleBuffered = true;
@@ -181,8 +183,30 @@ namespace SimpleCL.Ui
                     marker.Image = Properties.Resources.mm_sign_animal;
                     break;
 
-                case Teleport teleport:
+                case Teleport teleporter:
                     marker.Image = Properties.Resources.xy_gate;
+                    if (teleporter.Links.IsNotEmpty())
+                    {
+                        ContextMenuStrip teleportMenu = new ContextMenuStrip();
+                        foreach (TeleportLink teleportLink in teleporter.Links)
+                        {
+                            ToolStripMenuItem menuitem = new ToolStripMenuItem
+                            {
+                                Text = teleportLink.Name,
+                                Name = teleportLink.DestinationId.ToString(),
+                                Tag = teleporter
+                            };
+                            
+                            menuitem.Click += (sender, args) => teleportLink.Teleport(teleporter);
+                            
+                            teleportMenu.Items.Add(
+                                menuitem
+                            );
+                        }
+
+                        marker.ContextMenuStrip = teleportMenu;
+                    }
+
                     break;
             }
 
@@ -234,6 +258,11 @@ namespace SimpleCL.Ui
             {
                 Console.WriteLine(e);
             }
+        }
+
+        public void ClearMarkers()
+        {
+            minimap.ClearMarkers();
         }
 
         public void RefreshMarkers()

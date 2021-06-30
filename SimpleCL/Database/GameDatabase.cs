@@ -33,8 +33,7 @@ namespace SimpleCL.Database
         private readonly Dictionary<uint, NameValueCollection> _itemCache;
         private readonly Dictionary<uint, NameValueCollection> _modelCache;
         private readonly Dictionary<uint, NameValueCollection> _skillCache;
-        private readonly Dictionary<uint, NameValueCollection> _teleBuildingCache;
-        private readonly Dictionary<uint, NameValueCollection> _teleLinkCache;
+        private readonly Dictionary<uint, List<NameValueCollection>> _teleportCache;
         public readonly Dictionary<uint, List<SpawnPoint>> SpawnPoints = new Dictionary<uint, List<SpawnPoint>>();
 
         private GameDatabase()
@@ -42,8 +41,7 @@ namespace SimpleCL.Database
             _itemCache = LoadFromCache("items");
             _modelCache = LoadFromCache("models");
             _skillCache = LoadFromCache("skills");
-            _teleBuildingCache = LoadFromCache("teleportbuildings");
-            _teleLinkCache = LoadFromCache("teleportlinks");
+            _teleportCache = LoadCachedTeleports("teleports");
         }
 
         private List<NameValueCollection> GetData(string sql, string dbNameExtra = "_DB")
@@ -210,37 +208,11 @@ namespace SimpleCL.Database
             return _modelCache[id] = result[0];
         }
 
-        public NameValueCollection GetTeleportBuilding(uint id, QueryBuilder queryBuilder = null)
+        public List<NameValueCollection> GetTeleportLinks(uint id, QueryBuilder queryBuilder = null)
         {
-            if (_teleBuildingCache.ContainsKey(id))
+            if (_teleportCache.ContainsKey(id))
             {
-                return _teleBuildingCache[id];
-            }
-
-            List<NameValueCollection> result;
-            if (queryBuilder != null)
-            {
-                result = queryBuilder.Query("SELECT * FROM teleportbuildings WHERE id = " + id)
-                    .ExecuteSelect(false);
-            }
-            else
-            {
-                result = GetData("SELECT * FROM teleportbuildings WHERE id = " + id);
-            }
-
-            if (result.IsEmpty())
-            {
-                return _teleBuildingCache[id] = null;
-            }
-
-            return _teleBuildingCache[id] = result[0];
-        }
-
-        public NameValueCollection GetTeleportLink(uint id, QueryBuilder queryBuilder = null)
-        {
-            if (_teleLinkCache.ContainsKey(id))
-            {
-                return _teleLinkCache[id];
+                return _teleportCache[id];
             }
 
             List<NameValueCollection> result;
@@ -256,10 +228,10 @@ namespace SimpleCL.Database
 
             if (result.IsEmpty())
             {
-                return _teleLinkCache[id] = null;
+                return _teleportCache[id] = new List<NameValueCollection>();
             }
 
-            return _teleLinkCache[id] = result[0];
+            return _teleportCache[id] = result;
         }
 
         public uint GetGameVersion()
@@ -310,8 +282,7 @@ namespace SimpleCL.Database
             CacheToFile(_itemCache, "items");
             CacheToFile(_modelCache, "models");
             CacheToFile(_skillCache, "skills");
-            CacheToFile(_teleBuildingCache, "teleportbuildings");
-            CacheToFile(_teleLinkCache, "teleportlinks");
+            CacheTeleportsToFile(_teleportCache, "teleports");
         }
 
         public void CacheToFile(Dictionary<uint, NameValueCollection> cache, string fileName)
@@ -387,6 +358,90 @@ namespace SimpleCL.Database
             }
 
             return new Dictionary<uint, NameValueCollection>();
+        }
+        
+        public void CacheTeleportsToFile(Dictionary<uint, List<NameValueCollection>> cache, string fileName)
+        {
+            var values = new Dictionary<uint, List<Dictionary<string, string>>>();
+            foreach (var entry in cache)
+            {
+                if (entry.Value == null)
+                {
+                    values[entry.Key] = new List<Dictionary<string, string>>();
+                }
+                else
+                {
+                    values[entry.Key] = new List<Dictionary<string, string>>();
+                    foreach (var link in entry.Value)
+                    {
+                        values[entry.Key].Add(link.ToDictionary());
+                    }
+                }
+            }
+
+            using (StreamWriter file = File.CreateText("Cache/" + fileName + ".json"))
+            {
+                new JsonSerializer().Serialize(file, values);
+            }
+        }
+        
+        public Dictionary<uint, List<NameValueCollection>> LoadCachedTeleports(string fileName)
+        {
+            if (!Directory.Exists("Cache"))
+            {
+                return new Dictionary<uint, List<NameValueCollection>>();
+            }
+
+            if (!File.Exists("Cache/" + fileName + ".json"))
+            {
+                return new Dictionary<uint, List<NameValueCollection>>();
+            }
+
+            try
+            {
+                string jsonString = File.ReadAllText("Cache/" + fileName + ".json");
+
+                var json =
+                    JsonConvert.DeserializeObject<Dictionary<uint, List<Dictionary<string, string>>>>(jsonString);
+                if (json != null)
+                {
+                    var output = new Dictionary<uint, List<NameValueCollection>>();
+                    foreach (var entry in json)
+                    {
+                        var id = entry.Key;
+
+                        var links = entry.Value;
+                        if (links == null)
+                        {
+                            output[id] = new List<NameValueCollection>();
+                        }
+                        else
+                        {
+                            output[id] = new List<NameValueCollection>();
+
+                            foreach (var link in links)
+                            {
+                                NameValueCollection nvc = new NameValueCollection();
+                                foreach (var entry2 in link)
+                                {
+                                    nvc.Add(entry2.Key, entry2.Value);
+                                }
+                                
+                                output[id].Add(nvc);
+                            }
+                        }
+                    }
+
+                    return output;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(fileName);
+                Console.WriteLine(e);
+            }
+
+            return new Dictionary<uint, List<NameValueCollection>>();
         }
     }
 }

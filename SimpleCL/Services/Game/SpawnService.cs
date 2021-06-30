@@ -4,9 +4,11 @@ using SilkroadSecurityApi;
 using SimpleCL.Database;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Skills;
+using SimpleCL.Interaction.Providers;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
 using SimpleCL.Models.Entities.Pet;
+using SimpleCL.Models.Entities.Teleporters;
 using SimpleCL.Models.Exceptions;
 using SimpleCL.Models.Items;
 using SimpleCL.Network;
@@ -20,8 +22,7 @@ namespace SimpleCL.Services.Game
         private Packet _spawnPacket;
         private byte _spawnType;
         private ushort _spawnCount;
-
-
+        
         [PacketHandler(Opcodes.Agent.Response.ENTITY_SOLO_SPAWN)]
         public void SingleEntitySpawn(Server server, Packet packet)
         {
@@ -459,6 +460,13 @@ namespace SimpleCL.Services.Game
                     packet.ReadByte();
                 }
             }
+        }
+
+        [PacketHandler(Opcodes.Agent.Response.TELEPORT_READY)]
+        public void TeleportUse(Server server, Packet packet)
+        {
+            Entities.AllEntities.Clear();
+            server.Inject(new Packet(Opcodes.Agent.Request.TELEPORT_READY));
         }
     }
 }
