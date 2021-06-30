@@ -17,7 +17,7 @@ using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Services.Game
 {
-    public class SpawnService : Service
+    public class EntitySpawnService : Service
     {
         private Packet _spawnPacket;
         private byte _spawnType;

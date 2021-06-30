@@ -2,6 +2,9 @@
 {
     public class PathingEntity : Entity
     {
+        public uint Hp { get; set; }
+        public uint Mp { get; set; }
+        public BadStatusFlag BadStatus { get; set; }
         public float WalkSpeed { get; set; }
         public float RunSpeed { get; set; }
         public float ZerkSpeed { get; set; }
@@ -21,7 +24,7 @@
             return TypeId2 == 2;
         }
         
-        public enum BadStatus : uint
+        public enum BadStatusFlag : uint
         {
             None = 0,
             Freezing = 0x1, // Universal

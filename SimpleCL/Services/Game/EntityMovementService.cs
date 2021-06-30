@@ -9,7 +9,7 @@ using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Services.Game
 {
-    public class MovementService : Service
+    public class EntityMovementService : Service
     {
         [PacketHandler(Opcodes.Agent.Response.ENTITY_MOVEMENT)]
         public void EntityMovement(Server server, Packet packet)

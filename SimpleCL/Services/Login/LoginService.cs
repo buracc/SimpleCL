@@ -123,9 +123,9 @@ namespace SimpleCL.Services.Login
                     agent.RegisterService(new ChatService());
                     agent.RegisterService(new CharacterSelectService(_silkroadServer));
                     agent.RegisterService(new LocalPlayerService(_silkroadServer, (Gateway) server));
-                    agent.RegisterService(new SpawnService());
-                    agent.RegisterService(new StatusService());
-                    agent.RegisterService(new MovementService());
+                    agent.RegisterService(new EntitySpawnService());
+                    agent.RegisterService(new EntityHealthService());
+                    agent.RegisterService(new EntityMovementService());
                     
                     // agent.Debug = true;
                     agent.Start();

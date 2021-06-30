@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SimpleCL.Database;
 
 namespace SimpleCL.Models.Entities.Teleporters
@@ -12,8 +11,7 @@ namespace SimpleCL.Models.Entities.Teleporters
             var links = GameDatabase.Get.GetTeleportLinks(id);
             foreach (var link in links)
             {
-                var telelink = new TeleportLink(uint.Parse(link["destinationid"]), link["destination"]);
-                Links.Add(telelink);
+                Links.Add(new TeleportLink(uint.Parse(link["destinationid"]), link["destination"]));
             }
         }
 

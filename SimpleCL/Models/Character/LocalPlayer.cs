@@ -18,8 +18,6 @@ namespace SimpleCL.Models.Character
         private ulong _jobNextLevelExp;
         private byte _level;
         private byte _jobLevel;
-        public uint Hp { get; set; }
-        public uint Mp { get; set; }
         public uint MaxHp { get; set; }
         public uint MaxMp { get; set; }
 
