@@ -267,7 +267,7 @@ namespace SimpleCL.Services.Game
             local.LocalPoint = localPoint;
 
             SimpleCL.Gui.AddMinimapMarker(LocalPlayer.Get);
-            Entities.Spawn(local);
+            Entities.Spawned(local);
 
             server.Log("Successfully joined the game");
         }

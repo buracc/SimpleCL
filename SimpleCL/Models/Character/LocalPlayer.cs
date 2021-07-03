@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using SimpleCL.Database;
 using SimpleCL.Models.Entities;
 using SimpleCL.Models.Items;
@@ -21,8 +22,8 @@ namespace SimpleCL.Models.Character
         private byte _jobLevel;
         public uint MaxHp { get; set; }
         public uint MaxMp { get; set; }
-        public List<Mastery> Masteries = new List<Mastery>();
-        public List<CharacterSkill> Skills = new List<CharacterSkill>();
+        public readonly List<Mastery> Masteries = new List<Mastery>();
+        public readonly BindingList<CharacterSkill> Skills = new BindingList<CharacterSkill>();
 
         public byte Level
         {

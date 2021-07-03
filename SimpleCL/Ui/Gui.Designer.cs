@@ -80,6 +80,18 @@ namespace SimpleCL.Ui
             this.jobEquipmentDataGridView = new System.Windows.Forms.DataGridView();
             this.chatTab = new System.Windows.Forms.TabPage();
             this.chatBox = new System.Windows.Forms.ListBox();
+            this.attackTab = new System.Windows.Forms.TabPage();
+            this.removeSkillListBox = new System.Windows.Forms.Button();
+            this.addSkillListBox = new System.Windows.Forms.Button();
+            this.removeEntityButton = new System.Windows.Forms.Button();
+            this.addEntityButton = new System.Windows.Forms.Button();
+            this.refreshEntitiesButton = new System.Windows.Forms.Button();
+            this.nearEntitiesListBox = new System.Windows.Forms.ListBox();
+            this.availSkillsListBox = new System.Windows.Forms.ListBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.attackEntitiesListBox = new System.Windows.Forms.ListBox();
+            this.attackSkillsListBox = new System.Windows.Forms.ListBox();
             this.movementTab = new System.Windows.Forms.TabPage();
             this.mapPanel = new System.Windows.Forms.Panel();
             this.minimap = new global::SimpleCL.Ui.Components.Map();
@@ -109,6 +121,7 @@ namespace SimpleCL.Ui
             this.jobEquipmentInvTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.jobEquipmentDataGridView)).BeginInit();
             this.chatTab.SuspendLayout();
+            this.attackTab.SuspendLayout();
             this.movementTab.SuspendLayout();
             this.mapPanel.SuspendLayout();
             this.devTab.SuspendLayout();
@@ -191,6 +204,7 @@ namespace SimpleCL.Ui
             this.tabControl.Controls.Add(this.homeTab);
             this.tabControl.Controls.Add(this.inventoryPage);
             this.tabControl.Controls.Add(this.chatTab);
+            this.tabControl.Controls.Add(this.attackTab);
             this.tabControl.Controls.Add(this.movementTab);
             this.tabControl.Controls.Add(this.devTab);
             this.tabControl.Location = new System.Drawing.Point(12, 12);
@@ -594,6 +608,124 @@ namespace SimpleCL.Ui
             this.chatBox.Size = new System.Drawing.Size(765, 342);
             this.chatBox.TabIndex = 0;
             // 
+            // attackTab
+            // 
+            this.attackTab.Controls.Add(this.removeSkillListBox);
+            this.attackTab.Controls.Add(this.addSkillListBox);
+            this.attackTab.Controls.Add(this.removeEntityButton);
+            this.attackTab.Controls.Add(this.addEntityButton);
+            this.attackTab.Controls.Add(this.refreshEntitiesButton);
+            this.attackTab.Controls.Add(this.nearEntitiesListBox);
+            this.attackTab.Controls.Add(this.availSkillsListBox);
+            this.attackTab.Controls.Add(this.label2);
+            this.attackTab.Controls.Add(this.label1);
+            this.attackTab.Controls.Add(this.attackEntitiesListBox);
+            this.attackTab.Controls.Add(this.attackSkillsListBox);
+            this.attackTab.Location = new System.Drawing.Point(4, 22);
+            this.attackTab.Name = "attackTab";
+            this.attackTab.Size = new System.Drawing.Size(768, 381);
+            this.attackTab.TabIndex = 5;
+            this.attackTab.Text = "Attack";
+            this.attackTab.UseVisualStyleBackColor = true;
+            // 
+            // removeSkillListBox
+            // 
+            this.removeSkillListBox.Location = new System.Drawing.Point(167, 194);
+            this.removeSkillListBox.Name = "removeSkillListBox";
+            this.removeSkillListBox.Size = new System.Drawing.Size(27, 23);
+            this.removeSkillListBox.TabIndex = 10;
+            this.removeSkillListBox.Text = "-";
+            this.removeSkillListBox.UseVisualStyleBackColor = true;
+            this.removeSkillListBox.Click += new System.EventHandler(this.RemoveSkill);
+            // 
+            // addSkillListBox
+            // 
+            this.addSkillListBox.Location = new System.Drawing.Point(168, 140);
+            this.addSkillListBox.Name = "addSkillListBox";
+            this.addSkillListBox.Size = new System.Drawing.Size(27, 23);
+            this.addSkillListBox.TabIndex = 9;
+            this.addSkillListBox.Text = "+";
+            this.addSkillListBox.UseVisualStyleBackColor = true;
+            this.addSkillListBox.Click += new System.EventHandler(this.AddSkill);
+            // 
+            // removeEntityButton
+            // 
+            this.removeEntityButton.Location = new System.Drawing.Point(573, 194);
+            this.removeEntityButton.Name = "removeEntityButton";
+            this.removeEntityButton.Size = new System.Drawing.Size(27, 23);
+            this.removeEntityButton.TabIndex = 8;
+            this.removeEntityButton.Text = "-";
+            this.removeEntityButton.UseVisualStyleBackColor = true;
+            this.removeEntityButton.Click += new System.EventHandler(this.RemoveEntity);
+            // 
+            // addEntityButton
+            // 
+            this.addEntityButton.Location = new System.Drawing.Point(574, 140);
+            this.addEntityButton.Name = "addEntityButton";
+            this.addEntityButton.Size = new System.Drawing.Size(27, 23);
+            this.addEntityButton.TabIndex = 7;
+            this.addEntityButton.Text = "+";
+            this.addEntityButton.UseVisualStyleBackColor = true;
+            this.addEntityButton.Click += new System.EventHandler(this.AddEntity);
+            // 
+            // refreshEntitiesButton
+            // 
+            this.refreshEntitiesButton.Location = new System.Drawing.Point(606, 259);
+            this.refreshEntitiesButton.Name = "refreshEntitiesButton";
+            this.refreshEntitiesButton.Size = new System.Drawing.Size(75, 23);
+            this.refreshEntitiesButton.TabIndex = 6;
+            this.refreshEntitiesButton.Text = "Refresh";
+            this.refreshEntitiesButton.UseVisualStyleBackColor = true;
+            this.refreshEntitiesButton.Click += new System.EventHandler(this.RefreshEntities);
+            // 
+            // nearEntitiesListBox
+            // 
+            this.nearEntitiesListBox.FormattingEnabled = true;
+            this.nearEntitiesListBox.Location = new System.Drawing.Point(606, 96);
+            this.nearEntitiesListBox.Name = "nearEntitiesListBox";
+            this.nearEntitiesListBox.Size = new System.Drawing.Size(147, 160);
+            this.nearEntitiesListBox.TabIndex = 5;
+            // 
+            // availSkillsListBox
+            // 
+            this.availSkillsListBox.FormattingEnabled = true;
+            this.availSkillsListBox.Location = new System.Drawing.Point(15, 96);
+            this.availSkillsListBox.Name = "availSkillsListBox";
+            this.availSkillsListBox.Size = new System.Drawing.Size(147, 160);
+            this.availSkillsListBox.TabIndex = 4;
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(421, 259);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(75, 19);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Entities";
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(201, 259);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(75, 19);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Skills";
+            // 
+            // attackEntitiesListBox
+            // 
+            this.attackEntitiesListBox.FormattingEnabled = true;
+            this.attackEntitiesListBox.Location = new System.Drawing.Point(421, 96);
+            this.attackEntitiesListBox.Name = "attackEntitiesListBox";
+            this.attackEntitiesListBox.Size = new System.Drawing.Size(147, 160);
+            this.attackEntitiesListBox.TabIndex = 1;
+            // 
+            // attackSkillsListBox
+            // 
+            this.attackSkillsListBox.FormattingEnabled = true;
+            this.attackSkillsListBox.Location = new System.Drawing.Point(201, 96);
+            this.attackSkillsListBox.Name = "attackSkillsListBox";
+            this.attackSkillsListBox.Size = new System.Drawing.Size(147, 160);
+            this.attackSkillsListBox.TabIndex = 0;
+            // 
             // movementTab
             // 
             this.movementTab.Controls.Add(this.mapPanel);
@@ -608,7 +740,7 @@ namespace SimpleCL.Ui
             this.movementTab.Text = "Movement";
             this.movementTab.UseVisualStyleBackColor = true;
             // 
-            // panel1
+            // mapPanel
             // 
             this.mapPanel.Controls.Add(this.minimap);
             this.mapPanel.Location = new System.Drawing.Point(3, 3);
@@ -616,7 +748,7 @@ namespace SimpleCL.Ui
             this.mapPanel.Size = new System.Drawing.Size(762, 352);
             this.mapPanel.TabIndex = 11;
             // 
-            // map1
+            // minimap
             // 
             this.minimap.Location = new System.Drawing.Point(-31, -214);
             this.minimap.Name = "minimap";
@@ -730,11 +862,19 @@ namespace SimpleCL.Ui
             this.jobEquipmentInvTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize) (this.jobEquipmentDataGridView)).EndInit();
             this.chatTab.ResumeLayout(false);
+            this.attackTab.ResumeLayout(false);
             this.movementTab.ResumeLayout(false);
             this.mapPanel.ResumeLayout(false);
             this.devTab.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Button addEntityButton;
+        private System.Windows.Forms.Button removeEntityButton;
+        private System.Windows.Forms.Button removeSkillListBox;
+        private System.Windows.Forms.Button addSkillListBox;
+
+        private System.Windows.Forms.ListBox nearEntitiesListBox;
 
         private System.Windows.Forms.Panel mapPanel;
 
@@ -808,6 +948,7 @@ namespace SimpleCL.Ui
         private System.Windows.Forms.ListBox loggerBox;
 
         private System.Windows.Forms.Button loginButton;
+        private System.Windows.Forms.Button refreshEntitiesButton;
 
         private System.Windows.Forms.TextBox passwordBox;
         private System.Windows.Forms.TabControl tabControl;
@@ -818,6 +959,13 @@ namespace SimpleCL.Ui
 
         private System.Windows.Forms.Label serverLabel;
         private System.Windows.Forms.ComboBox serverComboBox;
+        
+        private System.Windows.Forms.TabPage attackTab;
+        private System.Windows.Forms.ListBox attackSkillsListBox;
+        private System.Windows.Forms.ListBox attackEntitiesListBox;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ListBox availSkillsListBox;
 
         #endregion
 

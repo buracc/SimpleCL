@@ -70,5 +70,10 @@ namespace SimpleCL.Models.Skills
             Targeted = byte.Parse(data["target_required"]) == 1;
             Range = ushort.Parse(data["range"]);
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

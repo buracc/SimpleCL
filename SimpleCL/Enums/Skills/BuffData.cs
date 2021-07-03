@@ -4,7 +4,7 @@
     {
         public enum Attribute: uint
         {
-            AutoTransferEffect = 6645362
+            AutoTransferEffect = 1751474540
         }
     }
 }

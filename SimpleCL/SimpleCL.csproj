@@ -151,6 +151,7 @@
     <Compile Include="Models\Entities\Teleporters\TeleportLink.cs" />
     <Compile Include="Models\Exceptions\EntityParseException.cs" />
     <Compile Include="Models\IIdentifiable.cs" />
+    <Compile Include="Models\ITargetable.cs" />
     <Compile Include="Models\Items\InventoryItem.cs" />
     <Compile Include="Models\Server\GameServer.cs" />
     <Compile Include="Models\Skills\Buff.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="Network\Agent.cs" />
     <Compile Include="Network\Gateway.cs" />
     <Compile Include="Network\Server.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\Game\ChatService.cs" />
     <Compile Include="Services\Game\EntityBuffService.cs" />
     <Compile Include="Services\Game\LocalPlayerService.cs" />

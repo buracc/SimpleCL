@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using SimpleCL.Models;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
 using SimpleCL.Models.Entities.Teleporters;
@@ -10,6 +12,7 @@ namespace SimpleCL.Interaction.Providers
     public static class Entities
     {
         public static readonly Dictionary<uint, Entity> AllEntities = new Dictionary<uint, Entity>();
+        public static readonly BindingList<ITargetable> TargetableEntities = new BindingList<ITargetable>();
         private static readonly Dictionary<uint, uint> Buffs = new Dictionary<uint, uint>();
 
         public static void Respawn()
@@ -18,7 +21,7 @@ namespace SimpleCL.Interaction.Providers
             Buffs.Clear();
         }
 
-        public static void Spawn(Entity e)
+        public static void Spawned(Entity e)
         {
             if (AllEntities.ContainsKey(e.Uid))
             {
@@ -26,14 +29,25 @@ namespace SimpleCL.Interaction.Providers
             }
             
             AllEntities[e.Uid] = e;
+            if (e is ITargetable targetable)
+            {
+                TargetableEntities.Add(targetable);
+            }
+            
             SimpleCL.Gui.AddMinimapMarker(e);
         }
 
-        public static void Despawn(uint uid)
+        public static void Despawned(uint uid)
         {
             if (!AllEntities.ContainsKey(uid))
             {
                 return;
+            }
+
+            AllEntities.TryGetValue(uid, out var removed);
+            if (removed is ITargetable targetable)
+            {
+                TargetableEntities.Remove(targetable);
             }
             
             AllEntities.Remove(uid);

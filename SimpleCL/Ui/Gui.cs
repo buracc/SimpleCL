@@ -1,8 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Forms;
 using SimpleCL.Database;
 using SimpleCL.Enums.Server;
@@ -13,6 +13,7 @@ using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
 using SimpleCL.Models.Entities.Pet;
 using SimpleCL.Models.Entities.Teleporters;
+using SimpleCL.Models.Skills;
 using SimpleCL.Network;
 using SimpleCL.Services.Login;
 using SimpleCL.Ui.Components;
@@ -25,6 +26,9 @@ namespace SimpleCL.Ui
         private const ushort GatewayPort = 15779;
 
         private readonly ToolTip _toolTip = new ToolTip();
+
+        public BindingList<CharacterSkill> SelectedSkills = new BindingList<CharacterSkill>();
+        public BindingList<ITargetable> SelectedEntities = new BindingList<ITargetable>();
 
         public Gui()
         {
@@ -49,6 +53,13 @@ namespace SimpleCL.Ui
             equipmentDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             avatarDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             jobEquipmentDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+            availSkillsListBox.DataSource = LocalPlayer.Get.Skills;
+            
+            attackSkillsListBox.DataSource = SelectedSkills;
+            attackEntitiesListBox.DataSource = SelectedEntities;
+
+            nearEntitiesListBox.DataSource = Entities.TargetableEntities;
 
             CenterToScreen();
         }
@@ -275,6 +286,51 @@ namespace SimpleCL.Ui
         public void RemoveMinimapMarker(uint uid)
         {
             minimap.RemoveMarker(uid);
+        }
+
+        private void AddSkill(object sender, EventArgs e)
+        {
+            if (!(sender is CharacterSkill characterSkill))
+            {
+                return;
+            }
+
+            SelectedSkills.Add(characterSkill);
+        }
+
+        private void RemoveSkill(object sender, EventArgs e)
+        {
+            if (!(sender is CharacterSkill characterSkill))
+            {
+                return;
+            }
+
+            SelectedSkills.Remove(characterSkill);
+        }
+
+        private void AddEntity(object sender, EventArgs e)
+        {
+            if (!(sender is ITargetable target))
+            {
+                return;
+            }
+
+            SelectedEntities.Add(target);
+        }
+
+        private void RemoveEntity(object sender, EventArgs e)
+        {
+            if (!(sender is ITargetable target))
+            {
+                return;
+            }
+
+            SelectedEntities.Remove(target);
+        }
+
+        private void RefreshEntities(object sender, EventArgs e)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

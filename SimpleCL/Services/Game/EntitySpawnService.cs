@@ -78,16 +78,13 @@ namespace SimpleCL.Services.Game
                 });
             }
 
-            if (queryBuilder != null)
-            {
-                queryBuilder.Finish();
-            }
+            queryBuilder?.Finish();
         }
 
         private void EntityDespawn(Server server, Packet packet)
         {
             uint uid = packet.ReadUInt();
-            Interaction.Providers.Entities.Despawn(uid);
+            Entities.Despawned(uid);
         }
 
         private void EntitySpawn(Server server, Packet packet, QueryBuilder queryBuilder = null)
@@ -119,7 +116,7 @@ namespace SimpleCL.Services.Game
                         packet.ReadFloat()
                     );
                     var angle = packet.ReadUShort();
-                    return;
+                    break;
                 }
                 
                 case Teleport teleport:
@@ -153,14 +150,15 @@ namespace SimpleCL.Services.Game
                         }
                     }
 
-                    if (unk == 1)
+                    if (unk != 1)
                     {
-                        packet.ReadByte();
-                        packet.ReadByte();
+                        break;
                     }
+                    
+                    packet.ReadByte();
+                    packet.ReadByte();
 
-                    Entities.Spawn(teleport);
-                    return;
+                    break;
                 }
                 
                 case GroundItem groundItem:
@@ -198,14 +196,14 @@ namespace SimpleCL.Services.Game
                         var rarity = packet.ReadByte();
                         if (packet.Opcode != Opcodes.Agent.Response.ENTITY_SOLO_SPAWN)
                         {
-                            return;
+                            break;
                         }
                         
                         var dropSourceType = packet.ReadByte();
                         var dropUid = packet.ReadUInt();
                     }
 
-                    return;
+                    break;
                 }
                 
                 case Actor actor:
@@ -397,7 +395,6 @@ namespace SimpleCL.Services.Game
                                 }
                             }
 
-                            Entities.Spawn(p);
                             break;
                         }
                         
@@ -408,7 +405,6 @@ namespace SimpleCL.Services.Game
                             var unkByteAmount = packet.ReadByte();
                             var unkBytes = packet.ReadByteArray(unkByteAmount);
                             var mobType = (Monster.Type) unkBytes[0];
-                            Entities.Spawn(npc);
                             break;
                         }
                         
@@ -425,7 +421,6 @@ namespace SimpleCL.Services.Game
                             switch (npc)
                             {
                                 case TalkNpc talkNpc:
-                                    Entities.Spawn(talkNpc);
                                     break;
                                 
                                 case Cos cos:
@@ -451,14 +446,10 @@ namespace SimpleCL.Services.Game
                                         }
 
                                         var ownerUid = packet.ReadUInt();
+                                        
                                         if (cos is FellowPet)
                                         {
                                             packet.ReadByte();
-                                        }
-
-                                        if (cos is CharacterPet pet)
-                                        {
-                                            Interaction.Providers.Entities.Spawn(pet);
                                         }
                                     }
 
@@ -481,10 +472,12 @@ namespace SimpleCL.Services.Game
                     {
                         packet.ReadByte();
                     }
-
+                    
                     break;
                 }
             }
+            
+            Entities.Spawned(entity);
         }
 
         [PacketHandler(Opcodes.Agent.Response.TELEPORT_READY)]

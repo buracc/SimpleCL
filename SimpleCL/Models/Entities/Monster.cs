@@ -1,6 +1,10 @@
-﻿namespace SimpleCL.Models.Entities
+﻿using SimpleCL.Enums.Commons;
+using SimpleCL.Models.Skills;
+using SimpleCL.SilkroadSecurityApi;
+
+namespace SimpleCL.Models.Entities
 {
-    public class Monster : Npc
+    public class Monster : Npc, ITargetable
     {
         public Monster(uint id) : base(id)
         {
@@ -54,6 +58,24 @@
             PartyChampion = 0x11,
             PartyGiant = 0x14,
             Event = 0xFF
+        }
+
+        public void Cast(Skill skill)
+        {
+            Packet attackPacket = new Packet(Opcodes.Agent.Request.CHAR_ACTION);
+            attackPacket.WriteByte(1);
+            if (skill.Id == 1)
+            {
+                attackPacket.WriteByte(1);
+            }
+            else
+            {
+                attackPacket.WriteByte(4);
+                attackPacket.WriteUInt(skill.Id);
+            }
+            
+            attackPacket.WriteByte(1);
+            attackPacket.WriteUInt(Uid);
         }
     }
 }

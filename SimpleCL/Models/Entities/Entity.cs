@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Data.Entity.Core;
+﻿using System.Collections.Specialized;
 using SimpleCL.Database;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities.Fortress;
