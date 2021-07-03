@@ -1,4 +1,4 @@
-﻿using SilkroadSecurityApi;
+﻿using SimpleCL.SilkroadSecurityApi;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Util.Extension;

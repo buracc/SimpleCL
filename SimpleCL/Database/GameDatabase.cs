@@ -26,13 +26,14 @@ namespace SimpleCL.Database
             set
             {
                 _selectedServer = value;
-                LoadSpawns();
+                // LoadSpawns();
             }
         }
 
         private readonly Dictionary<uint, NameValueCollection> _itemCache;
         private readonly Dictionary<uint, NameValueCollection> _modelCache;
         private readonly Dictionary<uint, NameValueCollection> _skillCache;
+        private readonly Dictionary<uint, NameValueCollection> _masteryCache;
         private readonly Dictionary<uint, List<NameValueCollection>> _teleportCache;
         public readonly Dictionary<uint, List<SpawnPoint>> SpawnPoints = new Dictionary<uint, List<SpawnPoint>>();
 
@@ -41,6 +42,7 @@ namespace SimpleCL.Database
             _itemCache = LoadFromCache("items");
             _modelCache = LoadFromCache("models");
             _skillCache = LoadFromCache("skills");
+            _masteryCache = LoadFromCache("masteries");
             _teleportCache = LoadCachedTeleports("teleports");
         }
 
@@ -79,7 +81,7 @@ namespace SimpleCL.Database
         public ulong GetNextLevelExp(byte level)
         {
             var data = GetData("SELECT * FROM leveldata WHERE level = " + level);
-            if (data.Count == 0)
+            if (data.IsEmpty())
             {
                 return 0;
             }
@@ -90,7 +92,7 @@ namespace SimpleCL.Database
         public ulong GetJobNextLevelExp(byte level)
         {
             var data = GetData("SELECT * FROM leveldata WHERE level = " + level);
-            if (data.Count == 0)
+            if (data.IsEmpty())
             {
                 return 0;
             }
@@ -101,7 +103,7 @@ namespace SimpleCL.Database
         public ulong GetFellowNextLevelExp(byte level)
         {
             var data = GetData("SELECT * FROM leveldata WHERE level = " + level);
-            if (data.Count == 0)
+            if (data.IsEmpty())
             {
                 return 0;
             }
@@ -127,7 +129,7 @@ namespace SimpleCL.Database
                 result = GetData("SELECT * FROM items WHERE id = " + id);
             }
 
-            if (result.Count == 0)
+            if (result.IsEmpty())
             {
                 return _itemCache[id] = null;
             }
@@ -148,7 +150,7 @@ namespace SimpleCL.Database
                 result = GetData("SELECT * FROM magicoption WHERE id = " + id);
             }
 
-            if (result.Count == 0)
+            if (result.IsEmpty())
             {
                 return null;
             }
@@ -174,12 +176,38 @@ namespace SimpleCL.Database
                 result = GetData("SELECT * FROM skills WHERE id = " + id);
             }
 
-            if (result.Count == 0)
+            if (result.IsEmpty())
             {
                 return _skillCache[id] = null;
             }
 
             return _skillCache[id] = result[0];
+        }
+        
+        public NameValueCollection GetMastery(uint id, QueryBuilder queryBuilder = null)
+        {
+            if (_masteryCache.ContainsKey(id))
+            {
+                return _masteryCache[id];
+            }
+
+            List<NameValueCollection> result;
+            if (queryBuilder != null)
+            {
+                result = queryBuilder.Query("SELECT * FROM mastery WHERE id = " + id)
+                    .ExecuteSelect(false);
+            }
+            else
+            {
+                result = GetData("SELECT * FROM mastery WHERE id = " + id);
+            }
+
+            if (result.IsEmpty())
+            {
+                return _masteryCache[id] = null;
+            }
+
+            return _masteryCache[id] = result[0];
         }
 
         public NameValueCollection GetModel(uint id, QueryBuilder queryBuilder = null)
@@ -200,7 +228,7 @@ namespace SimpleCL.Database
                 result = GetData("SELECT * FROM models WHERE id = " + id);
             }
 
-            if (result.Count == 0)
+            if (result.IsEmpty())
             {
                 return _modelCache[id] = null;
             }
@@ -282,6 +310,7 @@ namespace SimpleCL.Database
             CacheToFile(_itemCache, "items");
             CacheToFile(_modelCache, "models");
             CacheToFile(_skillCache, "skills");
+            CacheToFile(_masteryCache, "masteries");
             CacheTeleportsToFile(_teleportCache, "teleports");
         }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using SilkroadSecurityApi;
+using SimpleCL.SilkroadSecurityApi;
 using SimpleCL.Database;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Login.Error;
@@ -128,6 +128,7 @@ namespace SimpleCL.Services.Login
                     agent.RegisterService(new EntitySpawnService());
                     agent.RegisterService(new EntityHealthService());
                     agent.RegisterService(new EntityMovementService());
+                    agent.RegisterService(new EntityBuffService());
                     
                     // agent.Debug = true;
                     agent.Start();
@@ -196,6 +197,10 @@ namespace SimpleCL.Services.Login
                         case LoginErrorCode.LoginQueue:
                             server.Log("Login queue");
                             return;
+                        
+                        case LoginErrorCode.PasswordExpired:
+                            server.Log("Password expired. Set a new password.");
+                            break;
                         
                         default:
                             server.Log("Unhandled login error code: " + errorCode);

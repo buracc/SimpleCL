@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using SilkroadSecurityApi;
+using SimpleCL.SilkroadSecurityApi;
 using SimpleCL.Database;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Skills;
@@ -11,6 +11,7 @@ using SimpleCL.Models.Entities.Pet;
 using SimpleCL.Models.Entities.Teleporters;
 using SimpleCL.Models.Exceptions;
 using SimpleCL.Models.Items;
+using SimpleCL.Models.Skills;
 using SimpleCL.Network;
 using SimpleCL.Util;
 using SimpleCL.Util.Extension;
@@ -109,8 +110,7 @@ namespace SimpleCL.Services.Game
             {
                 case SkillAoe skillAoe:
                 {
-                    var skillId = packet.ReadUInt();
-                    var skillData = GameDatabase.Get.GetSkill(skillId);
+                    skillAoe.Skill = new Skill(packet.ReadUInt());
                     skillAoe.Uid = packet.ReadUInt();
                     skillAoe.LocalPoint = new LocalPoint(
                         packet.ReadUShort(),
@@ -208,9 +208,9 @@ namespace SimpleCL.Services.Game
                     return;
                 }
                 
-                case PathingEntity pathingEntity:
+                case Actor actor:
                 {
-                    switch (pathingEntity)
+                    switch (actor)
                     {
                         case Player player:
                         {
@@ -268,16 +268,16 @@ namespace SimpleCL.Services.Game
                         }
                     }
 
-                    pathingEntity.Uid = packet.ReadUInt();
+                    actor.Uid = packet.ReadUInt();
 
-                    pathingEntity.LocalPoint = new LocalPoint(
+                    actor.LocalPoint = new LocalPoint(
                         packet.ReadUShort(),
                         packet.ReadFloat(),
                         packet.ReadFloat(),
                         packet.ReadFloat()
                     );
 
-                    pathingEntity.Angle = packet.ReadUShort();
+                    actor.Angle = packet.ReadUShort();
 
                     var destinationSet = packet.ReadByte() == 1;
                     var walkType = packet.ReadByte();
@@ -285,7 +285,7 @@ namespace SimpleCL.Services.Game
                     if (destinationSet)
                     {
                         var destinationRegion = packet.ReadUShort();
-                        var inDungeon = pathingEntity.LocalPoint.Region > short.MaxValue;
+                        var inDungeon = actor.LocalPoint.Region > short.MaxValue;
                         if (inDungeon)
                         {
                             var destinationXOffset = packet.ReadInt();
@@ -302,7 +302,7 @@ namespace SimpleCL.Services.Game
                     else
                     {
                         var movementType = packet.ReadByte();
-                        pathingEntity.Angle = packet.ReadUShort();
+                        actor.Angle = packet.ReadUShort();
                     }
 
                     var lifeState = packet.ReadByte();
@@ -313,27 +313,30 @@ namespace SimpleCL.Services.Game
 
                     packet.ReadByte(); // idk what position, but there is an unknown byte before walkspeed
 
-                    pathingEntity.WalkSpeed = packet.ReadFloat();
-                    pathingEntity.RunSpeed = packet.ReadFloat();
-                    pathingEntity.ZerkSpeed = packet.ReadFloat();
+                    actor.WalkSpeed = packet.ReadFloat();
+                    actor.RunSpeed = packet.ReadFloat();
+                    actor.ZerkSpeed = packet.ReadFloat();
 
                     var buffCount = packet.ReadByte();
                     buffCount.Repeat(i =>
                     {
                         var refSkillId = packet.ReadUInt();
-                        var duration = packet.ReadUInt();
-                        var skillData = GameDatabase.Get.GetSkill(refSkillId);
-                        var autoTransferEffect = skillData["attributes"]
-                            .Split(',')
-                            .Contains(BuffData.Attribute.AutoTransferEffect.ToString());
+                        var buff = new Buff(refSkillId) {RemainingDuration = packet.ReadUInt()};
 
-                        if (autoTransferEffect)
+                        if (buff.Attributes.Contains((uint) BuffData.Attribute.AutoTransferEffect))
                         {
                             var isBuffOwner = packet.ReadByte();
+                            if (isBuffOwner == 1)
+                            {
+                                buff.CasterUid = actor.Uid;
+                            }
                         }
+
+                        buff.TargetUid = actor.Uid;
+                        actor.Buffs.Add(buff);
                     });
 
-                    switch (pathingEntity)
+                    switch (actor)
                     {
                         case Player p:
                         {
@@ -487,7 +490,7 @@ namespace SimpleCL.Services.Game
         [PacketHandler(Opcodes.Agent.Response.TELEPORT_READY)]
         public void TeleportUse(Server server, Packet packet)
         {
-            Entities.AllEntities.Clear();
+            Entities.Respawn();
             server.Inject(new Packet(Opcodes.Agent.Request.TELEPORT_READY));
         }
     }

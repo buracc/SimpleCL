@@ -1,6 +1,10 @@
-﻿namespace SimpleCL.Models.Entities
+﻿using System.Collections.Generic;
+using SimpleCL.Models.Character;
+using SimpleCL.Models.Skills;
+
+namespace SimpleCL.Models.Entities
 {
-    public class PathingEntity : Entity
+    public class Actor : Entity
     {
         public uint Hp { get; set; }
         public uint Mp { get; set; }
@@ -9,7 +13,8 @@
         public float RunSpeed { get; set; }
         public float ZerkSpeed { get; set; }
         public ushort Angle { get; set; }
-        public PathingEntity(uint id) : base(id)
+        public List<Buff> Buffs = new List<Buff>();
+        public Actor(uint id) : base(id)
         {
             
         }

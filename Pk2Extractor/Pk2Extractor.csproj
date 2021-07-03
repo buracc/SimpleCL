@@ -67,6 +67,7 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Api\Blowfish.cs" />
         <Compile Include="Api\DdsReader.cs" />
         <Compile Include="Api\Pk2Extractor.cs" />
         <Compile Include="Api\Pk2File.cs" />

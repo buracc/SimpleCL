@@ -3,7 +3,7 @@ using SimpleCL.Models.Items;
 
 namespace SimpleCL.Models.Entities
 {
-    public class Player : PathingEntity
+    public class Player : Actor
     {
         public List<InventoryItem> InventoryItems = new List<InventoryItem>();
         public Player(uint id) : base(id)

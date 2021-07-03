@@ -1,4 +1,4 @@
-﻿using SilkroadSecurityApi;
+﻿using SimpleCL.SilkroadSecurityApi;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Events;
 using SimpleCL.Interaction.Providers;
@@ -23,7 +23,7 @@ namespace SimpleCL.Services.Game
 
             var entity = Entities.AllEntities[uid];
 
-            if (!(entity is PathingEntity pathingEntity))
+            if (!(entity is Actor actor))
             {
                 return;
             }
@@ -36,21 +36,21 @@ namespace SimpleCL.Services.Game
             switch (eventType)
             {
                 case EntityStateEvent.Health.HP:
-                    pathingEntity.Hp = packet.ReadUInt();
+                    actor.Hp = packet.ReadUInt();
                     break;
 
                 case EntityStateEvent.Health.MP:
-                    pathingEntity.Mp = packet.ReadUInt();
+                    actor.Mp = packet.ReadUInt();
                     break;
 
                 case EntityStateEvent.Health.EntityHPMP:
                 case EntityStateEvent.Health.HPMP:
-                    pathingEntity.Hp = packet.ReadUInt();
-                    pathingEntity.Mp = packet.ReadUInt();
+                    actor.Hp = packet.ReadUInt();
+                    actor.Mp = packet.ReadUInt();
                     break;
                 
                 case EntityStateEvent.Health.BadStatus:
-                    pathingEntity.BadStatus = (PathingEntity.BadStatusFlag) packet.ReadUInt();
+                    actor.BadStatus = (Actor.BadStatusFlag) packet.ReadUInt();
                     break;
             }
         }

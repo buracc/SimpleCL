@@ -47,9 +47,6 @@
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SilkroadSecurityApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Libs\SilkroadSecurityApi.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -147,7 +144,7 @@
     <Compile Include="Models\Entities\TalkNpc.cs" />
     <Compile Include="Models\Entities\Monster.cs" />
     <Compile Include="Models\Entities\Npc.cs" />
-    <Compile Include="Models\Entities\PathingEntity.cs" />
+    <Compile Include="Models\Entities\Actor.cs" />
     <Compile Include="Models\Entities\Player.cs" />
     <Compile Include="Models\Entities\SkillAoe.cs" />
     <Compile Include="Models\Entities\Teleporters\Teleport.cs" />
@@ -156,14 +153,26 @@
     <Compile Include="Models\IIdentifiable.cs" />
     <Compile Include="Models\Items\InventoryItem.cs" />
     <Compile Include="Models\Server\GameServer.cs" />
+    <Compile Include="Models\Skills\Buff.cs" />
+    <Compile Include="Models\Skills\CharacterSkill.cs" />
+    <Compile Include="Models\Skills\Mastery.cs" />
+    <Compile Include="Models\Skills\Skill.cs" />
     <Compile Include="Network\Agent.cs" />
     <Compile Include="Network\Gateway.cs" />
     <Compile Include="Network\Server.cs" />
     <Compile Include="Services\Game\ChatService.cs" />
+    <Compile Include="Services\Game\EntityBuffService.cs" />
     <Compile Include="Services\Game\LocalPlayerService.cs" />
     <Compile Include="Services\Game\EntityMovementService.cs" />
     <Compile Include="Services\Game\EntitySpawnService.cs" />
     <Compile Include="Services\Game\EntityHealthService.cs" />
+    <Compile Include="SilkroadSecurityApi\Blowfish.cs" />
+    <Compile Include="SilkroadSecurityApi\Packet.cs" />
+    <Compile Include="SilkroadSecurityApi\PacketReader.cs" />
+    <Compile Include="SilkroadSecurityApi\PacketWriter.cs" />
+    <Compile Include="SilkroadSecurityApi\Security.cs" />
+    <Compile Include="SilkroadSecurityApi\TransferBuffer.cs" />
+    <Compile Include="SilkroadSecurityApi\Ultility.cs" />
     <Compile Include="SimpleCL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -208,8 +217,6 @@
     <Compile Include="Util\DirectoryUtils.cs" />
     <Compile Include="Util\Extension\CollectionExt.cs" />
     <Compile Include="Util\Extension\NumberExt.cs" />
-    <Compile Include="Util\Extension\PacketReadExt.cs" />
-    <Compile Include="Util\Extension\PacketWriteExt.cs" />
     <Compile Include="Util\Extension\UiExt.cs" />
     <Compile Include="Util\NetworkUtils.cs" />
   </ItemGroup>

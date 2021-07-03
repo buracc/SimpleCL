@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using SilkroadSecurityApi;
+using SimpleCL.SilkroadSecurityApi;
 using SimpleCL.Database;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Quests;
@@ -10,6 +10,7 @@ using SimpleCL.Interaction.Providers;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Items;
+using SimpleCL.Models.Skills;
 using SimpleCL.Network;
 using SimpleCL.Util.Extension;
 
@@ -99,8 +100,8 @@ namespace SimpleCL.Services.Game
             var nextMastery = packet.ReadByte() == 1;
             while (nextMastery)
             {
-                var masteryId = packet.ReadUInt();
-                var masteryLevel = packet.ReadByte();
+                var mastery = new Mastery(packet.ReadUInt()) {Level = packet.ReadByte()};
+                local.Masteries.Add(mastery);
                 nextMastery = packet.ReadByte() == 1;
             }
 
@@ -110,14 +111,8 @@ namespace SimpleCL.Services.Game
 
             while (nextSkill)
             {
-                var skillId = packet.ReadUInt();
-                var skillEnabled = packet.ReadByte() == 1;
-
-                if (skillEnabled)
-                {
-                    var skillData = GameDatabase.Get.GetSkill(skillId);
-                }
-
+                var skill = new CharacterSkill(packet.ReadUInt()) {Enabled = packet.ReadByte() == 1};
+                local.Skills.Add(skill);
                 nextSkill = packet.ReadByte() == 1;
             }
 
@@ -229,16 +224,19 @@ namespace SimpleCL.Services.Game
             buffCount.Repeat(i =>
             {
                 var refSkillId = packet.ReadUInt();
-                var duration = packet.ReadUInt();
-                var skillData = GameDatabase.Get.GetSkill(refSkillId);
-                var autoTransferEffect = skillData["attributes"]
-                    .Split(',')
-                    .Contains(BuffData.Attribute.AutoTransferEffect.ToString());
+                var buff = new Buff(refSkillId) {RemainingDuration = packet.ReadUInt()};
 
-                if (autoTransferEffect)
+                if (buff.Attributes.Contains((uint) BuffData.Attribute.AutoTransferEffect))
                 {
                     var isBuffOwner = packet.ReadByte();
+                    if (isBuffOwner == 1)
+                    {
+                        buff.CasterUid = local.Uid;
+                    }
                 }
+
+                buff.TargetUid = local.Uid;
+                local.Buffs.Add(buff);
             });
 
             local.Name = packet.ReadAscii();

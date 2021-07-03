@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using SilkroadSecurityApi;
+using SimpleCL.SilkroadSecurityApi;
 
 namespace SimpleCL.Interaction
 {

@@ -2,6 +2,7 @@
 using SimpleCL.Database;
 using SimpleCL.Models.Entities;
 using SimpleCL.Models.Items;
+using SimpleCL.Models.Skills;
 
 namespace SimpleCL.Models.Character
 {
@@ -20,6 +21,8 @@ namespace SimpleCL.Models.Character
         private byte _jobLevel;
         public uint MaxHp { get; set; }
         public uint MaxMp { get; set; }
+        public List<Mastery> Masteries = new List<Mastery>();
+        public List<CharacterSkill> Skills = new List<CharacterSkill>();
 
         public byte Level
         {

@@ -3,17 +3,19 @@ using System.Linq;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
 using SimpleCL.Models.Entities.Teleporters;
+using SimpleCL.Models.Skills;
 
 namespace SimpleCL.Interaction.Providers
 {
     public static class Entities
     {
         public static readonly Dictionary<uint, Entity> AllEntities = new Dictionary<uint, Entity>();
+        private static readonly Dictionary<uint, uint> Buffs = new Dictionary<uint, uint>();
 
         public static void Respawn()
         {
             AllEntities.Clear();
-            SimpleCL.Gui.ClearMarkers();
+            Buffs.Clear();
         }
 
         public static void Spawn(Entity e)
@@ -46,20 +48,54 @@ namespace SimpleCL.Interaction.Providers
             }
             
             var entity = AllEntities[uid];
-            if (entity is PathingEntity pathingEntity)
+            if (entity is Actor actor)
             {
                 if (point != null)
                 {
-                    pathingEntity.LocalPoint = point;
+                    actor.LocalPoint = point;
                 }
                     
                 if (angle > 0)
                 {
-                    pathingEntity.Angle = angle;
+                    actor.Angle = angle;
                 }
             }
 
             SimpleCL.Gui.RefreshMap();
+        }
+
+        public static void Buffed(Buff buff)
+        {
+            if (!AllEntities.ContainsKey(buff.TargetUid))
+            {
+                return;
+            }
+
+            var entity = AllEntities[buff.TargetUid];
+            if (!(entity is Actor actor))
+            {
+                return;
+            }
+            
+            actor.Buffs.Add(buff);
+            Buffs[buff.TargetUid] = buff.Uid;
+        }
+
+        public static void BuffEnded(uint buffUid)
+        {
+            if (!Buffs.ContainsKey(buffUid))
+            {
+                return;
+            }
+
+            var entity = AllEntities[Buffs[buffUid]];
+            if (!(entity is Actor actor))
+            {
+                return;
+            }
+            
+            actor.Buffs.RemoveAll(x => x.Uid == buffUid);
+            Buffs.Remove(buffUid);
         }
 
         public static void SpeedChanged(uint uid, float walkSpeed, float runSpeed)
@@ -70,13 +106,13 @@ namespace SimpleCL.Interaction.Providers
             }
             
             var entity = AllEntities[uid];
-            if (!(entity is PathingEntity pathingEntity))
+            if (!(entity is Actor actor))
             {
                 return;
             }
             
-            pathingEntity.WalkSpeed = walkSpeed;
-            pathingEntity.RunSpeed = runSpeed;
+            actor.WalkSpeed = walkSpeed;
+            actor.RunSpeed = runSpeed;
         }
 
         public static List<Player> GetPlayers()

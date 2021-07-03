@@ -1,5 +1,5 @@
 ﻿using System;
-using SilkroadSecurityApi;
+using SimpleCL.SilkroadSecurityApi;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Interaction.Providers;
 using SimpleCL.Models.Character;

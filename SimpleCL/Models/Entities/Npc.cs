@@ -1,6 +1,6 @@
 ﻿namespace SimpleCL.Models.Entities
 {
-    public class Npc : PathingEntity
+    public class Npc : Actor
     {
         public Npc(uint id) : base(id)
         {

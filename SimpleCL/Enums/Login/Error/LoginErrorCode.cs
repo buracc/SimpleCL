@@ -29,6 +29,7 @@
         ServerIsFull = 6,
         
         LoginQueue = 0x1A,
+        PasswordExpired = 0x2A,
 
         /// <summary>
         /// Cannot connect to the server because access to the current IP has exceeded its limit.

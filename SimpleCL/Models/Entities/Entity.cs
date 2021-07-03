@@ -97,15 +97,15 @@ namespace SimpleCL.Models.Entities
                 return new SkillAoe(id);
             }
 
-            if (entity.IsPathingEntity())
+            if (entity.IsActor())
             {
-                PathingEntity pathingEntity = new PathingEntity(id);
-                if (pathingEntity.IsPlayer())
+                Actor actor = new Actor(id);
+                if (actor.IsPlayer())
                 {
                     return new Player(id);
                 }
 
-                if (pathingEntity.IsNpc())
+                if (actor.IsNpc())
                 {
                     Npc npc = new Npc(id);
                     if (npc.IsMonster())
@@ -251,7 +251,7 @@ namespace SimpleCL.Models.Entities
             return Id == uint.MaxValue;
         }
 
-        public bool IsPathingEntity()
+        public bool IsActor()
         {
             return TypeId1 == 1;
         }
