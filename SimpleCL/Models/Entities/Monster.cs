@@ -1,4 +1,5 @@
 ﻿using SimpleCL.Enums.Commons;
+using SimpleCL.Interaction;
 using SimpleCL.Models.Skills;
 using SimpleCL.SilkroadSecurityApi;
 
@@ -76,6 +77,7 @@ namespace SimpleCL.Models.Entities
             
             attackPacket.WriteByte(1);
             attackPacket.WriteUInt(Uid);
+            InteractionQueue.PacketQueue.Enqueue(attackPacket);
         }
     }
 }

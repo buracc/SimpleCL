@@ -9,6 +9,8 @@ namespace SimpleCL.Services.Game
 {
     public class ChatService : Service
     {
+        #region OnChatMessage
+
         [PacketHandler(Opcodes.Agent.Response.CHAT_UPDATE)]
         public void ChatUpdated(Server server, Packet packet)
         {
@@ -32,5 +34,7 @@ namespace SimpleCL.Services.Game
 
             SimpleCL.Gui.AddChatMessage(chatMessage.ToString());
         }
+
+        #endregion
     }
 }

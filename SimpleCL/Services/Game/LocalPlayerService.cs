@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using SimpleCL.SilkroadSecurityApi;
 using SimpleCL.Database;
 using SimpleCL.Enums.Commons;
@@ -26,6 +27,8 @@ namespace SimpleCL.Services.Game
             _silkroadServer = silkroadServer;
             _gateway = gateway;
         }
+
+        #region Spawned
 
         [PacketHandler(Opcodes.Agent.Response.CHAR_DATA_CHUNK)]
         public void GameJoined(Server server, Packet packet)
@@ -272,11 +275,19 @@ namespace SimpleCL.Services.Game
             server.Log("Successfully joined the game");
         }
 
+        #endregion
+
+        #region CelestialPosition
+
         [PacketHandler(Opcodes.Agent.Response.CHAR_CELESTIAL_POSITION)]
         public void GameReady(Server server, Packet packet)
         {
             server.Inject(new Packet(Opcodes.Agent.Request.GAME_READY));
         }
+
+        #endregion
+
+        #region StatChanged
 
         [PacketHandler(Opcodes.Agent.Response.CHAR_STAT)]
         public void CharacterStats(Server server, Packet packet)
@@ -294,6 +305,10 @@ namespace SimpleCL.Services.Game
             var str = packet.ReadUShort();
             var intellect = packet.ReadUShort();
         }
+
+        #endregion
+
+        #region CharInfo
 
         [PacketHandler(Opcodes.Agent.Response.CHAR_INFO_UPDATE)]
         public void CharacterInfo(Server server, Packet packet)
@@ -321,6 +336,25 @@ namespace SimpleCL.Services.Game
                     break;
             }
         }
+
+        #endregion
+
+        #region ExpGained
+
+        [PacketHandler(Opcodes.Agent.Response.CHAR_XP_UPDATE)]
+        public void ExpGained(Server server, Packet packet)
+        {
+            var sourceUid = packet.ReadUInt();
+            var expAmount = packet.ReadLong();
+            var spAmount = packet.ReadLong();
+
+            server.Log(expAmount + " EXP");
+            server.Log(spAmount + " SP");
+        }
+
+        #endregion
+
+        #region Utility methods
 
         private List<InventoryItem> ParseInventory(Packet packet, byte itemCount, bool inventory = true)
         {
@@ -479,5 +513,7 @@ namespace SimpleCL.Services.Game
 
             return items;
         }
+
+        #endregion
     }
 }

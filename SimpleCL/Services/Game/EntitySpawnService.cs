@@ -23,18 +23,24 @@ namespace SimpleCL.Services.Game
         private Packet _spawnPacket;
         private byte _spawnType;
         private ushort _spawnCount;
-        
+
+        #region SingleSpawn
+
         [PacketHandler(Opcodes.Agent.Response.ENTITY_SOLO_SPAWN)]
         public void SingleEntitySpawn(Server server, Packet packet)
         {
             EntitySpawn(server, packet);
         }
-        
+
         [PacketHandler(Opcodes.Agent.Response.ENTITY_SOLO_DESPAWN)]
         public void SingleEntityDespawn(Server server, Packet packet)
         {
             EntityDespawn(server, packet);
         }
+
+        #endregion
+
+        #region GroupSpawn
 
         [PacketHandler(Opcodes.Agent.Response.ENTITY_GROUP_SPAWN_START)]
         public void GroupSpawnStart(Server server, Packet packet)
@@ -81,6 +87,21 @@ namespace SimpleCL.Services.Game
             queryBuilder?.Finish();
         }
 
+        #endregion
+
+        #region OnTeleport
+
+        [PacketHandler(Opcodes.Agent.Response.TELEPORT_READY)]
+        public void TeleportUse(Server server, Packet packet)
+        {
+            Entities.Respawn();
+            server.Inject(new Packet(Opcodes.Agent.Request.TELEPORT_READY));
+        }
+
+        #endregion
+
+        #region Spawn Handlers
+
         private void EntityDespawn(Server server, Packet packet)
         {
             uint uid = packet.ReadUInt();
@@ -91,7 +112,7 @@ namespace SimpleCL.Services.Game
         {
             var refObjId = packet.ReadUInt();
             Entity entity;
-            
+
             try
             {
                 entity = Entity.FromId(refObjId, queryBuilder);
@@ -118,7 +139,7 @@ namespace SimpleCL.Services.Game
                     var angle = packet.ReadUShort();
                     break;
                 }
-                
+
                 case Teleport teleport:
                 {
                     teleport.Uid = packet.ReadUInt();
@@ -134,7 +155,7 @@ namespace SimpleCL.Services.Game
                     var unk = packet.ReadByte();
                     packet.ReadByte();
                     var type = (Teleport.Type) packet.ReadByte();
-                    
+
                     switch (type)
                     {
                         case Teleport.Type.Regular:
@@ -154,13 +175,13 @@ namespace SimpleCL.Services.Game
                     {
                         break;
                     }
-                    
+
                     packet.ReadByte();
                     packet.ReadByte();
 
                     break;
                 }
-                
+
                 case GroundItem groundItem:
                 {
                     if (groundItem.IsEquipment())
@@ -198,14 +219,14 @@ namespace SimpleCL.Services.Game
                         {
                             break;
                         }
-                        
+
                         var dropSourceType = packet.ReadByte();
                         var dropUid = packet.ReadUInt();
                     }
 
                     break;
                 }
-                
+
                 case Actor actor:
                 {
                     switch (actor)
@@ -256,7 +277,7 @@ namespace SimpleCL.Services.Game
 
                             break;
                         }
-                        
+
                         case FortressStructure structure:
                         {
                             var hp = packet.ReadUInt();
@@ -397,7 +418,7 @@ namespace SimpleCL.Services.Game
 
                             break;
                         }
-                        
+
                         case Npc npc when npc is Monster monster:
                         {
                             packet.ReadByte();
@@ -407,7 +428,7 @@ namespace SimpleCL.Services.Game
                             var mobType = (Monster.Type) unkBytes[0];
                             break;
                         }
-                        
+
                         case Npc npc:
                         {
                             var talk = packet.ReadByte();
@@ -422,7 +443,7 @@ namespace SimpleCL.Services.Game
                             {
                                 case TalkNpc talkNpc:
                                     break;
-                                
+
                                 case Cos cos:
                                 {
                                     if (!cos.IsHorse())
@@ -446,7 +467,7 @@ namespace SimpleCL.Services.Game
                                         }
 
                                         var ownerUid = packet.ReadUInt();
-                                        
+
                                         if (cos is FellowPet)
                                         {
                                             packet.ReadByte();
@@ -455,7 +476,7 @@ namespace SimpleCL.Services.Game
 
                                     break;
                                 }
-                                
+
                                 case FortressCos fortressCos:
                                 {
                                     var guildId = packet.ReadUInt();
@@ -472,19 +493,14 @@ namespace SimpleCL.Services.Game
                     {
                         packet.ReadByte();
                     }
-                    
+
                     break;
                 }
             }
-            
+
             Entities.Spawned(entity);
         }
 
-        [PacketHandler(Opcodes.Agent.Response.TELEPORT_READY)]
-        public void TeleportUse(Server server, Packet packet)
-        {
-            Entities.Respawn();
-            server.Inject(new Packet(Opcodes.Agent.Request.TELEPORT_READY));
-        }
+        #endregion
     }
 }

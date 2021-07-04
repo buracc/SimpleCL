@@ -27,5 +27,25 @@ namespace SimpleCL.Util.Extension
                 action(i);
             }
         }
+        
+        public static bool HasFlags(this ulong flags, ulong desiredFlags)
+        {
+            return (flags & desiredFlags) != 0;
+        }
+        
+        public static bool HasFlags(this uint flags, uint desiredFlags)
+        {
+            return (flags & desiredFlags) != 0;
+        }
+        
+        public static bool HasFlags(this ushort flags, ushort desiredFlags)
+        {
+            return (flags & desiredFlags) != 0;
+        }
+        
+        public static bool HasFlags(this byte flags, byte desiredFlags)
+        {
+            return (flags & desiredFlags) != 0;
+        }
     }
 }

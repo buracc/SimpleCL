@@ -11,6 +11,8 @@ namespace SimpleCL.Services.Game
 {
     public class EntityMovementService : Service
     {
+        #region OnMovement
+
         [PacketHandler(Opcodes.Agent.Response.ENTITY_MOVEMENT)]
         public void EntityMovement(Server server, Packet packet)
         {
@@ -91,6 +93,10 @@ namespace SimpleCL.Services.Game
             }
         }
 
+        #endregion
+
+        #region MovementHalted
+
         [PacketHandler(Opcodes.Agent.Response.ENTITY_MOVEMENT_HALT)]
         public void EntityHalt(Server server, Packet packet)
         {
@@ -106,11 +112,19 @@ namespace SimpleCL.Services.Game
             Entities.Moved(uid, stuckPosition, angle);
         }
 
+        #endregion
+
+        #region AngleChanged
+
         [PacketHandler(Opcodes.Agent.Response.ENTITY_MOVEMENT_ANGLE)]
         public void EntityAngle(Server server, Packet packet)
         {
             Entities.Moved(packet.ReadUInt(), angle: packet.ReadUShort());
         }
+
+        #endregion
+
+        #region SpeedChanged
 
         [PacketHandler(Opcodes.Agent.Response.ENTITY_SPEED)]
         public void EntitySpeed(Server server, Packet packet)
@@ -121,5 +135,7 @@ namespace SimpleCL.Services.Game
                 packet.ReadFloat()
             );
         }
+
+        #endregion
     }
 }

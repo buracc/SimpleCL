@@ -18,6 +18,7 @@ namespace SimpleCL.Interaction.Providers
         public static void Respawn()
         {
             AllEntities.Clear();
+            TargetableEntities.Clear();
             Buffs.Clear();
         }
 

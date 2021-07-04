@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SimpleCL.Enums.Commons;
+using SimpleCL.Interaction;
 using SimpleCL.Models.Items;
 using SimpleCL.Models.Skills;
 using SimpleCL.SilkroadSecurityApi;
@@ -34,6 +35,10 @@ namespace SimpleCL.Models.Entities
             
             attackPacket.WriteByte(1);
             attackPacket.WriteUInt(Uid);
+            Packet selectTarget = new Packet(Opcodes.Agent.Request.ENTITY_SELECT_OBJECT);
+            selectTarget.WriteUInt(Uid);
+            InteractionQueue.PacketQueue.Enqueue(selectTarget);
+            InteractionQueue.PacketQueue.Enqueue(attackPacket);
         }
     }
 }

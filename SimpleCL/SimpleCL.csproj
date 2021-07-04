@@ -163,7 +163,7 @@
     <Compile Include="Network\Server.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\Game\ChatService.cs" />
-    <Compile Include="Services\Game\EntityBuffService.cs" />
+    <Compile Include="Services\Game\EntitySkillService.cs" />
     <Compile Include="Services\Game\LocalPlayerService.cs" />
     <Compile Include="Services\Game\EntityMovementService.cs" />
     <Compile Include="Services\Game\EntitySpawnService.cs" />

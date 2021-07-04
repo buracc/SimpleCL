@@ -28,6 +28,8 @@ namespace SimpleCL.Services.Login
             _silkroadServer = silkroadServer;
         }
 
+        #region SendIdentity
+
         [PacketHandler(Opcodes.IDENTITY)]
         public void SendIdentity(Server server, Packet packet)
         {
@@ -54,11 +56,19 @@ namespace SimpleCL.Services.Login
             }
         }
 
+        #endregion
+
+        #region RequestServerlist
+
         [PacketHandler(Opcodes.Gateway.Response.PATCH)]
         public void RequestServerlist(Server server, Packet packet)
         {
             server.Inject(new Packet(Opcodes.Gateway.Request.SERVERLIST, true));
         }
+
+        #endregion
+
+        #region SendLogin
 
         [PacketHandler(Opcodes.Gateway.Response.SERVERLIST)]
         public void SendLogin(Server server, Packet packet)
@@ -86,11 +96,19 @@ namespace SimpleCL.Services.Login
             Application.Run(new Serverlist(servers, server));
         }
 
+        #endregion
+
+        #region SendPasscode
+
         [PacketHandler(Opcodes.Gateway.Response.LOGIN2)]
         public void SendPasscode(Server server, Packet packet)
         {
             Application.Run(new PasscodeEnter(server));
         }
+
+        #endregion
+
+        #region PasscodeResponse
 
         [PacketHandler(Opcodes.Gateway.Response.PASSCODE)]
         public void PasscodeResponse(Server server, Packet packet)
@@ -106,6 +124,10 @@ namespace SimpleCL.Services.Login
             Application.Run(new PasscodeEnter(server, "Invalid passcode [" + attempts + "/" + 3 + "]"));
             server.Log("Invalid passcode. Attempts: [" + attempts + "/" + 3 + "]");
         }
+
+        #endregion
+
+        #region AgentAuth
 
         [PacketHandler(Opcodes.Gateway.Response.AGENT_AUTH)]
         public void AgentAuth(Server server, Packet packet)
@@ -128,7 +150,7 @@ namespace SimpleCL.Services.Login
                     agent.RegisterService(new EntitySpawnService());
                     agent.RegisterService(new EntityHealthService());
                     agent.RegisterService(new EntityMovementService());
-                    agent.RegisterService(new EntityBuffService());
+                    agent.RegisterService(new EntitySkillService());
                     
                     // agent.Debug = true;
                     agent.Start();
@@ -217,6 +239,10 @@ namespace SimpleCL.Services.Login
             }
         }
 
+        #endregion
+
+        #region LoginQueue
+
         [PacketHandler(Opcodes.Gateway.Response.QUEUE_POSITION)]
         public void LoginQueuePosition(Server server, Packet packet)
         {
@@ -227,6 +253,10 @@ namespace SimpleCL.Services.Login
             
             server.Log("Queue position: [" + currentPosition + "/" + playersInQueue + "]");
         }
+
+        #endregion
+
+        #region RequestCharSelect
 
         [PacketHandler(Opcodes.Agent.Response.AUTH)]
         public void EnterCharacterSelect(Server server, Packet packet)
@@ -270,5 +300,7 @@ namespace SimpleCL.Services.Login
                 }
             }
         }
+
+        #endregion
     }
 }

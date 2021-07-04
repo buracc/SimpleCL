@@ -6,6 +6,7 @@ using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Server;
 using SimpleCL.Models.Character;
 using SimpleCL.Network;
+using SimpleCL.Ui;
 using SimpleCL.Util;
 using SimpleCL.Util.Extension;
 
@@ -19,6 +20,8 @@ namespace SimpleCL.Services.Login
         {
             _silkroadServer = silkroadServer;
         }
+
+        #region CharSelect
 
         [PacketHandler(Opcodes.Agent.Response.CHARACTER_SELECTION_ACTION)]
         public void SelectCharacter(Server server, Packet packet)
@@ -108,7 +111,9 @@ namespace SimpleCL.Services.Login
                 chars.Add(character);
             });
 
-            Application.Run(new Ui.CharacterSelection(chars, server));
+            Application.Run(new CharacterSelection(chars, server));
         }
+
+        #endregion
     }
 }

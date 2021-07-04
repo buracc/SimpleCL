@@ -11,6 +11,8 @@ namespace SimpleCL.Services.Game
 {
     public class EntityHealthService : Service
     {
+        #region HealthChanged
+
         [PacketHandler(Opcodes.Agent.Response.ENTITY_POTION_UPDATE)]
         public void HealthChanged(Server server, Packet packet)
         {
@@ -37,6 +39,10 @@ namespace SimpleCL.Services.Game
             {
                 case EntityStateEvent.Health.HP:
                     actor.Hp = packet.ReadUInt();
+                    if (actor is Monster monster && monster.Hp == 0)
+                    {
+                        Entities.Despawned(actor.Uid);
+                    }
                     break;
 
                 case EntityStateEvent.Health.MP:
@@ -46,6 +52,11 @@ namespace SimpleCL.Services.Game
                 case EntityStateEvent.Health.EntityHPMP:
                 case EntityStateEvent.Health.HPMP:
                     actor.Hp = packet.ReadUInt();
+                    if (actor is Monster m && m.Hp == 0)
+                    {
+                        Entities.Despawned(actor.Uid);
+                    }
+                    
                     actor.Mp = packet.ReadUInt();
                     break;
                 
@@ -54,5 +65,7 @@ namespace SimpleCL.Services.Game
                     break;
             }
         }
+
+        #endregion
     }
 }

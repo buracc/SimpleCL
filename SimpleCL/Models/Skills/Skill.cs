@@ -6,6 +6,8 @@ namespace SimpleCL.Models.Skills
 {
     public class Skill
     {
+        public long CastTimeStamp = Environment.TickCount;
+        
         public readonly uint Id;
         public readonly ushort GroupId;
         public readonly string ServerName;
@@ -71,9 +73,44 @@ namespace SimpleCL.Models.Skills
             Range = ushort.Parse(data["range"]);
         }
 
+        public bool IsOnCooldown()
+        {
+            return Environment.TickCount - CastTimeStamp < Cooldown;
+        }
+
+        public void StartCooldownTimer()
+        {
+            CastTimeStamp = Environment.TickCount;
+        }
+
         public override string ToString()
         {
             return Name;
+        }
+        
+        public enum CastType : byte
+        {
+            Buff = 0,
+            Attack = 2
+        }
+        
+        [Flags]
+        public enum DamageEffect : byte
+        {
+            None = 0,
+            KnockBack = 1,
+            Block = 2,
+            Position = 4,
+            Cancel = 8
+        }
+        
+        [Flags]
+        public enum DamageType : byte
+        {
+            None = 0,
+            Normal = 1,
+            Critical = 2,
+            Status = 4
         }
     }
 }

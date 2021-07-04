@@ -105,6 +105,7 @@ namespace SimpleCL.Ui
             this.loggerBox = new System.Windows.Forms.ListBox();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripProgressBar2 = new System.Windows.Forms.ToolStripProgressBar();
+            this.attackButton = new System.Windows.Forms.Button();
             credentialsGroup = new System.Windows.Forms.GroupBox();
             credentialsGroup.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -113,13 +114,13 @@ namespace SimpleCL.Ui
             this.inventoryPage.SuspendLayout();
             this.inventoryTabControl.SuspendLayout();
             this.inventoryInvTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.inventoryDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.inventoryDataGridView)).BeginInit();
             this.equipmentInvTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.equipmentDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.equipmentDataGridView)).BeginInit();
             this.avatarInvTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.avatarDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.avatarDataGridView)).BeginInit();
             this.jobEquipmentInvTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.jobEquipmentDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.jobEquipmentDataGridView)).BeginInit();
             this.chatTab.SuspendLayout();
             this.attackTab.SuspendLayout();
             this.movementTab.SuspendLayout();
@@ -610,6 +611,7 @@ namespace SimpleCL.Ui
             // 
             // attackTab
             // 
+            this.attackTab.Controls.Add(this.attackButton);
             this.attackTab.Controls.Add(this.removeSkillListBox);
             this.attackTab.Controls.Add(this.addSkillListBox);
             this.attackTab.Controls.Add(this.removeEntityButton);
@@ -754,7 +756,7 @@ namespace SimpleCL.Ui
             this.minimap.Name = "minimap";
             this.minimap.Size = new System.Drawing.Size(800, 800);
             this.minimap.TabIndex = 10;
-            this.minimap.Zoom = ((byte) (1));
+            this.minimap.Zoom = ((byte)(1));
             // 
             // currWorldLabel
             // 
@@ -835,6 +837,16 @@ namespace SimpleCL.Ui
             this.toolStripProgressBar2.Name = "toolStripProgressBar2";
             this.toolStripProgressBar2.Size = new System.Drawing.Size(100, 15);
             // 
+            // attackButton
+            // 
+            this.attackButton.Location = new System.Drawing.Point(653, 341);
+            this.attackButton.Name = "attackButton";
+            this.attackButton.Size = new System.Drawing.Size(75, 23);
+            this.attackButton.TabIndex = 11;
+            this.attackButton.Text = "Attack";
+            this.attackButton.UseVisualStyleBackColor = true;
+            this.attackButton.Click += new System.EventHandler(this.StartAttack);
+            // 
             // Gui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -854,19 +866,20 @@ namespace SimpleCL.Ui
             this.inventoryPage.ResumeLayout(false);
             this.inventoryTabControl.ResumeLayout(false);
             this.inventoryInvTab.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize) (this.inventoryDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.inventoryDataGridView)).EndInit();
             this.equipmentInvTab.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize) (this.equipmentDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.equipmentDataGridView)).EndInit();
             this.avatarInvTab.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize) (this.avatarDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.avatarDataGridView)).EndInit();
             this.jobEquipmentInvTab.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize) (this.jobEquipmentDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.jobEquipmentDataGridView)).EndInit();
             this.chatTab.ResumeLayout(false);
             this.attackTab.ResumeLayout(false);
             this.movementTab.ResumeLayout(false);
             this.mapPanel.ResumeLayout(false);
             this.devTab.ResumeLayout(false);
             this.ResumeLayout(false);
+
         }
 
         private System.Windows.Forms.Button addEntityButton;
@@ -878,7 +891,6 @@ namespace SimpleCL.Ui
 
         private System.Windows.Forms.Panel mapPanel;
 
-        private global::SimpleCL.Ui.Components.Map minimap;
 
         private System.Windows.Forms.Label currLocalLabel;
         private System.Windows.Forms.Label currWorldLabel;
@@ -893,9 +905,7 @@ namespace SimpleCL.Ui
         private System.Windows.Forms.TabPage devTab;
         private System.Windows.Forms.CheckBox debugGwCheckbox;
         private System.Windows.Forms.CheckBox debugAgCheckbox;
-
-        private global::SimpleCL.Ui.Components.TextProgressBar expProgressBar;
-
+        
         private System.Windows.Forms.Label nameLabel;
         private System.Windows.Forms.Label nameLabelValue;
         private System.Windows.Forms.Label jobNameLabelValue;
@@ -969,8 +979,12 @@ namespace SimpleCL.Ui
 
         #endregion
 
+        
+        private global::SimpleCL.Ui.Components.Map minimap;
+        private global::SimpleCL.Ui.Components.TextProgressBar expProgressBar;
         private global::SimpleCL.Ui.Components.TextProgressBar hpProgressBar;
         private global::SimpleCL.Ui.Components.TextProgressBar mpProgressBar;
         private global::SimpleCL.Ui.Components.TextProgressBar jobExpProgressBar;
+        private Button attackButton;
     }
 }

@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using SimpleCL.Database;
 using SimpleCL.Enums.Server;
+using SimpleCL.Interaction;
 using SimpleCL.Interaction.Providers;
 using SimpleCL.Models;
 using SimpleCL.Models.Character;
@@ -290,7 +291,8 @@ namespace SimpleCL.Ui
 
         private void AddSkill(object sender, EventArgs e)
         {
-            if (!(sender is CharacterSkill characterSkill))
+            var selected = availSkillsListBox.SelectedItem;
+            if (!(selected is CharacterSkill characterSkill))
             {
                 return;
             }
@@ -300,7 +302,8 @@ namespace SimpleCL.Ui
 
         private void RemoveSkill(object sender, EventArgs e)
         {
-            if (!(sender is CharacterSkill characterSkill))
+            var selected = attackSkillsListBox.SelectedItem;
+            if (!(selected is CharacterSkill characterSkill))
             {
                 return;
             }
@@ -310,7 +313,8 @@ namespace SimpleCL.Ui
 
         private void AddEntity(object sender, EventArgs e)
         {
-            if (!(sender is ITargetable target))
+            var selected = nearEntitiesListBox.SelectedItem;
+            if (!(selected is ITargetable target))
             {
                 return;
             }
@@ -320,7 +324,8 @@ namespace SimpleCL.Ui
 
         private void RemoveEntity(object sender, EventArgs e)
         {
-            if (!(sender is ITargetable target))
+            var selected = attackEntitiesListBox.SelectedItem;
+            if (!(selected is ITargetable target))
             {
                 return;
             }
@@ -331,6 +336,11 @@ namespace SimpleCL.Ui
         private void RefreshEntities(object sender, EventArgs e)
         {
             throw new System.NotImplementedException();
+        }
+
+        private void StartAttack(object sender, EventArgs e)
+        {
+            InteractionQueue.Get.StartLoop();
         }
     }
 }
