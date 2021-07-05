@@ -1,8 +1,8 @@
-﻿using SimpleCL.SilkroadSecurityApi;
-using SimpleCL.Enums.Chatter;
+﻿using SimpleCL.Enums.Chatter;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Models.Chatter;
 using SimpleCL.Network;
+using SimpleCL.SecurityApi;
 using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Services.Game

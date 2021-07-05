@@ -1,4 +1,4 @@
-﻿namespace SimpleCL.SilkroadSecurityApi
+﻿namespace SimpleCL.SecurityApi
 {
 	public class TransferBuffer
 	{

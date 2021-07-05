@@ -7,7 +7,7 @@ using SimpleCL.Interaction.Providers;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
-using SimpleCL.SilkroadSecurityApi;
+using SimpleCL.SecurityApi;
 
 namespace SimpleCL.Interaction
 {

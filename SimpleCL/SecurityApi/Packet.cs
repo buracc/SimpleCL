@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace SimpleCL.SilkroadSecurityApi
+namespace SimpleCL.SecurityApi
 {
 	public class Packet
 	{

@@ -6,7 +6,7 @@ using SimpleCL.Models.Character;
 using SimpleCL.Models.Entities;
 using SimpleCL.Models.Skills;
 using SimpleCL.Network;
-using SimpleCL.SilkroadSecurityApi;
+using SimpleCL.SecurityApi;
 using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Services.Game

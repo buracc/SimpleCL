@@ -3,7 +3,7 @@ using SimpleCL.Enums.Commons;
 using SimpleCL.Interaction;
 using SimpleCL.Models.Items;
 using SimpleCL.Models.Skills;
-using SimpleCL.SilkroadSecurityApi;
+using SimpleCL.SecurityApi;
 
 namespace SimpleCL.Models.Entities
 {

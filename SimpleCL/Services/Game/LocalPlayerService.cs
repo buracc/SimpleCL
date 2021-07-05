@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SimpleCL.SilkroadSecurityApi;
 using SimpleCL.Database;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Quests;
@@ -13,6 +12,7 @@ using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Items;
 using SimpleCL.Models.Skills;
 using SimpleCL.Network;
+using SimpleCL.SecurityApi;
 using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Services.Game

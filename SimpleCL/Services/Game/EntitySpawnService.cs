@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using SimpleCL.SilkroadSecurityApi;
 using SimpleCL.Database;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Skills;
@@ -13,6 +12,7 @@ using SimpleCL.Models.Exceptions;
 using SimpleCL.Models.Items;
 using SimpleCL.Models.Skills;
 using SimpleCL.Network;
+using SimpleCL.SecurityApi;
 using SimpleCL.Util;
 using SimpleCL.Util.Extension;
 

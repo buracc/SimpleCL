@@ -26,10 +26,10 @@ namespace SimpleCL.Ui
     {
         private const ushort GatewayPort = 15779;
 
-        private readonly ToolTip _toolTip = new ToolTip();
+        private readonly ToolTip _toolTip = new();
 
-        public readonly BindingList<CharacterSkill> SelectedSkills = new BindingList<CharacterSkill>();
-        public readonly BindingList<ITargetable> SelectedEntities = new BindingList<ITargetable>();
+        public readonly BindingList<CharacterSkill> SelectedSkills = new();
+        public readonly BindingList<ITargetable> SelectedEntities = new();
 
         public Gui()
         {
@@ -77,7 +77,6 @@ namespace SimpleCL.Ui
             var gw = new Gateway(selectedServer.GatewayIps[new Random().Next(selectedServer.GatewayIps.Length)],
                 GatewayPort);
             gw.RegisterService(new LoginService(usernameBox.Text, passwordBox.Text, selectedServer));
-            // gw.Debug = true;
             gw.Start();
 
             ToggleControls(false);

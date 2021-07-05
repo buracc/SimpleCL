@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace SimpleCL.SilkroadSecurityApi
+namespace SimpleCL.SecurityApi
 {
     public class Security
     {

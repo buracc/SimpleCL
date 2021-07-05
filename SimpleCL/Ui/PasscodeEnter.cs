@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
 using System.Windows.Forms;
-using SimpleCL.SilkroadSecurityApi;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Network;
+using SimpleCL.SecurityApi;
 
 namespace SimpleCL.Ui
 {

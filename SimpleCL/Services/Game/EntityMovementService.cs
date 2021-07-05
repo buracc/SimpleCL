@@ -1,10 +1,10 @@
 ﻿using System;
-using SimpleCL.SilkroadSecurityApi;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Interaction.Providers;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Network;
+using SimpleCL.SecurityApi;
 using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Services.Game

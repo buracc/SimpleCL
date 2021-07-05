@@ -1,6 +1,6 @@
-﻿using SimpleCL.SilkroadSecurityApi;
-using SimpleCL.Enums.Commons;
+﻿using SimpleCL.Enums.Commons;
 using SimpleCL.Interaction;
+using SimpleCL.SecurityApi;
 using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Models.Entities.Teleporters

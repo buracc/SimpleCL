@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace SimpleCL.SilkroadSecurityApi
+namespace SimpleCL.SecurityApi
 {
     internal class PacketReader : BinaryReader
     {
