@@ -20,7 +20,7 @@ namespace SimpleCL.Models.Entities
         public Movement.Mode WalkMode { get; set; }
         public Health.LifeState LifeState { get; set; }
         
-        private Timer movementTimer = new(100);
+        private Timer _movementTimer = new(100);
 
         public Actor(uint id) : base(id)
         {
@@ -29,9 +29,9 @@ namespace SimpleCL.Models.Entities
 
         public void StartMovement(LocalPoint destination)
         {
-            if (movementTimer.Enabled)
+            if (_movementTimer.Enabled)
             {
-                movementTimer.Dispose();
+                _movementTimer.Dispose();
             }
             
             var oldPos = WorldPoint;
@@ -43,16 +43,16 @@ namespace SimpleCL.Models.Entities
             var xDiff = newPos.X - oldPos.X;
             var yDiff = newPos.Y - oldPos.Y;
             
-            var intervalMs = movementTimer.Interval;
+            var intervalMs = _movementTimer.Interval;
             var totalIntervals = (float) (timeToDestination / intervalMs);
             var intervals = 0;
 
-            movementTimer = new Timer(100);
-            movementTimer.Elapsed += (_, _) =>
+            _movementTimer = new Timer(100);
+            _movementTimer.Elapsed += (_, _) =>
             {
                 if (++intervals > totalIntervals)
                 {
-                    movementTimer.Dispose();
+                    _movementTimer.Dispose();
                     LocalPoint = destination;
                     return;
                 }
@@ -63,7 +63,7 @@ namespace SimpleCL.Models.Entities
                 LocalPoint = LocalPoint.FromWorld(newWorldLoc);
             };
             
-            movementTimer.Start();
+            _movementTimer.Start();
         }
 
         public float GetTilesPerMillis(int interval = 50)
