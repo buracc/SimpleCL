@@ -42,14 +42,12 @@ namespace SimpleCL.Models.Entities
         {
             Id = id;
 
-            if (id == uint.MaxValue)
+            switch (id)
             {
-                return;
-            }
-
-            if (id > ushort.MaxValue)
-            {
-                throw new EntityParseException("Entity id longer than expected: " + id);
+                case uint.MaxValue:
+                    return;
+                case > ushort.MaxValue:
+                    throw new EntityParseException("Entity id longer than expected: " + id);
             }
 
             if ((DatabaseData = GameDatabase.Get.GetModel(id, queryBuilder)) != null)
@@ -89,7 +87,7 @@ namespace SimpleCL.Models.Entities
 
         public static Entity FromId(uint id, QueryBuilder queryBuilder = null)
         {
-            Entity entity = new Entity(id, queryBuilder);
+            var entity = new Entity(id, queryBuilder);
             if (entity.IsSkillAoe())
             {
                 return new SkillAoe(id);
@@ -97,7 +95,7 @@ namespace SimpleCL.Models.Entities
 
             if (entity.IsActor())
             {
-                Actor actor = new Actor(id);
+                var actor = new Actor(id);
                 if (actor.IsPlayer())
                 {
                     return new Player(id);
@@ -105,10 +103,10 @@ namespace SimpleCL.Models.Entities
 
                 if (actor.IsNpc())
                 {
-                    Npc npc = new Npc(id);
+                    var npc = new Npc(id);
                     if (npc.IsMonster())
                     {
-                        Monster monster = new Monster(id);
+                        var monster = new Monster(id);
                         if (monster.IsFlower())
                         {
                             return new Flower(id);
@@ -134,7 +132,7 @@ namespace SimpleCL.Models.Entities
 
                     if (npc.IsCos())
                     {
-                        Cos cos = new Cos(id);
+                        var cos = new Cos(id);
                         if (cos.IsHorse())
                         {
                             return new Horse(id);
@@ -173,7 +171,7 @@ namespace SimpleCL.Models.Entities
 
                     if (npc.IsFortressCos())
                     {
-                        FortressCos fortressCos = new FortressCos(id);
+                        var fortressCos = new FortressCos(id);
                         if (fortressCos.IsPatrolGuard())
                         {
                             return new FortressPatrolGuard(id);
@@ -197,7 +195,7 @@ namespace SimpleCL.Models.Entities
 
                     if (npc.IsFortressStructure())
                     {
-                        FortressStructure structure = new FortressStructure(id);
+                        var structure = new FortressStructure(id);
                         if (structure.IsHeart())
                         {
                             return new FortressHeart(id);
@@ -236,12 +234,7 @@ namespace SimpleCL.Models.Entities
                 return new GroundItem(id);
             }
 
-            if (entity.IsTeleport())
-            {
-                return new Teleport(id);
-            }
-
-            return entity;
+            return entity.IsTeleport() ? new Teleport(id) : entity;
         }
 
         public bool IsSkillAoe()

@@ -21,13 +21,15 @@ namespace SimpleCL.Models.Character
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder(Name + " Lvl. " + Level);
-            if (Deleting)
+            var sb = new StringBuilder(Name + " Lvl. " + Level);
+            if (!Deleting)
             {
-                sb.Append(" Deleted at: ");
-                sb.Append(DeletionTime);
+                return sb.ToString();
             }
             
+            sb.Append(" Deleted at: ");
+            sb.Append(DeletionTime);
+
             return sb.ToString();
         }
     }

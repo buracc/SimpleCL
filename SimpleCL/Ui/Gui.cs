@@ -28,8 +28,8 @@ namespace SimpleCL.Ui
 
         private readonly ToolTip _toolTip = new ToolTip();
 
-        public BindingList<CharacterSkill> SelectedSkills = new BindingList<CharacterSkill>();
-        public BindingList<ITargetable> SelectedEntities = new BindingList<ITargetable>();
+        public readonly BindingList<CharacterSkill> SelectedSkills = new BindingList<CharacterSkill>();
+        public readonly BindingList<ITargetable> SelectedEntities = new BindingList<ITargetable>();
 
         public Gui()
         {
@@ -38,7 +38,7 @@ namespace SimpleCL.Ui
 
             FormClosed += ExitApplication;
 
-            foreach (SilkroadServer server in SilkroadServer.Values)
+            foreach (var server in SilkroadServer.Values)
             {
                 serverComboBox.Items.Add(server);
             }
@@ -67,14 +67,14 @@ namespace SimpleCL.Ui
 
         private void LoginClicked(object sender, EventArgs e)
         {
-            if (!(serverComboBox.SelectedItem is SilkroadServer selectedServer))
+            if (serverComboBox.SelectedItem is not SilkroadServer selectedServer)
             {
                 return;
             }
 
             GameDatabase.Get.SelectedServer = selectedServer;
 
-            Gateway gw = new Gateway(selectedServer.GatewayIps[new Random().Next(selectedServer.GatewayIps.Length)],
+            var gw = new Gateway(selectedServer.GatewayIps[new Random().Next(selectedServer.GatewayIps.Length)],
                 GatewayPort);
             gw.RegisterService(new LoginService(usernameBox.Text, passwordBox.Text, selectedServer));
             // gw.Debug = true;
@@ -115,43 +115,45 @@ namespace SimpleCL.Ui
 
         public void RefreshGui()
         {
-            LocalPlayer local = LocalPlayer.Get;
-            if (local != null)
+            var local = LocalPlayer.Get;
+            if (local == null)
             {
-                nameLabelValue.Text = local.Name;
-                jobNameLabelValue.Text = local.JobName;
-
-                Text = "SimpleCL (" + local.Uid + ")";
-
-                hpProgressBar.Maximum = (int) local.MaxHp;
-                mpProgressBar.Maximum = (int) local.MaxMp;
-                hpProgressBar.Value = (int) local.MaxHp;
-                mpProgressBar.Value = (int) local.MaxMp;
-
-                expProgressBar.Value = (int) local.GetExpPercent();
-                expProgressBar.CustomText = local.GetExpPercentDecimal().ToString("P", CultureInfo.CurrentCulture);
-                jobExpProgressBar.Value = (int) local.GetJobExpPercent();
-                jobExpProgressBar.CustomText =
-                    local.GetJobExpPercentDecimal().ToString("P", CultureInfo.CurrentCulture);
-
-                levelLabelValue.Text = local.Level.ToString();
-                jobLevelLabelValue.Text = local.JobLevel.ToString();
-                spLabelValue.Text = local.Skillpoints.ToString("N0");
-                goldLabelValue.Text = local.Gold.ToString("N0");
-
-                var worldPoint = WorldPoint.FromLocal(local.LocalPoint);
-                localCoordsLabelValue.Text = local.LocalPoint.ToString();
-                worldCoordsLabelValue.Text = worldPoint.ToString();
-                currLocalLabelValue.Text = local.LocalPoint.ToString();
-                currWorldLabelValue.Text = worldPoint.ToString();
-
-                inventoryDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-
-                inventoryDataGridView.DataSource = local.Inventories["inventory"];
-                equipmentDataGridView.DataSource = local.Inventories["equipment"];
-                avatarDataGridView.DataSource = local.Inventories["avatar"];
-                jobEquipmentDataGridView.DataSource = local.Inventories["jobEquipment"];
+                return;
             }
+            
+            nameLabelValue.Text = local.Name;
+            jobNameLabelValue.Text = local.JobName;
+
+            Text = "SimpleCL (" + local.Uid + ")";
+
+            hpProgressBar.Maximum = (int) local.MaxHp;
+            mpProgressBar.Maximum = (int) local.MaxMp;
+            hpProgressBar.Value = (int) local.MaxHp;
+            mpProgressBar.Value = (int) local.MaxMp;
+
+            expProgressBar.Value = (int) local.GetExpPercent();
+            expProgressBar.CustomText = local.GetExpPercentDecimal().ToString("P", CultureInfo.CurrentCulture);
+            jobExpProgressBar.Value = (int) local.GetJobExpPercent();
+            jobExpProgressBar.CustomText =
+                local.GetJobExpPercentDecimal().ToString("P", CultureInfo.CurrentCulture);
+
+            levelLabelValue.Text = local.Level.ToString();
+            jobLevelLabelValue.Text = local.JobLevel.ToString();
+            spLabelValue.Text = local.Skillpoints.ToString("N0");
+            goldLabelValue.Text = local.Gold.ToString("N0");
+
+            var worldPoint = WorldPoint.FromLocal(local.LocalPoint);
+            localCoordsLabelValue.Text = local.LocalPoint.ToString();
+            worldCoordsLabelValue.Text = worldPoint.ToString();
+            currLocalLabelValue.Text = local.LocalPoint.ToString();
+            currWorldLabelValue.Text = worldPoint.ToString();
+
+            inventoryDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+            inventoryDataGridView.DataSource = local.Inventories["inventory"];
+            equipmentDataGridView.DataSource = local.Inventories["equipment"];
+            avatarDataGridView.DataSource = local.Inventories["avatar"];
+            jobEquipmentDataGridView.DataSource = local.Inventories["jobEquipment"];
         }
 
         public bool DebugGateway()
@@ -166,32 +168,32 @@ namespace SimpleCL.Ui
 
         public void AddMinimapMarker(Entity entity)
         {
-            MapControl marker = new MapControl();
+            var marker = new MapControl();
             _toolTip.SetToolTip(marker, entity.ToString());
 
             switch (entity)
             {
-                case TalkNpc talkNpc:
+                case TalkNpc:
                     marker.Image = Properties.Resources.mm_sign_npc;
                     break;
 
-                case Monster monster:
+                case Monster:
                     marker.Image = Properties.Resources.mm_sign_monster;
                     break;
 
-                case LocalPlayer localPlayer:
+                case LocalPlayer:
                     marker.Image = Properties.Resources.mm_sign_character;
                     _toolTip.SetToolTip(marker, "We are here");
                     break;
 
-                case Player player:
+                case Player:
                     marker.Image = Properties.Resources.mm_sign_otherplayer;
                     break;
 
-                case PickPet pickPet:
-                case AttackPet attackPet:
-                case FellowPet fellowPet:
-                case Horse horse:
+                case PickPet:
+                case AttackPet:
+                case FellowPet:
+                case Horse:
                     marker.Image = Properties.Resources.mm_sign_animal;
                     break;
 
@@ -199,10 +201,10 @@ namespace SimpleCL.Ui
                     marker.Image = Properties.Resources.xy_gate;
                     if (teleporter.Links.IsNotEmpty())
                     {
-                        ContextMenuStrip teleportMenu = new ContextMenuStrip();
-                        foreach (TeleportLink teleportLink in teleporter.Links)
+                        var teleportMenu = new ContextMenuStrip();
+                        foreach (var teleportLink in teleporter.Links)
                         {
-                            ToolStripMenuItem menuitem = new ToolStripMenuItem
+                            var menuitem = new ToolStripMenuItem
                             {
                                 Text = teleportLink.Name,
                                 Name = teleportLink.DestinationId.ToString(),
@@ -229,7 +231,7 @@ namespace SimpleCL.Ui
             
             marker.Size = marker.Image.Size;
 
-            Point location = minimap.GetPoint(entity.WorldPoint);
+            var location = minimap.GetPoint(entity.WorldPoint);
             location.X -= marker.Image.Size.Width / 2;
             location.Y -= marker.Image.Size.Height / 2;
             marker.Location = location;
@@ -292,7 +294,7 @@ namespace SimpleCL.Ui
         private void AddSkill(object sender, EventArgs e)
         {
             var selected = availSkillsListBox.SelectedItem;
-            if (!(selected is CharacterSkill characterSkill))
+            if (selected is not CharacterSkill characterSkill)
             {
                 return;
             }
@@ -303,7 +305,7 @@ namespace SimpleCL.Ui
         private void RemoveSkill(object sender, EventArgs e)
         {
             var selected = attackSkillsListBox.SelectedItem;
-            if (!(selected is CharacterSkill characterSkill))
+            if (selected is not CharacterSkill characterSkill)
             {
                 return;
             }
@@ -314,7 +316,7 @@ namespace SimpleCL.Ui
         private void AddEntity(object sender, EventArgs e)
         {
             var selected = nearEntitiesListBox.SelectedItem;
-            if (!(selected is ITargetable target))
+            if (selected is not ITargetable target)
             {
                 return;
             }
@@ -325,7 +327,7 @@ namespace SimpleCL.Ui
         private void RemoveEntity(object sender, EventArgs e)
         {
             var selected = attackEntitiesListBox.SelectedItem;
-            if (!(selected is ITargetable target))
+            if (selected is not ITargetable target)
             {
                 return;
             }
@@ -335,7 +337,7 @@ namespace SimpleCL.Ui
 
         private void RefreshEntities(object sender, EventArgs e)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         private void StartAttack(object sender, EventArgs e)

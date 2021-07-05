@@ -32,7 +32,7 @@ namespace SimpleCL.SilkroadSecurityApi
 
         static SecurityFlags CopySecurityFlags(SecurityFlags flags)
         {
-            SecurityFlags copy = new SecurityFlags();
+            var copy = new SecurityFlags();
             copy.none = flags.none;
             copy.blowfish = flags.blowfish;
             copy.security_bytes = flags.security_bytes;
@@ -53,7 +53,7 @@ namespace SimpleCL.SilkroadSecurityApi
         // Returns a SecurityFlags object from a byte.
         static SecurityFlags ToSecurityFlags(byte value)
         {
-            SecurityFlags flags = new SecurityFlags();
+            var flags = new SecurityFlags();
             flags.none = (byte)(value & 1);
             value >>= 1;
             flags.blowfish = (byte)(value & 1);
@@ -78,7 +78,7 @@ namespace SimpleCL.SilkroadSecurityApi
         // Generates the crc bytes lookup table
         static uint[] GenerateSecurityTable()
         {
-            uint[] security_table = new uint[0x10000];
+            var security_table = new uint[0x10000];
             byte[] base_security_table = 
             {
                 0xB1, 0xD6, 0x8B, 0x96, 0x96, 0x30, 0x07, 0x77, 0x2C, 0x61, 0x0E, 0xEE, 0xBA, 0x51, 0x09, 0x99, 
@@ -147,22 +147,22 @@ namespace SimpleCL.SilkroadSecurityApi
                 0x37, 0xBE, 0xCB, 0xB4, 0xA1, 0x8E, 0xCC, 0xC3, 0x1B, 0xDF, 0x0D, 0x5A, 0x8D, 0xED, 0x02, 0x2D,
             };
 
-            using (MemoryStream in_memory_stream = new MemoryStream(base_security_table, false))
+            using (var in_memory_stream = new MemoryStream(base_security_table, false))
             {
-                using (BinaryReader reader = new BinaryReader(in_memory_stream))
+                using (var reader = new BinaryReader(in_memory_stream))
                 {
-                    int index = 0;
-                    for (int edi = 0; edi < 1024; edi += 4)
+                    var index = 0;
+                    for (var edi = 0; edi < 1024; edi += 4)
                     {
-                        uint edx = reader.ReadUInt32();
+                        var edx = reader.ReadUInt32();
                         for (uint ecx = 0; ecx < 256; ++ecx)
                         {
-                            uint eax = ecx >> 1;
+                            var eax = ecx >> 1;
                             if ((ecx & 1) != 0)
                             {
                                 eax ^= edx;
                             }
-                            for (int bit = 0; bit < 7; ++bit)
+                            for (var bit = 0; bit < 7; ++bit)
                             {
                                 if ((eax & 1) != 0)
                                 {
@@ -301,7 +301,7 @@ namespace SimpleCL.SilkroadSecurityApi
         // This function's logic was written by jMerlin as part of the article "How to generate the security bytes for SRO"
         uint GenerateValue(ref uint val)
         {
-            for (int i = 0; i < 32; ++i)
+            for (var i = 0; i < 32; ++i)
             {
                 val = (((((((((((val >> 2) ^ val) >> 2) ^ val) >> 1) ^ val) >> 1) ^ val) >> 1) ^ val) & 1) | ((((val & 1) << 31) | (val >> 1)) & 0xFFFFFFFE);
             }
@@ -313,13 +313,13 @@ namespace SimpleCL.SilkroadSecurityApi
         void SetupCountByte(uint seed)
         {
             if (seed == 0) seed = 0x9ABFB3B6;
-            uint mut = seed;
-            uint mut1 = GenerateValue(ref mut);
-            uint mut2 = GenerateValue(ref mut);
-            uint mut3 = GenerateValue(ref mut);
+            var mut = seed;
+            var mut1 = GenerateValue(ref mut);
+            var mut2 = GenerateValue(ref mut);
+            var mut3 = GenerateValue(ref mut);
             GenerateValue(ref mut);
-            byte byte1 = (byte)((mut & 0xFF) ^ (mut3 & 0xFF));
-            byte byte2 = (byte)((mut1 & 0xFF) ^ (mut2 & 0xFF));
+            var byte1 = (byte)((mut & 0xFF) ^ (mut3 & 0xFF));
+            var byte2 = (byte)((mut1 & 0xFF) ^ (mut2 & 0xFF));
             if (byte1 == 0) byte1 = 1;
             if (byte2 == 0) byte2 = 1;
             m_count_byte_seeds[0] = (byte)(byte1 ^ byte2);
@@ -351,7 +351,7 @@ namespace SimpleCL.SilkroadSecurityApi
         // Helper function used in the handshake (Func_X_2)
         void KeyTransformValue(ref ulong val, uint key, byte key_byte)
         {
-            byte[] stream = BitConverter.GetBytes(val);
+            var stream = BitConverter.GetBytes(val);
             stream[0] ^= (byte)(stream[0] + LOBYTE_(LOWORD_(key)) + key_byte);
             stream[1] ^= (byte)(stream[1] + HIBYTE_(LOWORD_(key)) + key_byte);
             stream[2] ^= (byte)(stream[2] + LOBYTE_(HIWORD_(key)) + key_byte);
@@ -367,7 +367,7 @@ namespace SimpleCL.SilkroadSecurityApi
         // This function's logic was written by jMerlin as part of the article "How to generate the security bytes for SRO"
         byte GenerateCountByte(bool update)
         {
-            byte result = (byte)(m_count_byte_seeds[2] * (~m_count_byte_seeds[0] + m_count_byte_seeds[1]));
+            var result = (byte)(m_count_byte_seeds[2] * (~m_count_byte_seeds[0] + m_count_byte_seeds[1]));
             result = (byte)(result ^ (result >> 4));
             if (update)
             {
@@ -380,9 +380,9 @@ namespace SimpleCL.SilkroadSecurityApi
         // This function's logic was written by jMerlin as part of the article "How to generate the security bytes for SRO"
         byte GenerateCheckByte(byte[] stream, int offset, int length)
         {
-            uint checksum = 0xFFFFFFFF;
-            uint moddedseed = m_crc_seed << 8;
-            for (int x = offset; x < offset + length; ++x)
+            var checksum = 0xFFFFFFFF;
+            var moddedseed = m_crc_seed << 8;
+            for (var x = offset; x < offset + length; ++x)
             {
                 checksum = (checksum >> 8) ^ global_security_table[moddedseed + (((uint)stream[x] ^ checksum) & 0xFF)];
             }
@@ -402,7 +402,7 @@ namespace SimpleCL.SilkroadSecurityApi
             m_security_flags = flags;
             m_client_security = true;
 
-            Packet response = new Packet(0x5000);
+            var response = new Packet(0x5000);
 
             response.WriteByte(m_security_flag);
 
@@ -540,11 +540,11 @@ namespace SimpleCL.SilkroadSecurityApi
                 KeyTransformValue(ref m_handshake_blowfish_key, m_value_K, 0x3);
                 m_blowfish.Initialize(BitConverter.GetBytes(m_handshake_blowfish_key));
 
-                SecurityFlags tmp_flags = new SecurityFlags();
+                var tmp_flags = new SecurityFlags();
                 tmp_flags.handshake_response = 1;
-                byte tmp_flag = FromSecurityFlags(tmp_flags);
+                var tmp_flag = FromSecurityFlags(tmp_flags);
 
-                Packet response = new Packet(0x5000);
+                var response = new Packet(0x5000);
                 response.WriteByte(tmp_flag);
                 response.WriteULong(m_challenge_key);
                 m_outgoing_packets.Add(response);
@@ -556,9 +556,9 @@ namespace SimpleCL.SilkroadSecurityApi
                     throw (new Exception("[SecurityAPI::Handshake] Received an illogical handshake packet (programmer error)."));
                 }
 
-                byte flag = packet_data.ReadByte();
+                var flag = packet_data.ReadByte();
 
-                SecurityFlags flags = ToSecurityFlags(flag);
+                var flags = ToSecurityFlags(flag);
 
                 if (m_security_flag == 0)
                 {
@@ -591,13 +591,13 @@ namespace SimpleCL.SilkroadSecurityApi
                     m_value_B = G_pow_X_mod_P(m_value_p, m_value_x, m_value_g);
                     m_value_K = G_pow_X_mod_P(m_value_p, m_value_x, m_value_A);
 
-                    ulong key_array = MAKELONGLONG_(m_value_A, m_value_B);
+                    var key_array = MAKELONGLONG_(m_value_A, m_value_B);
                     KeyTransformValue(ref key_array, m_value_K, (byte)(LOBYTE_(LOWORD_(m_value_K)) & 0x03));
                     m_blowfish.Initialize(BitConverter.GetBytes(key_array));
 
                     m_client_key = MAKELONGLONG_(m_value_B, m_value_A);
                     KeyTransformValue(ref m_client_key, m_value_K, (byte)(LOBYTE_(LOWORD_(m_value_B)) & 0x07));
-                    byte[] tmp_bytes = m_blowfish.Encode(BitConverter.GetBytes(m_client_key));
+                    var tmp_bytes = m_blowfish.Encode(BitConverter.GetBytes(m_client_key));
                     m_client_key = BitConverter.ToUInt64(tmp_bytes, 0);
                 }
 
@@ -605,9 +605,9 @@ namespace SimpleCL.SilkroadSecurityApi
                 {
                     m_challenge_key = packet_data.ReadUInt64();
 
-                    ulong expected_challenge_key = MAKELONGLONG_(m_value_A, m_value_B);
+                    var expected_challenge_key = MAKELONGLONG_(m_value_A, m_value_B);
                     KeyTransformValue(ref expected_challenge_key, m_value_K, (byte)(LOBYTE_(LOWORD_(m_value_A)) & 0x07));
-                    byte[] tmp_bytes = m_blowfish.Encode(BitConverter.GetBytes(expected_challenge_key));
+                    var tmp_bytes = m_blowfish.Encode(BitConverter.GetBytes(expected_challenge_key));
                     expected_challenge_key = BitConverter.ToUInt64(tmp_bytes, 0);
 
                     if (m_challenge_key != expected_challenge_key)
@@ -629,7 +629,7 @@ namespace SimpleCL.SilkroadSecurityApi
                     }
 
                     // Handshake challenge
-                    Packet response = new Packet(0x5000);
+                    var response = new Packet(0x5000);
                     response.WriteUInt(m_value_B);
                     response.WriteULong(m_client_key);
                     m_outgoing_packets.Insert(0, response);
@@ -646,10 +646,10 @@ namespace SimpleCL.SilkroadSecurityApi
                     }
 
                     // Handshake accepted
-                    Packet response1 = new Packet(0x9000);
+                    var response1 = new Packet(0x9000);
 
                     // Identify
-                    Packet response2 = new Packet(0x2001, true, false);
+                    var response2 = new Packet(0x2001, true, false);
                     response2.WriteAscii(m_identity_name);
                     response2.WriteByte(m_identity_flag);
 
@@ -672,10 +672,10 @@ namespace SimpleCL.SilkroadSecurityApi
                 throw (new Exception("[SecurityAPI::FormatPacket] Payload is too large!"));
             }
 
-            ushort data_length = (ushort)data.Length;
+            var data_length = (ushort)data.Length;
 
             // Add the packet header to the start of the data
-            PacketWriter writer = new PacketWriter();
+            var writer = new PacketWriter();
             writer.Write(data_length); // packet size
             writer.Write(opcode); // packet opcode
             writer.Write((ushort)0); // packet security bytes
@@ -685,9 +685,9 @@ namespace SimpleCL.SilkroadSecurityApi
             // Determine if we need to mark the packet size as encrypted
             if (encrypted && (m_security_flags.blowfish == 1 || (m_security_flags.security_bytes == 1 && m_security_flags.blowfish == 0)))
             {
-                long seek_index = writer.BaseStream.Seek(0, SeekOrigin.Current);
+                var seek_index = writer.BaseStream.Seek(0, SeekOrigin.Current);
 
-                ushort packet_size = (ushort)(data_length | 0x8000);
+                var packet_size = (ushort)(data_length | 0x8000);
 
                 writer.BaseStream.Seek(0, SeekOrigin.Begin);
                 writer.Write((ushort)packet_size);
@@ -699,14 +699,14 @@ namespace SimpleCL.SilkroadSecurityApi
             // Only need to stamp bytes if this is a clientless object
             if (m_client_security == false && m_security_flags.security_bytes == 1)
             {
-                long seek_index = writer.BaseStream.Seek(0, SeekOrigin.Current);
+                var seek_index = writer.BaseStream.Seek(0, SeekOrigin.Current);
 
-                byte sb1 = GenerateCountByte(true);
+                var sb1 = GenerateCountByte(true);
                 writer.BaseStream.Seek(4, SeekOrigin.Begin);
                 writer.Write(sb1);
                 writer.Flush();
 
-                byte sb2 = GenerateCheckByte(writer.GetBytes());
+                var sb2 = GenerateCheckByte(writer.GetBytes());
                 writer.BaseStream.Seek(5, SeekOrigin.Begin);
                 writer.Write(sb2);
                 writer.Flush();
@@ -717,8 +717,8 @@ namespace SimpleCL.SilkroadSecurityApi
             // If the packet should be physically encrypted, return an encrypted version of it
             if (encrypted && m_security_flags.blowfish == 1)
             {
-                byte[] raw_data = writer.GetBytes();
-                byte[] encrypted_data = m_blowfish.Encode(raw_data, 2, raw_data.Length - 2);
+                var raw_data = writer.GetBytes();
+                var encrypted_data = m_blowfish.Encode(raw_data, 2, raw_data.Length - 2);
 
                 writer.BaseStream.Seek(2, SeekOrigin.Begin);
 
@@ -730,7 +730,7 @@ namespace SimpleCL.SilkroadSecurityApi
                 // Determine if we need to unmark the packet size from being encrypted but not physically encrypted
                 if (encrypted && (m_security_flags.security_bytes == 1 && m_security_flags.blowfish == 0))
                 {
-                    long seek_index = writer.BaseStream.Seek(0, SeekOrigin.Current);
+                    var seek_index = writer.BaseStream.Seek(0, SeekOrigin.Current);
 
                     writer.BaseStream.Seek(0, SeekOrigin.Begin);
                     writer.Write((ushort)data_length);
@@ -760,7 +760,7 @@ namespace SimpleCL.SilkroadSecurityApi
             }
 
             // Otherwise, check to see if we have pending handshake packets to send
-            Packet packet = m_outgoing_packets[0];
+            var packet = m_outgoing_packets[0];
             if (packet.Opcode == 0x5000 || packet.Opcode == 0x9000)
             {
                 return true;
@@ -777,26 +777,26 @@ namespace SimpleCL.SilkroadSecurityApi
                 throw (new Exception("[SecurityAPI::GetPacketToSend] No packets are avaliable to send."));
             }
 
-            Packet packet = m_outgoing_packets[0];
+            var packet = m_outgoing_packets[0];
             m_outgoing_packets.RemoveAt(0);
 
             if (packet.Massive)
             {
                 ushort parts = 0;
 
-                PacketWriter final = new PacketWriter();
-                PacketWriter final_data = new PacketWriter();
+                var final = new PacketWriter();
+                var final_data = new PacketWriter();
 
-                byte[] input_data = packet.GetBytes();
-                PacketReader input_reader = new PacketReader(input_data);
+                var input_data = packet.GetBytes();
+                var input_reader = new PacketReader(input_data);
 
-                TransferBuffer workspace = new TransferBuffer(4089, 0, (int)input_data.Length);
+                var workspace = new TransferBuffer(4089, 0, (int)input_data.Length);
 
                 while (workspace.Size > 0)
                 {
-                    PacketWriter part_data = new PacketWriter();
+                    var part_data = new PacketWriter();
 
-                    int cur_size = workspace.Size > 4089 ? 4089 : workspace.Size; // Max buffer size is 4kb for the client
+                    var cur_size = workspace.Size > 4089 ? 4089 : workspace.Size; // Max buffer size is 4kb for the client
 
                     part_data.Write((byte)0); // Data flag
 
@@ -811,7 +811,7 @@ namespace SimpleCL.SilkroadSecurityApi
                 }
 
                 // Write the final header packet to the front of the packet
-                PacketWriter final_header = new PacketWriter();
+                var final_header = new PacketWriter();
                 final_header.Write((byte)1); // Header flag
                 final_header.Write((short)parts);
                 final_header.Write(packet.Opcode);
@@ -821,13 +821,13 @@ namespace SimpleCL.SilkroadSecurityApi
                 final.Write(final_data.GetBytes());
 
                 // Return the collated data
-                byte[] raw_bytes = final.GetBytes();
+                var raw_bytes = final.GetBytes();
                 packet.Lock();
                 return new KeyValuePair<TransferBuffer, Packet>(new TransferBuffer(raw_bytes, 0, raw_bytes.Length, true), packet);
             }
             else
             {
-                bool encrypted = packet.Encrypted;
+                var encrypted = packet.Encrypted;
                 if (!m_client_security)
                 {
                     if (m_enc_opcodes.Contains(packet.Opcode))
@@ -835,7 +835,7 @@ namespace SimpleCL.SilkroadSecurityApi
                         encrypted = true;
                     }
                 }
-                byte[] raw_bytes = FormatPacket(packet.Opcode, packet.GetBytes(), encrypted);
+                var raw_bytes = FormatPacket(packet.Opcode, packet.GetBytes(), encrypted);
                 packet.Lock();
                 return new KeyValuePair<TransferBuffer, Packet>(new TransferBuffer(raw_bytes, 0, raw_bytes.Length, true), packet);
             }
@@ -909,7 +909,7 @@ namespace SimpleCL.SilkroadSecurityApi
         {
             lock (m_class_lock)
             {
-                SecurityFlags flags = new SecurityFlags();
+                var flags = new SecurityFlags();
                 if (blowfish)
                 {
                     flags.none = 0;
@@ -972,15 +972,15 @@ namespace SimpleCL.SilkroadSecurityApi
         // obtain a list of ready to process packets.
         public void Recv(TransferBuffer raw_buffer)
         {
-            List<TransferBuffer> incoming_buffers_tmp = new List<TransferBuffer>();
+            var incoming_buffers_tmp = new List<TransferBuffer>();
             lock (m_class_lock)
             {
-                int length = raw_buffer.Size - raw_buffer.Offset;
-                int index = 0;
+                var length = raw_buffer.Size - raw_buffer.Offset;
+                var index = 0;
                 while (length > 0)
                 {
-                    int max_length = length;
-                    int calc_length = m_recv_buffer.Buffer.Length - m_recv_buffer.Size;
+                    var max_length = length;
+                    var calc_length = m_recv_buffer.Buffer.Length - m_recv_buffer.Size;
 
                     if (max_length > calc_length)
                     {
@@ -1006,7 +1006,7 @@ namespace SimpleCL.SilkroadSecurityApi
                             }
 
                             // Calculate the packet size.
-                            int packet_size = m_recv_buffer.Buffer[1] << 8 | m_recv_buffer.Buffer[0];
+                            var packet_size = m_recv_buffer.Buffer[1] << 8 | m_recv_buffer.Buffer[0];
 
                             // Check to see if this packet is encrypted.
                             if ((packet_size & 0x8000) > 0)
@@ -1034,7 +1034,7 @@ namespace SimpleCL.SilkroadSecurityApi
                         }
 
                         // Calculate how many bytes are left to receive in the packet.
-                        int max_copy_count = m_current_buffer.Size - m_current_buffer.Offset;
+                        var max_copy_count = m_current_buffer.Size - m_current_buffer.Offset;
 
                         // If we need more bytes than we currently have, update the size.
                         if (max_copy_count > m_recv_buffer.Size)
@@ -1078,11 +1078,11 @@ namespace SimpleCL.SilkroadSecurityApi
 
                 if (incoming_buffers_tmp.Count > 0)
                 {
-                    foreach (TransferBuffer buffer in incoming_buffers_tmp)
+                    foreach (var buffer in incoming_buffers_tmp)
                     {
-                        bool packet_encrypted = false;
+                        var packet_encrypted = false;
 
-                        int packet_size = buffer.Buffer[1] << 8 | buffer.Buffer[0];
+                        var packet_size = buffer.Buffer[1] << 8 | buffer.Buffer[0];
                         if ((packet_size & 0x8000) > 0)
                         {
                             if (m_security_flags.blowfish == 1)
@@ -1098,26 +1098,26 @@ namespace SimpleCL.SilkroadSecurityApi
 
                         if (packet_encrypted)
                         {
-                            byte[] decrypted = m_blowfish.Decode(buffer.Buffer, 2, buffer.Size - 2);
-                            byte[] new_buffer = new byte[6 + packet_size];
+                            var decrypted = m_blowfish.Decode(buffer.Buffer, 2, buffer.Size - 2);
+                            var new_buffer = new byte[6 + packet_size];
                             Buffer.BlockCopy(BitConverter.GetBytes((ushort)packet_size), 0, new_buffer, 0, 2);
                             Buffer.BlockCopy(decrypted, 0, new_buffer, 2, 4 + packet_size);
                             buffer.Buffer = null;
                             buffer.Buffer = new_buffer;
                         }
 
-                        PacketReader packet_data = new PacketReader(buffer.Buffer);
+                        var packet_data = new PacketReader(buffer.Buffer);
                         packet_size = packet_data.ReadUInt16();
-                        ushort packet_opcode = packet_data.ReadUInt16();
-                        byte packet_security_count = packet_data.ReadByte();
-                        byte packet_security_crc = packet_data.ReadByte();
+                        var packet_opcode = packet_data.ReadUInt16();
+                        var packet_security_count = packet_data.ReadByte();
+                        var packet_security_crc = packet_data.ReadByte();
 
                         // Client object whose bytes the server might need to verify
                         if (m_client_security)
                         {
                             if (m_security_flags.security_bytes == 1)
                             {
-                                byte expected_count = GenerateCountByte(true);
+                                var expected_count = GenerateCountByte(true);
                                 if (packet_security_count != expected_count)
                                 {
                                     throw (new Exception("[SecurityAPI::Recv] Count byte mismatch."));
@@ -1134,7 +1134,7 @@ namespace SimpleCL.SilkroadSecurityApi
 
                                 buffer.Buffer[5] = 0;
 
-                                byte expected_crc = GenerateCheckByte(buffer.Buffer);
+                                var expected_crc = GenerateCheckByte(buffer.Buffer);
                                 if (packet_security_crc != expected_crc)
                                 {
                                     throw (new Exception("[SecurityAPI::Recv] CRC byte mismatch."));
@@ -1161,7 +1161,7 @@ namespace SimpleCL.SilkroadSecurityApi
                             // They do not need to actually do anything with them. This was added to
                             // help debugging and make output logs complete.
 
-                            Packet packet = new Packet(packet_opcode, packet_encrypted, false, buffer.Buffer, 6, packet_size);
+                            var packet = new Packet(packet_opcode, packet_encrypted, false, buffer.Buffer, 6, packet_size);
                             packet.Lock();
                             m_incoming_packets.Add(packet);
                         }
@@ -1177,11 +1177,11 @@ namespace SimpleCL.SilkroadSecurityApi
                             }
                             if (packet_opcode == 0x600D) // Auto process massive messages for the user
                             {
-                                byte mode = packet_data.ReadByte();
+                                var mode = packet_data.ReadByte();
                                 if (mode == 1)
                                 {
                                     m_massive_count = packet_data.ReadUInt16();
-                                    ushort contained_packet_opcode = packet_data.ReadUInt16();
+                                    var contained_packet_opcode = packet_data.ReadUInt16();
                                     m_massive_packet = new Packet(contained_packet_opcode, packet_encrypted, true);
                                 }
                                 else
@@ -1202,7 +1202,7 @@ namespace SimpleCL.SilkroadSecurityApi
                             }
                             else
                             {
-                                Packet packet = new Packet(packet_opcode, packet_encrypted, false, buffer.Buffer, 6, packet_size);
+                                var packet = new Packet(packet_opcode, packet_encrypted, false, buffer.Buffer, 6, packet_size);
                                 packet.Lock();
                                 m_incoming_packets.Add(packet);
                             }

@@ -26,28 +26,28 @@ namespace SimpleCL.Services.Login
         [PacketHandler(Opcodes.Agent.Response.CHARACTER_SELECTION_ACTION)]
         public void SelectCharacter(Server server, Packet packet)
         {
-            byte action = packet.ReadByte();
-            bool succeeded = packet.ReadByte() == 1;
+            var action = packet.ReadByte();
+            var succeeded = packet.ReadByte() == 1;
 
             if (action != 2 || !succeeded)
             {
                 return;
             }
             
-            byte charCount = packet.ReadByte();
+            var charCount = packet.ReadByte();
 
-            List<Character> chars = new List<Character>();
+            var chars = new List<Character>();
             charCount.Repeat(i =>
             {
                 packet.ReadUInt();
-                string name = packet.ReadAscii();
+                var name = packet.ReadAscii();
                 if (_silkroadServer.Locale.IsInternational())
                 {
-                    string jobName = packet.ReadAscii();
+                    var jobName = packet.ReadAscii();
                 }
 
                 packet.ReadByte();
-                byte level = packet.ReadByte();
+                var level = packet.ReadByte();
                 packet.ReadULong();
                 packet.ReadUShort();
                 packet.ReadUShort();
@@ -58,54 +58,51 @@ namespace SimpleCL.Services.Login
                     packet.ReadUInt();
                 }
 
-                uint hp = packet.ReadUInt();
-                uint mp = packet.ReadUInt();
+                var hp = packet.ReadUInt();
+                var mp = packet.ReadUInt();
 
                 if (_silkroadServer.Locale.IsInternational())
                 {
                     packet.ReadUShort();
                 }
 
-                bool deleting = packet.ReadByte() == 1;
+                var deleting = packet.ReadByte() == 1;
 
                 if (_silkroadServer.Locale.IsInternational())
                 {
                     packet.ReadUInt();
                 }
 
-                Character character = new Character(name, level, deleting);
-
-                character.Hp = hp;
-                character.Mp = mp;
-
+                var character = new Character(name, level, deleting) {Hp = hp, Mp = mp};
+                
                 if (deleting)
                 {
-                    uint minutes = packet.ReadUInt();
+                    var minutes = packet.ReadUInt();
                     character.DeletionTime = DateTime.Now.AddMinutes(minutes);
                 }
 
-                byte guildMemberClass = packet.ReadByte();
+                var guildMemberClass = packet.ReadByte();
 
-                bool guildRenameRequired = packet.ReadByte() == 1;
+                var guildRenameRequired = packet.ReadByte() == 1;
                 if (guildRenameRequired)
                 {
-                    string guildName = packet.ReadAscii();
+                    var guildName = packet.ReadAscii();
                 }
 
-                byte academyMemberClass = packet.ReadByte();
-                byte itemCount = packet.ReadByte();
+                var academyMemberClass = packet.ReadByte();
+                var itemCount = packet.ReadByte();
 
                 itemCount.Repeat(j =>
                 {
-                    uint refItemId = packet.ReadUInt();
-                    byte plus = packet.ReadByte();
+                    var refItemId = packet.ReadUInt();
+                    var plus = packet.ReadByte();
                 });
 
-                byte avatarItemCount = packet.ReadByte();
+                var avatarItemCount = packet.ReadByte();
                 avatarItemCount.Repeat(j =>
                 {
-                    uint refItemId = packet.ReadUInt();
-                    byte plus = packet.ReadByte();
+                    var refItemId = packet.ReadUInt();
+                    var plus = packet.ReadByte();
                 });
 
                 chars.Add(character);

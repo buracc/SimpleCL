@@ -63,7 +63,7 @@ namespace SimpleCL.Models.Entities
 
         public void Cast(Skill skill)
         {
-            Packet attackPacket = new Packet(Opcodes.Agent.Request.CHAR_ACTION);
+            var attackPacket = new Packet(Opcodes.Agent.Request.CHAR_ACTION);
             attackPacket.WriteByte(1);
             if (skill.Id == 1)
             {

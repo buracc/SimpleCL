@@ -8,7 +8,7 @@ namespace SimpleCL.Interaction.Providers
 {
     public class Pets
     {
-        private static readonly List<CharacterPet> EmptyList = new List<CharacterPet>();
+        private static readonly List<CharacterPet> EmptyList = new();
 
         public static List<CharacterPet> GetAll(Func<CharacterPet, bool> filter = null)
         {

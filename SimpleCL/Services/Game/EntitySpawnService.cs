@@ -104,7 +104,7 @@ namespace SimpleCL.Services.Game
 
         private void EntityDespawn(Server server, Packet packet)
         {
-            uint uid = packet.ReadUInt();
+            var uid = packet.ReadUInt();
             Entities.Despawned(uid);
         }
 
@@ -244,7 +244,7 @@ namespace SimpleCL.Services.Game
                             player.InventoryItems.Clear();
                             equipmentCount.Repeat(i =>
                             {
-                                InventoryItem item = InventoryItem.FromId(packet.ReadUInt());
+                                var item = InventoryItem.FromId(packet.ReadUInt());
                                 player.InventoryItems.Add(item);
                                 if (item.IsEquipment())
                                 {
@@ -256,7 +256,7 @@ namespace SimpleCL.Services.Game
                             var avatarCount = packet.ReadByte();
                             avatarCount.Repeat(i =>
                             {
-                                InventoryItem item = InventoryItem.FromId(packet.ReadUInt());
+                                var item = InventoryItem.FromId(packet.ReadUInt());
                                 player.InventoryItems.Add(item);
                                 if (item.IsEquipment())
                                 {
@@ -267,7 +267,7 @@ namespace SimpleCL.Services.Game
                             var hasMask = packet.ReadByte() == 1;
                             if (hasMask)
                             {
-                                Mask mask = new Mask(packet.ReadUInt());
+                                var mask = new Mask(packet.ReadUInt());
                                 if (mask.TypeId1 == player.TypeId1 && mask.TypeId2 == player.TypeId2)
                                 {
                                     var maskScale = packet.ReadByte();
@@ -419,7 +419,7 @@ namespace SimpleCL.Services.Game
                             break;
                         }
 
-                        case Npc npc when npc is Monster monster:
+                        case Npc and Monster monster:
                         {
                             packet.ReadByte();
                             packet.ReadByte();

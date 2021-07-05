@@ -13,14 +13,14 @@ namespace SimpleCL.SilkroadSecurityApi
 		public static string HexDump(byte[] buffer, int offset, int count)
 		{
 			const int bytesPerLine = 16;
-			StringBuilder output = new StringBuilder();
-			StringBuilder ascii_output = new StringBuilder();
-			int length = count;
+			var output = new StringBuilder();
+			var ascii_output = new StringBuilder();
+			var length = count;
 			if (length % bytesPerLine != 0)
 			{
 				length += bytesPerLine - length % bytesPerLine;
 			}
-			for (int x = 0; x <= length; ++x)
+			for (var x = 0; x <= length; ++x)
 			{
 				if (x % bytesPerLine == 0)
 				{
@@ -37,7 +37,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				if (x < count)
 				{
 					output.AppendFormat("{0:X2} ", buffer[offset + x]);
-					char ch = (char)buffer[offset + x];
+					var ch = (char)buffer[offset + x];
 					if (!Char.IsControl(ch))
 					{
 						ascii_output.AppendFormat("{0}", ch);

@@ -3,7 +3,7 @@ using System.Net.NetworkInformation;
 
 namespace SimpleCL.Util
 {
-    public class NetworkUtils
+    public static class NetworkUtils
     {
         public static byte[] GetMacAddressBytes()
         {

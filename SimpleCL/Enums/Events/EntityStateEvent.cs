@@ -4,11 +4,11 @@
     {
         public enum Health : byte
         {
-            HP = 1,
-            MP = 2,
-            HPMP = 3,
+            Hp = 1,
+            Mp = 2,
+            HpMp = 3,
             BadStatus = 4,
-            EntityHPMP = 5
+            EntityHpMp = 5
         }
     }
 }

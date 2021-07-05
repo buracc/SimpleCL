@@ -5,7 +5,7 @@ namespace SimpleCL.Enums.Server
 {
     public class SilkroadServer
     {
-        public static readonly SilkroadServer Trsro = new SilkroadServer(
+        public static readonly SilkroadServer Trsro = new(
             "TRSRO",
             Locale.SRO_TR_Official_GameGami,
             new[]
@@ -15,7 +15,7 @@ namespace SimpleCL.Enums.Server
                 "94.199.103.70"
             });
         
-        public static readonly SilkroadServer Isro = new SilkroadServer(
+        public static readonly SilkroadServer Isro = new(
             "iSRO",
             Locale.SRO_Global_TestBed,
             new[]

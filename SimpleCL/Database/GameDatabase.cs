@@ -16,7 +16,7 @@ namespace SimpleCL.Database
     {
         private static GameDatabase _instance;
 
-        public static GameDatabase Get => _instance ?? (_instance = new GameDatabase());
+        public static GameDatabase Get => _instance ??= new GameDatabase();
 
         private SilkroadServer _selectedServer;
 
@@ -35,7 +35,7 @@ namespace SimpleCL.Database
         private readonly Dictionary<uint, NameValueCollection> _skillCache;
         private readonly Dictionary<uint, NameValueCollection> _masteryCache;
         private readonly Dictionary<uint, List<NameValueCollection>> _teleportCache;
-        public readonly Dictionary<uint, List<SpawnPoint>> SpawnPoints = new Dictionary<uint, List<SpawnPoint>>();
+        public readonly Dictionary<uint, List<SpawnPoint>> SpawnPoints = new();
 
         private GameDatabase()
         {
@@ -53,62 +53,45 @@ namespace SimpleCL.Database
                 throw new SystemException("Current server wasn't set");
             }
 
-            string dbFile = DirectoryUtils.GetDbFile(SelectedServer.Name + dbNameExtra);
+            var dbFile = DirectoryUtils.GetDbFile(SelectedServer.Name + dbNameExtra);
 
             if (dbFile == "")
             {
                 throw new SystemException("DB file not found");
             }
 
-            List<NameValueCollection> data = new List<NameValueCollection>();
-            using (var conn = new SQLiteConnection("Data Source=" + dbFile + ";Version=3;"))
+            var data = new List<NameValueCollection>();
+            using var conn = new SQLiteConnection("Data Source=" + dbFile + ";Version=3;");
+            conn.Open();
+            var comm = conn.CreateCommand();
+            comm.CommandTimeout = 1000;
+            comm.CommandText = sql;
+            comm.ExecuteNonQuery();
+            var reader = comm.ExecuteReader();
+            while (reader.Read())
             {
-                conn.Open();
-                SQLiteCommand comm = conn.CreateCommand();
-                comm.CommandTimeout = 1000;
-                comm.CommandText = sql;
-                comm.ExecuteNonQuery();
-                SQLiteDataReader reader = comm.ExecuteReader();
-                while (reader.Read())
-                {
-                    data.Add(reader.GetValues());
-                }
-
-                return data;
+                data.Add(reader.GetValues());
             }
+
+            return data;
         }
 
         public ulong GetNextLevelExp(byte level)
         {
             var data = GetData("SELECT * FROM leveldata WHERE level = " + level);
-            if (data.IsEmpty())
-            {
-                return 0;
-            }
-
-            return ulong.Parse(data[0]["player"]);
+            return data.IsEmpty() ? 0 : ulong.Parse(data[0]["player"]);
         }
 
         public ulong GetJobNextLevelExp(byte level)
         {
             var data = GetData("SELECT * FROM leveldata WHERE level = " + level);
-            if (data.IsEmpty())
-            {
-                return 0;
-            }
-
-            return ulong.Parse(data[0]["job"]);
+            return data.IsEmpty() ? 0 : ulong.Parse(data[0]["job"]);
         }
 
         public ulong GetFellowNextLevelExp(byte level)
         {
             var data = GetData("SELECT * FROM leveldata WHERE level = " + level);
-            if (data.IsEmpty())
-            {
-                return 0;
-            }
-
-            return ulong.Parse(data[0]["fellow"]);
+            return data.IsEmpty() ? 0 : ulong.Parse(data[0]["fellow"]);
         }
 
         public NameValueCollection GetItemData(uint id, QueryBuilder queryBuilder = null)
@@ -150,12 +133,7 @@ namespace SimpleCL.Database
                 result = GetData("SELECT * FROM magicoption WHERE id = " + id);
             }
 
-            if (result.IsEmpty())
-            {
-                return null;
-            }
-
-            return result[0];
+            return result.IsEmpty() ? null : result[0];
         }
 
         public NameValueCollection GetSkill(uint id, QueryBuilder queryBuilder = null)
@@ -183,7 +161,7 @@ namespace SimpleCL.Database
 
             return _skillCache[id] = result[0];
         }
-        
+
         public NameValueCollection GetMastery(uint id, QueryBuilder queryBuilder = null)
         {
             if (_masteryCache.ContainsKey(id))
@@ -265,12 +243,7 @@ namespace SimpleCL.Database
         public uint GetGameVersion()
         {
             var result = GetData("SELECT * FROM data WHERE k = 'version'");
-            if (result.IsEmpty())
-            {
-                return 0;
-            }
-
-            return uint.Parse(result[0]["v"]);
+            return result.IsEmpty() ? 0 : uint.Parse(result[0]["v"]);
         }
 
         public void LoadSpawns()
@@ -295,7 +268,7 @@ namespace SimpleCL.Database
                 else
                 {
                     SpawnPoints[id] = new List<SpawnPoint>
-                        {new SpawnPoint(new LocalPoint((ushort) region, x, z, y), id, name)};
+                        {new(new LocalPoint((ushort) region, x, z, y), id, name)};
                 }
             }
         }
@@ -317,7 +290,7 @@ namespace SimpleCL.Database
         public void CacheToFile(Dictionary<uint, NameValueCollection> cache, string fileName)
         {
             var values = new Dictionary<uint, Dictionary<string, string>>();
-            foreach (KeyValuePair<uint, NameValueCollection> valueCollection in cache)
+            foreach (var valueCollection in cache)
             {
                 if (valueCollection.Value == null)
                 {
@@ -329,66 +302,68 @@ namespace SimpleCL.Database
                 }
             }
 
-            using (StreamWriter file = File.CreateText("Cache/" + fileName + ".json"))
-            {
-                new JsonSerializer().Serialize(file, values);
-            }
+            using var file = File.CreateText("Cache/" + fileName + ".json");
+            new JsonSerializer().Serialize(file, values);
         }
 
         public Dictionary<uint, NameValueCollection> LoadFromCache(string fileName)
         {
-            if (Directory.Exists("Cache"))
+            if (!Directory.Exists("Cache"))
             {
-                if (File.Exists("Cache/" + fileName + ".json"))
+                return new Dictionary<uint, NameValueCollection>();
+            }
+
+            if (!File.Exists("Cache/" + fileName + ".json"))
+            {
+                return new Dictionary<uint, NameValueCollection>();
+            }
+
+            try
+            {
+                var jsonString = File.ReadAllText("Cache/" + fileName + ".json");
+
+                var json =
+                    JsonConvert.DeserializeObject<Dictionary<uint, Dictionary<string, string>>>(jsonString);
+                if (json != null)
                 {
-                    try
+                    var output = new Dictionary<uint, NameValueCollection>();
+                    foreach (var entry in json)
                     {
-                        string jsonString = File.ReadAllText("Cache/" + fileName + ".json");
-
-                        var json =
-                            JsonConvert.DeserializeObject<Dictionary<uint, Dictionary<string, string>>>(jsonString);
-                        if (json != null)
+                        if (entry.Key > ushort.MaxValue)
                         {
-                            var output = new Dictionary<uint, NameValueCollection>();
-                            foreach (var entry in json)
+                            Console.WriteLine("Found unusual entity with id: " + entry.Key +
+                                              " in cache, removing it.");
+                            continue;
+                        }
+
+                        if (entry.Value == null)
+                        {
+                            output[entry.Key] = null;
+                        }
+                        else
+                        {
+                            var nvc = new NameValueCollection();
+                            foreach (var entry2 in entry.Value)
                             {
-                                if (entry.Key > ushort.MaxValue)
-                                {
-                                    Console.WriteLine("Found unusual entity with id: " + entry.Key +
-                                                      " in cache, removing it.");
-                                    continue;
-                                }
-
-                                if (entry.Value == null)
-                                {
-                                    output[entry.Key] = null;
-                                }
-                                else
-                                {
-                                    NameValueCollection nvc = new NameValueCollection();
-                                    foreach (var entry2 in entry.Value)
-                                    {
-                                        nvc.Add(entry2.Key, entry2.Value);
-                                    }
-
-                                    output[entry.Key] = nvc;
-                                }
+                                nvc.Add(entry2.Key, entry2.Value);
                             }
 
-                            return output;
+                            output[entry.Key] = nvc;
                         }
                     }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(fileName);
-                        Console.WriteLine(e);
-                    }
+
+                    return output;
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(fileName);
+                Console.WriteLine(e);
             }
 
             return new Dictionary<uint, NameValueCollection>();
         }
-        
+
         public void CacheTeleportsToFile(Dictionary<uint, List<NameValueCollection>> cache, string fileName)
         {
             var values = new Dictionary<uint, List<Dictionary<string, string>>>();
@@ -408,12 +383,10 @@ namespace SimpleCL.Database
                 }
             }
 
-            using (StreamWriter file = File.CreateText("Cache/" + fileName + ".json"))
-            {
-                new JsonSerializer().Serialize(file, values);
-            }
+            using var file = File.CreateText("Cache/" + fileName + ".json");
+            new JsonSerializer().Serialize(file, values);
         }
-        
+
         public Dictionary<uint, List<NameValueCollection>> LoadCachedTeleports(string fileName)
         {
             if (!Directory.Exists("Cache"))
@@ -428,7 +401,7 @@ namespace SimpleCL.Database
 
             try
             {
-                string jsonString = File.ReadAllText("Cache/" + fileName + ".json");
+                var jsonString = File.ReadAllText("Cache/" + fileName + ".json");
 
                 var json =
                     JsonConvert.DeserializeObject<Dictionary<uint, List<Dictionary<string, string>>>>(jsonString);
@@ -450,12 +423,12 @@ namespace SimpleCL.Database
 
                             foreach (var link in links)
                             {
-                                NameValueCollection nvc = new NameValueCollection();
+                                var nvc = new NameValueCollection();
                                 foreach (var entry2 in link)
                                 {
                                     nvc.Add(entry2.Key, entry2.Value);
                                 }
-                                
+
                                 output[id].Add(nvc);
                             }
                         }

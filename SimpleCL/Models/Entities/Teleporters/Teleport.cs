@@ -5,7 +5,7 @@ namespace SimpleCL.Models.Entities.Teleporters
 {
     public class Teleport : Entity
     {
-        public List<TeleportLink> Links = new List<TeleportLink>();
+        public List<TeleportLink> Links = new();
         public Teleport(uint id) : base(id)
         {
             var links = GameDatabase.Get.GetTeleportLinks(id);

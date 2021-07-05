@@ -11,17 +11,16 @@ namespace SimpleCL.Ui.Components
 {
     public class Map : Panel
     {
-        private readonly Dictionary<string, MapTile> _mapSectors = new Dictionary<string, MapTile>();
-        public readonly Dictionary<uint, MapControl> Markers = new Dictionary<uint, MapControl>();
+        private readonly Dictionary<string, MapTile> _mapSectors = new();
+        public readonly Dictionary<uint, MapControl> Markers = new();
 
-        private WorldPoint _mapCenter;
         private string _filePath;
         private Size _tileSize;
         private int _tileCount;
 
         public Size TileSize => _tileSize;
         public int TileCount => _tileCount;
-        public WorldPoint MapCenter => _mapCenter;
+        public WorldPoint MapCenter { get; private set; }
 
         private byte _zoom = 1;
 
@@ -29,13 +28,13 @@ namespace SimpleCL.Ui.Components
         {
             base.DoubleBuffered = true;
             // Initialize
-            _mapCenter = new WorldPoint(0, 0);
+            MapCenter = new WorldPoint(0, 0);
             base.Size = new Size(600, 600);
             _tileSize = new Size((int) Math.Round(Width / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero),
                 (int) Math.Round(Height / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero));
             _tileCount = 2 * _zoom + 3;
 
-            SelectMapLayer(_mapCenter.Region);
+            SelectMapLayer(MapCenter.Region);
             UpdateTiles();
         }
 
@@ -75,14 +74,13 @@ namespace SimpleCL.Ui.Components
             switch (region)
             {
                 case 32769:
-                    if (_mapCenter.Z < 115)
-                        _filePath = "Minimap/d/dh_a01_floor01_{0}x{1}.jpg";
-                    else if (_mapCenter.Z < 230)
-                        _filePath = "Minimap/d/dh_a01_floor02_{0}x{1}.jpg";
-                    else if (_mapCenter.Z < 345)
-                        _filePath = "Minimap/d/dh_a01_floor03_{0}x{1}.jpg";
-                    else
-                        _filePath = "Minimap/d/dh_a01_floor04_{0}x{1}.jpg";
+                    _filePath = MapCenter.Z switch
+                    {
+                        < 115 => "Minimap/d/dh_a01_floor01_{0}x{1}.jpg",
+                        < 230 => "Minimap/d/dh_a01_floor02_{0}x{1}.jpg",
+                        < 345 => "Minimap/d/dh_a01_floor03_{0}x{1}.jpg",
+                        _ => "Minimap/d/dh_a01_floor04_{0}x{1}.jpg"
+                    };
                     break;
                 case 32770:
                     _filePath = "Minimap/d/qt_a01_floor06_{0}x{1}.jpg";
@@ -114,14 +112,13 @@ namespace SimpleCL.Ui.Components
                     _filePath = "Minimap/d/RN_SD_EGYPT1_02_{0}x{1}.jpg";
                     break;
                 case 32785:
-                    if (_mapCenter.Z < 115)
-                        _filePath = "Minimap/d/fort_dungeon01_{0}x{1}.jpg";
-                    else if (_mapCenter.Z < 230)
-                        _filePath = "Minimap/d/fort_dungeon02_{0}x{1}.jpg";
-                    else if (_mapCenter.Z < 345)
-                        _filePath = "Minimap/d/fort_dungeon03_{0}x{1}.jpg";
-                    else
-                        _filePath = "Minimap/d/fort_dungeon04_{0}x{1}.jpg";
+                    _filePath = MapCenter.Z switch
+                    {
+                        < 115 => "Minimap/d/fort_dungeon01_{0}x{1}.jpg",
+                        < 230 => "Minimap/d/fort_dungeon02_{0}x{1}.jpg",
+                        < 345 => "Minimap/d/fort_dungeon03_{0}x{1}.jpg",
+                        _ => "Minimap/d/fort_dungeon04_{0}x{1}.jpg"
+                    };
                     break;
                 case 32786:
                     _filePath = "Minimap/d/flame_dungeon01_{0}x{1}.jpg";
@@ -149,26 +146,26 @@ namespace SimpleCL.Ui.Components
 
         public void UpdateTiles()
         {
-            int tileAvg = _tileCount / 2;
-            int relativePosX = (int) Math.Round(_mapCenter.X % 192 * _tileSize.Width / 192.0 +
-                                                (_mapCenter.X < 0 ? _tileSize.Width : 0));
-            int relativePosY = (int) Math.Round(_mapCenter.Y % 192 * _tileSize.Height / 192.0 +
-                                                (_mapCenter.Y < 0 ? _tileSize.Height : 0));
-            int marginX = (int) Math.Round(_tileSize.Width / 2.0 - _tileSize.Width - relativePosX);
-            int marginY = (int) Math.Round(_tileSize.Height / 2.0 - _tileSize.Height * 2 + relativePosY);
+            var tileAvg = _tileCount / 2;
+            var relativePosX = (int) Math.Round(MapCenter.X % 192 * _tileSize.Width / 192.0 +
+                                                (MapCenter.X < 0 ? _tileSize.Width : 0));
+            var relativePosY = (int) Math.Round(MapCenter.Y % 192 * _tileSize.Height / 192.0 +
+                                                (MapCenter.Y < 0 ? _tileSize.Height : 0));
+            var marginX = (int) Math.Round(_tileSize.Width / 2.0 - _tileSize.Width - relativePosX);
+            var marginY = (int) Math.Round(_tileSize.Height / 2.0 - _tileSize.Height * 2 + relativePosY);
 
             this.InvokeLater(() =>
             {
-                int i = 0;
-                for (int sectorY = tileAvg + _mapCenter.YSector; sectorY >= -tileAvg + _mapCenter.YSector; sectorY--)
+                var i = 0;
+                for (var sectorY = tileAvg + MapCenter.YSector; sectorY >= -tileAvg + MapCenter.YSector; sectorY--)
                 {
-                    int j = 0;
-                    for (int sectorX = -tileAvg + _mapCenter.XSector;
-                        sectorX <= tileAvg + _mapCenter.XSector;
+                    var j = 0;
+                    for (var sectorX = -tileAvg + MapCenter.XSector;
+                        sectorX <= tileAvg + MapCenter.XSector;
                         sectorX++)
                     {
-                        string path = string.Format(_filePath, sectorX, sectorY);
-                        Point sectorLocation =
+                        var path = string.Format(_filePath, sectorX, sectorY);
+                        var sectorLocation =
                             new Point(j * _tileSize.Width + marginX, i * _tileSize.Height + marginY);
 
                         if (_mapSectors.TryGetValue(path, out var sector))
@@ -209,12 +206,12 @@ namespace SimpleCL.Ui.Components
 
         private void ClearTiles()
         {
-            int minAvg = _tileCount / 2;
+            var minAvg = _tileCount / 2;
 
-            int ySectorMin = -minAvg + MapCenter.YSector;
-            int ySectorMax = minAvg + MapCenter.YSector;
-            int xSectorMin = -minAvg + MapCenter.XSector;
-            int xSectorMax = minAvg + MapCenter.XSector;
+            var ySectorMin = -minAvg + MapCenter.YSector;
+            var ySectorMax = minAvg + MapCenter.YSector;
+            var xSectorMin = -minAvg + MapCenter.XSector;
+            var xSectorMax = minAvg + MapCenter.XSector;
 
             foreach (var tile in _mapSectors.Values.Where(tile =>
                 tile.SectorX < xSectorMin || tile.SectorX > xSectorMax || tile.SectorY < ySectorMin ||
@@ -228,7 +225,7 @@ namespace SimpleCL.Ui.Components
         {
             this.InvokeLater(() =>
             {
-                foreach (MapTile tile in _mapSectors.Values)
+                foreach (var tile in _mapSectors.Values)
                 {
                     Controls.RemoveByKey(tile.Name);
                 }
@@ -239,17 +236,17 @@ namespace SimpleCL.Ui.Components
 
         public void SetView(WorldPoint viewPoint)
         {
-            if (!_mapCenter.Equals(viewPoint))
+            if (!MapCenter.Equals(viewPoint))
             {
-                if (_mapCenter.Region != viewPoint.Region && viewPoint.InCave())
+                if (MapCenter.Region != viewPoint.Region && viewPoint.InCave())
                 {
                     SelectMapLayer(viewPoint.Region);
                     RemoveTiles();
-                    _mapCenter = viewPoint;
+                    MapCenter = viewPoint;
                 }
                 else
                 {
-                    _mapCenter = viewPoint;
+                    MapCenter = viewPoint;
                     ClearTiles();
                 }
 
@@ -261,26 +258,26 @@ namespace SimpleCL.Ui.Components
 
         public Point GetPoint(WorldPoint coords)
         {
-            int tileAvg = _tileCount / 2;
+            var tileAvg = _tileCount / 2;
 
             return new Point
             {
-                X = (int) Math.Round((coords.X - _mapCenter.X) / (192.0 / _tileSize.Width) +
+                X = (int) Math.Round((coords.X - MapCenter.X) / (192.0 / _tileSize.Width) +
                     _tileSize.Width * tileAvg - _tileSize.Width / 2.0),
-                Y = (int) Math.Round((coords.Y - _mapCenter.Y) / (192.0 / _tileSize.Height) * (-1) +
+                Y = (int) Math.Round((coords.Y - MapCenter.Y) / (192.0 / _tileSize.Height) * (-1) +
                     _tileSize.Height * tileAvg - _tileSize.Height / 2.0)
             };
         }
 
         public LocalPoint GetCoord(Point point)
         {
-            int tileAvg = _tileCount / 2;
-            float coordX =
+            var tileAvg = _tileCount / 2;
+            var coordX =
                 (point.X + _tileSize.Width / 2.0f - _tileSize.Width * tileAvg) * 192 / _tileSize.Width +
-                _mapCenter.X;
-            float coordY =
+                MapCenter.X;
+            var coordY =
                 (point.Y + _tileSize.Height / 2.0f - _tileSize.Height * tileAvg) * 192 / _tileSize.Height * -1 +
-                _mapCenter.Y;
+                MapCenter.Y;
 
             return MapCenter.InCave()
                 ? new LocalPoint(MapCenter.Region, coordX, MapCenter.Z, coordY)
@@ -319,25 +316,25 @@ namespace SimpleCL.Ui.Components
                 return;
             }
 
-            MapControl marker = Markers[uniqueId];
+            var marker = Markers[uniqueId];
             this.InvokeLater(() => { Controls.RemoveByKey(marker.Name); });
             Markers.Remove(uniqueId);
         }
 
         public void UpdateMarkerLocations()
         {
-            double aX = _tileSize.Width * (_zoom + 3 / 2) - _tileSize.Width / 2.0;
-            double aY = _tileSize.Height * (_zoom + 3 / 2) - _tileSize.Height / 2.0;
-            double bX = 192.0 / _tileSize.Width;
-            double bY = 192.0 / _tileSize.Height;
+            var aX = _tileSize.Width * (_zoom + 3 / 2) - _tileSize.Width / 2.0;
+            var aY = _tileSize.Height * (_zoom + 3 / 2) - _tileSize.Height / 2.0;
+            var bX = 192.0 / _tileSize.Width;
+            var bY = 192.0 / _tileSize.Height;
 
             this.InvokeLater(() =>
             {
-                foreach (MapControl marker in Markers.Values)
+                foreach (var marker in Markers.Values)
                 {
-                    WorldPoint coord = ((ILocatable) marker.Tag).WorldPoint;
-                    Point location = new Point((int) Math.Round((coord.X - _mapCenter.X) / bX + aX),
-                        (int) Math.Round((coord.Y - _mapCenter.Y) / bY * -1 + aY));
+                    var coord = ((ILocatable) marker.Tag).WorldPoint;
+                    var location = new Point((int) Math.Round((coord.X - MapCenter.X) / bX + aX),
+                        (int) Math.Round((coord.Y - MapCenter.Y) / bY * -1 + aY));
                     var imageSize = marker.Image.Size;
 
                     location.X -= imageSize.Width / 2;
@@ -358,12 +355,12 @@ namespace SimpleCL.Ui.Components
                 return;
             }
 
-            MapTile t = (MapTile) sender;
+            var t = (MapTile) sender;
             var clickPoint = new Point(t.Location.X + e.Location.X, t.Location.Y + e.Location.Y);
             var coord = GetCoord(clickPoint);
             var world = WorldPoint.FromLocal(coord);
             Movement.WalkTo(coord);
-            SimpleCL.Gui.Log("Moving to [" + world + "]");
+            Program.Gui.Log("Moving to [" + world + "]");
         }
     }
 }

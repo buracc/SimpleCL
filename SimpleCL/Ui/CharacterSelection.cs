@@ -2,19 +2,16 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using SimpleCL.SilkroadSecurityApi;
-using SimpleCL.Enums;
 using SimpleCL.Enums.Commons;
-using SimpleCL.Models;
 using SimpleCL.Models.Character;
 using SimpleCL.Network;
-using SimpleCL.Util;
 
 namespace SimpleCL.Ui
 {
     public partial class CharacterSelection : Form
     {
         private readonly Server _agent;
-        public CharacterSelection(List<Character> chars, Server agent)
+        public CharacterSelection(IReadOnlyCollection<Character> chars, Server agent)
         {
             _agent = agent;
             InitializeComponent();
@@ -23,9 +20,9 @@ namespace SimpleCL.Ui
             FormBorderStyle = FormBorderStyle.FixedSingle;
             CenterToScreen();
 
-            characterListDataGridView.KeyDown += (sender, args) =>
+            characterListDataGridView.KeyDown += (_, args) =>
             {
-                DataGridViewCell currentCell = characterListDataGridView.CurrentCell;
+                var currentCell = characterListDataGridView.CurrentCell;
                 if (args.KeyCode == Keys.Enter && currentCell != null)
                 {
                     SelectCharacter(characterListDataGridView.Rows[currentCell.RowIndex], args);
@@ -35,7 +32,7 @@ namespace SimpleCL.Ui
 
         private void SelectCharacter(object sender, EventArgs args)
         {
-            Character selected = (Character) ((DataGridViewRow) sender).DataBoundItem;
+            var selected = (Character) ((DataGridViewRow) sender).DataBoundItem;
             if (selected == null)
             {
                 return;
@@ -43,7 +40,7 @@ namespace SimpleCL.Ui
 
             LocalPlayer.Get.MaxHp = selected.Hp;
             LocalPlayer.Get.MaxMp = selected.Mp;
-            Packet characterJoin = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_JOIN);
+            var characterJoin = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_JOIN);
             characterJoin.WriteAscii(selected.Name);
             _agent.Inject(characterJoin);
             Dispose(true);

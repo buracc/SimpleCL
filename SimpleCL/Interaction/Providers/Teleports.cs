@@ -8,7 +8,7 @@ namespace SimpleCL.Interaction.Providers
 {
     public class Teleports
     {
-        private static readonly List<Teleport> EmptyList = new List<Teleport>();
+        private static readonly List<Teleport> EmptyList = new();
 
         public static List<Teleport> GetAll(Func<Teleport, bool> filter = null)
         {

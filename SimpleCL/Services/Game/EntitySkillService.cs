@@ -53,7 +53,7 @@ namespace SimpleCL.Services.Game
 
             try
             {
-                Skill.CastType type = (Skill.CastType) packet.ReadByte();
+                var type = (Skill.CastType) packet.ReadByte();
                 packet.ReadByte();
                 var id = packet.ReadUInt();
                 var sourceUid = packet.ReadUInt();

@@ -4,14 +4,13 @@ using System.Windows.Forms;
 using SimpleCL.SilkroadSecurityApi;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Network;
-using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Ui
 {
     public partial class PasscodeEnter : Form
     {
         private readonly byte[] _key = {0x0F, 0x07, 0x3D, 0x20, 0x56, 0x62, 0xC9, 0xEB};
-        private readonly Blowfish _blowfish = new Blowfish();
+        private readonly Blowfish _blowfish = new();
         private readonly Server _gateway;
 
         public PasscodeEnter(Server gateway, string title = "Enter passcode")
@@ -41,16 +40,16 @@ namespace SimpleCL.Ui
 
         public void SubmitPasscode(string passcodeString)
         {
-            if (passcodeString.Length < 6 || passcodeString.Length > 8)
+            if (passcodeString.Length is < 6 or > 8)
             {
                 _gateway.Log("Passcode is 6-8 characters");
                 return;
             }
 
-            byte[] encodedPasscode = Encoding.ASCII.GetBytes(passcodeString);
-            byte[] encryptedPasscode = _blowfish.Encode(encodedPasscode);
+            var encodedPasscode = Encoding.ASCII.GetBytes(passcodeString);
+            var encryptedPasscode = _blowfish.Encode(encodedPasscode);
 
-            Packet passcode = new Packet(Opcodes.Gateway.Request.PASSCODE, true);
+            var passcode = new Packet(Opcodes.Gateway.Request.PASSCODE, true);
             passcode.WriteByte(4);
             passcode.WriteUShort(passcodeString.Length);
             passcode.WriteByteArray(encryptedPasscode);

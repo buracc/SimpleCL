@@ -35,7 +35,7 @@ namespace SimpleCL.Services.Game
         {
             _gateway.Dispose();
 
-            LocalPlayer local = LocalPlayer.Get;
+            var local = LocalPlayer.Get;
 
             var serverTime = packet.ReadUInt();
             var refObjId = packet.ReadUInt();
@@ -67,7 +67,7 @@ namespace SimpleCL.Services.Game
             var inventorySize = packet.ReadByte();
             var itemCount = packet.ReadByte();
 
-            List<InventoryItem> inv = ParseInventory(packet, itemCount);
+            var inv = ParseInventory(packet, itemCount);
 
             local.Inventories["inventory"] = inv.Where(x => x.Slot > 12).ToList();
             local.Inventories["equipment"] = inv.Where(x => x.Slot < 13).ToList();
@@ -157,14 +157,16 @@ namespace SimpleCL.Services.Game
                     });
                 }
 
-                if (questType == QuestType.Npcs)
+                if (questType != QuestType.Npcs)
                 {
-                    var questNpcCount = packet.ReadByte();
-                    questNpcCount.Repeat(j =>
-                    {
-                        var questNpcId = packet.ReadUInt();
-                    });
+                    return;
                 }
+
+                var questNpcCount = packet.ReadByte();
+                questNpcCount.Repeat(j =>
+                {
+                    var questNpcId = packet.ReadUInt();
+                });
             });
 
             packet.ReadByte(); // structure changes
@@ -269,7 +271,7 @@ namespace SimpleCL.Services.Game
 
             local.LocalPoint = localPoint;
 
-            SimpleCL.Gui.AddMinimapMarker(LocalPlayer.Get);
+            Program.Gui.AddMinimapMarker(LocalPlayer.Get);
             Entities.Spawned(local);
 
             server.Log("Successfully joined the game");
@@ -358,7 +360,7 @@ namespace SimpleCL.Services.Game
 
         private List<InventoryItem> ParseInventory(Packet packet, byte itemCount, bool inventory = true)
         {
-            List<InventoryItem> items = new List<InventoryItem>();
+            var items = new List<InventoryItem>();
 
             itemCount.Repeat(i =>
             {
@@ -489,7 +491,7 @@ namespace SimpleCL.Services.Game
 
                         inventoryItem.Quantity = stackCount;
 
-                        if (inventoryItem.TypeId3 == 11 && (inventoryItem.TypeId4 == 1 || inventoryItem.TypeId4 == 2))
+                        if (inventoryItem.TypeId3 == 11 && inventoryItem.TypeId4 is 1 or 2)
                         {
                             var assimilationProb = packet.ReadByte();
                             break;

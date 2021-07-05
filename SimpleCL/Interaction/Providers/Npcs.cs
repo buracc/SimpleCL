@@ -8,7 +8,7 @@ namespace SimpleCL.Interaction.Providers
 {
     public class Npcs
     {
-        private static readonly List<TalkNpc> EmptyList = new List<TalkNpc>();
+        private static readonly List<TalkNpc> EmptyList = new();
 
         public static List<TalkNpc> GetAll(Func<TalkNpc, bool> filter = null)
         {

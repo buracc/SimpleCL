@@ -33,26 +33,29 @@ namespace SimpleCL.Services.Login
         [PacketHandler(Opcodes.IDENTITY)]
         public void SendIdentity(Server server, Packet packet)
         {
-            if (server is Gateway)
+            switch (server)
             {
-                Packet identity = new Packet(Opcodes.Gateway.Request.PATCH, true);
-                identity.WriteByte(_silkroadServer.Locale);
-                identity.WriteAscii("SR_Client");
-                identity.WriteUInt(GameDatabase.Get.GetGameVersion());
-                server.Inject(identity);
-                return;
-            }
+                case Gateway:
+                {
+                    var identity = new Packet(Opcodes.Gateway.Request.PATCH, true);
+                    identity.WriteByte(_silkroadServer.Locale);
+                    identity.WriteAscii("SR_Client");
+                    identity.WriteUInt(GameDatabase.Get.GetGameVersion());
+                    server.Inject(identity);
+                    return;
+                }
+                case Agent agent:
+                {
+                    var login = new Packet(Opcodes.Agent.Request.AUTH, true);
+                    login.WriteUInt(agent.SessionId);
+                    login.WriteAscii(_username);
+                    login.WriteAscii(_password);
+                    login.WriteByte(_silkroadServer.Locale);
+                    login.WriteByteArray(NetworkUtils.GetMacAddressBytes());
 
-            if (server is Agent)
-            {
-                Packet login = new Packet(Opcodes.Agent.Request.AUTH, true);
-                login.WriteUInt(((Agent) server).SessionId);
-                login.WriteAscii(_username);
-                login.WriteAscii(_password);
-                login.WriteByte(_silkroadServer.Locale);
-                login.WriteByteArray(NetworkUtils.GetMacAddressBytes());
-
-                server.Inject(login);
+                    agent.Inject(login);
+                    break;
+                }
             }
         }
 
@@ -73,17 +76,17 @@ namespace SimpleCL.Services.Login
         [PacketHandler(Opcodes.Gateway.Response.SERVERLIST)]
         public void SendLogin(Server server, Packet packet)
         {
-            List<GameServer> servers = new List<GameServer>();
+            var servers = new List<GameServer>();
 
             while (packet.ReadByte() == 1)
             {
-                byte farmId = packet.ReadByte();
-                string farmName = packet.ReadAscii();
+                var farmId = packet.ReadByte();
+                var farmName = packet.ReadAscii();
             }
 
             while (packet.ReadByte() == 1)
             {
-                GameServer gameServer = new GameServer(
+                var gameServer = new GameServer(
                     packet.ReadUShort(),
                     packet.ReadAscii(),
                     (ServerCapacity) packet.ReadByte(),
@@ -114,13 +117,13 @@ namespace SimpleCL.Services.Login
         public void PasscodeResponse(Server server, Packet packet)
         {
             packet.ReadByte();
-            byte passcodeResult = packet.ReadByte();
+            var passcodeResult = packet.ReadByte();
             if (passcodeResult != 2)
             {
                 return;
             }
             
-            byte attempts = packet.ReadByte();
+            var attempts = packet.ReadByte();
             Application.Run(new PasscodeEnter(server, "Invalid passcode [" + attempts + "/" + 3 + "]"));
             server.Log("Invalid passcode. Attempts: [" + attempts + "/" + 3 + "]");
         }
@@ -132,15 +135,15 @@ namespace SimpleCL.Services.Login
         [PacketHandler(Opcodes.Gateway.Response.AGENT_AUTH)]
         public void AgentAuth(Server server, Packet packet)
         {
-            byte result = packet.ReadByte();
+            var result = packet.ReadByte();
             switch (result)
             {
                 case 1:
-                    uint sessionId = packet.ReadUInt();
-                    string agentIp = packet.ReadAscii();
-                    ushort agentPort = packet.ReadUShort();
+                    var sessionId = packet.ReadUInt();
+                    var agentIp = packet.ReadAscii();
+                    var agentPort = packet.ReadUShort();
 
-                    Agent agent = new Agent(agentIp, agentPort, sessionId);
+                    var agent = new Agent(agentIp, agentPort, sessionId);
                     
                     agent.RegisterService(this);
                     
@@ -157,25 +160,25 @@ namespace SimpleCL.Services.Login
                     break;
 
                 case 2:
-                    LoginErrorCode errorCode = (LoginErrorCode) packet.ReadByte();
+                    var errorCode = (LoginErrorCode) packet.ReadByte();
 
                     switch (errorCode)
                     {
                         case LoginErrorCode.InvalidCredentials:
-                            uint maxAttempts = packet.ReadUInt();
-                            uint currentAttempts = packet.ReadUInt();
+                            var maxAttempts = packet.ReadUInt();
+                            var currentAttempts = packet.ReadUInt();
                             server.Log("Invalid credentials. Attempts: [" + currentAttempts +
                                        "/" + maxAttempts + "]");
                             break;
 
                         case LoginErrorCode.Blocked:
-                            LoginBlockType blockType = (LoginBlockType) packet.ReadByte();
+                            var blockType = (LoginBlockType) packet.ReadByte();
 
                             switch (blockType)
                             {
                                 case LoginBlockType.Punishment:
-                                    string reason = packet.ReadAscii();
-                                    DateTime endDate = new DateTime(
+                                    var reason = packet.ReadAscii();
+                                    var endDate = new DateTime(
                                         packet.ReadUShort(),
                                         packet.ReadUShort(),
                                         packet.ReadUShort(),
@@ -247,9 +250,9 @@ namespace SimpleCL.Services.Login
         public void LoginQueuePosition(Server server, Packet packet)
         {
             packet.ReadByte();
-            ushort playersInQueue = packet.ReadUShort();
+            var playersInQueue = packet.ReadUShort();
             packet.ReadUInt();
-            ushort currentPosition = packet.ReadUShort();
+            var currentPosition = packet.ReadUShort();
             
             server.Log("Queue position: [" + currentPosition + "/" + playersInQueue + "]");
         }
@@ -261,12 +264,12 @@ namespace SimpleCL.Services.Login
         [PacketHandler(Opcodes.Agent.Response.AUTH)]
         public void EnterCharacterSelect(Server server, Packet packet)
         {
-            byte result = packet.ReadByte();
+            var result = packet.ReadByte();
             switch (result)
             {
                 case 1:
                 {
-                    Packet charSelect = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_ACTION);
+                    var charSelect = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_ACTION);
                     charSelect.WriteByte(2);
                     server.Inject(charSelect);
                     return;
@@ -274,8 +277,8 @@ namespace SimpleCL.Services.Login
                 
                 case 2:
                 {
-                    byte errorCode = packet.ReadByte();
-                    AuthErrorCode error = (AuthErrorCode) errorCode;
+                    var errorCode = packet.ReadByte();
+                    var error = (AuthErrorCode) errorCode;
                     switch (error)
                     {
                         case AuthErrorCode.InvalidCredentials:

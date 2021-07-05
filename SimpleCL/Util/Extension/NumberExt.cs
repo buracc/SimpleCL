@@ -6,7 +6,7 @@ namespace SimpleCL.Util.Extension
     {
         public static void Repeat(this byte times, Action<int> action)
         {
-            for (int i = 0; i < times; i++)
+            for (var i = 0; i < times; i++)
             {
                 action(i);
             }
@@ -14,7 +14,7 @@ namespace SimpleCL.Util.Extension
 
         public static void Repeat(this uint times, Action<int> action)
         {
-            for (int i = 0; i < times; i++)
+            for (var i = 0; i < times; i++)
             {
                 action(i);
             }
@@ -22,7 +22,7 @@ namespace SimpleCL.Util.Extension
 
         public static void Repeat(this ushort times, Action<int> action)
         {
-            for (int i = 0; i < times; i++)
+            for (var i = 0; i < times; i++)
             {
                 action(i);
             }

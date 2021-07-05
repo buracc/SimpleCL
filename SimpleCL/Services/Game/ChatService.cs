@@ -14,25 +14,24 @@ namespace SimpleCL.Services.Game
         [PacketHandler(Opcodes.Agent.Response.CHAT_UPDATE)]
         public void ChatUpdated(Server server, Packet packet)
         {
-            ChatChannel channel = (ChatChannel) packet.ReadByte();
-            ChatMessage chatMessage = new ChatMessage(channel);
+            var channel = (ChatChannel) packet.ReadByte();
+            var chatMessage = new ChatMessage(channel);
 
-            if (channel == ChatChannel.General || channel == ChatChannel.GM ||
-                channel == ChatChannel.NPC)
+            if (channel is ChatChannel.General or ChatChannel.GameMaster or ChatChannel.Npc)
             {
-                uint senderId = packet.ReadUInt();
+                var senderId = packet.ReadUInt();
                 chatMessage.SenderId = senderId;
             }
             else
             {
-                string senderName = packet.ReadAscii();
+                var senderName = packet.ReadAscii();
                 chatMessage.SenderName = senderName;
             }
 
-            string message = packet.ReadUnicode();
+            var message = packet.ReadUnicode();
             chatMessage.Message = message;
 
-            SimpleCL.Gui.AddChatMessage(chatMessage.ToString());
+            Program.Gui.AddChatMessage(chatMessage.ToString());
         }
 
         #endregion

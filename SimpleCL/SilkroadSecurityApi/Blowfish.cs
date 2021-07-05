@@ -180,8 +180,8 @@ namespace SimpleCL.SilkroadSecurityApi
 
 		private void Blowfish_encipher(ref uint xl, ref uint xr)
 		{
-			uint Xl = xl;
-			uint Xr = xr;
+			var Xl = xl;
+			var Xr = xr;
 
 			Xl ^= PArray[0];
 			ROUND(ref Xr, Xl, 1); ROUND(ref Xl, Xr, 2);
@@ -200,8 +200,8 @@ namespace SimpleCL.SilkroadSecurityApi
 
 		private void Blowfish_decipher(ref uint xl, ref uint xr)
 		{
-			uint Xl = xl;
-			uint Xr = xr;
+			var Xl = xl;
+			var Xr = xr;
 
 			Xl ^= PArray[17];
 			ROUND(ref Xr, Xl, 16); ROUND(ref Xl, Xr, 15);
@@ -245,7 +245,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				}
 			}
 
-			byte[] temp = new byte[4];
+			var temp = new byte[4];
 			j = 0;
 			for (i = 0; i < 16 + 2; ++i)
 			{
@@ -306,18 +306,18 @@ namespace SimpleCL.SilkroadSecurityApi
 				return null;
 			}
 
-			byte[] workspace = new byte[GetOutputLength(length)];
+			var workspace = new byte[GetOutputLength(length)];
 
 			Buffer.BlockCopy(stream, offset, workspace, 0, length);
-			for (int x = length; x < workspace.Length; ++x)
+			for (var x = length; x < workspace.Length; ++x)
 			{
 				workspace[x] = 0;
 			}
 
-			for (int x = 0; x < workspace.Length; x += 8)
+			for (var x = 0; x < workspace.Length; x += 8)
 			{
-				uint l = BitConverter.ToUInt32(workspace, x + 0);
-				uint r = BitConverter.ToUInt32(workspace, x + 4);
+				var l = BitConverter.ToUInt32(workspace, x + 0);
+				var r = BitConverter.ToUInt32(workspace, x + 4);
 				Blowfish_encipher(ref l, ref r);
 				Buffer.BlockCopy(BitConverter.GetBytes(l), 0, workspace, x + 0, 4);
 				Buffer.BlockCopy(BitConverter.GetBytes(r), 0, workspace, x + 4, 4);
@@ -345,13 +345,13 @@ namespace SimpleCL.SilkroadSecurityApi
 				return null;
 			}
 
-			byte[] workspace = new byte[length];
+			var workspace = new byte[length];
 			Buffer.BlockCopy(stream, offset, workspace, 0, length);
 
-			for (int x = 0; x < workspace.Length; x += 8)
+			for (var x = 0; x < workspace.Length; x += 8)
 			{
-				uint l = BitConverter.ToUInt32(workspace, x + 0);
-				uint r = BitConverter.ToUInt32(workspace, x + 4);
+				var l = BitConverter.ToUInt32(workspace, x + 0);
+				var r = BitConverter.ToUInt32(workspace, x + 4);
 				Blowfish_decipher(ref l, ref r);
 				Buffer.BlockCopy(BitConverter.GetBytes(l), 0, workspace, x + 0, 4);
 				Buffer.BlockCopy(BitConverter.GetBytes(r), 0, workspace, x + 4, 4);

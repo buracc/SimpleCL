@@ -4,9 +4,9 @@ using SimpleCL.Ui;
 namespace SimpleCL
 {
     // ReSharper disable once InconsistentNaming
-    internal static class SimpleCL
+    internal static class Program
     {
-        public static Gui Gui { get; set; }
+        public static Gui Gui { get; private set; }
 
         public static void Main(string[] args)
         {

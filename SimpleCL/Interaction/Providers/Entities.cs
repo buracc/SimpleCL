@@ -11,9 +11,9 @@ namespace SimpleCL.Interaction.Providers
 {
     public static class Entities
     {
-        public static readonly Dictionary<uint, Entity> AllEntities = new Dictionary<uint, Entity>();
-        public static readonly BindingList<ITargetable> TargetableEntities = new BindingList<ITargetable>();
-        private static readonly Dictionary<uint, uint> Buffs = new Dictionary<uint, uint>();
+        public static readonly Dictionary<uint, Entity> AllEntities = new();
+        public static readonly BindingList<ITargetable> TargetableEntities = new();
+        private static readonly Dictionary<uint, uint> Buffs = new();
 
         public static void Respawn()
         {
@@ -35,7 +35,7 @@ namespace SimpleCL.Interaction.Providers
                 TargetableEntities.Add(targetable);
             }
             
-            SimpleCL.Gui.AddMinimapMarker(e);
+            Program.Gui.AddMinimapMarker(e);
         }
 
         public static void Despawned(uint uid)
@@ -52,7 +52,7 @@ namespace SimpleCL.Interaction.Providers
             }
             
             AllEntities.Remove(uid);
-            SimpleCL.Gui.RemoveMinimapMarker(uid);
+            Program.Gui.RemoveMinimapMarker(uid);
         }
 
         public static void Moved(uint uid, LocalPoint point = null, ushort angle = 0)
@@ -76,7 +76,7 @@ namespace SimpleCL.Interaction.Providers
                 }
             }
 
-            SimpleCL.Gui.RefreshMap();
+            Program.Gui.RefreshMap();
         }
 
         public static void Buffed(Buff buff)
@@ -87,7 +87,7 @@ namespace SimpleCL.Interaction.Providers
             }
 
             var entity = AllEntities[buff.TargetUid];
-            if (!(entity is Actor actor))
+            if (entity is not Actor actor)
             {
                 return;
             }
@@ -104,7 +104,7 @@ namespace SimpleCL.Interaction.Providers
             }
 
             var entity = AllEntities[Buffs[buffUid]];
-            if (!(entity is Actor actor))
+            if (entity is not Actor actor)
             {
                 return;
             }
@@ -121,7 +121,7 @@ namespace SimpleCL.Interaction.Providers
             }
             
             var entity = AllEntities[uid];
-            if (!(entity is Actor actor))
+            if (entity is not Actor actor)
             {
                 return;
             }

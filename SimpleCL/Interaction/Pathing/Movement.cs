@@ -14,7 +14,7 @@ namespace SimpleCL.Interaction.Pathing
 
         public static void WalkTo(ushort region, float x, float y, float z)
         {
-            Packet packet = new Packet(Opcodes.Agent.Request.CHAR_MOVEMENT);
+            var packet = new Packet(Opcodes.Agent.Request.CHAR_MOVEMENT);
             packet.WriteByte(1);
             packet.WriteUShort(region);
 

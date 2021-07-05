@@ -17,7 +17,7 @@ namespace SimpleCL.Models.Chatter
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder("[" + Channel + "] ");
+            var sb = new StringBuilder("[" + Channel + "] ");
             if (SenderName != null)
             {
                 sb.Append(SenderName);

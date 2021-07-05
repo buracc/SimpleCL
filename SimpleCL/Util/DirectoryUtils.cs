@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SimpleCL.Util
 {
-    public class DirectoryUtils
+    public static class DirectoryUtils
     {
         public static DirectoryInfo GetRootDir()
         {

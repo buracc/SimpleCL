@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Threading;
@@ -16,17 +17,17 @@ namespace SimpleCL.Network
     public abstract class Server : IDisposable
     {
         public readonly Thread ServerThread;
-        protected readonly Security Security = new Security();
-        protected readonly TransferBuffer RecvBuffer = new TransferBuffer(8192, 0, 0);
-        protected readonly Socket Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        protected readonly Security Security = new();
+        protected readonly TransferBuffer RecvBuffer = new(8192, 0, 0);
+        protected readonly Socket Socket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-        private readonly List<Service> _services = new List<Service>();
-        private readonly List<Tuple<ushort, PacketHandler>> _handlers = new List<Tuple<ushort, PacketHandler>>();
-        private readonly ConcurrentQueue<Action> _actions = new ConcurrentQueue<Action>();
+        private readonly List<Service> _services = new();
+        private readonly List<Tuple<ushort, PacketHandler>> _handlers = new();
+        private readonly ConcurrentQueue<Action> _actions = new();
 
         private delegate void PacketHandler(Server server, Packet packet);
 
-        private readonly Timer _timer = new Timer(6666);
+        private readonly Timer _timer = new(6666);
         private bool _disposed;
 
         protected Server()
@@ -46,13 +47,15 @@ namespace SimpleCL.Network
             foreach (var method in service.GetType()
                 .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
             {
-                PacketHandlerAttribute packetHandlerMethod = method.GetCustomAttribute<PacketHandlerAttribute>();
-                if (packetHandlerMethod != null)
+                var packetHandlerMethod = method.GetCustomAttribute<PacketHandlerAttribute>();
+                if (packetHandlerMethod == null)
                 {
-                    PacketHandler handler =
-                        (PacketHandler) Delegate.CreateDelegate(typeof(PacketHandler), service, method);
-                    _handlers.Add(Tuple.Create(packetHandlerMethod.Opcode, handler));
+                    continue;
                 }
+
+                var handler =
+                    (PacketHandler) Delegate.CreateDelegate(typeof(PacketHandler), service, method);
+                _handlers.Add(Tuple.Create(packetHandlerMethod.Opcode, handler));
             }
         }
 
@@ -75,10 +78,10 @@ namespace SimpleCL.Network
 
         public void Log(string message, bool toGui = true)
         {
-            string logMsg = "[" + GetType().Name + "] " + message;
-            if (toGui && SimpleCL.Gui != null)
+            var logMsg = "[" + GetType().Name + "] " + message;
+            if (toGui && Program.Gui != null)
             {
-                SimpleCL.Gui.Log(logMsg);
+                Program.Gui.Log(logMsg);
             }
             else
             {
@@ -91,16 +94,16 @@ namespace SimpleCL.Network
             Security.Send(packet);
         }
 
-        private void HeartBeat(Object source, ElapsedEventArgs e)
+        private void HeartBeat(object source, ElapsedEventArgs e)
         {
             Inject(new Packet(Opcodes.HEARTBEAT));
 
-            SimpleCL.Gui.RefreshGui();
+            Program.Gui.RefreshGui();
         }
 
         public void Disconnect()
         {
-            SimpleCL.Gui.ToggleControls(true);
+            Program.Gui.ToggleControls(true);
             Dispose();
         }
 
@@ -186,21 +189,17 @@ namespace SimpleCL.Network
                     }
                 }
 
-                List<Packet> incomingPackets = Security.TransferIncoming();
+                var incomingPackets = Security.TransferIncoming();
                 if (incomingPackets == null)
                 {
                     continue;
                 }
 
-                foreach (var packet in incomingPackets)
+                foreach (var packet in incomingPackets.Where(packet =>
+                    packet.Opcode != Opcodes.HANDSHAKE && packet.Opcode != Opcodes.HANDSHAKE_ACCEPT))
                 {
-                    if (packet.Opcode == Opcodes.HANDSHAKE || packet.Opcode == Opcodes.HANDSHAKE_ACCEPT)
-                    {
-                        continue;
-                    }
-
-                    if (this is Agent && SimpleCL.Gui.DebugAgent() ||
-                        this is Gateway && SimpleCL.Gui.DebugGateway())
+                    if (this is Agent && Program.Gui.DebugAgent() ||
+                        this is Gateway && Program.Gui.DebugGateway())
                     {
                         DebugPacket(packet);
                     }
@@ -213,17 +212,16 @@ namespace SimpleCL.Network
                     Notify(packet);
                 }
 
-                List<KeyValuePair<TransferBuffer, Packet>> outgoing = Security.TransferOutgoing();
+                var outgoing = Security.TransferOutgoing();
                 if (outgoing != null)
                 {
-                    foreach (var pair in outgoing)
+                    foreach (var buffer in outgoing.Select(pair => pair.Key))
                     {
-                        TransferBuffer buffer = pair.Key;
                         success = SocketError.Success;
 
                         while (buffer.Offset != buffer.Size)
                         {
-                            int n = Socket.Send(buffer.Buffer, buffer.Offset, buffer.Size - buffer.Offset,
+                            var n = Socket.Send(buffer.Buffer, buffer.Offset, buffer.Size - buffer.Offset,
                                 SocketFlags.None, out success);
                             if (success != SocketError.Success && success != SocketError.WouldBlock)
                             {

@@ -25,7 +25,7 @@ namespace SimpleCL.Services.Game
 
             var entity = Entities.AllEntities[uid];
 
-            if (!(entity is Actor actor))
+            if (entity is not Actor actor)
             {
                 return;
             }
@@ -33,11 +33,11 @@ namespace SimpleCL.Services.Game
             packet.ReadByte();
             packet.ReadByte();
             
-            EntityStateEvent.Health eventType = (EntityStateEvent.Health) packet.ReadByte();
+            var eventType = (EntityStateEvent.Health) packet.ReadByte();
             
             switch (eventType)
             {
-                case EntityStateEvent.Health.HP:
+                case EntityStateEvent.Health.Hp:
                     actor.Hp = packet.ReadUInt();
                     if (actor is Monster monster && monster.Hp == 0)
                     {
@@ -45,12 +45,12 @@ namespace SimpleCL.Services.Game
                     }
                     break;
 
-                case EntityStateEvent.Health.MP:
+                case EntityStateEvent.Health.Mp:
                     actor.Mp = packet.ReadUInt();
                     break;
 
-                case EntityStateEvent.Health.EntityHPMP:
-                case EntityStateEvent.Health.HPMP:
+                case EntityStateEvent.Health.EntityHpMp:
+                case EntityStateEvent.Health.HpMp:
                     actor.Hp = packet.ReadUInt();
                     if (actor is Monster m && m.Hp == 0)
                     {

@@ -14,16 +14,14 @@ namespace SimpleCL.Models.Character
         }
 
         private static LocalPlayer _instance;
-        public static LocalPlayer Get => _instance ?? (_instance = new LocalPlayer(1907));
+        public static LocalPlayer Get => _instance ??= new LocalPlayer(1907);
 
-        private ulong _nextLevelExp;
-        private ulong _jobNextLevelExp;
         private byte _level;
         private byte _jobLevel;
         public uint MaxHp { get; set; }
         public uint MaxMp { get; set; }
-        public readonly List<Mastery> Masteries = new List<Mastery>();
-        public readonly BindingList<CharacterSkill> Skills = new BindingList<CharacterSkill>();
+        public readonly List<Mastery> Masteries = new();
+        public readonly BindingList<CharacterSkill> Skills = new();
 
         public byte Level
         {
@@ -31,13 +29,14 @@ namespace SimpleCL.Models.Character
             set
             {
                 _level = value;
-                _nextLevelExp = GameDatabase.Get.GetNextLevelExp(value);
+                NextLevelExp = GameDatabase.Get.GetNextLevelExp(value);
             }
         }
 
         public string JobName { get; set; }
-        public ulong NextLevelExp => _nextLevelExp;
-        public ulong JobNextLevelExp => _jobNextLevelExp;
+        public ulong NextLevelExp { get; private set; }
+
+        public ulong JobNextLevelExp { get; private set; }
 
         public byte JobLevel
         {
@@ -45,7 +44,7 @@ namespace SimpleCL.Models.Character
             set
             {
                 _jobLevel = value;
-                _jobNextLevelExp = GameDatabase.Get.GetJobNextLevelExp(value);
+                JobNextLevelExp = GameDatabase.Get.GetJobNextLevelExp(value);
             }
         }
 
@@ -54,7 +53,7 @@ namespace SimpleCL.Models.Character
         public uint Skillpoints { get; set; }
         public ulong Gold { get; set; }
 
-        public Dictionary<string, List<InventoryItem>> Inventories = new Dictionary<string, List<InventoryItem>>();
+        public Dictionary<string, List<InventoryItem>> Inventories = new();
 
         public float GetAngleDegrees()
         {
@@ -73,12 +72,12 @@ namespace SimpleCL.Models.Character
 
         public double GetExpPercentDecimal()
         {
-            return (double) ExpGained / _nextLevelExp;
+            return (double) ExpGained / NextLevelExp;
         }
 
         public double GetJobExpPercentDecimal()
         {
-            return (double) JobExpGained / _jobNextLevelExp;
+            return (double) JobExpGained / JobNextLevelExp;
         }
     }
 }

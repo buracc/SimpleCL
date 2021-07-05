@@ -8,7 +8,7 @@ namespace SimpleCL.Interaction.Providers
 {
     public class Monsters
     {
-        private static readonly List<Monster> EmptyList = new List<Monster>();
+        private static readonly List<Monster> EmptyList = new();
 
         public static List<Monster> GetAll(Func<Monster, bool> filter = null)
         {

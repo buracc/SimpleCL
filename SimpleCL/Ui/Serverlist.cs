@@ -15,7 +15,7 @@ namespace SimpleCL.Ui
     public partial class Serverlist : Form
     {
         private readonly Server _gateway;
-        public Serverlist(List<GameServer> servers, Server gateway)
+        public Serverlist(IReadOnlyCollection<GameServer> servers, Server gateway)
         {
             _gateway = gateway;
             InitializeComponent();
@@ -27,7 +27,7 @@ namespace SimpleCL.Ui
             
             serverlistDataGridView.KeyDown += (sender, args) =>
             {
-                DataGridViewCell currentCell = serverlistDataGridView.CurrentCell;
+                var currentCell = serverlistDataGridView.CurrentCell;
                 if (args.KeyCode == Keys.Enter && currentCell != null)
                 {
                     SelectServer(serverlistDataGridView.Rows[currentCell.RowIndex], args);
@@ -37,13 +37,13 @@ namespace SimpleCL.Ui
 
         private void SelectServer(object sender, EventArgs args)
         {
-            GameServer selected = (GameServer) ((DataGridViewRow) sender).DataBoundItem;
+            var selected = (GameServer) ((DataGridViewRow) sender).DataBoundItem;
             if (selected == null)
             {
                 return;
             }
             
-            Packet login = new Packet(Opcodes.Gateway.Request.LOGIN2, true);
+            var login = new Packet(Opcodes.Gateway.Request.LOGIN2, true);
             login.WriteByte(Locale.SRO_TR_Official_GameGami);
             login.WriteAscii(Credentials.Username);
             login.WriteAscii(Credentials.Password);

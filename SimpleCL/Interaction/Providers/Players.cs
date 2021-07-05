@@ -8,7 +8,7 @@ namespace SimpleCL.Interaction.Providers
 {
     public class Players
     {
-        private static readonly List<Player> EmptyList = new List<Player>();
+        private static readonly List<Player> EmptyList = new();
 
         public static List<Player> GetAll(Func<Player, bool> filter = null)
         {

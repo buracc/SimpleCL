@@ -69,7 +69,7 @@ namespace SimpleCL.Services.Game
                     }
                     else
                     {
-                        double angleRadians = Math.Atan(yDiff / xDiff);
+                        var angleRadians = Math.Atan(yDiff / xDiff);
 
                         if (yDiff < 0 || xDiff < 0)
                         {

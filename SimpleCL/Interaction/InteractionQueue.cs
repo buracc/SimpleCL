@@ -26,7 +26,7 @@ namespace SimpleCL.Interaction
             {
                 while (Looping)
                 {
-                    var selectedEntity = SimpleCL.Gui.SelectedEntities.FirstOrDefault();
+                    var selectedEntity = Program.Gui.SelectedEntities.FirstOrDefault();
                     if (selectedEntity == null)
                     {
                         continue;
@@ -52,7 +52,7 @@ namespace SimpleCL.Interaction
                         continue;
                     }
             
-                    var selectedSkill = SimpleCL.Gui.SelectedSkills.FirstOrDefault(x => !x.IsOnCooldown());
+                    var selectedSkill = Program.Gui.SelectedSkills.FirstOrDefault(x => !x.IsOnCooldown());
                     if (selectedSkill == null)
                     {
                         Thread.Sleep(500);

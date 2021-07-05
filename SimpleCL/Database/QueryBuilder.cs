@@ -58,14 +58,14 @@ namespace SimpleCL.Database
 
         public List<NameValueCollection> ExecuteSelect(bool close = true)
         {
-            List<NameValueCollection> result = new List<NameValueCollection>();
+            var result = new List<NameValueCollection>();
 
             if (!_fast)
             {
                 _db.Open();
             }
 
-            SQLiteDataReader reader = _command.ExecuteReader();
+            var reader = _command.ExecuteReader();
             while (reader.Read())
             {
                 result.Add(reader.GetValues());

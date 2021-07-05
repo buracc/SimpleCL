@@ -21,7 +21,7 @@ namespace SimpleCL.Models.Entities
 
         public void Cast(Skill skill)
         {
-            Packet attackPacket = new Packet(Opcodes.Agent.Request.CHAR_ACTION);
+            var attackPacket = new Packet(Opcodes.Agent.Request.CHAR_ACTION);
             attackPacket.WriteByte(1);
             if (skill.Id == 1)
             {
@@ -35,7 +35,7 @@ namespace SimpleCL.Models.Entities
             
             attackPacket.WriteByte(1);
             attackPacket.WriteUInt(Uid);
-            Packet selectTarget = new Packet(Opcodes.Agent.Request.ENTITY_SELECT_OBJECT);
+            var selectTarget = new Packet(Opcodes.Agent.Request.ENTITY_SELECT_OBJECT);
             selectTarget.WriteUInt(Uid);
             InteractionQueue.PacketQueue.Enqueue(selectTarget);
             InteractionQueue.PacketQueue.Enqueue(attackPacket);

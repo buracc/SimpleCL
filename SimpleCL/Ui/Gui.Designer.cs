@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using SimpleCL.Ui.Components;
 
 namespace SimpleCL.Ui
 {
@@ -46,10 +47,10 @@ namespace SimpleCL.Ui
             this.statisticsBox = new System.Windows.Forms.GroupBox();
             this.worldCoordsLabelValue = new System.Windows.Forms.Label();
             this.worldCoordsLabel = new System.Windows.Forms.Label();
-            this.jobExpProgressBar = new global::SimpleCL.Ui.Components.TextProgressBar();
-            this.hpProgressBar = new global::SimpleCL.Ui.Components.TextProgressBar();
-            this.mpProgressBar = new global::SimpleCL.Ui.Components.TextProgressBar();
-            this.expProgressBar = new global::SimpleCL.Ui.Components.TextProgressBar();
+            this.jobExpProgressBar = new SimpleCL.Ui.Components.TextProgressBar();
+            this.hpProgressBar = new SimpleCL.Ui.Components.TextProgressBar();
+            this.mpProgressBar = new SimpleCL.Ui.Components.TextProgressBar();
+            this.expProgressBar = new SimpleCL.Ui.Components.TextProgressBar();
             this.jobExpLabel = new System.Windows.Forms.Label();
             this.jobLevelLabelValue = new System.Windows.Forms.Label();
             this.jobLevelLabel = new System.Windows.Forms.Label();
@@ -81,11 +82,11 @@ namespace SimpleCL.Ui
             this.chatTab = new System.Windows.Forms.TabPage();
             this.chatBox = new System.Windows.Forms.ListBox();
             this.attackTab = new System.Windows.Forms.TabPage();
+            this.attackButton = new System.Windows.Forms.Button();
             this.removeSkillListBox = new System.Windows.Forms.Button();
             this.addSkillListBox = new System.Windows.Forms.Button();
             this.removeEntityButton = new System.Windows.Forms.Button();
             this.addEntityButton = new System.Windows.Forms.Button();
-            this.refreshEntitiesButton = new System.Windows.Forms.Button();
             this.nearEntitiesListBox = new System.Windows.Forms.ListBox();
             this.availSkillsListBox = new System.Windows.Forms.ListBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -94,7 +95,7 @@ namespace SimpleCL.Ui
             this.attackSkillsListBox = new System.Windows.Forms.ListBox();
             this.movementTab = new System.Windows.Forms.TabPage();
             this.mapPanel = new System.Windows.Forms.Panel();
-            this.minimap = new global::SimpleCL.Ui.Components.Map();
+            this.minimap = new SimpleCL.Ui.Components.Map();
             this.currWorldLabel = new System.Windows.Forms.Label();
             this.currWorldLabelValue = new System.Windows.Forms.Label();
             this.currLocalLabel = new System.Windows.Forms.Label();
@@ -105,7 +106,6 @@ namespace SimpleCL.Ui
             this.loggerBox = new System.Windows.Forms.ListBox();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripProgressBar2 = new System.Windows.Forms.ToolStripProgressBar();
-            this.attackButton = new System.Windows.Forms.Button();
             credentialsGroup = new System.Windows.Forms.GroupBox();
             credentialsGroup.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -114,13 +114,13 @@ namespace SimpleCL.Ui
             this.inventoryPage.SuspendLayout();
             this.inventoryTabControl.SuspendLayout();
             this.inventoryInvTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.inventoryDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.inventoryDataGridView)).BeginInit();
             this.equipmentInvTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.equipmentDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.equipmentDataGridView)).BeginInit();
             this.avatarInvTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.avatarDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.avatarDataGridView)).BeginInit();
             this.jobEquipmentInvTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.jobEquipmentDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.jobEquipmentDataGridView)).BeginInit();
             this.chatTab.SuspendLayout();
             this.attackTab.SuspendLayout();
             this.movementTab.SuspendLayout();
@@ -285,7 +285,7 @@ namespace SimpleCL.Ui
             this.jobExpProgressBar.TabIndex = 29;
             this.jobExpProgressBar.TextColor = System.Drawing.Color.Black;
             this.jobExpProgressBar.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.jobExpProgressBar.VisualMode = global::SimpleCL.Ui.Components.ProgressBarDisplayMode.CustomText;
+            this.jobExpProgressBar.VisualMode = SimpleCL.Ui.Components.ProgressBarDisplayMode.CustomText;
             // 
             // hpProgressBar
             // 
@@ -297,7 +297,7 @@ namespace SimpleCL.Ui
             this.hpProgressBar.TabIndex = 28;
             this.hpProgressBar.TextColor = System.Drawing.Color.Black;
             this.hpProgressBar.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.hpProgressBar.VisualMode = global::SimpleCL.Ui.Components.ProgressBarDisplayMode.CurrProgress;
+            this.hpProgressBar.VisualMode = SimpleCL.Ui.Components.ProgressBarDisplayMode.CurrProgress;
             // 
             // mpProgressBar
             // 
@@ -309,7 +309,7 @@ namespace SimpleCL.Ui
             this.mpProgressBar.TabIndex = 27;
             this.mpProgressBar.TextColor = System.Drawing.Color.Black;
             this.mpProgressBar.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.mpProgressBar.VisualMode = global::SimpleCL.Ui.Components.ProgressBarDisplayMode.CurrProgress;
+            this.mpProgressBar.VisualMode = SimpleCL.Ui.Components.ProgressBarDisplayMode.CurrProgress;
             // 
             // expProgressBar
             // 
@@ -321,7 +321,7 @@ namespace SimpleCL.Ui
             this.expProgressBar.TabIndex = 26;
             this.expProgressBar.TextColor = System.Drawing.Color.Black;
             this.expProgressBar.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.expProgressBar.VisualMode = global::SimpleCL.Ui.Components.ProgressBarDisplayMode.CustomText;
+            this.expProgressBar.VisualMode = SimpleCL.Ui.Components.ProgressBarDisplayMode.CustomText;
             // 
             // jobExpLabel
             // 
@@ -616,7 +616,6 @@ namespace SimpleCL.Ui
             this.attackTab.Controls.Add(this.addSkillListBox);
             this.attackTab.Controls.Add(this.removeEntityButton);
             this.attackTab.Controls.Add(this.addEntityButton);
-            this.attackTab.Controls.Add(this.refreshEntitiesButton);
             this.attackTab.Controls.Add(this.nearEntitiesListBox);
             this.attackTab.Controls.Add(this.availSkillsListBox);
             this.attackTab.Controls.Add(this.label2);
@@ -629,6 +628,16 @@ namespace SimpleCL.Ui
             this.attackTab.TabIndex = 5;
             this.attackTab.Text = "Attack";
             this.attackTab.UseVisualStyleBackColor = true;
+            // 
+            // attackButton
+            // 
+            this.attackButton.Location = new System.Drawing.Point(653, 341);
+            this.attackButton.Name = "attackButton";
+            this.attackButton.Size = new System.Drawing.Size(75, 23);
+            this.attackButton.TabIndex = 11;
+            this.attackButton.Text = "Attack";
+            this.attackButton.UseVisualStyleBackColor = true;
+            this.attackButton.Click += new System.EventHandler(this.StartAttack);
             // 
             // removeSkillListBox
             // 
@@ -669,16 +678,6 @@ namespace SimpleCL.Ui
             this.addEntityButton.Text = "+";
             this.addEntityButton.UseVisualStyleBackColor = true;
             this.addEntityButton.Click += new System.EventHandler(this.AddEntity);
-            // 
-            // refreshEntitiesButton
-            // 
-            this.refreshEntitiesButton.Location = new System.Drawing.Point(606, 259);
-            this.refreshEntitiesButton.Name = "refreshEntitiesButton";
-            this.refreshEntitiesButton.Size = new System.Drawing.Size(75, 23);
-            this.refreshEntitiesButton.TabIndex = 6;
-            this.refreshEntitiesButton.Text = "Refresh";
-            this.refreshEntitiesButton.UseVisualStyleBackColor = true;
-            this.refreshEntitiesButton.Click += new System.EventHandler(this.RefreshEntities);
             // 
             // nearEntitiesListBox
             // 
@@ -756,7 +755,7 @@ namespace SimpleCL.Ui
             this.minimap.Name = "minimap";
             this.minimap.Size = new System.Drawing.Size(800, 800);
             this.minimap.TabIndex = 10;
-            this.minimap.Zoom = ((byte)(1));
+            this.minimap.Zoom = ((byte) (1));
             // 
             // currWorldLabel
             // 
@@ -837,16 +836,6 @@ namespace SimpleCL.Ui
             this.toolStripProgressBar2.Name = "toolStripProgressBar2";
             this.toolStripProgressBar2.Size = new System.Drawing.Size(100, 15);
             // 
-            // attackButton
-            // 
-            this.attackButton.Location = new System.Drawing.Point(653, 341);
-            this.attackButton.Name = "attackButton";
-            this.attackButton.Size = new System.Drawing.Size(75, 23);
-            this.attackButton.TabIndex = 11;
-            this.attackButton.Text = "Attack";
-            this.attackButton.UseVisualStyleBackColor = true;
-            this.attackButton.Click += new System.EventHandler(this.StartAttack);
-            // 
             // Gui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -866,20 +855,19 @@ namespace SimpleCL.Ui
             this.inventoryPage.ResumeLayout(false);
             this.inventoryTabControl.ResumeLayout(false);
             this.inventoryInvTab.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.inventoryDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.inventoryDataGridView)).EndInit();
             this.equipmentInvTab.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.equipmentDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.equipmentDataGridView)).EndInit();
             this.avatarInvTab.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.avatarDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.avatarDataGridView)).EndInit();
             this.jobEquipmentInvTab.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.jobEquipmentDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.jobEquipmentDataGridView)).EndInit();
             this.chatTab.ResumeLayout(false);
             this.attackTab.ResumeLayout(false);
             this.movementTab.ResumeLayout(false);
             this.mapPanel.ResumeLayout(false);
             this.devTab.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
 
         private System.Windows.Forms.Button addEntityButton;
@@ -958,7 +946,6 @@ namespace SimpleCL.Ui
         private System.Windows.Forms.ListBox loggerBox;
 
         private System.Windows.Forms.Button loginButton;
-        private System.Windows.Forms.Button refreshEntitiesButton;
 
         private System.Windows.Forms.TextBox passwordBox;
         private System.Windows.Forms.TabControl tabControl;
@@ -980,11 +967,11 @@ namespace SimpleCL.Ui
         #endregion
 
         
-        private global::SimpleCL.Ui.Components.Map minimap;
-        private global::SimpleCL.Ui.Components.TextProgressBar expProgressBar;
-        private global::SimpleCL.Ui.Components.TextProgressBar hpProgressBar;
-        private global::SimpleCL.Ui.Components.TextProgressBar mpProgressBar;
-        private global::SimpleCL.Ui.Components.TextProgressBar jobExpProgressBar;
-        private Button attackButton;
+        private Map minimap;
+        private TextProgressBar expProgressBar;
+        private TextProgressBar hpProgressBar;
+        private TextProgressBar mpProgressBar;
+        private TextProgressBar jobExpProgressBar;
+        private System.Windows.Forms.Button attackButton;
     }
 }

@@ -300,7 +300,7 @@ namespace SimpleCL.SilkroadSecurityApi
 					throw new Exception("Cannot Read from an unlocked Packet.");
 				}
 
-				byte[] bytes = m_reader.ReadBytes(length);
+				var bytes = m_reader.ReadBytes(length);
 				return Encoding.GetEncoding(codepage).GetString(bytes);
 			}
 		}
@@ -313,8 +313,8 @@ namespace SimpleCL.SilkroadSecurityApi
 					throw new Exception("Cannot Read from an unlocked Packet.");
 				}
 
-				ushort length = m_reader.ReadUInt16();
-				byte[] bytes = m_reader.ReadBytes(length);
+				var length = m_reader.ReadUInt16();
+				var bytes = m_reader.ReadBytes(length);
 
 				return Encoding.GetEncoding(codepage).GetString(bytes);
 			}
@@ -328,8 +328,8 @@ namespace SimpleCL.SilkroadSecurityApi
 					throw new Exception("Cannot Read from an unlocked Packet.");
 				}
 
-				ushort length = m_reader.ReadUInt16();
-				byte[] bytes = m_reader.ReadBytes(length * 2);
+				var length = m_reader.ReadUInt16();
+				var bytes = m_reader.ReadBytes(length * 2);
 
 				return Encoding.Unicode.GetString(bytes);
 			}
@@ -342,8 +342,8 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Read from an unlocked Packet.");
 				}
-				byte[] values = new byte[count];
-				for (int x = 0; x < count; ++x)
+				var values = new byte[count];
+				for (var x = 0; x < count; ++x)
 				{
 					values[x] = m_reader.ReadByte();
 				}
@@ -358,8 +358,8 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Read from an unlocked Packet.");
 				}
-				sbyte[] values = new sbyte[count];
-				for (int x = 0; x < count; ++x)
+				var values = new sbyte[count];
+				for (var x = 0; x < count; ++x)
 				{
 					values[x] = m_reader.ReadSByte();
 				}
@@ -374,8 +374,8 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Read from an unlocked Packet.");
 				}
-				ushort[] values = new ushort[count];
-				for (int x = 0; x < count; ++x)
+				var values = new ushort[count];
+				for (var x = 0; x < count; ++x)
 				{
 					values[x] = m_reader.ReadUInt16();
 				}
@@ -390,8 +390,8 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Read from an unlocked Packet.");
 				}
-				short[] values = new short[count];
-				for (int x = 0; x < count; ++x)
+				var values = new short[count];
+				for (var x = 0; x < count; ++x)
 				{
 					values[x] = m_reader.ReadInt16();
 				}
@@ -406,8 +406,8 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Read from an unlocked Packet.");
 				}
-				uint[] values = new uint[count];
-				for (int x = 0; x < count; ++x)
+				var values = new uint[count];
+				for (var x = 0; x < count; ++x)
 				{
 					values[x] = m_reader.ReadUInt32();
 				}
@@ -422,8 +422,8 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Read from an unlocked Packet.");
 				}
-				int[] values = new int[count];
-				for (int x = 0; x < count; ++x)
+				var values = new int[count];
+				for (var x = 0; x < count; ++x)
 				{
 					values[x] = m_reader.ReadInt32();
 				}
@@ -438,8 +438,8 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Read from an unlocked Packet.");
 				}
-				ulong[] values = new ulong[count];
-				for (int x = 0; x < count; ++x)
+				var values = new ulong[count];
+				for (var x = 0; x < count; ++x)
 				{
 					values[x] = m_reader.ReadUInt64();
 				}
@@ -454,8 +454,8 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Read from an unlocked Packet.");
 				}
-				long[] values = new long[count];
-				for (int x = 0; x < count; ++x)
+				var values = new long[count];
+				for (var x = 0; x < count; ++x)
 				{
 					values[x] = m_reader.ReadInt64();
 				}
@@ -470,8 +470,8 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Read from an unlocked Packet.");
 				}
-				float[] values = new float[count];
-				for (int x = 0; x < count; ++x)
+				var values = new float[count];
+				for (var x = 0; x < count; ++x)
 				{
 					values[x] = m_reader.ReadSingle();
 				}
@@ -486,8 +486,8 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Read from an unlocked Packet.");
 				}
-				double[] values = new double[count];
-				for (int x = 0; x < count; ++x)
+				var values = new double[count];
+				for (var x = 0; x < count; ++x)
 				{
 					values[x] = m_reader.ReadDouble();
 				}
@@ -506,11 +506,11 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Read from an unlocked Packet.");
 				}
-				string[] values = new string[count];
-				for (int x = 0; x < count; ++x)
+				var values = new string[count];
+				for (var x = 0; x < count; ++x)
 				{
-					ushort length = m_reader.ReadUInt16();
-					byte[] bytes = m_reader.ReadBytes(length);
+					var length = m_reader.ReadUInt16();
+					var bytes = m_reader.ReadBytes(length);
 					values[x] = Encoding.UTF7.GetString(bytes);
 				}
 				return values;
@@ -524,11 +524,11 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Read from an unlocked Packet.");
 				}
-				string[] values = new string[count];
-				for (int x = 0; x < count; ++x)
+				var values = new string[count];
+				for (var x = 0; x < count; ++x)
 				{
-					ushort length = m_reader.ReadUInt16();
-					byte[] bytes = m_reader.ReadBytes(length * 2);
+					var length = m_reader.ReadUInt16();
+					var bytes = m_reader.ReadBytes(length * 2);
 					values[x] = Encoding.Unicode.GetString(bytes);
 				}
 				return values;
@@ -686,9 +686,9 @@ namespace SimpleCL.SilkroadSecurityApi
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
 
-				byte[] codepage_bytes = Encoding.GetEncoding(codepage).GetBytes(value);
-				string utf7_value = Encoding.UTF7.GetString(codepage_bytes);
-				byte[] bytes = Encoding.Default.GetBytes(utf7_value);
+				var codepage_bytes = Encoding.GetEncoding(codepage).GetBytes(value);
+				var utf7_value = Encoding.UTF7.GetString(codepage_bytes);
+				var bytes = Encoding.Default.GetBytes(utf7_value);
 
 				m_writer.Write((ushort)bytes.Length);
 				m_writer.Write(bytes);
@@ -703,7 +703,7 @@ namespace SimpleCL.SilkroadSecurityApi
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
 
-				byte[] bytes = Encoding.Unicode.GetBytes(value);
+				var bytes = Encoding.Unicode.GetBytes(value);
 
 				m_writer.Write((ushort)value.ToString().Length);
 				m_writer.Write(bytes);
@@ -832,9 +832,9 @@ namespace SimpleCL.SilkroadSecurityApi
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
 
-				byte[] codepage_bytes = Encoding.GetEncoding(code_page).GetBytes(value.ToString());
-				string utf7_value = Encoding.UTF7.GetString(codepage_bytes);
-				byte[] bytes = Encoding.Default.GetBytes(utf7_value);
+				var codepage_bytes = Encoding.GetEncoding(code_page).GetBytes(value.ToString());
+				var utf7_value = Encoding.UTF7.GetString(codepage_bytes);
+				var bytes = Encoding.Default.GetBytes(utf7_value);
 
 				m_writer.Write((ushort)bytes.Length);
 				m_writer.Write(bytes);
@@ -849,7 +849,7 @@ namespace SimpleCL.SilkroadSecurityApi
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
 
-				byte[] bytes = Encoding.Unicode.GetBytes(value.ToString());
+				var bytes = Encoding.Unicode.GetBytes(value.ToString());
 
 				m_writer.Write((ushort)value.ToString().Length);
 				m_writer.Write(bytes);
@@ -872,7 +872,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					m_writer.Write(values[x]);
 				}
@@ -890,7 +890,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					m_writer.Write(values[x]);
 				}
@@ -908,7 +908,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					m_writer.Write(values[x]);
 				}
@@ -926,7 +926,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					m_writer.Write(values[x]);
 				}
@@ -944,7 +944,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					m_writer.Write(values[x]);
 				}
@@ -962,7 +962,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					m_writer.Write(values[x]);
 				}
@@ -980,7 +980,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					m_writer.Write(values[x]);
 				}
@@ -998,7 +998,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					m_writer.Write(values[x]);
 				}
@@ -1016,7 +1016,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					m_writer.Write(values[x]);
 				}
@@ -1034,7 +1034,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					WriteAscii(values[x], codepage);
 				}
@@ -1060,7 +1060,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					WriteUnicode(values[x]);
 				}
@@ -1079,7 +1079,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					WriteByte(values[x]);
 				}
@@ -1097,7 +1097,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					WriteSByte(values[x]);
 				}
@@ -1115,7 +1115,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					WriteUShort(values[x]);
 				}
@@ -1133,7 +1133,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					WriteShort(values[x]);
 				}
@@ -1151,7 +1151,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					WriteUInt(values[x]);
 				}
@@ -1169,7 +1169,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					WriteInt(values[x]);
 				}
@@ -1187,7 +1187,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					WriteULong(values[x]);
 				}
@@ -1205,7 +1205,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					WriteLong(values[x]);
 				}
@@ -1223,7 +1223,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					WriteSingle(values[x]);
 				}
@@ -1241,7 +1241,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					WriteDouble(values[x]);
 				}
@@ -1259,7 +1259,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					WriteAscii(values[x].ToString(), codepage);
 				}
@@ -1285,7 +1285,7 @@ namespace SimpleCL.SilkroadSecurityApi
 				{
 					throw new Exception("Cannot Write to a locked Packet.");
 				}
-				for (int x = index; x < index + count; ++x)
+				for (var x = index; x < index + count; ++x)
 				{
 					WriteUnicode(values[x].ToString());
 				}
@@ -1295,8 +1295,8 @@ namespace SimpleCL.SilkroadSecurityApi
 		{
 			if (bytes.Length == 0)
 				return "";
-			StringBuilder hexData = new StringBuilder();
-			foreach (byte b in bytes)
+			var hexData = new StringBuilder();
+			foreach (var b in bytes)
 				hexData.Append(b.ToString("X2") + " ");
 			// remove the last empty space
 			return hexData.Remove(hexData.Length - 1, 1).ToString();
