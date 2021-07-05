@@ -28,13 +28,13 @@ namespace SimpleCL.Interaction.Providers
             {
                 return;
             }
-            
+
             AllEntities[e.Uid] = e;
             if (e is ITargetable targetable)
             {
                 TargetableEntities.Add(targetable);
             }
-            
+
             Program.Gui.AddMinimapMarker(e);
         }
 
@@ -50,26 +50,26 @@ namespace SimpleCL.Interaction.Providers
             {
                 TargetableEntities.Remove(targetable);
             }
-            
+
             AllEntities.Remove(uid);
             Program.Gui.RemoveMinimapMarker(uid);
         }
 
-        public static void Moved(uint uid, LocalPoint point = null, ushort angle = 0)
+        public static void Moved(uint uid, LocalPoint destination = null, ushort angle = 0)
         {
             if (!AllEntities.ContainsKey(uid))
             {
                 return;
             }
-            
+
             var entity = AllEntities[uid];
             if (entity is Actor actor)
             {
-                if (point != null)
+                if (destination != null)
                 {
-                    actor.LocalPoint = point;
+                    actor.StartMovement(destination);
                 }
-                    
+
                 if (angle > 0)
                 {
                     actor.Angle = angle;
@@ -91,7 +91,7 @@ namespace SimpleCL.Interaction.Providers
             {
                 return;
             }
-            
+
             actor.Buffs.Add(buff);
             Buffs[buff.TargetUid] = buff.Uid;
         }
@@ -108,7 +108,7 @@ namespace SimpleCL.Interaction.Providers
             {
                 return;
             }
-            
+
             actor.Buffs.RemoveAll(x => x.Uid == buffUid);
             Buffs.Remove(buffUid);
         }
@@ -119,13 +119,13 @@ namespace SimpleCL.Interaction.Providers
             {
                 return;
             }
-            
+
             var entity = AllEntities[uid];
             if (entity is not Actor actor)
             {
                 return;
             }
-            
+
             actor.WalkSpeed = walkSpeed;
             actor.RunSpeed = runSpeed;
         }
@@ -134,7 +134,7 @@ namespace SimpleCL.Interaction.Providers
         {
             return AllEntities.Values.Where(x => x is Player).Cast<Player>().ToList();
         }
-        
+
         public static List<Monster> GetMonsters()
         {
             return AllEntities.Values.Where(x => x is Monster).Cast<Monster>().ToList();
@@ -144,7 +144,7 @@ namespace SimpleCL.Interaction.Providers
         {
             return AllEntities.Values.Where(x => x is TalkNpc).Cast<TalkNpc>().ToList();
         }
-        
+
         public static List<CharacterPet> GetPets()
         {
             return AllEntities.Values.Where(x => x is CharacterPet).Cast<CharacterPet>().ToList();

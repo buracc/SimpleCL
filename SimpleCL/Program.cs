@@ -14,9 +14,5 @@ namespace SimpleCL
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(Gui = new Gui());
         }
-
-        // public static void Main(string[] args)
-        // {
-        // }
     }
 }

@@ -61,7 +61,7 @@ namespace SimpleCL.Services.Game
                     break;
                 
                 case EntityStateEvent.Health.BadStatus:
-                    actor.BadStatus = (Actor.BadStatusFlag) packet.ReadUInt();
+                    actor.BadStatus = (Actor.Health.BadStatusFlag) packet.ReadUInt();
                     break;
             }
         }

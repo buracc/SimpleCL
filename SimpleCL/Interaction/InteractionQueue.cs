@@ -14,69 +14,83 @@ namespace SimpleCL.Interaction
     public class InteractionQueue
     {
         private static InteractionQueue _instance;
-        public static InteractionQueue Get => _instance ?? (_instance = new InteractionQueue());
-        
-        public static readonly ConcurrentQueue<Packet> PacketQueue = new ConcurrentQueue<Packet>();
-        public static bool Looping;
-        private readonly Thread _loopThread;
+        public static InteractionQueue Get => _instance ??= new InteractionQueue();
+
+        public static readonly ConcurrentQueue<Packet> PacketQueue = new();
+        public static bool AttackLoop;
 
         private InteractionQueue()
         {
-            _loopThread = new Thread(() =>
+            new Thread(() =>
             {
-                while (Looping)
+                while (true)
                 {
+                    var local = LocalPlayer.Get;
+
+                    if (local == null || local.Uid == 0)
+                    {
+                        Thread.Sleep(1);
+                        continue;
+                    }
+
+                    if (!AttackLoop)
+                    {
+                        Thread.Sleep(1000);
+                        continue;
+                    }
+
                     var selectedEntity = Program.Gui.SelectedEntities.FirstOrDefault();
                     if (selectedEntity == null)
                     {
+                        Thread.Sleep(1);
                         continue;
                     }
-                    
+
                     var attackableEntity = Entities.TargetableEntities
                         .OrderBy(x => ((ILocatable) x).WorldPoint.DistanceTo(LocalPlayer.Get.WorldPoint))
                         .FirstOrDefault(x =>
-                    {
-                        switch (selectedEntity)
                         {
-                            case Player player:
-                                return x is Player p && player.Uid == p.Uid;
-                            case Monster monster:
-                                return x is Monster m && monster.Id == m.Id;
-                            default:
-                                return false;
-                        }
-                    });
+                            switch (selectedEntity)
+                            {
+                                case Player player:
+                                    return x is Player p && player.Uid == p.Uid;
+                                case Monster monster:
+                                    return x is Monster m && monster.Id == m.Id;
+                                default:
+                                    return false;
+                            }
+                        });
 
                     if (attackableEntity == null)
                     {
+                        Thread.Sleep(1);
                         continue;
                     }
-            
+
                     var selectedSkill = Program.Gui.SelectedSkills.FirstOrDefault(x => !x.IsOnCooldown());
                     if (selectedSkill == null)
                     {
-                        Thread.Sleep(500);
+                        Thread.Sleep(1);
                         continue;
                     }
 
                     Console.WriteLine("attacking: " + attackableEntity + " with " + selectedSkill);
-                
+
                     attackableEntity.Cast(selectedSkill);
-                    Thread.Sleep(500);
+                    Thread.Sleep(1000);
                 }
-            });
+            }).Start();
         }
-        
+
         public void StartLoop()
         {
-            if (Looping)
+            if (AttackLoop)
             {
-                Looping = false;
+                AttackLoop = false;
                 return;
             }
-            
-            Looping = true;
-            _loopThread.Start();
+
+            AttackLoop = true;
         }
     }
 }

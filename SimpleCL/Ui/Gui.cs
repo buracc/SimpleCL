@@ -19,6 +19,7 @@ using SimpleCL.Network;
 using SimpleCL.Services.Login;
 using SimpleCL.Ui.Components;
 using SimpleCL.Util.Extension;
+using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Ui
 {
@@ -38,6 +39,18 @@ namespace SimpleCL.Ui
 
             FormClosed += ExitApplication;
 
+            var timer = new Timer(50);
+            timer.Elapsed += (_, _) =>
+            {
+                if (LocalPlayer.Get.Uid == 0)
+                {
+                    return;
+                }
+
+                RefreshMap();
+            };
+            timer.Start();
+
             foreach (var server in SilkroadServer.Values)
             {
                 serverComboBox.Items.Add(server);
@@ -56,7 +69,7 @@ namespace SimpleCL.Ui
             jobEquipmentDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
             availSkillsListBox.DataSource = LocalPlayer.Get.Skills;
-            
+
             attackSkillsListBox.DataSource = SelectedSkills;
             attackEntitiesListBox.DataSource = SelectedEntities;
 
@@ -119,7 +132,7 @@ namespace SimpleCL.Ui
             {
                 return;
             }
-            
+
             nameLabelValue.Text = local.Name;
             jobNameLabelValue.Text = local.JobName;
 
@@ -209,9 +222,9 @@ namespace SimpleCL.Ui
                                 Name = teleportLink.DestinationId.ToString(),
                                 Tag = teleporter
                             };
-                            
+
                             menuitem.Click += (sender, args) => teleportLink.Teleport(teleporter);
-                            
+
                             teleportMenu.Items.Add(
                                 menuitem
                             );
@@ -227,7 +240,7 @@ namespace SimpleCL.Ui
             {
                 return;
             }
-            
+
             marker.Size = marker.Image.Size;
 
             var location = minimap.GetPoint(entity.WorldPoint);

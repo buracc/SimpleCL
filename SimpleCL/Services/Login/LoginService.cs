@@ -154,6 +154,7 @@ namespace SimpleCL.Services.Login
                     agent.RegisterService(new EntityHealthService());
                     agent.RegisterService(new EntityMovementService());
                     agent.RegisterService(new EntitySkillService());
+                    agent.RegisterService(new EntityStateService());
                     
                     // agent.Debug = true;
                     agent.Start();

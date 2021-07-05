@@ -9,6 +9,7 @@ using SimpleCL.Enums.Skills;
 using SimpleCL.Interaction.Providers;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
+using SimpleCL.Models.Entities;
 using SimpleCL.Models.Items;
 using SimpleCL.Models.Skills;
 using SimpleCL.Network;
@@ -190,7 +191,7 @@ namespace SimpleCL.Services.Game
             local.Angle = packet.ReadUShort();
 
             var destinationSet = packet.ReadByte() == 1;
-            var walkType = packet.ReadByte();
+            local.WalkMode = (Actor.Movement.Mode) packet.ReadByte();
 
             if (destinationSet)
             {
@@ -217,7 +218,7 @@ namespace SimpleCL.Services.Game
 
             var lifeState = packet.ReadByte();
             packet.ReadByte();
-            var motionState = packet.ReadByte();
+            local.Motion = (Actor.Movement.Motion) packet.ReadByte();
             var status = packet.ReadByte();
 
             packet.ReadByte(); // idk what position, but there is an unknown byte before walkspeed

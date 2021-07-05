@@ -3,6 +3,7 @@ using SimpleCL.Enums.Commons;
 using SimpleCL.Interaction.Providers;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
+using SimpleCL.Models.Entities;
 using SimpleCL.Network;
 using SimpleCL.SecurityApi;
 using SimpleCL.Util.Extension;
@@ -16,80 +17,78 @@ namespace SimpleCL.Services.Game
         [PacketHandler(Opcodes.Agent.Response.ENTITY_MOVEMENT)]
         public void EntityMovement(Server server, Packet packet)
         {
-            var oldPos = LocalPlayer.Get.WorldPoint;
-            
-            try
+            var uid = packet.ReadUInt();
+            var destinationSet = packet.ReadByte() == 1;
+            if (!destinationSet)
             {
-                var uid = packet.ReadUInt();
-                var destinationSet = packet.ReadByte() == 1;
-                if (!destinationSet)
-                {
-                    return;
-                }
-                
-                var region = packet.ReadUShort();
-                LocalPoint localPoint;
-                if (region > short.MaxValue)
-                {
-                    localPoint = new LocalPoint(
-                        region,
-                        packet.ReadInt(),
-                        packet.ReadInt(),
-                        packet.ReadInt()
-                    );
-                }
-                else
-                {
-                    localPoint = new LocalPoint(
-                        region,
-                        packet.ReadUShort(),
-                        packet.ReadUShort(),
-                        packet.ReadUShort()
-                    );
-                }
-                    
-                Entities.Moved(uid, localPoint);
+                return;
+            }
 
-                if (uid != LocalPlayer.Get.Uid)
-                {
-                    return;
-                }
-                
-                var xDiff = LocalPlayer.Get.WorldPoint.X - oldPos.X;
-                var yDiff = LocalPlayer.Get.WorldPoint.Y - oldPos.Y;
-                if (xDiff == 0)
+            var region = packet.ReadUShort();
+            LocalPoint destination;
+            if (region > short.MaxValue)
+            {
+                destination = new LocalPoint(
+                    region,
+                    packet.ReadInt(),
+                    packet.ReadInt(),
+                    packet.ReadInt()
+                );
+            }
+            else
+            {
+                destination = new LocalPoint(
+                    region,
+                    packet.ReadUShort(),
+                    packet.ReadUShort(),
+                    packet.ReadUShort()
+                );
+            }
+
+            if (!Entities.AllEntities.TryGetValue(uid, out var entity) || entity is not Actor actor)
+            {
+                return;
+            }
+
+            Entities.Moved(uid, destination);
+            
+            if (uid != LocalPlayer.Get.Uid)
+            {
+                return;
+            }
+
+            var oldWorldPos = actor.WorldPoint;
+            var newWorldPos = WorldPoint.FromLocal(destination);
+            
+            var xDiff = newWorldPos.X - oldWorldPos.X;
+            var yDiff = newWorldPos.Y - oldWorldPos.Y;
+            
+            if (xDiff == 0)
+            {
+                LocalPlayer.Get.Angle = (ushort) (ushort.MaxValue / 4 * (yDiff > 0 ? 1 : 3));
+            }
+            else
+            {
+                if (yDiff == 0)
                 {
                     LocalPlayer.Get.Angle = (ushort) (ushort.MaxValue / 4 * (yDiff > 0 ? 1 : 3));
                 }
                 else
                 {
-                    if (yDiff == 0)
-                    {
-                        LocalPlayer.Get.Angle = (ushort) (ushort.MaxValue / 4 * (yDiff > 0 ? 1 : 3));
-                    }
-                    else
-                    {
-                        var angleRadians = Math.Atan(yDiff / xDiff);
+                    var angleRadians = Math.Atan(yDiff / xDiff);
 
-                        if (yDiff < 0 || xDiff < 0)
+                    if (yDiff < 0 || xDiff < 0)
+                    {
+                        angleRadians += Math.PI;
+                        if (xDiff > 0)
                         {
                             angleRadians += Math.PI;
-                            if (xDiff > 0)
-                            {
-                                angleRadians += Math.PI;
-                            }
                         }
-
-                        LocalPlayer.Get.Angle =
-                            (ushort) Math.Round(angleRadians * ushort.MaxValue / (Math.PI * 2.0));
                     }
+
+                    LocalPlayer.Get.Angle =
+                        (ushort) Math.Round(angleRadians * ushort.MaxValue / (Math.PI * 2.0));
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Failed to parse movement packet");
-                server.DebugPacket(packet);
-                Console.WriteLine(e);
             }
         }
 

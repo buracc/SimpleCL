@@ -299,7 +299,7 @@ namespace SimpleCL.Services.Game
                     actor.Angle = packet.ReadUShort();
 
                     var destinationSet = packet.ReadByte() == 1;
-                    var walkType = packet.ReadByte();
+                    actor.WalkMode = (Actor.Movement.Mode) packet.ReadByte();
 
                     if (destinationSet)
                     {
@@ -324,10 +324,10 @@ namespace SimpleCL.Services.Game
                         actor.Angle = packet.ReadUShort();
                     }
 
-                    var lifeState = packet.ReadByte();
+                    actor.LifeState = (Actor.Health.LifeState) packet.ReadByte();
 
                     packet.ReadByte();
-                    var motionState = packet.ReadByte();
+                    actor.Motion = (Actor.Movement.Motion) packet.ReadByte();
                     var status = packet.ReadByte();
 
                     packet.ReadByte(); // idk what position, but there is an unknown byte before walkspeed
