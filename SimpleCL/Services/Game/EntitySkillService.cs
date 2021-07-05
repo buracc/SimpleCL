@@ -19,9 +19,8 @@ namespace SimpleCL.Services.Game
         public void BuffStart(Server server, Packet packet)
         {
             var targetUid = packet.ReadUInt();
-            var buff = new Buff(packet.ReadUInt());
-            buff.Uid = packet.ReadUInt();
-            buff.TargetUid = targetUid;
+            var buff = new Buff(packet.ReadUInt()) {Uid = packet.ReadUInt(), TargetUid = targetUid};
+            buff.RemainingDuration = (uint) buff.Duration;
             Entities.Buffed(buff);
         }
 

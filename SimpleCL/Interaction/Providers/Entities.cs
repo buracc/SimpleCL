@@ -75,8 +75,6 @@ namespace SimpleCL.Interaction.Providers
                     actor.Angle = angle;
                 }
             }
-
-            Program.Gui.RefreshMap();
         }
 
         public static void Buffed(Buff buff)
@@ -109,7 +107,12 @@ namespace SimpleCL.Interaction.Providers
                 return;
             }
 
-            actor.Buffs.RemoveAll(x => x.Uid == buffUid);
+            var buffsToRemove = actor.Buffs.Where(x => x.Uid == buffUid).ToList();
+            foreach (var buff in buffsToRemove)
+            {
+                actor.Buffs.Remove(buff);
+            }
+            
             Buffs.Remove(buffUid);
         }
 

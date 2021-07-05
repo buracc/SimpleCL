@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 using SimpleCL.Database;
 using SimpleCL.Enums.Server;
@@ -39,10 +40,12 @@ namespace SimpleCL.Ui
 
             FormClosed += ExitApplication;
 
-            var timer = new Timer(50);
+            var local = LocalPlayer.Get;
+
+            var timer = new Timer(100);
             timer.Elapsed += (_, _) =>
             {
-                if (LocalPlayer.Get.Uid == 0)
+                if (local.Uid == 0)
                 {
                     return;
                 }
@@ -68,12 +71,12 @@ namespace SimpleCL.Ui
             avatarDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             jobEquipmentDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
-            availSkillsListBox.DataSource = LocalPlayer.Get.Skills;
-
+            availSkillsListBox.DataSource = local.Skills;
             attackSkillsListBox.DataSource = SelectedSkills;
             attackEntitiesListBox.DataSource = SelectedEntities;
-
             nearEntitiesListBox.DataSource = Entities.TargetableEntities;
+
+            buffsDataGridView.DataSource = local.Buffs;
 
             CenterToScreen();
         }
@@ -189,13 +192,52 @@ namespace SimpleCL.Ui
                     marker.Image = Properties.Resources.mm_sign_npc;
                     break;
 
-                case Monster:
+                case Monster monster:
                     marker.Image = Properties.Resources.mm_sign_monster;
+                    var monsterMenu = new ContextMenuStrip();
+                    var monsterMenuitem = new ToolStripMenuItem
+                    {
+                        Text = "Attack",
+                        Name = monster.ToString()
+                    };
+
+                    monsterMenuitem.Click += (_, _) =>
+                    {
+                        var skill = SelectedSkills.FirstOrDefault(x => !x.IsOnCooldown());
+                        Log("Going to attack " + monster.Name + " with skill " + skill);
+                        monster.Attack(skill);
+                    };
+
+                    monsterMenu.Items.Add(
+                        monsterMenuitem
+                    );
+
+                    marker.ContextMenuStrip = monsterMenu;
                     break;
 
                 case LocalPlayer:
                     marker.Image = Properties.Resources.mm_sign_character;
                     _toolTip.SetToolTip(marker, "We are here");
+
+                    var localPlayerMenu = new ContextMenuStrip();
+                    localPlayerMenu.MaximumSize = new Size(250, 400);
+
+                    foreach (var skill in LocalPlayer.Get.Skills)
+                    {
+                        var menuitem = new ToolStripMenuItem
+                        {
+                            Text = skill.Name,
+                            Name = skill.ToString()
+                        };
+
+                        menuitem.Click += (_, _) => skill.Cast();
+
+                        localPlayerMenu.Items.Add(
+                            menuitem
+                        );
+                    }
+
+                    marker.ContextMenuStrip = localPlayerMenu;
                     break;
 
                 case Player:

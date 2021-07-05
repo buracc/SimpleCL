@@ -4,6 +4,6 @@ namespace SimpleCL.Models
 {
     public interface ITargetable
     {
-        void Cast(Skill skill);
+        void Attack(Skill skill);
     }
 }

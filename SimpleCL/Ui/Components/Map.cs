@@ -238,11 +238,10 @@ namespace SimpleCL.Ui.Components
         {
             if (!MapCenter.Equals(viewPoint))
             {
-                if (MapCenter.Region != viewPoint.Region && viewPoint.InCave())
+                if (!MapCenter.Region.Equals(viewPoint.Region) && viewPoint.InCave())
                 {
                     SelectMapLayer(viewPoint.Region);
                     RemoveTiles();
-                    MapCenter = viewPoint;
                 }
                 else
                 {
@@ -340,7 +339,7 @@ namespace SimpleCL.Ui.Components
                     location.X -= imageSize.Width / 2;
                     location.Y -= imageSize.Height / 2;
 
-                    if (marker.Location.X != location.X && marker.Location.Y != location.Y)
+                    if (!marker.Location.X.Equals(location.X) && !marker.Location.Y.Equals(location.Y))
                     {
                         marker.Location = location;
                     }

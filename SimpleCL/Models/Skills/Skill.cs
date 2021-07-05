@@ -1,13 +1,16 @@
 ﻿using System;
 using SimpleCL.Database;
+using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Items.Type;
+using SimpleCL.Interaction;
+using SimpleCL.SecurityApi;
 
 namespace SimpleCL.Models.Skills
 {
     public class Skill
     {
         public long CastTimeStamp = Environment.TickCount;
-        
+
         public readonly uint Id;
         public readonly ushort GroupId;
         public readonly string ServerName;
@@ -34,7 +37,7 @@ namespace SimpleCL.Models.Skills
         public readonly EquipmentData.SubType.Weapon RequiredWeapon2;
         public readonly bool Targeted;
         public readonly ushort Range;
-        
+
         public Skill(uint id)
         {
             var data = GameDatabase.Get.GetSkill(id);
@@ -83,17 +86,37 @@ namespace SimpleCL.Models.Skills
             CastTimeStamp = Environment.TickCount;
         }
 
+        public void Cast()
+        {
+            var actionPacket = new Packet(Opcodes.Agent.Request.CHAR_ACTION);
+            actionPacket.WriteByte(1);
+            actionPacket.WriteByte(4);
+            actionPacket.WriteUInt(Id);
+            actionPacket.WriteByte(0);
+            InteractionQueue.PacketQueue.Enqueue(actionPacket);
+        }
+        
+        public void Cancel()
+        {
+            var actionPacket = new Packet(Opcodes.Agent.Request.CHAR_ACTION);
+            actionPacket.WriteByte(1);
+            actionPacket.WriteByte(5);
+            actionPacket.WriteUInt(Id);
+            actionPacket.WriteByte(0);
+            InteractionQueue.PacketQueue.Enqueue(actionPacket);
+        }
+
         public override string ToString()
         {
             return Name;
         }
-        
+
         public enum CastType : byte
         {
             Buff = 0,
             Attack = 2
         }
-        
+
         [Flags]
         public enum DamageEffect : byte
         {
@@ -103,7 +126,7 @@ namespace SimpleCL.Models.Skills
             Position = 4,
             Cancel = 8
         }
-        
+
         [Flags]
         public enum DamageType : byte
         {

@@ -76,7 +76,7 @@ namespace SimpleCL.Interaction
 
                     Console.WriteLine("attacking: " + attackableEntity + " with " + selectedSkill);
 
-                    attackableEntity.Cast(selectedSkill);
+                    attackableEntity.Attack(selectedSkill);
                     Thread.Sleep(1000);
                 }
             }).Start();

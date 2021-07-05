@@ -44,6 +44,8 @@ namespace SimpleCL.Ui
             this.passwordLabel = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.homeTab = new System.Windows.Forms.TabPage();
+            this.buffsGroupBox = new System.Windows.Forms.GroupBox();
+            this.buffsDataGridView = new System.Windows.Forms.DataGridView();
             this.statisticsBox = new System.Windows.Forms.GroupBox();
             this.worldCoordsLabelValue = new System.Windows.Forms.Label();
             this.worldCoordsLabel = new System.Windows.Forms.Label();
@@ -110,6 +112,8 @@ namespace SimpleCL.Ui
             credentialsGroup.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.homeTab.SuspendLayout();
+            this.buffsGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize) (this.buffsDataGridView)).BeginInit();
             this.statisticsBox.SuspendLayout();
             this.inventoryPage.SuspendLayout();
             this.inventoryTabControl.SuspendLayout();
@@ -216,6 +220,7 @@ namespace SimpleCL.Ui
             // 
             // homeTab
             // 
+            this.homeTab.Controls.Add(this.buffsGroupBox);
             this.homeTab.Controls.Add(this.statisticsBox);
             this.homeTab.Controls.Add(credentialsGroup);
             this.homeTab.Location = new System.Drawing.Point(4, 22);
@@ -225,6 +230,24 @@ namespace SimpleCL.Ui
             this.homeTab.TabIndex = 0;
             this.homeTab.Text = "Home";
             this.homeTab.UseVisualStyleBackColor = true;
+            // 
+            // buffsGroupBox
+            // 
+            this.buffsGroupBox.Controls.Add(this.buffsDataGridView);
+            this.buffsGroupBox.Location = new System.Drawing.Point(6, 125);
+            this.buffsGroupBox.Name = "buffsGroupBox";
+            this.buffsGroupBox.Size = new System.Drawing.Size(262, 250);
+            this.buffsGroupBox.TabIndex = 8;
+            this.buffsGroupBox.TabStop = false;
+            this.buffsGroupBox.Text = "Buffs";
+            // 
+            // buffsDataGridView
+            // 
+            this.buffsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.buffsDataGridView.Location = new System.Drawing.Point(6, 19);
+            this.buffsDataGridView.Name = "buffsDataGridView";
+            this.buffsDataGridView.Size = new System.Drawing.Size(248, 225);
+            this.buffsDataGridView.TabIndex = 0;
             // 
             // statisticsBox
             // 
@@ -851,6 +874,8 @@ namespace SimpleCL.Ui
             credentialsGroup.PerformLayout();
             this.tabControl.ResumeLayout(false);
             this.homeTab.ResumeLayout(false);
+            this.buffsGroupBox.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize) (this.buffsDataGridView)).EndInit();
             this.statisticsBox.ResumeLayout(false);
             this.inventoryPage.ResumeLayout(false);
             this.inventoryTabControl.ResumeLayout(false);
@@ -869,6 +894,13 @@ namespace SimpleCL.Ui
             this.devTab.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.DataGridView buffsDataGridView;
+
+        private System.Windows.Forms.GroupBox buffsGroupBox;
+
+        private System.Windows.Forms.GroupBox infoGroupBox;
+        private System.Windows.Forms.DataGridView dataGridView1;
 
         private System.Windows.Forms.Button addEntityButton;
         private System.Windows.Forms.Button removeEntityButton;

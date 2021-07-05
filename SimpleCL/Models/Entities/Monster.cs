@@ -61,11 +61,11 @@ namespace SimpleCL.Models.Entities
             Event = 0xFF
         }
 
-        public void Cast(Skill skill)
+        public void Attack(Skill skill = null)
         {
             var attackPacket = new Packet(Opcodes.Agent.Request.CHAR_ACTION);
             attackPacket.WriteByte(1);
-            if (skill.Id == 1)
+            if (skill == null || skill.Id == 1)
             {
                 attackPacket.WriteByte(1);
             }

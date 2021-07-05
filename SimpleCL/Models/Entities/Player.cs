@@ -9,7 +9,7 @@ namespace SimpleCL.Models.Entities
 {
     public class Player : Actor, ITargetable
     {
-        public readonly List<InventoryItem> InventoryItems = new List<InventoryItem>();
+        public readonly List<InventoryItem> InventoryItems = new();
         public Player(uint id) : base(id)
         {
         }
@@ -19,7 +19,7 @@ namespace SimpleCL.Models.Entities
             return InventoryItems.Exists(item => item.IsEquipment() && item.TypeId3 == 7);
         }
 
-        public void Cast(Skill skill)
+        public void Attack(Skill skill)
         {
             var attackPacket = new Packet(Opcodes.Agent.Request.CHAR_ACTION);
             attackPacket.WriteByte(1);

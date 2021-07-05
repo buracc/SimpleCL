@@ -74,6 +74,30 @@ namespace SimpleCL.Models.Coordinates
             return point;
         }
 
+        public override bool Equals(object obj)
+        {
+            return obj is WorldPoint worldPoint && Equals(worldPoint);
+        }
+
+        protected bool Equals(WorldPoint other)
+        {
+            return XSector == other.XSector && YSector == other.YSector && X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z) && Region == other.Region;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = XSector.GetHashCode();
+                hashCode = (hashCode * 397) ^ YSector.GetHashCode();
+                hashCode = (hashCode * 397) ^ X.GetHashCode();
+                hashCode = (hashCode * 397) ^ Y.GetHashCode();
+                hashCode = (hashCode * 397) ^ Z.GetHashCode();
+                hashCode = (hashCode * 397) ^ Region.GetHashCode();
+                return hashCode;
+            }
+        }
+
         public override string ToString()
         {
             return "X: " + X + " | Y: " + Y;

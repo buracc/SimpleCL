@@ -10,6 +10,7 @@ using SimpleCL.Enums.Commons;
 using SimpleCL.Interaction;
 using SimpleCL.SecurityApi;
 using SimpleCL.Services;
+using SimpleCL.Util.Extension;
 using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Network
@@ -32,7 +33,7 @@ namespace SimpleCL.Network
 
         protected Server()
         {
-            ServerThread = new Thread(Loop) {IsBackground = true};
+            ServerThread = new Thread(Loop);
         }
 
         public void RegisterService(Service service)
@@ -181,7 +182,9 @@ namespace SimpleCL.Network
                 {
                     try
                     {
+                        Console.WriteLine("Injecting queued packet: " + queuedPacket.Opcode);
                         Inject(queuedPacket);
+                        continue;
                     }
                     catch (Exception e)
                     {
@@ -190,26 +193,24 @@ namespace SimpleCL.Network
                 }
 
                 var incomingPackets = Security.TransferIncoming();
-                if (incomingPackets == null)
+                if (incomingPackets != null && incomingPackets.IsNotEmpty())
                 {
-                    continue;
-                }
-
-                foreach (var packet in incomingPackets.Where(packet =>
-                    packet.Opcode != Opcodes.HANDSHAKE && packet.Opcode != Opcodes.HANDSHAKE_ACCEPT))
-                {
-                    if (this is Agent && Program.Gui.DebugAgent() ||
-                        this is Gateway && Program.Gui.DebugGateway())
+                    foreach (var packet in incomingPackets.Where(packet =>
+                        packet.Opcode != Opcodes.HANDSHAKE && packet.Opcode != Opcodes.HANDSHAKE_ACCEPT))
                     {
-                        DebugPacket(packet);
-                    }
+                        if (this is Agent && Program.Gui.DebugAgent() ||
+                            this is Gateway && Program.Gui.DebugGateway())
+                        {
+                            DebugPacket(packet);
+                        }
 
-                    if (packet.Opcode == Opcodes.IDENTITY && !_timer.Enabled)
-                    {
-                        _timer.Start();
-                    }
+                        if (packet.Opcode == Opcodes.IDENTITY && !_timer.Enabled)
+                        {
+                            _timer.Start();
+                        }
 
-                    Notify(packet);
+                        Notify(packet);
+                    }
                 }
 
                 var outgoing = Security.TransferOutgoing();

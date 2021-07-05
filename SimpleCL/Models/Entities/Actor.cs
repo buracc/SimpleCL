@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Timers;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Skills;
@@ -15,7 +16,7 @@ namespace SimpleCL.Models.Entities
         public float RunSpeed { get; set; }
         public float ZerkSpeed { get; set; }
         public ushort Angle { get; set; }
-        public List<Buff> Buffs = new();
+        public BindingList<Buff> Buffs = new();
         public Movement.Motion Motion { get; set; }
         public Movement.Mode WalkMode { get; set; }
         public Health.LifeState LifeState { get; set; }
@@ -59,7 +60,6 @@ namespace SimpleCL.Models.Entities
 
                 var newWorldLoc = WorldPoint.Translate(xDiff / totalIntervals,
                     yDiff / totalIntervals);
-                Console.WriteLine(newWorldLoc);
                 LocalPoint = LocalPoint.FromWorld(newWorldLoc);
             };
             
