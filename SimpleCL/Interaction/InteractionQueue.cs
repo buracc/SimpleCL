@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
 using SimpleCL.Interaction.Providers;
@@ -73,8 +71,6 @@ namespace SimpleCL.Interaction
                         Thread.Sleep(1);
                         continue;
                     }
-
-                    Console.WriteLine("attacking: " + attackableEntity + " with " + selectedSkill);
 
                     attackableEntity.Attack(selectedSkill);
                     Thread.Sleep(1000);

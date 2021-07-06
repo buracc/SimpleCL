@@ -1,5 +1,6 @@
 ﻿using System;
 using SimpleCL.Interaction;
+using SimpleCL.Interaction.Providers;
 using SimpleCL.Models;
 using SimpleCL.Models.Skills;
 
@@ -7,6 +8,14 @@ namespace SimpleCL.Ui
 {
     partial class Gui
     {
+        private void InitAttackTab()
+        {
+            availSkillsListBox.DataSource = _localPlayer.Skills;
+            attackSkillsListBox.DataSource = SelectedSkills;
+            attackEntitiesListBox.DataSource = SelectedEntities;
+            nearEntitiesListBox.DataSource = Entities.TargetableEntities;
+        }
+        
         private void AddSkill(object sender, EventArgs e)
         {
             var selected = availSkillsListBox.SelectedItem;

@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using SimpleCL.Database;
 using SimpleCL.Enums.Server;
+using SimpleCL.Models.Character;
 using SimpleCL.Models.Skills;
 using SimpleCL.Network;
 using SimpleCL.Services.Login;
@@ -29,6 +30,8 @@ namespace SimpleCL.Ui
         
         private void InitBuffsGrid()
         {
+            buffsDataGridView.DataSource = _localPlayer.Buffs;
+            
             var deleteMenuStrip = new ContextMenuStrip();
             var deleteMenuItem = new ToolStripMenuItem
             {

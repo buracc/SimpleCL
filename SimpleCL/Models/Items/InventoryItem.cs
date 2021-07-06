@@ -1,5 +1,8 @@
 ﻿using System;
 using SimpleCL.Database;
+using SimpleCL.Enums.Commons;
+using SimpleCL.Interaction;
+using SimpleCL.SecurityApi;
 
 namespace SimpleCL.Models.Items
 {
@@ -16,6 +19,7 @@ namespace SimpleCL.Models.Items
         public readonly byte TypeId2;
         public readonly byte TypeId3;
         public readonly byte TypeId4;
+        public readonly bool CashItem;
 
         public ushort Quantity
         {
@@ -47,6 +51,7 @@ namespace SimpleCL.Models.Items
             TypeId2 = byte.Parse(data["tid1"]);
             TypeId3 = byte.Parse(data["tid2"]);
             TypeId4 = byte.Parse(data["tid3"]);
+            CashItem = byte.Parse(data["cash_item"]) == 1;
         }
 
         public static InventoryItem FromId(uint id)
@@ -72,6 +77,17 @@ namespace SimpleCL.Models.Items
         public int CompareTo(InventoryItem other)
         {
             return Slot - other.Slot;
+        }
+
+        public void Use()
+        {
+            var usePacket = new Packet(Opcodes.Agent.Request.INVENTORY_ITEM_USE, true);
+            usePacket.WriteByte(Slot);
+            usePacket.WriteByte(CashItem ? (byte) 0x31 : (byte) 0x30);
+            usePacket.WriteByte(0x0C);
+            usePacket.WriteByte(TypeId3);
+            usePacket.WriteByte(TypeId4);
+            InteractionQueue.PacketQueue.Enqueue(usePacket);
         }
     }
 }

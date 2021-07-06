@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using SimpleCL.Database;
 using SimpleCL.Enums.Server;
-using SimpleCL.Interaction.Providers;
 using SimpleCL.Models;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Skills;
@@ -20,6 +19,8 @@ namespace SimpleCL.Ui
         public readonly BindingList<CharacterSkill> SelectedSkills = new();
         public readonly BindingList<ITargetable> SelectedEntities = new();
 
+        private readonly LocalPlayer _localPlayer;
+
         public Gui()
         {
             base.DoubleBuffered = true;
@@ -27,18 +28,19 @@ namespace SimpleCL.Ui
 
             FormClosed += ExitApplication;
 
-            var local = LocalPlayer.Get;
+            _localPlayer = LocalPlayer.Get;
 
             var timer = new Timer(100);
             timer.Elapsed += (_, _) =>
             {
-                if (local.Uid == 0)
+                if (_localPlayer.Uid == 0)
                 {
                     return;
                 }
 
                 RefreshMap();
             };
+            
             timer.Start();
 
             foreach (var server in SilkroadServer.Values)
@@ -51,14 +53,10 @@ namespace SimpleCL.Ui
             usernameBox.Text = Credentials.Username;
             passwordBox.Text = Credentials.Password;
 
-            availSkillsListBox.DataSource = local.Skills;
-            attackSkillsListBox.DataSource = SelectedSkills;
-            attackEntitiesListBox.DataSource = SelectedEntities;
-            nearEntitiesListBox.DataSource = Entities.TargetableEntities;
-
-            buffsDataGridView.DataSource = local.Buffs;
+            InitAttackTab();
             InitBuffsGrid();
-
+            InitInventories();
+            
             CenterToScreen();
         }
 

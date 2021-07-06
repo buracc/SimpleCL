@@ -70,14 +70,25 @@ namespace SimpleCL.Services.Game
             var itemCount = packet.ReadByte();
 
             var inv = ParseInventory(packet, itemCount);
+            
+            foreach (var inventoryItem in inv.Where(x => x.Slot > 12))
+            {
+                local.Inventory.Add(inventoryItem);
+            }
 
-            local.Inventories["inventory"] = inv.Where(x => x.Slot > 12).ToList();
-            local.Inventories["equipment"] = inv.Where(x => x.Slot < 13).ToList();
+            foreach (var equipment in inv.Where(x => x.Slot < 13))
+            {
+                local.EquipmentInventory.Add(equipment);
+            }
 
             var avatarInventorySize = packet.ReadByte();
             var avatarInventoryCount = packet.ReadByte();
 
-            local.Inventories["avatar"] = ParseInventory(packet, avatarInventoryCount, false);
+            var avatars = ParseInventory(packet, avatarInventoryCount, false);
+            foreach (var avatar in avatars)
+            {
+                local.AvatarInventory.Add(avatar);
+            }
 
             if (_silkroadServer.Locale.IsInternational())
             {
@@ -97,7 +108,11 @@ namespace SimpleCL.Services.Game
                 var jobInventorySize = packet.ReadByte();
                 var jobInventoryCount = packet.ReadByte();
 
-                local.Inventories["jobEquipment"] = ParseInventory(packet, jobInventoryCount, false);
+                var jobEquipment = ParseInventory(packet, jobInventoryCount, false);
+                foreach (var jobEquip in jobEquipment)
+                {
+                    local.JobEquipmentInventory.Add(jobEquip);
+                }
             }
 
             packet.ReadByte();
@@ -354,6 +369,38 @@ namespace SimpleCL.Services.Game
 
             server.Log(expAmount + " EXP");
             server.Log(spAmount + " SP");
+        }
+
+        #endregion
+
+        #region Inventory
+
+        [PacketHandler(Opcodes.Agent.Response.INVENTORY_ITEM_USE)]
+        public void ItemUse(Server server, Packet packet)
+        {
+            if (!packet.ReadBool())
+            {
+                return;
+            }
+
+            var slot = packet.ReadByte();
+            var quantity = packet.ReadUShort();
+
+            var inventory = LocalPlayer.Get.Inventory;
+            var changedItem = inventory.FirstOrDefault(x => x.Slot == slot);
+            if (changedItem == null)
+            {
+                return;
+            }
+            
+            if (quantity == 0)
+            {
+                inventory.Remove(changedItem);
+            }
+            else
+            {
+                changedItem.Quantity = quantity;
+            }
         }
 
         #endregion

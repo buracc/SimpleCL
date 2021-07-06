@@ -19,7 +19,7 @@ namespace SimpleCL.Ui
         
         public void RefreshGui()
         {
-            var local = LocalPlayer.Get;
+            var local = _localPlayer;
             if (local == null)
             {
                 return;
@@ -51,16 +51,8 @@ namespace SimpleCL.Ui
             worldCoordsLabelValue.Text = worldPoint.ToString();
             currLocalLabelValue.Text = local.LocalPoint.ToString();
             currWorldLabelValue.Text = worldPoint.ToString();
-
-            inventoryDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-
-            inventoryDataGridView.DataSource = local.Inventories["inventory"];
-            equipmentDataGridView.DataSource = local.Inventories["equipment"];
-            avatarDataGridView.DataSource = local.Inventories["avatar"];
-            jobEquipmentDataGridView.DataSource = local.Inventories["jobEquipment"];
         }
 
-        
         public void AddMinimapMarker(Entity entity)
         {
             var marker = new MapControl();
@@ -102,7 +94,7 @@ namespace SimpleCL.Ui
                     var localPlayerMenu = new ContextMenuStrip();
                     localPlayerMenu.MaximumSize = new Size(250, 400);
 
-                    foreach (var skill in LocalPlayer.Get.Skills)
+                    foreach (var skill in _localPlayer.Skills)
                     {
                         var menuitem = new ToolStripMenuItem
                         {
@@ -184,19 +176,19 @@ namespace SimpleCL.Ui
                     return;
                 }
 
-                minimap.SetView(LocalPlayer.Get.WorldPoint);
+                minimap.SetView(_localPlayer.WorldPoint);
 
-                if (!minimap.Markers.ContainsKey(LocalPlayer.Get.Uid))
+                if (!minimap.Markers.ContainsKey(_localPlayer.Uid))
                 {
                     return;
                 }
 
-                var marker = minimap.Markers[LocalPlayer.Get.Uid];
+                var marker = minimap.Markers[_localPlayer.Uid];
                 var image = Properties.Resources.mm_sign_character;
                 var rotated = new Bitmap(image.Width, image.Height);
                 var graphics = Graphics.FromImage(rotated);
                 graphics.TranslateTransform((float) rotated.Width / 2, (float) rotated.Height / 2);
-                graphics.RotateTransform(-LocalPlayer.Get.GetAngleDegrees());
+                graphics.RotateTransform(-_localPlayer.GetAngleDegrees());
                 graphics.TranslateTransform(-(float) rotated.Width / 2, -(float) rotated.Height / 2);
                 graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 graphics.DrawImage(image, new Point(0, 0));

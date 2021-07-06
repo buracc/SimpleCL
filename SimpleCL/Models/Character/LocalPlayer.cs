@@ -52,8 +52,10 @@ namespace SimpleCL.Models.Character
         public ulong JobExpGained { get; set; }
         public uint Skillpoints { get; set; }
         public ulong Gold { get; set; }
-
-        public Dictionary<string, List<InventoryItem>> Inventories = new();
+        public BindingList<InventoryItem> Inventory = new();
+        public BindingList<InventoryItem> EquipmentInventory = new();
+        public BindingList<InventoryItem> AvatarInventory = new();
+        public BindingList<InventoryItem> JobEquipmentInventory = new();
 
         public float GetAngleDegrees()
         {
