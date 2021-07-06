@@ -200,10 +200,25 @@
     <Compile Include="Ui\Components\Map.cs" />
     <Compile Include="Ui\Components\MapControl.cs" />
     <Compile Include="Ui\Components\MapTile.cs" />
+    <Compile Include="Ui\Gui.Attack.cs">
+      <DependentUpon>Gui.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Gui.Chat.cs">
+      <DependentUpon>Gui.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ui\Gui.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Ui\Gui.Designer.cs">
+      <DependentUpon>Gui.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Gui.Home.cs">
+      <DependentUpon>Gui.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Gui.Inventory.cs">
+      <DependentUpon>Gui.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Gui.Minimap.cs">
       <DependentUpon>Gui.cs</DependentUpon>
     </Compile>
     <Compile Include="Ui\PasscodeEnter.cs">

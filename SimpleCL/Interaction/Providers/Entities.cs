@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using SimpleCL.Models;
@@ -91,7 +92,7 @@ namespace SimpleCL.Interaction.Providers
             }
 
             actor.Buffs.Add(buff);
-            Buffs[buff.TargetUid] = buff.Uid;
+            Buffs[buff.Uid] = buff.TargetUid;
         }
 
         public static void BuffEnded(uint buffUid)
@@ -111,9 +112,8 @@ namespace SimpleCL.Interaction.Providers
             foreach (var buff in buffsToRemove)
             {
                 actor.Buffs.Remove(buff);
+                Buffs.Remove(buff.Uid);
             }
-            
-            Buffs.Remove(buffUid);
         }
 
         public static void SpeedChanged(uint uid, float walkSpeed, float runSpeed)

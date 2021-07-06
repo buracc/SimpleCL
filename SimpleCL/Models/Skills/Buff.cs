@@ -13,11 +13,11 @@ namespace SimpleCL.Models.Skills
         [Browsable(false)]
         public uint CasterUid { get; set; }
         [Browsable(false)]
-        public long AddedAt = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        public readonly long AddedAt = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         
         [Browsable(false)]
         public uint RemainingDuration { get; set; }
-        public DateTimeOffset EndTimeStamp => DateTimeOffset.FromUnixTimeMilliseconds(AddedAt + RemainingDuration);
+        // public DateTimeOffset EndTimeStamp => DateTimeOffset.FromUnixTimeMilliseconds(AddedAt + RemainingDuration);
 
         public Buff(uint id) : base(id)
         {

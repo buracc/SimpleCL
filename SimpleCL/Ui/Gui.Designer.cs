@@ -243,9 +243,15 @@ namespace SimpleCL.Ui
             // 
             // buffsDataGridView
             // 
+            this.buffsDataGridView.AllowUserToAddRows = false;
+            this.buffsDataGridView.AllowUserToDeleteRows = false;
+            this.buffsDataGridView.AllowUserToResizeColumns = false;
+            this.buffsDataGridView.AllowUserToResizeRows = false;
+            this.buffsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.buffsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.buffsDataGridView.Location = new System.Drawing.Point(6, 19);
             this.buffsDataGridView.Name = "buffsDataGridView";
+            this.buffsDataGridView.ReadOnly = true;
             this.buffsDataGridView.Size = new System.Drawing.Size(248, 225);
             this.buffsDataGridView.TabIndex = 0;
             // 
@@ -529,6 +535,7 @@ namespace SimpleCL.Ui
             this.inventoryDataGridView.AllowUserToDeleteRows = false;
             this.inventoryDataGridView.AllowUserToResizeColumns = false;
             this.inventoryDataGridView.AllowUserToResizeRows = false;
+            this.inventoryDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.inventoryDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.inventoryDataGridView.Location = new System.Drawing.Point(0, 0);
             this.inventoryDataGridView.MultiSelect = false;
@@ -554,6 +561,7 @@ namespace SimpleCL.Ui
             this.equipmentDataGridView.AllowUserToDeleteRows = false;
             this.equipmentDataGridView.AllowUserToResizeColumns = false;
             this.equipmentDataGridView.AllowUserToResizeRows = false;
+            this.equipmentDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.equipmentDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.equipmentDataGridView.Location = new System.Drawing.Point(0, 0);
             this.equipmentDataGridView.MultiSelect = false;
@@ -579,6 +587,7 @@ namespace SimpleCL.Ui
             this.avatarDataGridView.AllowUserToOrderColumns = true;
             this.avatarDataGridView.AllowUserToResizeColumns = false;
             this.avatarDataGridView.AllowUserToResizeRows = false;
+            this.avatarDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.avatarDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.avatarDataGridView.Location = new System.Drawing.Point(0, 0);
             this.avatarDataGridView.MultiSelect = false;
@@ -604,6 +613,7 @@ namespace SimpleCL.Ui
             this.jobEquipmentDataGridView.AllowUserToOrderColumns = true;
             this.jobEquipmentDataGridView.AllowUserToResizeColumns = false;
             this.jobEquipmentDataGridView.AllowUserToResizeRows = false;
+            this.jobEquipmentDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.jobEquipmentDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.jobEquipmentDataGridView.Location = new System.Drawing.Point(0, 0);
             this.jobEquipmentDataGridView.MultiSelect = false;
@@ -867,6 +877,7 @@ namespace SimpleCL.Ui
             this.ClientSize = new System.Drawing.Size(800, 558);
             this.Controls.Add(this.loggerBox);
             this.Controls.Add(this.tabControl);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "Gui";
             this.Text = "SimpleCL";
