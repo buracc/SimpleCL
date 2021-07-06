@@ -20,35 +20,37 @@ namespace SimpleCL.Models.Entities
         public Movement.Motion Motion { get; set; }
         public Movement.Mode WalkMode { get; set; }
         public Health.LifeState LifeState { get; set; }
-        
+
         private Timer _movementTimer = new(100);
 
         public Actor(uint id) : base(id)
         {
-            
+        }
+
+        public void StopMovementTimer()
+        {
+            _movementTimer?.Dispose();
         }
 
         public void StartMovement(LocalPoint destination)
         {
-            if (_movementTimer.Enabled)
-            {
-                _movementTimer.Dispose();
-            }
-            
+            StopMovementTimer();
+
             var oldPos = WorldPoint;
             var newPos = WorldPoint.FromLocal(destination);
 
             var timeToDestination =
                 GetMillisPerTile() * oldPos.DistanceTo(newPos);
-            
+
             var xDiff = newPos.X - oldPos.X;
             var yDiff = newPos.Y - oldPos.Y;
             
+            _movementTimer = new Timer(333);
+
             var intervalMs = _movementTimer.Interval;
             var totalIntervals = (float) (timeToDestination / intervalMs);
             var intervals = 0;
-
-            _movementTimer = new Timer(100);
+            
             _movementTimer.Elapsed += (_, _) =>
             {
                 if (++intervals > totalIntervals)
@@ -62,7 +64,7 @@ namespace SimpleCL.Models.Entities
                     yDiff / totalIntervals);
                 LocalPoint = LocalPoint.FromWorld(newWorldLoc);
             };
-            
+
             _movementTimer.Start();
         }
 
@@ -79,18 +81,18 @@ namespace SimpleCL.Models.Entities
         public float GetMillisPerTile()
         {
             // Speed unit is tiles per 10 seconds
-            
+
             if (WalkMode == Movement.Mode.Running)
             {
                 var tilesPerSecond = RunSpeed / 10;
                 var millisPerTile = 1000 / tilesPerSecond;
-                
+
                 return millisPerTile;
             }
 
             var tilesPerSec = WalkSpeed / 10;
             var msPerTile = 1000 / tilesPerSec;
-                
+
             return msPerTile;
         }
 
@@ -111,13 +113,13 @@ namespace SimpleCL.Models.Entities
                 Walking = 0,
                 Running = 1
             }
-            
+
             public enum Action : byte
             {
                 Spinning = 0,
                 KeyWalking = 1
             }
-            
+
             public enum Motion : byte
             {
                 StandUp = 0,
@@ -147,7 +149,7 @@ namespace SimpleCL.Models.Entities
                 Stealth = 6,
                 Invisible = 7
             }
-        
+
             public enum BadStatusFlag : uint
             {
                 None = 0,

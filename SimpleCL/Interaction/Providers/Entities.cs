@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using SimpleCL.Models;
+using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
 using SimpleCL.Models.Entities.Teleporters;
@@ -15,7 +16,7 @@ namespace SimpleCL.Interaction.Providers
         public static readonly Dictionary<uint, Entity> AllEntities = new();
         public static readonly BindingList<ITargetable> TargetableEntities = new();
         private static readonly Dictionary<uint, uint> Buffs = new();
-
+        
         public static void Respawn()
         {
             AllEntities.Clear();
@@ -64,17 +65,24 @@ namespace SimpleCL.Interaction.Providers
             }
 
             var entity = AllEntities[uid];
-            if (entity is Actor actor)
+            if (entity is not Actor actor)
             {
-                if (destination != null)
-                {
-                    actor.StartMovement(destination);
-                }
+                return;
+            }
+            
+            if (destination != null)
+            {
+                actor.StartMovement(destination);
+            }
 
-                if (angle > 0)
-                {
-                    actor.Angle = angle;
-                }
+            if (angle > 0)
+            {
+                actor.Angle = angle;
+            }
+
+            if (uid == LocalPlayer.Get.Uid && angle > 0)
+            {
+                Program.Gui.SetLocalPlayerMarkerAngle();
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using SimpleCL.Enums.Commons;
+using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.SecurityApi;
 using SimpleCL.Util.Extension;
@@ -14,6 +15,12 @@ namespace SimpleCL.Interaction.Pathing
 
         public static void WalkTo(ushort region, float x, float y, float z)
         {
+            if (LocalPlayer.Get.Tracing)
+            {
+                InteractionQueue.PacketQueue.Enqueue(new Packet(opcode: Opcodes.Agent.Request.CHAR_ACTION, false, false,
+                    new byte[] {0x02}));
+            }
+
             var packet = new Packet(Opcodes.Agent.Request.CHAR_MOVEMENT);
             packet.WriteByte(1);
             packet.WriteUShort(region);

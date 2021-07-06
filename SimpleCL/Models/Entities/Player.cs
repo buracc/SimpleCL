@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Interaction;
+using SimpleCL.Models.Character;
 using SimpleCL.Models.Items;
 using SimpleCL.Models.Skills;
 using SimpleCL.SecurityApi;
@@ -39,6 +40,17 @@ namespace SimpleCL.Models.Entities
             selectTarget.WriteUInt(Uid);
             InteractionQueue.PacketQueue.Enqueue(selectTarget);
             InteractionQueue.PacketQueue.Enqueue(attackPacket);
+        }
+
+        public void Trace()
+        {
+            var actionPacket = new Packet(Opcodes.Agent.Request.CHAR_ACTION);
+            actionPacket.WriteByte(1);
+            actionPacket.WriteByte(3);
+            actionPacket.WriteByte(1);
+            actionPacket.WriteUInt(Uid);
+            LocalPlayer.Get.Tracing = true;
+            InteractionQueue.PacketQueue.Enqueue(actionPacket);
         }
     }
 }

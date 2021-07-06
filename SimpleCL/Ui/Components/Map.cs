@@ -184,7 +184,9 @@ namespace SimpleCL.Ui.Components
                         }
                         else
                         {
-                            sector = new MapTile(sectorX, sectorY)
+                            var x = sectorX;
+                            var y = sectorY;
+                            sector = new MapTile(x, y)
                             {
                                 Name = path, Size = _tileSize, Location = sectorLocation
                             };
@@ -204,7 +206,7 @@ namespace SimpleCL.Ui.Components
             });
         }
 
-        private void ClearTiles()
+        public void ClearTiles()
         {
             var minAvg = _tileCount / 2;
 
@@ -221,7 +223,7 @@ namespace SimpleCL.Ui.Components
             }
         }
 
-        private void RemoveTiles()
+        public void RemoveTiles()
         {
             this.InvokeLater(() =>
             {
@@ -234,9 +236,9 @@ namespace SimpleCL.Ui.Components
             _mapSectors.Clear();
         }
 
-        public void SetView(WorldPoint viewPoint)
+        public void SetView(WorldPoint viewPoint, bool force = false)
         {
-            if (!MapCenter.Equals(viewPoint))
+            if (!MapCenter.Equals(viewPoint) || force)
             {
                 if (!MapCenter.Region.Equals(viewPoint.Region) && viewPoint.InCave())
                 {

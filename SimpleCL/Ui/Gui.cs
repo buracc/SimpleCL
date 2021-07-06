@@ -30,7 +30,7 @@ namespace SimpleCL.Ui
 
             _localPlayer = LocalPlayer.Get;
 
-            var timer = new Timer(100);
+            var timer = new Timer(333);
             timer.Elapsed += (_, _) =>
             {
                 if (_localPlayer.Uid == 0)

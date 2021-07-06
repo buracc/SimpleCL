@@ -18,6 +18,11 @@ namespace SimpleCL.Ui.Components
             SectorY = sectorY;
         }
 
+        protected override void OnMove(EventArgs e)
+        {
+            RecreateHandle();
+        }
+
         public async void LoadAsyncTile(string path, Size size)
         {
             if (File.Exists(path))

@@ -35,7 +35,9 @@ namespace SimpleCL.Services.Game
         [PacketHandler(Opcodes.Agent.Response.CHAR_DATA_CHUNK)]
         public void GameJoined(Server server, Packet packet)
         {
-            _gateway.Dispose();
+            _gateway?.Dispose();
+            Program.Gui.ClearMarkers();
+            Program.Gui.ClearTiles();
 
             var local = LocalPlayer.Get;
 
@@ -288,7 +290,7 @@ namespace SimpleCL.Services.Game
 
             local.LocalPoint = localPoint;
 
-            Program.Gui.AddMinimapMarker(LocalPlayer.Get);
+            Program.Gui.RefreshMap(true);
             Entities.Spawned(local);
 
             server.Log("Successfully joined the game");

@@ -80,9 +80,7 @@ namespace SimpleCL.Ui
                         monster.Attack(skill);
                     };
 
-                    monsterMenu.Items.Add(
-                        monsterMenuitem
-                    );
+                    monsterMenu.Items.Add(monsterMenuitem);
 
                     marker.ContextMenuStrip = monsterMenu;
                     break;
@@ -112,8 +110,37 @@ namespace SimpleCL.Ui
                     marker.ContextMenuStrip = localPlayerMenu;
                     break;
 
-                case Player:
+                case Player player:
                     marker.Image = Properties.Resources.mm_sign_otherplayer;
+                    
+                    var playerMenu = new ContextMenuStrip();
+                    var traceItem = new ToolStripMenuItem
+                    {
+                        Text = "Trace",
+                        Name = player.ToString()
+                    };
+
+                    traceItem.Click += (_, _) =>
+                    {
+                        Log("Going to trace " + player.Name);
+                        player.Trace();
+                    };
+                    
+                    // var buffItem = new ToolStripMenuItem
+                    // {
+                    //     Text = "Trace",
+                    //     Name = player.ToString()
+                    // };
+                    //
+                    // buffItem.Click += (_, _) =>
+                    // {
+                    //     Log("Going to trace " + player.Name);
+                    //     player.Trace();
+                    // };
+
+                    playerMenu.Items.Add(traceItem);
+
+                    marker.ContextMenuStrip = playerMenu;
                     break;
 
                 case PickPet:
@@ -166,8 +193,30 @@ namespace SimpleCL.Ui
 
             minimap.AddMarker(entity.Uid, marker);
         }
-        
-        public void RefreshMap()
+
+        public void SetLocalPlayerMarkerAngle()
+        {
+            if (!minimap.Markers.ContainsKey(_localPlayer.Uid))
+            {
+                Console.WriteLine(_localPlayer.Uid);
+                return;
+            }
+
+            var marker = minimap.Markers[_localPlayer.Uid];
+            var image = Properties.Resources.mm_sign_character;
+            var rotated = new Bitmap(image.Width, image.Height);
+            var graphics = Graphics.FromImage(rotated);
+            graphics.TranslateTransform((float) rotated.Width / 2, (float) rotated.Height / 2);
+            graphics.RotateTransform(-_localPlayer.GetAngleDegrees());
+            graphics.TranslateTransform(-(float) rotated.Width / 2, -(float) rotated.Height / 2);
+            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            graphics.DrawImage(image, new Point(0, 0));
+            graphics.Dispose();
+                
+            marker.InvokeLater(() => { marker.Image = rotated; });
+        }
+
+        public void RefreshMap(bool force = false)
         {
             try
             {
@@ -176,25 +225,7 @@ namespace SimpleCL.Ui
                     return;
                 }
 
-                minimap.SetView(_localPlayer.WorldPoint);
-
-                if (!minimap.Markers.ContainsKey(_localPlayer.Uid))
-                {
-                    return;
-                }
-
-                var marker = minimap.Markers[_localPlayer.Uid];
-                var image = Properties.Resources.mm_sign_character;
-                var rotated = new Bitmap(image.Width, image.Height);
-                var graphics = Graphics.FromImage(rotated);
-                graphics.TranslateTransform((float) rotated.Width / 2, (float) rotated.Height / 2);
-                graphics.RotateTransform(-_localPlayer.GetAngleDegrees());
-                graphics.TranslateTransform(-(float) rotated.Width / 2, -(float) rotated.Height / 2);
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.DrawImage(image, new Point(0, 0));
-                graphics.Dispose();
-
-                marker.InvokeLater(() => { marker.Image = rotated; });
+                minimap.SetView(_localPlayer.WorldPoint, force);
             }
             catch (Exception e)
             {
@@ -205,6 +236,11 @@ namespace SimpleCL.Ui
         public void ClearMarkers()
         {
             minimap.ClearMarkers();
+        }
+        
+        public void ClearTiles()
+        {
+            minimap.RemoveTiles();
         }
 
         public void RefreshMarkers()

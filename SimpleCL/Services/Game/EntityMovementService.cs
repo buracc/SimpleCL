@@ -50,12 +50,7 @@ namespace SimpleCL.Services.Game
                 return;
             }
 
-            Entities.Moved(uid, destination);
-            
-            if (uid != LocalPlayer.Get.Uid)
-            {
-                return;
-            }
+            ushort angle = 0;
 
             var oldWorldPos = actor.WorldPoint;
             var newWorldPos = WorldPoint.FromLocal(destination);
@@ -65,13 +60,13 @@ namespace SimpleCL.Services.Game
             
             if (xDiff == 0)
             {
-                LocalPlayer.Get.Angle = (ushort) (ushort.MaxValue / 4 * (yDiff > 0 ? 1 : 3));
+                angle = (ushort) (ushort.MaxValue / 4 * (yDiff > 0 ? 1 : 3));
             }
             else
             {
                 if (yDiff == 0)
                 {
-                    LocalPlayer.Get.Angle = (ushort) (ushort.MaxValue / 4 * (yDiff > 0 ? 1 : 3));
+                    angle = (ushort) (ushort.MaxValue / 4 * (yDiff > 0 ? 1 : 3));
                 }
                 else
                 {
@@ -86,10 +81,12 @@ namespace SimpleCL.Services.Game
                         }
                     }
 
-                    LocalPlayer.Get.Angle =
+                    angle =
                         (ushort) Math.Round(angleRadians * ushort.MaxValue / (Math.PI * 2.0));
                 }
             }
+            
+            Entities.Moved(uid, destination, angle);
         }
 
         #endregion

@@ -56,6 +56,7 @@ namespace SimpleCL.Models.Character
         public BindingList<InventoryItem> EquipmentInventory = new();
         public BindingList<InventoryItem> AvatarInventory = new();
         public BindingList<InventoryItem> JobEquipmentInventory = new();
+        public bool Tracing { get; set; }
 
         public float GetAngleDegrees()
         {
