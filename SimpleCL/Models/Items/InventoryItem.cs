@@ -56,7 +56,7 @@ namespace SimpleCL.Models.Items
 
         public static InventoryItem FromId(uint id)
         {
-            return new InventoryItem(id);
+            return new(id);
         }
 
         public bool IsEquipment()
@@ -88,6 +88,11 @@ namespace SimpleCL.Models.Items
             usePacket.WriteByte(TypeId3);
             usePacket.WriteByte(TypeId4);
             InteractionQueue.PacketQueue.Enqueue(usePacket);
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

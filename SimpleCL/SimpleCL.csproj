@@ -236,6 +236,12 @@
     <Compile Include="Ui\Serverlist.Designer.cs">
       <DependentUpon>Serverlist.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ui\StallWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\StallWindow.Designer.cs">
+      <DependentUpon>StallWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Util\DirectoryUtils.cs" />
     <Compile Include="Util\Extension\CollectionExt.cs" />
     <Compile Include="Util\Extension\NumberExt.cs" />
@@ -262,6 +268,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Ui\Serverlist.resx">
       <DependentUpon>Serverlist.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\StallWindow.resx">
+      <DependentUpon>StallWindow.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

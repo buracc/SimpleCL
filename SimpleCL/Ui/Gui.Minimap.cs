@@ -140,19 +140,30 @@ namespace SimpleCL.Ui
                     {
                         marker.Image = Properties.Resources.mm_sign_stall;
                         var stallMenu = new ContextMenuStrip();
-                        var stallItem = new ToolStripMenuItem
+                        var stallVisitItem = new ToolStripMenuItem
                         {
-                            Text = "Open stall",
-                            Name = player.ToString()
+                            Text = "Open stall"
                         };
 
-                        stallItem.Click += (_, _) =>
+                        stallVisitItem.Click += (_, _) =>
                         {
                             Log("Opening " + player.Name + "'s stall");
                             player.Stall.Visit();
                         };
+                        
+                        var stallLeaveItem = new ToolStripMenuItem
+                        {
+                            Text = "Leave stall",
+                        };
 
-                        stallMenu.Items.Add(stallItem);
+                        stallLeaveItem.Click += (_, _) =>
+                        {
+                            Log("Closing " + player.Name + "'s stall");
+                            player.Stall.Leave();
+                        };
+
+                        stallMenu.Items.Add(stallVisitItem);
+                        stallMenu.Items.Add(stallLeaveItem);
                         _toolTip.SetToolTip(marker, player.Stall.Title);
                         marker.ContextMenuStrip = stallMenu;
                         break;
@@ -164,7 +175,6 @@ namespace SimpleCL.Ui
                     var traceItem = new ToolStripMenuItem
                     {
                         Text = "Trace",
-                        Name = player.ToString()
                     };
 
                     traceItem.Click += (_, _) =>
@@ -208,7 +218,6 @@ namespace SimpleCL.Ui
                             var menuitem = new ToolStripMenuItem
                             {
                                 Text = teleportLink.Name,
-                                Name = teleportLink.DestinationId.ToString(),
                                 Tag = teleporter
                             };
 

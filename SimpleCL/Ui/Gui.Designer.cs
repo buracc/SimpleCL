@@ -799,7 +799,6 @@ namespace SimpleCL.Ui
             this.minimap.Name = "minimap";
             this.minimap.Size = new System.Drawing.Size(800, 800);
             this.minimap.TabIndex = 10;
-            this.minimap.Zoom = ((byte) (1));
             // 
             // currWorldLabel
             // 

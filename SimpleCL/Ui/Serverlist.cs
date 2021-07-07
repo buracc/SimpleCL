@@ -14,9 +14,13 @@ namespace SimpleCL.Ui
 {
     public partial class Serverlist : Form
     {
+        private readonly string _username;
+        private readonly string _password;
         private readonly Server _gateway;
-        public Serverlist(IReadOnlyCollection<GameServer> servers, Server gateway)
+        public Serverlist(string username, string password, IReadOnlyCollection<GameServer> servers, Server gateway)
         {
+            _username = username;
+            _password = password;
             _gateway = gateway;
             InitializeComponent();
             serverlistDataGridView.DataSource = servers;
@@ -45,8 +49,8 @@ namespace SimpleCL.Ui
             
             var login = new Packet(Opcodes.Gateway.Request.LOGIN2, true);
             login.WriteByte(Locale.SRO_TR_Official_GameGami);
-            login.WriteAscii(Credentials.Username);
-            login.WriteAscii(Credentials.Password);
+            login.WriteAscii(_username);
+            login.WriteAscii(_password);
             login.WriteByteArray(NetworkUtils.GetMacAddressBytes());
             login.WriteUShort(selected.Id);
             login.WriteByte(1);

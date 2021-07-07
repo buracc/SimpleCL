@@ -96,7 +96,7 @@ namespace SimpleCL.Services.Login
                 servers.Add(gameServer);
             }
 
-            Application.Run(new Serverlist(servers, server));
+            Application.Run(new Serverlist(_username, _password, servers, server));
         }
 
         #endregion
@@ -155,7 +155,7 @@ namespace SimpleCL.Services.Login
                     agent.RegisterService(new EntityMovementService());
                     agent.RegisterService(new EntitySkillService());
                     agent.RegisterService(new EntityStateService());
-                    agent.RegisterService(new StallService());
+                    agent.RegisterService(new StallService(_silkroadServer));
                     
                     // agent.Debug = true;
                     agent.Start();

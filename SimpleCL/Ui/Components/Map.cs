@@ -28,7 +28,7 @@ namespace SimpleCL.Ui.Components
         {
             base.DoubleBuffered = true;
             MapCenter = new WorldPoint(0, 0);
-            _zoom = 0;
+            Zoom = 0;
             base.Size = new Size(600, 600);
             _tileSize = new Size((int) Math.Round(Width / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero),
                 (int) Math.Round(Height / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero));
