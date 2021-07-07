@@ -24,6 +24,8 @@ namespace SimpleCL.Services.Game
             _silkroadServer = silkroadServer;
         }
 
+        #region Opened
+
         [PacketHandler(Opcodes.Agent.Response.STALL_TALK)]
         public void StallOpen(Server server, Packet packet)
         {
@@ -62,6 +64,44 @@ namespace SimpleCL.Services.Game
 
             Application.Run(new StallWindow(player));
         }
+
+        #endregion
+
+        [PacketHandler(Opcodes.Agent.Response.STALL_ENTITY_CREATE)]
+        public void StallCreate(Server server, Packet packet)
+        {
+            if (!Entities.AllEntities.TryGetValue(packet.ReadUInt(), out var entity) || entity is not Player player)
+            {
+                return;
+            }
+
+            var stall = new Stall
+            {
+                Title = packet.ReadUnicode()
+            };
+
+            player.Stall = stall;
+            player.InteractionType = Player.Interaction.OnStall;
+            Program.Gui.RefreshPlayerMarker(player.Uid);
+        }
+
+        #region Destroy
+
+        [PacketHandler(Opcodes.Agent.Response.STALL_ENTITY_DESTROY)]
+        public void StallDestroy(Server server, Packet packet)
+        {
+            if (!Entities.AllEntities.TryGetValue(packet.ReadUInt(), out var entity) || entity is not Player player)
+            {
+                return;
+            }
+
+            player.Stall = null;
+            Program.Gui.RefreshPlayerMarker(player.Uid);
+        }
+
+        #endregion
+
+        #region Utility
 
         public static InventoryItem ParseStallItem(Packet packet, Locale locale)
         {
@@ -210,5 +250,7 @@ namespace SimpleCL.Services.Game
 
             return inventoryItem;
         }
+
+        #endregion
     }
 }

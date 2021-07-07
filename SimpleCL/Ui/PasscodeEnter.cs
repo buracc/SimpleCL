@@ -54,13 +54,6 @@ namespace SimpleCL.Ui
             passcode.WriteUShort(passcodeString.Length);
             passcode.WriteByteArray(encryptedPasscode);
 
-            Console.WriteLine(passcodeString);
-            Console.WriteLine(passcodeString.Length);
-            foreach (var b in encryptedPasscode)
-            {
-                Console.Write(b.ToString("X") + " ");
-            }
-
             _gateway.Inject(passcode);
             Dispose(true);
         }

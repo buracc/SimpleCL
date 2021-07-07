@@ -12,7 +12,9 @@ namespace SimpleCL.Models.Entities
     public class Player : Actor, ITargetable
     {
         public readonly List<InventoryItem> InventoryItems = new();
+        public Interaction InteractionType { get; set; }
         public Stall Stall { get; set; }
+        
         public Player(uint id) : base(id)
         {
         }
@@ -53,6 +55,14 @@ namespace SimpleCL.Models.Entities
             actionPacket.WriteUInt(Uid);
             LocalPlayer.Get.Tracing = true;
             InteractionQueue.PacketQueue.Enqueue(actionPacket);
+        }
+        
+        public enum Interaction : byte
+        {
+            None = 0,
+            OnExchangeProbably = 2,
+            OnStall = 4,
+            OnShop = 6
         }
     }
 }

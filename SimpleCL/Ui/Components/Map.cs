@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using SimpleCL.Interaction.Pathing;
 using SimpleCL.Models.Coordinates;
+using SimpleCL.Models.Entities;
 using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Ui.Components
@@ -67,7 +68,7 @@ namespace SimpleCL.Ui.Components
                 {
                     return;
                 }
-                
+
                 _zoom = value;
                 _tileSize = new Size((int) Math.Round(Width / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero),
                     (int) Math.Round(Height / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero));
@@ -297,6 +298,81 @@ namespace SimpleCL.Ui.Components
             return MapCenter.InCave()
                 ? new LocalPoint(MapCenter.Region, coordX, MapCenter.Z, coordY)
                 : LocalPoint.FromWorld(new WorldPoint(coordX, coordY));
+        }
+
+        public void UpdatePlayerMarker(uint uid)
+        {
+            this.InvokeLater(() =>
+            {
+                if (!Markers.TryGetValue(uid, out var marker) || marker.Tag is not Player player)
+                {
+                    return;
+                }
+
+                if (player.Stall != null)
+                {
+                    marker.Image = Properties.Resources.mm_sign_stall;
+                    var stallMenu = new ContextMenuStrip();
+                    var stallVisitItem = new ToolStripMenuItem
+                    {
+                        Text = "Open stall"
+                    };
+
+                    stallVisitItem.Click += (_, _) =>
+                    {
+                        Program.Gui.Log("Opening " + player.Name + "'s stall");
+                        player.Stall.Visit();
+                    };
+
+                    var stallLeaveItem = new ToolStripMenuItem
+                    {
+                        Text = "Leave stall",
+                    };
+
+                    stallLeaveItem.Click += (_, _) =>
+                    {
+                        Program.Gui.Log("Closing " + player.Name + "'s stall");
+                        player.Stall.Leave();
+                    };
+
+                    stallMenu.Items.Add(stallVisitItem);
+                    stallMenu.Items.Add(stallLeaveItem);
+                    new ToolTip().SetToolTip(marker, player.Stall.Title);
+                    marker.ContextMenuStrip = stallMenu;
+                }
+                else
+                {
+                    marker.Image = Properties.Resources.mm_sign_otherplayer;
+
+                    var playerMenu = new ContextMenuStrip();
+                    var traceItem = new ToolStripMenuItem
+                    {
+                        Text = "Trace",
+                    };
+
+                    traceItem.Click += (_, _) =>
+                    {
+                        Program.Gui.Log("Going to trace " + player.Name);
+                        player.Trace();
+                    };
+
+                    // todo: add casting buffs on player
+                    // var buffItem = new ToolStripMenuItem
+                    // {
+                    //     Text = "Trace",
+                    //     Name = player.ToString()
+                    // };
+                    //
+                    // buffItem.Click += (_, _) =>
+                    // {
+                    //     Log("Going to trace " + player.Name);
+                    //     player.Trace();
+                    // };
+
+                    playerMenu.Items.Add(traceItem);
+                    marker.ContextMenuStrip = playerMenu;
+                }
+            });
         }
 
         public void AddMarker(uint uid, MapControl marker)

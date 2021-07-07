@@ -251,6 +251,11 @@ namespace SimpleCL.Ui
             minimap.AddMarker(entity.Uid, marker);
         }
 
+        public void RefreshPlayerMarker(uint uid)
+        {
+            minimap.UpdatePlayerMarker(uid);
+        }
+
         public void SetLocalPlayerMarkerAngle()
         {
             if (!minimap.Markers.ContainsKey(_localPlayer.Uid))

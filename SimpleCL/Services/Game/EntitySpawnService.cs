@@ -386,7 +386,7 @@ namespace SimpleCL.Services.Game
                             }
 
                             var scrollingType = packet.ReadByte();
-                            var interactionType = packet.ReadByte();
+                            p.InteractionType = (Player.Interaction) packet.ReadByte();
 
                             var guildName = packet.ReadAscii();
 
@@ -400,7 +400,7 @@ namespace SimpleCL.Services.Game
                                 var guildId = packet.ReadUInt();
                                 var grantName = packet.ReadAscii();
 
-                                if (interactionType == 3)
+                                if (p.InteractionType == Player.Interaction.OnStall)
                                 {
                                     byte unks = 14;
                                     unks.Repeat(i => { packet.ReadByte(); });
