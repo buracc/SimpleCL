@@ -1,6 +1,8 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using SimpleCL.Models.Entities;
 using SimpleCL.Models.Entities.Exchange;
+using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Ui
 {
@@ -10,22 +12,26 @@ namespace SimpleCL.Ui
         
         public StallWindow(Player player)
         {
-            InitializeComponent();
-            
             _player = player;
-            stallItemsDataGridView.DataSource = _player.Stall.Items;
-            base.Text = "[" + _player.Name + "] " + _player.Stall.Title;
-            stallDescriptionRtb.Text = _player.Stall.Description;
-
-            FormClosed += (_, _) =>
-            {
-                _player.Stall.Leave();
-            };
             
-            InitStallItemEvents();
-            CenterToScreen();
+            this.InvokeLater(() =>
+            {
+                InitializeComponent();
+                
+                stallItemsDataGridView.DataSource = _player.Stall.Items;
+                base.Text = _player.Stall.Title;
+                stallDescriptionRtb.Text = _player.Stall.Description;
+
+                stallOwnerBox.Text = _player.Name;
+                stallStatusBox.DataBindings.Add("Text", player.Stall, "Status", false,
+                    DataSourceUpdateMode.OnPropertyChanged);
+
+                InitStallItemEvents();
+                CenterToScreen();
+                BringToFront();
+            });
         }
-        
+
         private void InitStallItemEvents()
         {
             var purchaseMenu = new ContextMenuStrip();
@@ -63,6 +69,11 @@ namespace SimpleCL.Ui
                 stallItemsDataGridView.CurrentCell = stallItemsDataGridView.Rows[args.RowIndex].Cells[args.ColumnIndex];
                 args.ContextMenuStrip = purchaseMenu;
             };
+        }
+
+        private void ExitStallClick(object sender, EventArgs e)
+        {
+            _player.Stall.Leave();
         }
     }
 }

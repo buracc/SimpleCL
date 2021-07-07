@@ -108,7 +108,7 @@ namespace SimpleCL.Services.Login
                 chars.Add(character);
             });
 
-            Application.Run(new CharacterSelection(chars, server));
+            new CharacterSelection(chars, server).ShowDialog();
         }
 
         #endregion

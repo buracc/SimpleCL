@@ -96,7 +96,7 @@ namespace SimpleCL.Services.Login
                 servers.Add(gameServer);
             }
 
-            Application.Run(new Serverlist(_username, _password, servers, server));
+            new Serverlist(_username, _password, servers, server).ShowDialog();
         }
 
         #endregion
@@ -106,7 +106,7 @@ namespace SimpleCL.Services.Login
         [PacketHandler(Opcodes.Gateway.Response.LOGIN2)]
         public void SendPasscode(Server server, Packet packet)
         {
-            Application.Run(new PasscodeEnter(server));
+            new PasscodeEnter(server).ShowDialog();
         }
 
         #endregion
@@ -124,7 +124,7 @@ namespace SimpleCL.Services.Login
             }
             
             var attempts = packet.ReadByte();
-            Application.Run(new PasscodeEnter(server, "Invalid passcode [" + attempts + "/" + 3 + "]"));
+            new PasscodeEnter(server, "Invalid passcode [" + attempts + "/" + 3 + "]").ShowDialog();
             server.Log("Invalid passcode. Attempts: [" + attempts + "/" + 3 + "]");
         }
 

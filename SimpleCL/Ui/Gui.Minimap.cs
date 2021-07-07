@@ -85,8 +85,8 @@ namespace SimpleCL.Ui
 
             switch (entity)
             {
-                case TalkNpc:
-                    marker.Image = Properties.Resources.mm_sign_npc;
+                case TalkNpc talkNpc:
+                    marker.Image = (Bitmap) Properties.Resources.ResourceManager.GetObject(talkNpc.MapIcon);
                     break;
 
                 case Monster monster:

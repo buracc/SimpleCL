@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using SimpleCL.Ui;
 
 namespace SimpleCL
@@ -8,6 +9,7 @@ namespace SimpleCL
     {
         public static Gui Gui { get; private set; }
 
+        [STAThread]
         public static void Main(string[] args)
         {
             Application.EnableVisualStyles();

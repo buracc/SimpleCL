@@ -282,7 +282,29 @@
     <Content Include="Resources\mm_sign_spawn.png" />
     <Content Include="Resources\mm_sign_unique.png" />
     <Content Include="Resources\TRSRO_DB.db3" />
+    <Content Include="Resources\xy_armor.PNG" />
+    <Content Include="Resources\xy_ch_bow.PNG" />
+    <Content Include="Resources\xy_ch_heal.PNG" />
+    <Content Include="Resources\xy_ch_spear.PNG" />
+    <Content Include="Resources\xy_ch_sword.PNG" />
+    <Content Include="Resources\xy_dungeon.PNG" />
+    <Content Include="Resources\xy_etc.PNG" />
+    <Content Include="Resources\xy_ferry.PNG" />
+    <Content Include="Resources\xy_flyship.PNG" />
     <Content Include="Resources\xy_gate.png" />
+    <Content Include="Resources\xy_guild.PNG" />
+    <Content Include="Resources\xy_hunter.PNG" />
+    <Content Include="Resources\xy_maksa.PNG" />
+    <Content Include="Resources\xy_market _1.PNG" />
+    <Content Include="Resources\xy_market_1.PNG" />
+    <Content Include="Resources\xy_market_2.PNG" />
+    <Content Include="Resources\xy_merchant.PNG" />
+    <Content Include="Resources\xy_new.PNG" />
+    <Content Include="Resources\xy_npc.PNG" />
+    <Content Include="Resources\xy_oction.PNG" />
+    <Content Include="Resources\xy_potion.PNG" />
+    <Content Include="Resources\xy_returnicon.PNG" />
+    <Content Include="Resources\xy_returnicon_focus.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

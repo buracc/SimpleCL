@@ -5,6 +5,7 @@ using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Items.Type;
 using SimpleCL.Enums.Skills;
 using SimpleCL.Interaction;
+using SimpleCL.Models.Exceptions;
 using SimpleCL.SecurityApi;
 
 namespace SimpleCL.Models.Skills
@@ -46,8 +47,7 @@ namespace SimpleCL.Models.Skills
 
             if (data == null)
             {
-                Console.WriteLine("Couldn't parse skill with id: " + id);
-                return;
+                throw new EntityParseException("Couldn't parse skill with id: " + id);
             }
 
             Id = uint.Parse(data["id"]);

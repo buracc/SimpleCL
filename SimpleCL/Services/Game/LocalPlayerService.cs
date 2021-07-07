@@ -38,7 +38,7 @@ namespace SimpleCL.Services.Game
             _gateway?.Dispose();
             Program.Gui.ClearMarkers();
             Program.Gui.ClearTiles();
-
+            
             var local = LocalPlayer.Get;
 
             var serverTime = packet.ReadUInt();
@@ -72,7 +72,7 @@ namespace SimpleCL.Services.Game
             var itemCount = packet.ReadByte();
 
             var inv = ParseInventory(packet, itemCount, _silkroadServer.Locale);
-            
+
             foreach (var inventoryItem in inv.Where(x => x.Slot > 12))
             {
                 local.Inventory.Add(inventoryItem);
@@ -394,7 +394,7 @@ namespace SimpleCL.Services.Game
             {
                 return;
             }
-            
+
             if (quantity == 0)
             {
                 inventory.Remove(changedItem);
@@ -409,157 +409,171 @@ namespace SimpleCL.Services.Game
 
         #region Utility methods
 
-        public static List<InventoryItem> ParseInventory(Packet packet, byte itemCount, Locale locale, bool inventory = true)
+        public static InventoryItem ParseItem(Packet packet, Locale locale, bool inventory = true)
+        {
+            var rentType = packet.ReadUInt();
+
+            switch (rentType)
+            {
+                case 1:
+                    var canDelete = packet.ReadUShort();
+                    var beginPeriod = packet.ReadULong();
+                    var endPeriod = packet.ReadULong();
+                    break;
+
+                case 2:
+                    var canDelete2 = packet.ReadUShort();
+                    var canRecharge = packet.ReadUShort();
+                    var meterRateTime = packet.ReadUInt();
+                    break;
+
+                case 3:
+                    var canDelete3 = packet.ReadUShort();
+                    var canRecharge2 = packet.ReadUShort();
+                    var beginPeriod2 = packet.ReadUInt();
+                    var endPeriod2 = packet.ReadUInt();
+                    var packingTime = packet.ReadUInt();
+                    break;
+            }
+
+            var refItemId = packet.ReadUInt();
+            var inventoryItem = InventoryItem.FromId(refItemId);
+
+            switch (inventoryItem.TypeId2)
+            {
+                case 1:
+                case 4: // job gear
+                    var plus = packet.ReadByte();
+                    var variance = packet.ReadULong();
+                    var dura = packet.ReadUInt();
+
+                    var magicOptions = packet.ReadByte();
+                    magicOptions.Repeat(j =>
+                    {
+                        var paramType = packet.ReadUInt();
+                        var paramValue = packet.ReadUInt();
+                    });
+
+                    // 1 = sockets
+                    packet.ReadByte();
+                    var sockets = packet.ReadByte();
+                    sockets.Repeat(j =>
+                    {
+                        var socketSlot = packet.ReadByte();
+                        var socketId = packet.ReadUInt();
+                        var socketParam = packet.ReadByte();
+                    });
+
+                    // 2 = adv elixirs
+                    packet.ReadByte();
+                    var advElixirs = packet.ReadByte();
+                    advElixirs.Repeat(j =>
+                    {
+                        var advElixirSlot = packet.ReadByte();
+                        var advElixirId = packet.ReadUInt();
+                        var advElixirValue = packet.ReadUInt();
+                    });
+
+                    if (locale.IsInternational())
+                    {
+                        // 3 = ??
+                        packet.ReadByte();
+                        var unk01 = packet.ReadByte();
+                        unk01.Repeat(j =>
+                        {
+                            var unkSlot = packet.ReadByte();
+                            var unkParam1 = packet.ReadUInt();
+                            var unkParam2 = packet.ReadUInt();
+                        });
+
+                        // 4 = ??
+                        packet.ReadByte();
+                        var unk02 = packet.ReadByte();
+                        unk02.Repeat(j =>
+                        {
+                            var unkSlot = packet.ReadByte();
+                            var unkParam1 = packet.ReadUInt();
+                            var unkParam2 = packet.ReadUInt();
+                        });
+                    }
+
+                    break;
+
+                case 2:
+                    switch (inventoryItem.TypeId3)
+                    {
+                        case 1:
+                            var state = packet.ReadByte();
+                            var refObjId = packet.ReadUInt();
+                            var name = packet.ReadAscii();
+
+                            switch (inventoryItem.TypeId4)
+                            {
+                                case 1:
+                                case 3:
+                                    var level = packet.ReadByte();
+                                    break;
+                                    
+                                case 2:
+                                    var rentTimeEndSeconds = packet.ReadUInt();
+                                    break;
+                            }
+
+                            if (locale.IsInternational() && inventory)
+                            {
+                                packet.ReadByte();
+                            }
+
+                            break;
+
+                        case 2:
+                            var refObjId2 = packet.ReadUInt();
+                            break;
+
+                        case 3:
+                            var quantity = packet.ReadUInt();
+                            break;
+                    }
+
+                    break;
+
+                case 3:
+                    var stackCount = packet.ReadUShort();
+
+                    inventoryItem.Quantity = stackCount;
+
+                    if (inventoryItem.TypeId3 == 11 && inventoryItem.TypeId4 is 1 or 2)
+                    {
+                        var assimilationProb = packet.ReadByte();
+                        break;
+                    }
+
+                    if (inventoryItem.TypeId3 == 14 && inventoryItem.TypeId4 == 2)
+                    {
+                        var magParams = packet.ReadByte();
+                        magParams.Repeat(j =>
+                        {
+                            var paramType = packet.ReadUInt();
+                            var paramValue = packet.ReadUInt();
+                        });
+                    }
+
+                    break;
+            }
+
+            return inventoryItem;
+        }
+
+        public static List<InventoryItem> ParseInventory(Packet packet, byte itemCount, Locale locale,
+            bool inventory = true)
         {
             var items = new List<InventoryItem>();
 
             itemCount.Repeat(i =>
             {
                 var slot = packet.ReadByte();
-                var rentType = packet.ReadUInt();
-
-                switch (rentType)
-                {
-                    case 1:
-                        var canDelete = packet.ReadUShort();
-                        var beginPeriod = packet.ReadULong();
-                        var endPeriod = packet.ReadULong();
-                        break;
-
-                    case 2:
-                        var canDelete2 = packet.ReadUShort();
-                        var canRecharge = packet.ReadUShort();
-                        var meterRateTime = packet.ReadUInt();
-                        break;
-
-                    case 3:
-                        var canDelete3 = packet.ReadUShort();
-                        var canRecharge2 = packet.ReadUShort();
-                        var beginPeriod2 = packet.ReadUInt();
-                        var endPeriod2 = packet.ReadUInt();
-                        var packingTime = packet.ReadUInt();
-                        break;
-                }
-
-                var refItemId = packet.ReadUInt();
-                var inventoryItem = InventoryItem.FromId(refItemId);
-
+                var inventoryItem = ParseItem(packet, locale, inventory);
                 inventoryItem.Slot = slot;
-
-                switch (inventoryItem.TypeId2)
-                {
-                    case 1:
-                    case 4: // job gear
-                        var plus = packet.ReadByte();
-                        var variance = packet.ReadULong();
-                        var dura = packet.ReadUInt();
-
-                        var magicOptions = packet.ReadByte();
-                        magicOptions.Repeat(j =>
-                        {
-                            var paramType = packet.ReadUInt();
-                            var paramValue = packet.ReadUInt();
-                        });
-
-                        // 1 = sockets
-                        packet.ReadByte();
-                        var sockets = packet.ReadByte();
-                        sockets.Repeat(j =>
-                        {
-                            var socketSlot = packet.ReadByte();
-                            var socketId = packet.ReadUInt();
-                            var socketParam = packet.ReadByte();
-                        });
-
-                        // 2 = adv elixirs
-                        packet.ReadByte();
-                        var advElixirs = packet.ReadByte();
-                        advElixirs.Repeat(j =>
-                        {
-                            var advElixirSlot = packet.ReadByte();
-                            var advElixirId = packet.ReadUInt();
-                            var advElixirValue = packet.ReadUInt();
-                        });
-
-                        if (locale.IsInternational())
-                        {
-                            // 3 = ??
-                            packet.ReadByte();
-                            var unk01 = packet.ReadByte();
-                            unk01.Repeat(j =>
-                            {
-                                var unkSlot = packet.ReadByte();
-                                var unkParam1 = packet.ReadUInt();
-                                var unkParam2 = packet.ReadUInt();
-                            });
-
-                            // 4 = ??
-                            packet.ReadByte();
-                            var unk02 = packet.ReadByte();
-                            unk02.Repeat(j =>
-                            {
-                                var unkSlot = packet.ReadByte();
-                                var unkParam1 = packet.ReadUInt();
-                                var unkParam2 = packet.ReadUInt();
-                            });
-                        }
-
-                        break;
-
-                    case 2:
-                        switch (inventoryItem.TypeId3)
-                        {
-                            case 1:
-                                var state = packet.ReadByte();
-                                var refObjId = packet.ReadUInt();
-                                var name = packet.ReadAscii();
-
-                                if (inventoryItem.TypeId4 == 2)
-                                {
-                                    var rentTimeEndSeconds = packet.ReadUInt();
-                                }
-
-                                if (locale.IsInternational() && inventory)
-                                {
-                                    packet.ReadByte();
-                                }
-
-                                break;
-
-                            case 2:
-                                var refObjId2 = packet.ReadUInt();
-                                break;
-
-                            case 3:
-                                var quantity = packet.ReadUInt();
-                                break;
-                        }
-
-                        break;
-
-                    case 3:
-                        var stackCount = packet.ReadUShort();
-
-                        inventoryItem.Quantity = stackCount;
-
-                        if (inventoryItem.TypeId3 == 11 && inventoryItem.TypeId4 is 1 or 2)
-                        {
-                            var assimilationProb = packet.ReadByte();
-                            break;
-                        }
-
-                        if (inventoryItem.TypeId3 == 14 && inventoryItem.TypeId4 == 2)
-                        {
-                            var magParams = packet.ReadByte();
-                            magParams.Repeat(j =>
-                            {
-                                var paramType = packet.ReadUInt();
-                                var paramValue = packet.ReadUInt();
-                            });
-                        }
-
-                        break;
-                }
 
                 items.Add(inventoryItem);
             });
