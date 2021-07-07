@@ -74,12 +74,12 @@ namespace SimpleCL.Services.Game
             {
                 return;
             }
-
+        
             var stall = new Stall
             {
                 Title = packet.ReadUnicode()
             };
-
+        
             player.Stall = stall;
             player.InteractionType = Player.Interaction.OnStall;
             Program.Gui.RefreshPlayerMarker(player.Uid);
@@ -94,7 +94,7 @@ namespace SimpleCL.Services.Game
             {
                 return;
             }
-
+        
             player.Stall = null;
             Program.Gui.RefreshPlayerMarker(player.Uid);
         }

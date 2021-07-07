@@ -372,6 +372,18 @@ namespace SimpleCL.Ui.Components
                     playerMenu.Items.Add(traceItem);
                     marker.ContextMenuStrip = playerMenu;
                 }
+                
+                if (marker.Image == null)
+                {
+                    return;
+                }
+
+                marker.Size = marker.Image.Size;
+
+                var location = GetPoint(player.WorldPoint);
+                location.X -= marker.Image.Size.Width / 2;
+                location.Y -= marker.Image.Size.Height / 2;
+                marker.Location = location;
             });
         }
 
