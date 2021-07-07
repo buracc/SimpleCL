@@ -923,9 +923,6 @@ namespace SimpleCL.Ui
 
         private System.Windows.Forms.GroupBox buffsGroupBox;
 
-        private System.Windows.Forms.GroupBox infoGroupBox;
-        private System.Windows.Forms.DataGridView dataGridView1;
-
         private System.Windows.Forms.Button addEntityButton;
         private System.Windows.Forms.Button removeEntityButton;
         private System.Windows.Forms.Button removeSkillListBox;

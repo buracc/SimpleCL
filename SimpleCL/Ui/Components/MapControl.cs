@@ -56,7 +56,10 @@ namespace SimpleCL.Ui.Components
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (_image != null) e.Graphics.DrawImage(_image, 0, 0, _image.Size.Width, _image.Size.Height);
+            if (_image != null)
+            {
+                e.Graphics.DrawImage(_image, 0, 0, _image.Size.Width, _image.Size.Height);
+            }
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)

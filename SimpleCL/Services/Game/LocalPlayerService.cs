@@ -71,7 +71,7 @@ namespace SimpleCL.Services.Game
             var inventorySize = packet.ReadByte();
             var itemCount = packet.ReadByte();
 
-            var inv = ParseInventory(packet, itemCount);
+            var inv = ParseInventory(packet, itemCount, _silkroadServer.Locale);
             
             foreach (var inventoryItem in inv.Where(x => x.Slot > 12))
             {
@@ -86,7 +86,7 @@ namespace SimpleCL.Services.Game
             var avatarInventorySize = packet.ReadByte();
             var avatarInventoryCount = packet.ReadByte();
 
-            var avatars = ParseInventory(packet, avatarInventoryCount, false);
+            var avatars = ParseInventory(packet, avatarInventoryCount, _silkroadServer.Locale, false);
             foreach (var avatar in avatars)
             {
                 local.AvatarInventory.Add(avatar);
@@ -110,7 +110,7 @@ namespace SimpleCL.Services.Game
                 var jobInventorySize = packet.ReadByte();
                 var jobInventoryCount = packet.ReadByte();
 
-                var jobEquipment = ParseInventory(packet, jobInventoryCount, false);
+                var jobEquipment = ParseInventory(packet, jobInventoryCount, _silkroadServer.Locale, false);
                 foreach (var jobEquip in jobEquipment)
                 {
                     local.JobEquipmentInventory.Add(jobEquip);
@@ -409,7 +409,7 @@ namespace SimpleCL.Services.Game
 
         #region Utility methods
 
-        private List<InventoryItem> ParseInventory(Packet packet, byte itemCount, bool inventory = true)
+        public static List<InventoryItem> ParseInventory(Packet packet, byte itemCount, Locale locale, bool inventory = true)
         {
             var items = new List<InventoryItem>();
 
@@ -481,7 +481,7 @@ namespace SimpleCL.Services.Game
                             var advElixirValue = packet.ReadUInt();
                         });
 
-                        if (_silkroadServer.Locale.IsInternational())
+                        if (locale.IsInternational())
                         {
                             // 3 = ??
                             packet.ReadByte();
@@ -519,7 +519,7 @@ namespace SimpleCL.Services.Game
                                     var rentTimeEndSeconds = packet.ReadUInt();
                                 }
 
-                                if (_silkroadServer.Locale.IsInternational() && inventory)
+                                if (locale.IsInternational() && inventory)
                                 {
                                     packet.ReadByte();
                                 }

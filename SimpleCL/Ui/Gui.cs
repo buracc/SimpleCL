@@ -6,7 +6,6 @@ using SimpleCL.Enums.Server;
 using SimpleCL.Models;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Skills;
-using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Ui
 {
@@ -30,19 +29,6 @@ namespace SimpleCL.Ui
 
             _localPlayer = LocalPlayer.Get;
 
-            var timer = new Timer(333);
-            timer.Elapsed += (_, _) =>
-            {
-                if (_localPlayer.Uid == 0)
-                {
-                    return;
-                }
-
-                RefreshMap();
-            };
-            
-            timer.Start();
-
             foreach (var server in SilkroadServer.Values)
             {
                 serverComboBox.Items.Add(server);
@@ -56,6 +42,7 @@ namespace SimpleCL.Ui
             InitAttackTab();
             InitBuffsGrid();
             InitInventories();
+            InitMapTimers();
             
             CenterToScreen();
         }

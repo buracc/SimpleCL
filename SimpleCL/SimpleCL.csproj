@@ -117,6 +117,8 @@
     <Compile Include="Models\Coordinates\WorldPoint.cs" />
     <Compile Include="Models\Entities\CharacterPet.cs" />
     <Compile Include="Models\Entities\Cos.cs" />
+    <Compile Include="Models\Entities\Exchange\Stall.cs" />
+    <Compile Include="Models\Entities\Exchange\StallItem.cs" />
     <Compile Include="Models\Entities\Fortress\Structure\FortressCommandPost.cs" />
     <Compile Include="Models\Entities\Fortress\Structure\FortressDefenseCamp.cs" />
     <Compile Include="Models\Entities\Fortress\Structure\FortressGate.cs" />
@@ -184,6 +186,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\Game\StallService.cs" />
     <Compile Include="Services\Login\CharacterSelectService.cs" />
     <Compile Include="Services\Login\LoginService.cs" />
     <Compile Include="Services\PacketHandlerAttribute.cs" />

@@ -123,6 +123,16 @@ namespace SimpleCL.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap mm_sign_stall {
+            get {
+                object obj = ResourceManager.GetObject("mm_sign_stall", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap mm_sign_unique {
             get {
                 object obj = ResourceManager.GetObject("mm_sign_unique", resourceCulture);

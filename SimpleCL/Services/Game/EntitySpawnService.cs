@@ -6,6 +6,7 @@ using SimpleCL.Enums.Skills;
 using SimpleCL.Interaction.Providers;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
+using SimpleCL.Models.Entities.Exchange;
 using SimpleCL.Models.Entities.Pet;
 using SimpleCL.Models.Entities.Teleporters;
 using SimpleCL.Models.Exceptions;
@@ -405,6 +406,11 @@ namespace SimpleCL.Services.Game
                                     unks.Repeat(i => { packet.ReadByte(); });
 
                                     var stallName = packet.ReadUnicode();
+                                    p.Stall = new Stall
+                                    {
+                                        Title = stallName,
+                                        PlayerUid = p.Uid
+                                    };
 
                                     unks = 16;
                                     unks.Repeat(i => { packet.ReadByte(); });

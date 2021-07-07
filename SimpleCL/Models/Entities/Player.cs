@@ -2,6 +2,7 @@
 using SimpleCL.Enums.Commons;
 using SimpleCL.Interaction;
 using SimpleCL.Models.Character;
+using SimpleCL.Models.Entities.Exchange;
 using SimpleCL.Models.Items;
 using SimpleCL.Models.Skills;
 using SimpleCL.SecurityApi;
@@ -11,6 +12,7 @@ namespace SimpleCL.Models.Entities
     public class Player : Actor, ITargetable
     {
         public readonly List<InventoryItem> InventoryItems = new();
+        public Stall Stall { get; set; }
         public Player(uint id) : base(id)
         {
         }

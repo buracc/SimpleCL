@@ -11,11 +11,36 @@ using SimpleCL.Models.Entities.Pet;
 using SimpleCL.Models.Entities.Teleporters;
 using SimpleCL.Ui.Components;
 using SimpleCL.Util.Extension;
+using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Ui
 {
     partial class Gui
     {
+
+        private void InitMapTimers()
+        {
+            var markerTimer = new Timer(100);
+            markerTimer.Elapsed += (_, _) =>
+            {
+                RefreshMarkers();
+            };
+            
+            markerTimer.Start();
+            
+            var mapTimer = new Timer(10000);
+            mapTimer.Elapsed += (_, _) =>
+            {
+                if (_localPlayer.Uid == 0)
+                {
+                    return;
+                }
+
+                RefreshMap();
+            };
+            
+            mapTimer.Start();
+        }
         
         public void RefreshGui()
         {
@@ -111,6 +136,28 @@ namespace SimpleCL.Ui
                     break;
 
                 case Player player:
+                    if (player.Stall != null)
+                    {
+                        marker.Image = Properties.Resources.mm_sign_stall;
+                        var stallMenu = new ContextMenuStrip();
+                        var stallItem = new ToolStripMenuItem
+                        {
+                            Text = "Open stall",
+                            Name = player.ToString()
+                        };
+
+                        stallItem.Click += (_, _) =>
+                        {
+                            Log("Opening " + player.Name + "'s stall");
+                            player.Stall.Visit();
+                        };
+
+                        stallMenu.Items.Add(stallItem);
+                        _toolTip.SetToolTip(marker, player.Stall.Title);
+                        marker.ContextMenuStrip = stallMenu;
+                        break;
+                    }
+                    
                     marker.Image = Properties.Resources.mm_sign_otherplayer;
                     
                     var playerMenu = new ContextMenuStrip();
@@ -126,6 +173,7 @@ namespace SimpleCL.Ui
                         player.Trace();
                     };
                     
+                    // todo: add casting buffs on player
                     // var buffItem = new ToolStripMenuItem
                     // {
                     //     Text = "Trace",
@@ -220,7 +268,7 @@ namespace SimpleCL.Ui
         {
             try
             {
-                if (!mapPanel.Visible)
+                if (!mapPanel.Visible && !force)
                 {
                     return;
                 }

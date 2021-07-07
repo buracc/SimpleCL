@@ -22,17 +22,23 @@ namespace SimpleCL.Ui.Components
         public int TileCount => _tileCount;
         public WorldPoint MapCenter { get; private set; }
 
-        private byte _zoom = 1;
+        private byte _zoom;
 
         public Map()
         {
             base.DoubleBuffered = true;
-            // Initialize
             MapCenter = new WorldPoint(0, 0);
+            _zoom = 0;
             base.Size = new Size(600, 600);
             _tileSize = new Size((int) Math.Round(Width / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero),
                 (int) Math.Round(Height / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero));
             _tileCount = 2 * _zoom + 3;
+
+            MouseWheel += (sender, args) =>
+            {
+                var change = args.Delta;
+                Zoom = change > 0 ? (byte) 0 : (byte) 1;
+            };
 
             SelectMapLayer(MapCenter.Region);
             UpdateTiles();
@@ -46,7 +52,7 @@ namespace SimpleCL.Ui.Components
                 base.Size = value;
                 _tileSize = new Size((int) Math.Round(Width / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero),
                     (int) Math.Round(Height / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero));
-
+                _tileCount = 2 * _zoom + 3;
                 RemoveTiles();
                 UpdateTiles();
                 UpdateMarkerLocations();
@@ -55,9 +61,13 @@ namespace SimpleCL.Ui.Components
 
         public byte Zoom
         {
-            get => _zoom;
             set
             {
+                if (_zoom.Equals(value))
+                {
+                    return;
+                }
+                
                 _zoom = value;
                 _tileSize = new Size((int) Math.Round(Width / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero),
                     (int) Math.Round(Height / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero));
@@ -146,16 +156,16 @@ namespace SimpleCL.Ui.Components
 
         public void UpdateTiles()
         {
-            var tileAvg = _tileCount / 2;
-            var relativePosX = (int) Math.Round(MapCenter.X % 192 * _tileSize.Width / 192.0 +
-                                                (MapCenter.X < 0 ? _tileSize.Width : 0));
-            var relativePosY = (int) Math.Round(MapCenter.Y % 192 * _tileSize.Height / 192.0 +
-                                                (MapCenter.Y < 0 ? _tileSize.Height : 0));
-            var marginX = (int) Math.Round(_tileSize.Width / 2.0 - _tileSize.Width - relativePosX);
-            var marginY = (int) Math.Round(_tileSize.Height / 2.0 - _tileSize.Height * 2 + relativePosY);
-
             this.InvokeLater(() =>
             {
+                var tileAvg = _tileCount / 2;
+                var relativePosX = (int) Math.Round(MapCenter.X % 192 * _tileSize.Width / 192.0 +
+                                                    (MapCenter.X < 0 ? _tileSize.Width : 0));
+                var relativePosY = (int) Math.Round(MapCenter.Y % 192 * _tileSize.Height / 192.0 +
+                                                    (MapCenter.Y < 0 ? _tileSize.Height : 0));
+                var marginX = (int) Math.Round(_tileSize.Width / 2.0 - _tileSize.Width - relativePosX);
+                var marginY = (int) Math.Round(_tileSize.Height / 2.0 - _tileSize.Height * 2 + relativePosY);
+
                 var i = 0;
                 for (var sectorY = tileAvg + MapCenter.YSector; sectorY >= -tileAvg + MapCenter.YSector; sectorY--)
                 {
@@ -192,6 +202,7 @@ namespace SimpleCL.Ui.Components
                             };
 
                             sector.MouseClick += MapClicked;
+
                             sector.LoadAsyncTile(path, _tileSize);
                             _mapSectors[path] = sector;
                             Controls.Add(sector);
@@ -208,19 +219,22 @@ namespace SimpleCL.Ui.Components
 
         public void ClearTiles()
         {
-            var minAvg = _tileCount / 2;
-
-            var ySectorMin = -minAvg + MapCenter.YSector;
-            var ySectorMax = minAvg + MapCenter.YSector;
-            var xSectorMin = -minAvg + MapCenter.XSector;
-            var xSectorMax = minAvg + MapCenter.XSector;
-
-            foreach (var tile in _mapSectors.Values.Where(tile =>
-                tile.SectorX < xSectorMin || tile.SectorX > xSectorMax || tile.SectorY < ySectorMin ||
-                tile.SectorY > ySectorMax))
+            this.InvokeLater(() =>
             {
-                this.InvokeLater(() => { tile.Visible = false; });
-            }
+                var minAvg = _tileCount / 2;
+
+                var ySectorMin = -minAvg + MapCenter.YSector;
+                var ySectorMax = minAvg + MapCenter.YSector;
+                var xSectorMin = -minAvg + MapCenter.XSector;
+                var xSectorMax = minAvg + MapCenter.XSector;
+
+                foreach (var tile in _mapSectors.Values.Where(tile =>
+                    tile.SectorX < xSectorMin || tile.SectorX > xSectorMax || tile.SectorY < ySectorMin ||
+                    tile.SectorY > ySectorMax))
+                {
+                    tile.Visible = false;
+                }
+            });
         }
 
         public void RemoveTiles()
@@ -231,9 +245,9 @@ namespace SimpleCL.Ui.Components
                 {
                     Controls.RemoveByKey(tile.Name);
                 }
-            });
 
-            _mapSectors.Clear();
+                _mapSectors.Clear();
+            });
         }
 
         public void SetView(WorldPoint viewPoint, bool force = false)
@@ -305,9 +319,9 @@ namespace SimpleCL.Ui.Components
                 {
                     Controls.RemoveByKey(keyValuePair.Value.Name);
                 }
-
-                Markers.Clear();
             });
+
+            Markers.Clear();
         }
 
         public void RemoveMarker(uint uniqueId)
@@ -319,6 +333,7 @@ namespace SimpleCL.Ui.Components
 
             var marker = Markers[uniqueId];
             this.InvokeLater(() => { Controls.RemoveByKey(marker.Name); });
+
             Markers.Remove(uniqueId);
         }
 
@@ -351,7 +366,7 @@ namespace SimpleCL.Ui.Components
 
         private void MapClicked(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            if (e.Button != MouseButtons.Left)
             {
                 return;
             }

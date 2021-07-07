@@ -21,7 +21,7 @@ namespace SimpleCL.Models.Entities
         public Movement.Mode WalkMode { get; set; }
         public Health.LifeState LifeState { get; set; }
 
-        private Timer _movementTimer = new(100);
+        private Timer _movementTimer = new(50);
 
         public Actor(uint id) : base(id)
         {
@@ -45,7 +45,7 @@ namespace SimpleCL.Models.Entities
             var xDiff = newPos.X - oldPos.X;
             var yDiff = newPos.Y - oldPos.Y;
             
-            _movementTimer = new Timer(333);
+            _movementTimer = new Timer(50);
 
             var intervalMs = _movementTimer.Interval;
             var totalIntervals = (float) (timeToDestination / intervalMs);
