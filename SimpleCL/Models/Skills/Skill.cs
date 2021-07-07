@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using SimpleCL.Database;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Items.Type;
+using SimpleCL.Enums.Skills;
 using SimpleCL.Interaction;
 using SimpleCL.SecurityApi;
 
@@ -104,6 +106,16 @@ namespace SimpleCL.Models.Skills
             actionPacket.WriteUInt(Id);
             actionPacket.WriteByte(0);
             InteractionQueue.PacketQueue.Enqueue(actionPacket);
+        }
+        
+        public bool IsResSkill()
+        {
+            return Attributes.Any(x => x == (uint) SkillData.Attribute.Resurrection);
+        }
+        
+        public bool IsAttackSkill()
+        {
+            return Attributes.Any(x => x == (uint) SkillData.Attribute.Attack);
         }
 
         public override string ToString()

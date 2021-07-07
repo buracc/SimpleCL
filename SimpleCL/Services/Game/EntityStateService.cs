@@ -22,7 +22,12 @@ namespace SimpleCL.Services.Game
             switch (updateType)
             {
                 case 0:
-                    actor.LifeState = (Actor.Health.LifeState) updateState;    
+                    actor.LifeState = (Actor.Health.LifeState) updateState;
+                    if (actor is Player player)
+                    {
+                        Program.Gui.RefreshPlayerMarker(player.Uid);
+                    }
+                    
                     break;
                 
                 case 1:

@@ -98,7 +98,7 @@
     <Compile Include="Enums\Quests\QuestType.cs" />
     <Compile Include="Enums\Server\ServerCapacity.cs" />
     <Compile Include="Enums\Server\SilkroadServer.cs" />
-    <Compile Include="Enums\Skills\BuffData.cs" />
+    <Compile Include="Enums\Skills\SkillData.cs" />
     <Compile Include="Interaction\Providers\Entities.cs" />
     <Compile Include="Interaction\Providers\Monsters.cs" />
     <Compile Include="Interaction\Providers\Npcs.cs" />

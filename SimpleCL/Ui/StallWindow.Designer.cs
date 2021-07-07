@@ -105,8 +105,6 @@ namespace SimpleCL.Ui
 
         private System.Windows.Forms.DataGridView stallItemsDataGridView;
 
-        private System.Windows.Forms.DataGridView dataGridView1;
-
         #endregion
     }
 }

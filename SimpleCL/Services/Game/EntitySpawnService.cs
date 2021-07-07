@@ -343,7 +343,7 @@ namespace SimpleCL.Services.Game
                         var refSkillId = packet.ReadUInt();
                         var buff = new Buff(refSkillId) {RemainingDuration = packet.ReadUInt()};
 
-                        if (buff.Attributes.Contains((uint) BuffData.Attribute.AutoTransferEffect))
+                        if (buff.IsAutoTransfer())
                         {
                             var isBuffOwner = packet.ReadByte();
                             if (isBuffOwner == 1)

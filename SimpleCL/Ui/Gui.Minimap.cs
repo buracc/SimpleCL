@@ -168,6 +168,12 @@ namespace SimpleCL.Ui
                         marker.ContextMenuStrip = stallMenu;
                         break;
                     }
+
+                    if (player.LifeState == Actor.Health.LifeState.Dead)
+                    {
+                        marker.Image = Properties.Resources.mm_sign_skull;
+                        break;
+                    }
                     
                     marker.Image = Properties.Resources.mm_sign_otherplayer;
                     

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.ComponentModel;
+using System.Linq;
+using SimpleCL.Enums.Skills;
 
 namespace SimpleCL.Models.Skills
 {
@@ -21,6 +24,11 @@ namespace SimpleCL.Models.Skills
 
         public Buff(uint id) : base(id)
         {
+        }
+
+        public bool IsAutoTransfer()
+        {
+            return Attributes.Any(x => x == (uint) SkillData.Attribute.AutoTransferEffect);
         }
     }
 }

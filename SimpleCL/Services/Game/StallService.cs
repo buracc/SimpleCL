@@ -67,6 +67,8 @@ namespace SimpleCL.Services.Game
 
         #endregion
 
+        #region Created
+
         [PacketHandler(Opcodes.Agent.Response.STALL_ENTITY_CREATE)]
         public void StallCreate(Server server, Packet packet)
         {
@@ -85,7 +87,9 @@ namespace SimpleCL.Services.Game
             Program.Gui.RefreshPlayerMarker(player.Uid);
         }
 
-        #region Destroy
+        #endregion
+
+        #region Destroyed
 
         [PacketHandler(Opcodes.Agent.Response.STALL_ENTITY_DESTROY)]
         public void StallDestroy(Server server, Packet packet)

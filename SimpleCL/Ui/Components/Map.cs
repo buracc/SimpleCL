@@ -340,6 +340,11 @@ namespace SimpleCL.Ui.Components
                     new ToolTip().SetToolTip(marker, player.Stall.Title);
                     marker.ContextMenuStrip = stallMenu;
                 }
+                else if (player.LifeState == Actor.Health.LifeState.Dead)
+                {
+                    marker.Image = Properties.Resources.mm_sign_skull;
+                    marker.ContextMenuStrip = null;
+                }
                 else
                 {
                     marker.Image = Properties.Resources.mm_sign_otherplayer;
@@ -372,7 +377,7 @@ namespace SimpleCL.Ui.Components
                     playerMenu.Items.Add(traceItem);
                     marker.ContextMenuStrip = playerMenu;
                 }
-                
+
                 if (marker.Image == null)
                 {
                     return;
