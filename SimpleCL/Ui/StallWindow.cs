@@ -42,13 +42,13 @@ namespace SimpleCL.Ui
                 }
                 
                 var currRow = stallItemsDataGridView.Rows[currentCell.RowIndex];
-                var selectedBuff = (StallItem) currRow.DataBoundItem;
-                if (selectedBuff == null)
+                var selectedItem = (StallItem) currRow.DataBoundItem;
+                if (selectedItem == null)
                 {
                     return;
                 }
 
-                selectedBuff.Purchase();
+                selectedItem.Purchase();
             };
 
             purchaseMenu.Items.Add(purchaseMenuitem);
