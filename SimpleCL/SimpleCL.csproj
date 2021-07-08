@@ -18,7 +18,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -43,6 +43,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -144,6 +145,7 @@
     <Compile Include="Models\Entities\Fortress\FortressMonster.cs" />
     <Compile Include="Models\Entities\Fortress\FortressPatrolGuard.cs" />
     <Compile Include="Models\Entities\FortressStructure.cs" />
+    <Compile Include="Models\Entities\Shop.cs" />
     <Compile Include="Models\Entities\TalkNpc.cs" />
     <Compile Include="Models\Entities\Monster.cs" />
     <Compile Include="Models\Entities\Npc.cs" />
@@ -156,6 +158,7 @@
     <Compile Include="Models\IIdentifiable.cs" />
     <Compile Include="Models\ITargetable.cs" />
     <Compile Include="Models\Items\InventoryItem.cs" />
+    <Compile Include="Models\Items\ShopItem.cs" />
     <Compile Include="Models\Server\GameServer.cs" />
     <Compile Include="Models\Skills\Buff.cs" />
     <Compile Include="Models\Skills\CharacterSkill.cs" />
@@ -186,6 +189,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\Game\NpcService.cs" />
     <Compile Include="Services\Game\StallService.cs" />
     <Compile Include="Services\Login\CharacterSelectService.cs" />
     <Compile Include="Services\Login\LoginService.cs" />
@@ -236,6 +240,12 @@
     <Compile Include="Ui\Serverlist.Designer.cs">
       <DependentUpon>Serverlist.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ui\ShopWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\ShopWindow.Designer.cs">
+      <DependentUpon>ShopWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ui\StallWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -268,6 +278,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Ui\Serverlist.resx">
       <DependentUpon>Serverlist.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\ShopWindow.resx">
+      <DependentUpon>ShopWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ui\StallWindow.resx">
       <DependentUpon>StallWindow.cs</DependentUpon>

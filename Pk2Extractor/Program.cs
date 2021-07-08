@@ -18,8 +18,9 @@ namespace Pk2Extractor
             pk2Extractor.StoreModels();
             pk2Extractor.StoreTeleportBuildings();
             pk2Extractor.StoreTeleportLinks();
-            
-            // pk2Extractor.StoreItems(); // phbot already has this table
+            pk2Extractor.StoreItems();
+            pk2Extractor.ExtractItemIcons();
+            pk2Extractor.ExtractSkillIcons();
             
             // pk2Extractor.AddMinimap();
         }

@@ -183,6 +183,8 @@ namespace SimpleCL.Network
                     try
                     {
                         Console.WriteLine("Injecting queued packet: " + queuedPacket.Opcode.ToString("X"));
+                        Console.WriteLine("Data: ");
+                        DebugPacket(queuedPacket);
                         Inject(queuedPacket);
                         continue;
                     }

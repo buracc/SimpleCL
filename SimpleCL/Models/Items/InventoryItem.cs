@@ -1,4 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Drawing;
+using System.IO;
 using SimpleCL.Database;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Interaction;
@@ -8,8 +11,11 @@ namespace SimpleCL.Models.Items
 {
     public class InventoryItem : IComparable<InventoryItem>
     {
+        public Image Icon { get; set; }
         public byte Slot { get; set; }
+        [Browsable(false)]
         public uint Id { get; }
+        [Browsable(false)]
         public string ServerName { get; }
         public string Name { get; }
 
@@ -52,6 +58,7 @@ namespace SimpleCL.Models.Items
             TypeId3 = byte.Parse(data["tid2"]);
             TypeId4 = byte.Parse(data["tid3"]);
             CashItem = byte.Parse(data["cash_item"]) == 1;
+            Icon = Image.FromFile(Directory.GetCurrentDirectory() + "/Icon/" + data["icon"].Replace(".ddj", ".png"));
         }
 
         public static InventoryItem FromId(uint id)

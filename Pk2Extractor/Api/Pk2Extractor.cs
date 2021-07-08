@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -39,13 +40,13 @@ namespace Pk2Extractor.Api
 
         private int ExtractLanguageIdx()
         {
-            string[] lines = _pk2Reader.GetFileText("type.txt")
+            var lines = _pk2Reader.GetFileText("type.txt")
                 .Split(new[] {"\n"}, StringSplitOptions.RemoveEmptyEntries);
             foreach (var line in lines)
             {
                 if (line.Contains("Language"))
                 {
-                    string type = line.Split('=')[1].Replace("\"", "").Trim();
+                    var type = line.Split('=')[1].Replace("\"", "").Trim();
                     switch (type)
                     {
                         case "English":
@@ -71,14 +72,14 @@ namespace Pk2Extractor.Api
                 .Query("DROP TABLE IF EXISTS models")
                 .ExecuteUpdate();
 
-            string sql = "CREATE TABLE models (id INTEGER PRIMARY KEY, servername VARCHAR(64), "
-                         + "name VARCHAR(64),"
-                         + "tid2 INTEGER,"
-                         + "tid3 INTEGER,"
-                         + "tid4 INTEGER,"
-                         + "hp INTEGER,"
-                         + "level INTEGER"
-                         + ");";
+            var sql = "CREATE TABLE models (id INTEGER PRIMARY KEY, servername VARCHAR(64), "
+                      + "name VARCHAR(64),"
+                      + "tid2 INTEGER,"
+                      + "tid3 INTEGER,"
+                      + "tid4 INTEGER,"
+                      + "hp INTEGER,"
+                      + "level INTEGER"
+                      + ");";
 
             new QueryBuilder(_dbPath)
                 .Query(sql)
@@ -93,7 +94,7 @@ namespace Pk2Extractor.Api
             {
                 Console.WriteLine("Extracting: " + pk2File.Name);
 
-                using (StreamReader reader =
+                using (var reader =
                     new StreamReader(_pk2Reader.GetFileStream("server_dep/silkroad/textdata/" + pk2File.Name)))
                 {
                     string line;
@@ -146,20 +147,21 @@ namespace Pk2Extractor.Api
         public void StoreItems()
         {
             new QueryBuilder(_dbPath)
-                .Query("DROP TABLE IF EXISTS items")
+                .Query("DROP TABLE IF EXISTS items_ext")
                 .ExecuteUpdate();
 
-            string sql = "CREATE TABLE items ("
-                         + "id INTEGER PRIMARY KEY,"
-                         + "servername VARCHAR(64),"
-                         + "name VARCHAR(64),"
-                         + "stack INTEGER,"
-                         + "tid2 INTEGER,"
-                         + "tid3 INTEGER,"
-                         + "tid4 INTEGER,"
-                         + "level INTEGER,"
-                         + "icon VARCHAR(64)"
-                         + ");";
+            var sql = "CREATE TABLE items_ext ("
+                      + "id INTEGER PRIMARY KEY,"
+                      + "servername VARCHAR(64),"
+                      + "name VARCHAR(64),"
+                      + "stack INTEGER,"
+                      + "tid2 INTEGER,"
+                      + "tid3 INTEGER,"
+                      + "tid4 INTEGER,"
+                      + "level INTEGER,"
+                      + "icon VARCHAR(64),"
+                      + "price INTEGER"
+                      + ");";
 
             new QueryBuilder(_dbPath)
                 .Query(sql)
@@ -174,7 +176,7 @@ namespace Pk2Extractor.Api
             {
                 Console.WriteLine("Extracting: " + pk2File.Name);
 
-                using (StreamReader reader =
+                using (var reader =
                     new StreamReader(_pk2Reader.GetFileStream("server_dep/silkroad/textdata/" + pk2File.Name)))
                 {
                     string line;
@@ -205,7 +207,7 @@ namespace Pk2Extractor.Api
                             }
 
                             query.Query(
-                                    "INSERT INTO items (id,servername,name,stack,tid2,tid3,tid4,level,icon) VALUES (?,?,?,?,?,?,?,?,?)")
+                                    "INSERT INTO items_ext (id,servername,name,stack,tid2,tid3,tid4,level,icon,price) VALUES (?,?,?,?,?,?,?,?,?,?)")
                                 .Bind("id", data[1])
                                 .Bind("servername", data[2])
                                 .Bind("name", name)
@@ -215,6 +217,7 @@ namespace Pk2Extractor.Api
                                 .Bind("tid4", data[12])
                                 .Bind("level", data[33])
                                 .Bind("icon", (data.Length > 150 ? data[54] : data[50]).ToLower())
+                                .Bind("price", data[26])
                                 .ExecuteUpdate(false);
                         }
                     }
@@ -230,15 +233,15 @@ namespace Pk2Extractor.Api
                 .Query("DROP TABLE IF EXISTS teleportbuildings")
                 .ExecuteUpdate();
 
-            string sql = "CREATE TABLE teleportbuildings ("
-                         + "id INTEGER PRIMARY KEY,"
-                         + "servername VARCHAR(64), "
-                         + "name VARCHAR(64),"
-                         + "tid1 INTEGER,"
-                         + "tid2 INTEGER,"
-                         + "tid3 INTEGER,"
-                         + "tid4 INTEGER"
-                         + ");";
+            var sql = "CREATE TABLE teleportbuildings ("
+                      + "id INTEGER PRIMARY KEY,"
+                      + "servername VARCHAR(64), "
+                      + "name VARCHAR(64),"
+                      + "tid1 INTEGER,"
+                      + "tid2 INTEGER,"
+                      + "tid3 INTEGER,"
+                      + "tid4 INTEGER"
+                      + ");";
 
             new QueryBuilder(_dbPath)
                 .Query(sql)
@@ -253,7 +256,7 @@ namespace Pk2Extractor.Api
             {
                 Console.WriteLine("Extracting: " + pk2File.Name);
 
-                using (StreamReader reader =
+                using (var reader =
                     new StreamReader(_pk2Reader.GetFileStream("server_dep/silkroad/textdata/" + pk2File.Name)))
                 {
                     string line;
@@ -308,29 +311,29 @@ namespace Pk2Extractor.Api
                 .Query("DROP TABLE IF EXISTS teleportlinks")
                 .ExecuteUpdate();
 
-            string sql = "CREATE TABLE teleportlinks ("
-                         + "sourceid INTEGER,"
-                         + "destinationid INTEGER,"
-                         + "id INTEGER,"
-                         + "servername VARCHAR(64),"
-                         + "name VARCHAR(64),"
-                         + "destination VARCHAR(64),"
-                         + "tid1 INTEGER,"
-                         + "tid2 INTEGER,"
-                         + "tid3 INTEGER,"
-                         + "tid4 INTEGER,"
-                         + "gold INTEGER,"
-                         + "level INTEGER,"
-                         + "spawn_region INTEGER,"
-                         + "spawn_x INTEGER,"
-                         + "spawn_y INTEGER,"
-                         + "spawn_z INTEGER,"
-                         + "pos_region INTEGER,"
-                         + "pos_x INTEGER,"
-                         + "pos_y INTEGER,"
-                         + "pos_z INTEGER,"
-                         + "PRIMARY KEY (sourceid, destinationid)"
-                         + ");";
+            var sql = "CREATE TABLE teleportlinks ("
+                      + "sourceid INTEGER,"
+                      + "destinationid INTEGER,"
+                      + "id INTEGER,"
+                      + "servername VARCHAR(64),"
+                      + "name VARCHAR(64),"
+                      + "destination VARCHAR(64),"
+                      + "tid1 INTEGER,"
+                      + "tid2 INTEGER,"
+                      + "tid3 INTEGER,"
+                      + "tid4 INTEGER,"
+                      + "gold INTEGER,"
+                      + "level INTEGER,"
+                      + "spawn_region INTEGER,"
+                      + "spawn_x INTEGER,"
+                      + "spawn_y INTEGER,"
+                      + "spawn_z INTEGER,"
+                      + "pos_region INTEGER,"
+                      + "pos_x INTEGER,"
+                      + "pos_y INTEGER,"
+                      + "pos_z INTEGER,"
+                      + "PRIMARY KEY (sourceid, destinationid)"
+                      + ");";
 
             new QueryBuilder(_dbPath)
                 .Query(sql)
@@ -345,7 +348,7 @@ namespace Pk2Extractor.Api
             {
                 Console.WriteLine("Extracting: " + pk2File.Name);
 
-                using (StreamReader reader =
+                using (var reader =
                     new StreamReader(_pk2Reader.GetFileStream("server_dep/silkroad/textdata/" + pk2File.Name)))
                 {
                     string line;
@@ -433,7 +436,7 @@ namespace Pk2Extractor.Api
             }
 
             query.Query(
-                "INSERT INTO teleportlinks (sourceid,destinationid,id,servername,name,destination,tid1,tid2,tid3,tid4,gold,level,spawn_region,spawn_x,spawn_y,spawn_z,pos_region,pos_x,pos_y,pos_z) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+                    "INSERT INTO teleportlinks (sourceid,destinationid,id,servername,name,destination,tid1,tid2,tid3,tid4,gold,level,spawn_region,spawn_x,spawn_y,spawn_z,pos_region,pos_x,pos_y,pos_z) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
                 .Bind("sourceid", 0)
                 .Bind("destinationid", 0)
                 .Bind("id", 19076)
@@ -466,19 +469,19 @@ namespace Pk2Extractor.Api
                 .Query("DROP TABLE IF EXISTS textuisystem")
                 .ExecuteUpdate();
 
-            string sql = "CREATE TABLE textuisystem ("
-                         + "id INTEGER PRIMARY KEY,"
-                         + "servername VARCHAR(64) UNIQUE,"
-                         + "text VARCHAR(256)"
-                         + ")";
+            var sql = "CREATE TABLE textuisystem ("
+                      + "id INTEGER PRIMARY KEY,"
+                      + "servername VARCHAR(64) UNIQUE,"
+                      + "text VARCHAR(256)"
+                      + ")";
 
             new QueryBuilder(_dbPath)
                 .Query(sql)
                 .ExecuteUpdate();
 
             var query = new QueryBuilder(_dbPath, true);
-            int j = 0;
-            foreach (string key in _textReferences.Keys)
+            var j = 0;
+            foreach (var key in _textReferences.Keys)
             {
                 // INSERT
                 query.Query("INSERT INTO textuisystem (id, servername, text) VALUES (?, ?, ?)")
@@ -489,6 +492,97 @@ namespace Pk2Extractor.Api
             }
 
             query.Finish();
+        }
+
+        public void ExtractItemIcons()
+        {
+            var sql = "SELECT icon FROM items GROUP BY icon";
+
+            if (!Directory.Exists("Icon"))
+            {
+                Directory.CreateDirectory("Icon");
+            }
+
+            var path = Directory.GetCurrentDirectory() + "/Icon/";
+            var rows = new QueryBuilder(_dbPath)
+                .Query(sql)
+                .ExecuteSelect();
+
+            var defaultIcons = new NameValueCollection {{"icon", "icon_default.ddj"}};
+            rows.Add(defaultIcons);
+            defaultIcons = new NameValueCollection {{"icon", "action\\icon_cha_auto_attack.ddj"}};
+            rows.Add(defaultIcons);
+
+            foreach (var column in rows)
+            {
+                var iconPath = "icon\\" + column["icon"];
+                Console.WriteLine("Extracting: " + iconPath);
+                
+                var ddjFile = _pk2Reader.GetFile(iconPath);
+                if (ddjFile == null)
+                {
+                    continue;
+                }
+
+                var saveFilePath = Path.ChangeExtension(Path.GetFullPath(path + iconPath), "png");
+                if (File.Exists(saveFilePath))
+                {
+                    continue;
+                }
+
+                var saveFolderPath = Path.GetDirectoryName(saveFilePath);
+                if (!Directory.Exists(saveFolderPath) && saveFolderPath != null)
+                {
+                    Directory.CreateDirectory(saveFolderPath);
+                }
+
+                var img = DdsReader.FromDdj(_pk2Reader.GetFileBytes(ddjFile));
+
+                img.Save(saveFilePath, System.Drawing.Imaging.ImageFormat.Png);
+            }
+        }
+        
+        public void ExtractSkillIcons()
+        {
+            var sql = "SELECT icon FROM skills GROUP BY icon";
+
+            if (!Directory.Exists("Icon"))
+            {
+                Directory.CreateDirectory("Icon");
+            }
+
+            var path = Directory.GetCurrentDirectory() + "/Icon/";
+            var rows = new QueryBuilder(_dbPath)
+                .Query(sql)
+                .ExecuteSelect();
+            
+            foreach (var column in rows)
+            {
+                var iconPath = "icon\\" + column["icon"];
+                Console.WriteLine("Extracting: " + iconPath);
+                
+                var ddjFile = _pk2Reader.GetFile(iconPath);
+                if (ddjFile == null)
+                {
+                    continue;
+                }
+
+                var saveFilePath = Path.ChangeExtension(Path.GetFullPath(path + iconPath), "png");
+                if (File.Exists(saveFilePath))
+                {
+                    continue;
+                }
+
+                var saveFolderPath = Path.GetDirectoryName(saveFilePath);
+                if (!Directory.Exists(saveFolderPath) && saveFolderPath != null)
+                {
+                    Directory.CreateDirectory(saveFolderPath);
+                }
+
+                var img = DdsReader.FromDdj(_pk2Reader.GetFileBytes(ddjFile));
+
+                img.Save(saveFilePath, System.Drawing.Imaging.ImageFormat.Png);
+            }
         }
 
         private void LoadNameReferences()
@@ -505,7 +599,7 @@ namespace Pk2Extractor.Api
             {
                 Console.WriteLine("Extracting file: " + pk2File.Name);
 
-                using (StreamReader reader =
+                using (var reader =
                     new StreamReader(_pk2Reader.GetFileStream("server_dep/silkroad/textdata/" + pk2File.Name)))
                 {
                     while (!reader.EndOfStream)
@@ -533,28 +627,24 @@ namespace Pk2Extractor.Api
         {
             string folderPath;
 
-            // Check directory
             folderPath = "Minimap\\";
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             }
 
-            // Get files
-            Pk2Folder minimap = _pk2Reader.GetFolder("minimap");
+            var minimap = _pk2Reader.GetFolder("minimap");
             if (minimap != null)
             {
                 ExtractAllImages(minimap, folderPath, System.Drawing.Imaging.ImageFormat.Jpeg);
             }
 
-            // Check directory
             folderPath = "Minimap\\d\\";
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             }
 
-            // Get files
             minimap = _pk2Reader.GetFolder("minimap_d");
             if (minimap != null)
             {
@@ -564,11 +654,11 @@ namespace Pk2Extractor.Api
 
         public void ExtractAllImages(Pk2Folder folder, string outPutPath, System.Drawing.Imaging.ImageFormat format)
         {
-            string ext = Equals(format, System.Drawing.Imaging.ImageFormat.Jpeg) ? "jpg" : format.ToString().ToLower();
-            foreach (Pk2File f in folder.Files)
+            var ext = Equals(format, System.Drawing.Imaging.ImageFormat.Jpeg) ? "jpg" : format.ToString().ToLower();
+            foreach (var f in folder.Files)
             {
                 // Check path if the file already exists
-                string saveFilePath = Path.ChangeExtension(Path.GetFullPath(outPutPath + f.Name), ext);
+                var saveFilePath = Path.ChangeExtension(Path.GetFullPath(outPutPath + f.Name), ext);
                 if (File.Exists(saveFilePath))
                 {
                     continue;
@@ -577,11 +667,11 @@ namespace Pk2Extractor.Api
                 Console.WriteLine(f.Name);
 
                 // Convert DDJ to DDS to Bitmap
-                Bitmap img = DdsReader.FromDdj(_pk2Reader.GetFileBytes(f));
+                var img = DdsReader.FromDdj(_pk2Reader.GetFileBytes(f));
                 img?.Save(saveFilePath, format);
             }
 
-            foreach (Pk2Folder f in folder.SubFolders)
+            foreach (var f in folder.SubFolders)
             {
                 ExtractAllImages(f, outPutPath, format);
             }
@@ -606,7 +696,7 @@ namespace Pk2Extractor.Api
             {
                 Console.WriteLine("Extracting file: " + pk2File.Name);
 
-                using (StreamReader reader =
+                using (var reader =
                     new StreamReader(_pk2Reader.GetFileStream("server_dep/silkroad/textdata/" + pk2File.Name)))
                 {
                     while (!reader.EndOfStream)
@@ -648,7 +738,7 @@ namespace Pk2Extractor.Api
             string line;
             string[] data;
 
-            using (StreamReader reader =
+            using (var reader =
                 new StreamReader(_pk2Reader.GetFileStream("server_dep/silkroad/textdata/teleportdata.txt")))
             {
                 while (!reader.EndOfStream)
@@ -666,7 +756,7 @@ namespace Pk2Extractor.Api
                 }
             }
 
-            using (StreamReader reader =
+            using (var reader =
                 new StreamReader(_pk2Reader.GetFileStream("server_dep/silkroad/textdata/teleportbuilding.txt")))
             {
                 while (!reader.EndOfStream)

@@ -48,6 +48,7 @@ namespace SimpleCL.Ui
             this.serverlistDataGridView.MultiSelect = false;
             this.serverlistDataGridView.Name = "serverlistDataGridView";
             this.serverlistDataGridView.ReadOnly = true;
+            this.serverlistDataGridView.RowHeadersVisible = false;
             this.serverlistDataGridView.Size = new System.Drawing.Size(322, 206);
             this.serverlistDataGridView.TabIndex = 1;
             // 

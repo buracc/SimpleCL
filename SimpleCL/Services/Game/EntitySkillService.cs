@@ -50,7 +50,6 @@ namespace SimpleCL.Services.Game
                 return;
             }
 
-
             try
             {
                 var type = (Skill.CastType) packet.ReadByte();
@@ -130,7 +129,6 @@ namespace SimpleCL.Services.Game
             {
                 server.DebugPacket(packet);
                 Console.WriteLine(e);
-                throw;
             }
         }
 

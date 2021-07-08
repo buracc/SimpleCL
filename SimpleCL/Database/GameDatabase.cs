@@ -35,6 +35,7 @@ namespace SimpleCL.Database
         private readonly Dictionary<uint, NameValueCollection> _skillCache;
         private readonly Dictionary<uint, NameValueCollection> _masteryCache;
         private readonly Dictionary<uint, List<NameValueCollection>> _teleportCache;
+        private readonly Dictionary<uint, NameValueCollection> _priceCache;
         public readonly Dictionary<uint, List<SpawnPoint>> SpawnPoints = new();
 
         private GameDatabase()
@@ -43,6 +44,7 @@ namespace SimpleCL.Database
             _modelCache = LoadFromCache("models");
             _skillCache = LoadFromCache("skills");
             _masteryCache = LoadFromCache("masteries");
+            _priceCache = LoadFromCache("prices");
             _teleportCache = LoadCachedTeleports("teleports");
         }
 
@@ -74,6 +76,12 @@ namespace SimpleCL.Database
             }
 
             return data;
+        }
+
+        public List<NameValueCollection> GetShop(uint npcId)
+        {
+            var data = GetData("SELECT * FROM npcgoods WHERE model = " + npcId);
+            return data.IsEmpty() ? new List<NameValueCollection>() : data;
         }
 
         public ulong GetNextLevelExp(byte level)
@@ -187,6 +195,32 @@ namespace SimpleCL.Database
 
             return _masteryCache[id] = result[0];
         }
+        
+        public NameValueCollection GetItemPrice(uint id, QueryBuilder queryBuilder = null)
+        {
+            if (_priceCache.ContainsKey(id))
+            {
+                return _priceCache[id];
+            }
+
+            List<NameValueCollection> result;
+            if (queryBuilder != null)
+            {
+                result = queryBuilder.Query("SELECT * FROM items_ext WHERE id = " + id)
+                    .ExecuteSelect(false);
+            }
+            else
+            {
+                result = GetData("SELECT * FROM items_ext WHERE id = " + id);
+            }
+
+            if (result.IsEmpty())
+            {
+                return _priceCache[id] = null;
+            }
+
+            return _priceCache[id] = result[0];
+        }
 
         public NameValueCollection GetModel(uint id, QueryBuilder queryBuilder = null)
         {
@@ -284,6 +318,8 @@ namespace SimpleCL.Database
             CacheToFile(_modelCache, "models");
             CacheToFile(_skillCache, "skills");
             CacheToFile(_masteryCache, "masteries");
+            CacheToFile(_priceCache, "prices");
+            
             CacheTeleportsToFile(_teleportCache, "teleports");
         }
 

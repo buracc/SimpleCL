@@ -58,5 +58,13 @@ namespace SimpleCL.Ui
             _gateway.Inject(login);
             Dispose(true);
         }
+        
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                _gateway.Disconnect();
+            }
+        }
     }
 }

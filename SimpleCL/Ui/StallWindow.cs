@@ -9,6 +9,7 @@ namespace SimpleCL.Ui
     public partial class StallWindow : Form
     {
         private readonly Player _player;
+        private bool ClosedByUser { get; set; }
         
         public StallWindow(Player player)
         {
@@ -30,6 +31,7 @@ namespace SimpleCL.Ui
                 CenterToScreen();
                 BringToFront();
             });
+            
         }
 
         private void InitStallItemEvents()
@@ -71,9 +73,26 @@ namespace SimpleCL.Ui
             };
         }
 
-        private void ExitStallClick(object sender, EventArgs e)
+        protected override void WndProc(ref Message m)
         {
+            if (m.Msg == 0x0112 && m.WParam.ToInt32() == 0xF060)
+            {
+                ClosedByUser = true;
+            }
+
+            base.WndProc(ref m);
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (!ClosedByUser)
+            {
+                return;
+            }
+
+            e.Cancel = true;
             _player.Stall.Leave();
+            ClosedByUser = false;
         }
     }
 }

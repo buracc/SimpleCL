@@ -72,6 +72,8 @@ namespace SimpleCL.Ui
             this.mpLabel = new System.Windows.Forms.Label();
             this.hpLabel = new System.Windows.Forms.Label();
             this.inventoryPage = new System.Windows.Forms.TabPage();
+            this.goldAmountLabel = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.refreshInventoriesButton = new System.Windows.Forms.Button();
             this.inventoryTabControl = new System.Windows.Forms.TabControl();
             this.inventoryInvTab = new System.Windows.Forms.TabPage();
@@ -246,13 +248,14 @@ namespace SimpleCL.Ui
             // 
             this.buffsDataGridView.AllowUserToAddRows = false;
             this.buffsDataGridView.AllowUserToDeleteRows = false;
-            this.buffsDataGridView.AllowUserToResizeColumns = false;
             this.buffsDataGridView.AllowUserToResizeRows = false;
             this.buffsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.buffsDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.buffsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.buffsDataGridView.Location = new System.Drawing.Point(6, 19);
             this.buffsDataGridView.Name = "buffsDataGridView";
             this.buffsDataGridView.ReadOnly = true;
+            this.buffsDataGridView.RowHeadersVisible = false;
             this.buffsDataGridView.Size = new System.Drawing.Size(248, 225);
             this.buffsDataGridView.TabIndex = 0;
             // 
@@ -499,6 +502,8 @@ namespace SimpleCL.Ui
             // 
             // inventoryPage
             // 
+            this.inventoryPage.Controls.Add(this.goldAmountLabel);
+            this.inventoryPage.Controls.Add(this.label3);
             this.inventoryPage.Controls.Add(this.refreshInventoriesButton);
             this.inventoryPage.Controls.Add(this.inventoryTabControl);
             this.inventoryPage.Location = new System.Drawing.Point(4, 22);
@@ -507,6 +512,22 @@ namespace SimpleCL.Ui
             this.inventoryPage.TabIndex = 2;
             this.inventoryPage.Text = "Inventory";
             this.inventoryPage.UseVisualStyleBackColor = true;
+            // 
+            // goldAmountLabel
+            // 
+            this.goldAmountLabel.Location = new System.Drawing.Point(320, 352);
+            this.goldAmountLabel.Name = "goldAmountLabel";
+            this.goldAmountLabel.Size = new System.Drawing.Size(160, 23);
+            this.goldAmountLabel.TabIndex = 3;
+            this.goldAmountLabel.Text = "0";
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(261, 352);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 23);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Gold:";
             // 
             // refreshInventoriesButton
             // 
@@ -546,12 +567,14 @@ namespace SimpleCL.Ui
             this.inventoryDataGridView.AllowUserToDeleteRows = false;
             this.inventoryDataGridView.AllowUserToResizeColumns = false;
             this.inventoryDataGridView.AllowUserToResizeRows = false;
-            this.inventoryDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this.inventoryDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.inventoryDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.inventoryDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.inventoryDataGridView.Location = new System.Drawing.Point(6, 6);
             this.inventoryDataGridView.MultiSelect = false;
             this.inventoryDataGridView.Name = "inventoryDataGridView";
             this.inventoryDataGridView.ReadOnly = true;
+            this.inventoryDataGridView.RowHeadersVisible = false;
             this.inventoryDataGridView.Size = new System.Drawing.Size(742, 308);
             this.inventoryDataGridView.TabIndex = 0;
             // 
@@ -572,12 +595,14 @@ namespace SimpleCL.Ui
             this.equipmentDataGridView.AllowUserToDeleteRows = false;
             this.equipmentDataGridView.AllowUserToResizeColumns = false;
             this.equipmentDataGridView.AllowUserToResizeRows = false;
-            this.equipmentDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this.equipmentDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.equipmentDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.equipmentDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.equipmentDataGridView.Location = new System.Drawing.Point(6, 6);
             this.equipmentDataGridView.MultiSelect = false;
             this.equipmentDataGridView.Name = "equipmentDataGridView";
             this.equipmentDataGridView.ReadOnly = true;
+            this.equipmentDataGridView.RowHeadersVisible = false;
             this.equipmentDataGridView.Size = new System.Drawing.Size(742, 308);
             this.equipmentDataGridView.TabIndex = 1;
             // 
@@ -598,12 +623,14 @@ namespace SimpleCL.Ui
             this.avatarDataGridView.AllowUserToOrderColumns = true;
             this.avatarDataGridView.AllowUserToResizeColumns = false;
             this.avatarDataGridView.AllowUserToResizeRows = false;
-            this.avatarDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this.avatarDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.avatarDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.avatarDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.avatarDataGridView.Location = new System.Drawing.Point(6, 6);
             this.avatarDataGridView.MultiSelect = false;
             this.avatarDataGridView.Name = "avatarDataGridView";
             this.avatarDataGridView.ReadOnly = true;
+            this.avatarDataGridView.RowHeadersVisible = false;
             this.avatarDataGridView.Size = new System.Drawing.Size(742, 308);
             this.avatarDataGridView.TabIndex = 1;
             // 
@@ -624,12 +651,14 @@ namespace SimpleCL.Ui
             this.jobEquipmentDataGridView.AllowUserToOrderColumns = true;
             this.jobEquipmentDataGridView.AllowUserToResizeColumns = false;
             this.jobEquipmentDataGridView.AllowUserToResizeRows = false;
-            this.jobEquipmentDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this.jobEquipmentDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.jobEquipmentDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.jobEquipmentDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.jobEquipmentDataGridView.Location = new System.Drawing.Point(6, 6);
             this.jobEquipmentDataGridView.MultiSelect = false;
             this.jobEquipmentDataGridView.Name = "jobEquipmentDataGridView";
             this.jobEquipmentDataGridView.ReadOnly = true;
+            this.jobEquipmentDataGridView.RowHeadersVisible = false;
             this.jobEquipmentDataGridView.Size = new System.Drawing.Size(742, 308);
             this.jobEquipmentDataGridView.TabIndex = 1;
             // 
@@ -915,6 +944,9 @@ namespace SimpleCL.Ui
             this.devTab.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label goldAmountLabel;
 
         private System.Windows.Forms.Button refreshInventoriesButton;
 

@@ -193,6 +193,16 @@ namespace SimpleCL.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap xy_potion {
+            get {
+                object obj = ResourceManager.GetObject("xy_potion", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap xy_stable {
             get {
                 object obj = ResourceManager.GetObject("xy_stable", resourceCulture);

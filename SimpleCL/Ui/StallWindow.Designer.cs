@@ -39,7 +39,6 @@ namespace SimpleCL.Ui
             this.stallOwnerBox = new System.Windows.Forms.TextBox();
             this.stallStatusBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.exitStallButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize) (this.stallItemsDataGridView)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -51,12 +50,14 @@ namespace SimpleCL.Ui
             this.stallItemsDataGridView.AllowUserToDeleteRows = false;
             this.stallItemsDataGridView.AllowUserToResizeColumns = false;
             this.stallItemsDataGridView.AllowUserToResizeRows = false;
-            this.stallItemsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this.stallItemsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.stallItemsDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.stallItemsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.stallItemsDataGridView.Location = new System.Drawing.Point(6, 19);
             this.stallItemsDataGridView.MultiSelect = false;
             this.stallItemsDataGridView.Name = "stallItemsDataGridView";
             this.stallItemsDataGridView.ReadOnly = true;
+            this.stallItemsDataGridView.RowHeadersVisible = false;
             this.stallItemsDataGridView.Size = new System.Drawing.Size(383, 257);
             this.stallItemsDataGridView.TabIndex = 0;
             // 
@@ -75,7 +76,7 @@ namespace SimpleCL.Ui
             this.groupBox2.Controls.Add(this.stallDescriptionRtb);
             this.groupBox2.Location = new System.Drawing.Point(12, 342);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(312, 63);
+            this.groupBox2.Size = new System.Drawing.Size(395, 63);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Description";
@@ -84,7 +85,7 @@ namespace SimpleCL.Ui
             // 
             this.stallDescriptionRtb.Location = new System.Drawing.Point(6, 19);
             this.stallDescriptionRtb.Name = "stallDescriptionRtb";
-            this.stallDescriptionRtb.Size = new System.Drawing.Size(299, 38);
+            this.stallDescriptionRtb.Size = new System.Drawing.Size(383, 38);
             this.stallDescriptionRtb.TabIndex = 0;
             this.stallDescriptionRtb.Text = "";
             // 
@@ -120,24 +121,12 @@ namespace SimpleCL.Ui
             this.label2.TabIndex = 2;
             this.label2.Text = "Status";
             // 
-            // exitStallButton
-            // 
-            this.exitStallButton.Location = new System.Drawing.Point(332, 347);
-            this.exitStallButton.Name = "exitStallButton";
-            this.exitStallButton.Size = new System.Drawing.Size(75, 58);
-            this.exitStallButton.TabIndex = 4;
-            this.exitStallButton.Text = "Exit";
-            this.exitStallButton.UseVisualStyleBackColor = true;
-            this.exitStallButton.Click += new System.EventHandler(this.ExitStallClick);
-            // 
             // StallWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(420, 417);
-            this.ControlBox = false;
-            this.Controls.Add(this.exitStallButton);
             this.Controls.Add(this.stallStatusBox);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label2);
@@ -152,8 +141,6 @@ namespace SimpleCL.Ui
             this.ResumeLayout(false);
             this.PerformLayout();
         }
-
-        private System.Windows.Forms.Button exitStallButton;
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox stallOwnerBox;

@@ -34,7 +34,7 @@ namespace SimpleCL.Ui
                     return;
                 }
 
-                RefreshMap();
+                RefreshMap(true);
             };
             
             mapTimer.Start();
@@ -47,6 +47,24 @@ namespace SimpleCL.Ui
 
             switch (entity)
             {
+                case Shop shop:
+                    marker.Image = (Bitmap) Properties.Resources.ResourceManager.GetObject(shop.MapIcon);
+                    var shopMenu = new ContextMenuStrip();
+                    var shopMenuItem = new ToolStripMenuItem
+                    {
+                        Text = "Open",
+                        Name = shop.ToString()
+                    };
+
+                    shopMenuItem.Click += (_, _) =>
+                    {
+                        Log("Opening shop: " + shop.Name);
+                        shop.Select();
+                    };
+
+                    shopMenu.Items.Add(shopMenuItem);
+                    marker.ContextMenuStrip = shopMenu;
+                    break;
                 case TalkNpc talkNpc:
                     marker.Image = (Bitmap) Properties.Resources.ResourceManager.GetObject(talkNpc.MapIcon);
                     break;

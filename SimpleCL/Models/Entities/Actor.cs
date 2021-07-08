@@ -1,9 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Timers;
+using System.Threading;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Skills;
+using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Models.Entities
 {
@@ -50,13 +51,15 @@ namespace SimpleCL.Models.Entities
 
         public void StopMovementTimer()
         {
-            _movementTimer?.Dispose();
+            _movementTimer.Stop();
         }
 
         public void StartMovement(LocalPoint destination)
         {
             StopMovementTimer();
 
+            _movementTimer = new Timer(50);
+            
             var oldPos = WorldPoint;
             var newPos = WorldPoint.FromLocal(destination);
 
@@ -66,8 +69,6 @@ namespace SimpleCL.Models.Entities
             var xDiff = newPos.X - oldPos.X;
             var yDiff = newPos.Y - oldPos.Y;
 
-            _movementTimer = new Timer(50);
-
             var intervalMs = _movementTimer.Interval;
             var totalIntervals = (float) (timeToDestination / intervalMs);
             var intervals = 0;
@@ -76,7 +77,7 @@ namespace SimpleCL.Models.Entities
             {
                 if (++intervals > totalIntervals)
                 {
-                    _movementTimer.Dispose();
+                    StopMovementTimer();
                     LocalPoint = destination;
                     return;
                 }

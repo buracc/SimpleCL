@@ -1,4 +1,7 @@
 ﻿using System;
+using SimpleCL.Enums.Commons;
+using SimpleCL.Interaction;
+using SimpleCL.SecurityApi;
 
 namespace SimpleCL.Models.Entities
 {
@@ -23,6 +26,13 @@ namespace SimpleCL.Models.Entities
 
         public TalkNpc(uint id) : base(id)
         {
+        }
+
+        public void Talk()
+        {
+            var talkPacket = new Packet(Opcodes.Agent.Request.ENTITY_SELECT_OBJECT);
+            talkPacket.WriteUInt(Uid);
+            InteractionQueue.PacketQueue.Enqueue(talkPacket);
         }
     }
 }

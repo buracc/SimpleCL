@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Quests;
@@ -319,20 +320,22 @@ namespace SimpleCL.Services.Game
             var hitRate = packet.ReadUShort();
             var parry = packet.ReadUShort();
             var maxHp = packet.ReadUInt();
-            
+
             if (_localPlayer.Hp > maxHp)
             {
                 _localPlayer.Hp = maxHp;
             }
+
             _localPlayer.MaxHp = maxHp;
-            
+
             var maxMp = packet.ReadUInt();
             if (_localPlayer.Mp > maxMp)
             {
                 _localPlayer.Mp = maxMp;
             }
+
             _localPlayer.MaxMp = maxMp;
-            
+
             var str = packet.ReadUShort();
             var intellect = packet.ReadUShort();
         }
@@ -416,6 +419,25 @@ namespace SimpleCL.Services.Game
         }
 
         #endregion
+
+        [PacketHandler(Opcodes.Agent.Response.GAME_INVITE)]
+        public void ExchangeStart(Server server, Packet packet)
+        {
+            var type = packet.ReadByte();
+            switch (type)
+            {
+                case 1:
+                    Console.WriteLine("exchange invite");
+                    break;
+
+                case 2:
+                    Console.WriteLine("party invite");
+                    break;
+            }
+
+            var playerUid = packet.ReadUInt();
+            var player = Entities.GetPlayers().FirstOrDefault(x => x.Uid == playerUid);
+        }
 
         #region Utility methods
 
@@ -523,7 +545,7 @@ namespace SimpleCL.Services.Game
                                 case 3:
                                     var level = packet.ReadByte();
                                     break;
-                                    
+
                                 case 2:
                                     var rentTimeEndSeconds = packet.ReadUInt();
                                     break;

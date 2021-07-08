@@ -80,7 +80,8 @@ namespace SimpleCL.Ui
             
             spLabelValue.DataBindings.Add("Text", _localPlayer, "SkillpointsString");
             goldLabelValue.DataBindings.Add("Text", _localPlayer, "GoldString");
-            
+            goldAmountLabel.DataBindings.Add("Text", _localPlayer, "GoldString");
+
             localCoordsLabelValue.DataBindings.Add("Text", _localPlayer, "LocalPoint");
             currLocalLabelValue.DataBindings.Add("Text", _localPlayer, "LocalPoint");
             

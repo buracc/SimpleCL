@@ -39,10 +39,6 @@ namespace SimpleCL.Services.Game
             {
                 case EntityStateEvent.Health.Hp:
                     actor.Hp = packet.ReadUInt();
-                    if (actor is Monster monster && monster.Hp == 0)
-                    {
-                        Entities.Despawned(actor.Uid);
-                    }
                     break;
 
                 case EntityStateEvent.Health.Mp:
@@ -52,11 +48,6 @@ namespace SimpleCL.Services.Game
                 case EntityStateEvent.Health.EntityHpMp:
                 case EntityStateEvent.Health.HpMp:
                     actor.Hp = packet.ReadUInt();
-                    if (actor is Monster m && m.Hp == 0)
-                    {
-                        Entities.Despawned(actor.Uid);
-                    }
-                    
                     actor.Mp = packet.ReadUInt();
                     break;
                 

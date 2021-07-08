@@ -53,7 +53,7 @@ namespace SimpleCL.Interaction
                                 case Player player:
                                     return x is Player p && player.Uid == p.Uid;
                                 case Monster monster:
-                                    return x is Monster m && monster.Id == m.Id;
+                                    return x is Monster m && monster.Id == m.Id && m.Hp > 0;
                                 default:
                                     return false;
                             }

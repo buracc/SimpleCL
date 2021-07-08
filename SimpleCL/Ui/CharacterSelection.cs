@@ -45,5 +45,13 @@ namespace SimpleCL.Ui
             _agent.Inject(characterJoin);
             Dispose(true);
         }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                _agent.Disconnect();
+            }
+        }
     }
 }

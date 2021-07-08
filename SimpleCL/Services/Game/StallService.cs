@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SimpleCL.Enums.Commons;
@@ -9,7 +6,6 @@ using SimpleCL.Enums.Server;
 using SimpleCL.Interaction.Providers;
 using SimpleCL.Models.Entities;
 using SimpleCL.Models.Entities.Exchange;
-using SimpleCL.Models.Items;
 using SimpleCL.Network;
 using SimpleCL.SecurityApi;
 using SimpleCL.Ui;
@@ -74,10 +70,13 @@ namespace SimpleCL.Services.Game
                 }
             }
 
-            Task.Factory.StartNew(() =>
+            Task.Run(() =>
             {
-                StallWindow = new StallWindow(player);
-                StallWindow.ShowDialog(new Form {TopMost = false});
+                Program.Gui.InvokeLater(() =>
+                {
+                    StallWindow = new StallWindow(player);
+                    StallWindow.ShowDialog();
+                });
             });
         }
 
@@ -130,7 +129,7 @@ namespace SimpleCL.Services.Game
                 return;
             }
 
-            StallWindow?.InvokeLater(() => { StallWindow.Dispose(); });
+            StallWindow?.InvokeLater(() => { StallWindow?.Close(); });
         }
     }
 }

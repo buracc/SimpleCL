@@ -185,7 +185,8 @@ namespace SimpleCL.Models.Entities
 
                     if (npc.IsTalk())
                     {
-                        return new TalkNpc(id);
+                        var shopData = GameDatabase.Get.GetShop(id);
+                        return shopData.IsNotEmpty() ? new Shop(id, shopData) : new TalkNpc(id);
                     }
 
                     if (npc.IsCos())
