@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Timers;
+using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Skills;
 
@@ -9,8 +9,29 @@ namespace SimpleCL.Models.Entities
 {
     public class Actor : Entity
     {
-        public uint Hp { get; set; }
-        public uint Mp { get; set; }
+        private uint _hp;
+        private uint _mp;
+
+        public uint Hp
+        {
+            get => _hp;
+            set
+            {
+                _hp = value;
+                OnPropertyChanged(nameof(Hp));
+            }
+        }
+
+        public uint Mp
+        {
+            get => _mp;
+            set
+            {
+                _mp = value;
+                OnPropertyChanged(nameof(Mp));
+            }
+        }
+
         public Health.BadStatusFlag BadStatus { get; set; }
         public float WalkSpeed { get; set; }
         public float RunSpeed { get; set; }
@@ -44,13 +65,13 @@ namespace SimpleCL.Models.Entities
 
             var xDiff = newPos.X - oldPos.X;
             var yDiff = newPos.Y - oldPos.Y;
-            
+
             _movementTimer = new Timer(50);
 
             var intervalMs = _movementTimer.Interval;
             var totalIntervals = (float) (timeToDestination / intervalMs);
             var intervals = 0;
-            
+
             _movementTimer.Elapsed += (_, _) =>
             {
                 if (++intervals > totalIntervals)

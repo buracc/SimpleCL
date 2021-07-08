@@ -35,6 +35,11 @@ namespace SimpleCL.Models.Coordinates
 
         public static LocalPoint FromWorld(WorldPoint worldPoint)
         {
+            if (worldPoint == null)
+            {
+                return null;
+            }
+            
             if (worldPoint.InCave())
             {
                 return new LocalPoint(worldPoint.Region, worldPoint.X, worldPoint.Z, worldPoint.Y);

@@ -266,7 +266,7 @@ namespace SimpleCL.Services.Game
                                         var plus = packet.ReadByte();
                                     }
                                 }
-                                catch (Exception e)
+                                catch (Exception)
                                 {
                                     Console.WriteLine("failed to parse player equipment");
                                     server.DebugPacket(packet);
@@ -287,7 +287,7 @@ namespace SimpleCL.Services.Game
                                         var plus = packet.ReadByte();
                                     }
                                 }
-                                catch (Exception e)
+                                catch (Exception)
                                 {
                                     Console.WriteLine("failed to parse player avatars");
                                     server.DebugPacket(packet);

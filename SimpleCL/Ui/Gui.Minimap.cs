@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using SimpleCL.Models.Character;
-using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
 using SimpleCL.Models.Entities.Pet;
 using SimpleCL.Models.Entities.Teleporters;
@@ -40,42 +38,6 @@ namespace SimpleCL.Ui
             };
             
             mapTimer.Start();
-        }
-        
-        public void RefreshGui()
-        {
-            var local = _localPlayer;
-            if (local == null)
-            {
-                return;
-            }
-
-            nameLabelValue.Text = local.Name;
-            jobNameLabelValue.Text = local.JobName;
-
-            Text = "SimpleCL (" + local.Uid + ")";
-
-            hpProgressBar.Maximum = (int) local.MaxHp;
-            mpProgressBar.Maximum = (int) local.MaxMp;
-            hpProgressBar.Value = (int) local.MaxHp;
-            mpProgressBar.Value = (int) local.MaxMp;
-
-            expProgressBar.Value = (int) local.GetExpPercent();
-            expProgressBar.CustomText = local.GetExpPercentDecimal().ToString("P", CultureInfo.CurrentCulture);
-            jobExpProgressBar.Value = (int) local.GetJobExpPercent();
-            jobExpProgressBar.CustomText =
-                local.GetJobExpPercentDecimal().ToString("P", CultureInfo.CurrentCulture);
-
-            levelLabelValue.Text = local.Level.ToString();
-            jobLevelLabelValue.Text = local.JobLevel.ToString();
-            spLabelValue.Text = local.Skillpoints.ToString("N0");
-            goldLabelValue.Text = local.Gold.ToString("N0");
-
-            var worldPoint = WorldPoint.FromLocal(local.LocalPoint);
-            localCoordsLabelValue.Text = local.LocalPoint.ToString();
-            worldCoordsLabelValue.Text = worldPoint.ToString();
-            currLocalLabelValue.Text = local.LocalPoint.ToString();
-            currWorldLabelValue.Text = worldPoint.ToString();
         }
 
         public void AddMinimapMarker(Entity entity)
@@ -180,7 +142,7 @@ namespace SimpleCL.Ui
                     var playerMenu = new ContextMenuStrip();
                     var traceItem = new ToolStripMenuItem
                     {
-                        Text = "Trace",
+                        Text = "Trace"
                     };
 
                     traceItem.Click += (_, _) =>

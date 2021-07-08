@@ -1,5 +1,10 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using SimpleCL.Annotations;
 using SimpleCL.Database;
+using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities.Fortress;
 using SimpleCL.Models.Entities.Fortress.Structure;
@@ -11,16 +16,40 @@ using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Models.Entities
 {
-    public class Entity : ILocatable, IIdentifiable
+    public class Entity : ILocatable, IIdentifiable, INotifyPropertyChanged
     {
+        private LocalPoint _localPoint;
+        private string _name;
+
         public readonly uint Id;
         public readonly string ServerName;
-        public string Name { get; set; }
+
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
+
         public readonly byte TypeId1;
         public readonly byte TypeId2;
         public readonly byte TypeId3;
         public readonly byte TypeId4;
-        public LocalPoint LocalPoint { get; set; }
+
+        public LocalPoint LocalPoint
+        {
+            get => _localPoint;
+            set
+            {
+                _localPoint = value;
+                OnPropertyChanged(nameof(LocalPoint));
+                OnPropertyChanged(nameof(WorldPoint));
+            }
+        }
+
         public uint Uid { get; set; }
 
         public WorldPoint WorldPoint => WorldPoint.FromLocal(LocalPoint);
@@ -74,7 +103,7 @@ namespace SimpleCL.Models.Entities
                 var tid3 = TypeId1 == 3 ? "tid2" : "tid3";
                 var tid4 = TypeId1 == 3 ? "tid3" : "tid4";
                 ServerName = DatabaseData["servername"];
-                Name = DatabaseData["name"];
+                Name = this is Player ? "Weed" : DatabaseData["name"];
                 TypeId2 = byte.Parse(DatabaseData[tid2]);
                 TypeId3 = byte.Parse(DatabaseData[tid3]);
                 TypeId4 = byte.Parse(DatabaseData[tid4]);
@@ -259,12 +288,7 @@ namespace SimpleCL.Models.Entities
 
         public override bool Equals(object obj)
         {
-            if (obj is Entity other)
-            {
-                return Uid == other.Uid;
-            }
-
-            return false;
+            return obj is Entity other && other.Uid == Uid;
         }
 
         protected bool Equals(Entity other)
@@ -280,6 +304,14 @@ namespace SimpleCL.Models.Entities
         public override string ToString()
         {
             return GetType().Name + ": " + Name + " [" + Id + "] [" + Uid + "]";
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

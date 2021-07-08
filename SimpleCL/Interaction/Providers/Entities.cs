@@ -22,6 +22,7 @@ namespace SimpleCL.Interaction.Providers
             AllEntities.Clear();
             TargetableEntities.Clear();
             Buffs.Clear();
+            LocalPlayer.Get.Buffs.Clear();
         }
 
         public static void Spawned(Entity e)

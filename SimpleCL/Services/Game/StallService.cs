@@ -68,7 +68,7 @@ namespace SimpleCL.Services.Game
                     stallItem.Price = packet.ReadULong();
                     player.Stall.Items.Add(stallItem);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     server.DebugPacket(packet);
                 }

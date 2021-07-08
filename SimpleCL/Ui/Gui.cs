@@ -6,6 +6,7 @@ using SimpleCL.Enums.Server;
 using SimpleCL.Models;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Skills;
+using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Ui
 {
@@ -20,31 +21,71 @@ namespace SimpleCL.Ui
 
         private readonly LocalPlayer _localPlayer;
 
+        private bool _dataBound;
+
         public Gui()
         {
-            base.DoubleBuffered = true;
-            InitializeComponent();
-
-            FormClosed += ExitApplication;
-
             _localPlayer = LocalPlayer.Get;
-
-            foreach (var server in SilkroadServer.Values)
-            {
-                serverComboBox.Items.Add(server);
-            }
-
-            serverComboBox.SelectedIndex = 0;
-
-            usernameBox.Text = Credentials.Username;
-            passwordBox.Text = Credentials.Password;
-
-            InitAttackTab();
-            InitBuffsGrid();
-            InitInventories();
-            InitMapTimers();
             
-            CenterToScreen();
+            this.InvokeLater(() =>
+            {
+                base.DoubleBuffered = true;
+                InitializeComponent();
+
+                FormClosed += ExitApplication;
+
+                foreach (var server in SilkroadServer.Values)
+                {
+                    serverComboBox.Items.Add(server);
+                }
+
+                serverComboBox.SelectedIndex = 0;
+                GameDatabase.Get.SelectedServer = (SilkroadServer) serverComboBox.SelectedItem;
+
+                usernameBox.Text = Credentials.Username;
+                passwordBox.Text = Credentials.Password;
+
+                InitAttackTab();
+                InitBuffsGrid();
+                InitInventories();
+                InitMapTimers();
+            
+                CenterToScreen();
+            });
+        }
+
+        public void InitBindings()
+        {
+            if (_dataBound)
+            {
+                return;
+            }
+            
+            nameLabelValue.DataBindings.Add("Text", _localPlayer, "Name");
+            jobNameLabelValue.DataBindings.Add("Text", _localPlayer, "JobName");
+
+            hpProgressBar.DataBindings.Add("Maximum", _localPlayer, "MaxHp");
+            mpProgressBar.DataBindings.Add("Maximum", _localPlayer, "MaxMp");
+            hpProgressBar.DataBindings.Add("Value", _localPlayer, "Hp");
+            mpProgressBar.DataBindings.Add("Value", _localPlayer, "Mp");
+            
+            expProgressBar.DataBindings.Add("Value", _localPlayer, "ExpPercent");
+            expProgressBar.DataBindings.Add("CustomText", _localPlayer, "ExpPercentString");
+            jobExpProgressBar.DataBindings.Add("Value", _localPlayer, "JobExpPercent");
+            jobExpProgressBar.DataBindings.Add("CustomText", _localPlayer, "JobExpPercentString");
+            
+            levelLabelValue.DataBindings.Add("Text", _localPlayer, "Level");
+            jobLevelLabelValue.DataBindings.Add("Text", _localPlayer, "JobLevel");
+            
+            spLabelValue.DataBindings.Add("Text", _localPlayer, "SkillpointsString");
+            goldLabelValue.DataBindings.Add("Text", _localPlayer, "GoldString");
+            
+            localCoordsLabelValue.DataBindings.Add("Text", _localPlayer, "LocalPoint");
+            currLocalLabelValue.DataBindings.Add("Text", _localPlayer, "LocalPoint");
+            
+            worldCoordsLabelValue.DataBindings.Add("Text", _localPlayer, "WorldPoint");
+            currWorldLabelValue.DataBindings.Add("Text", _localPlayer, "WorldPoint");
+            _dataBound = true;
         }
 
         public void ToggleControls(bool enabled)

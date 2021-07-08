@@ -99,7 +99,7 @@ namespace SimpleCL.Network
         {
             Inject(new Packet(Opcodes.HEARTBEAT));
 
-            Program.Gui.RefreshGui();
+            // Program.Gui.RefreshGui();
         }
 
         public void Disconnect()

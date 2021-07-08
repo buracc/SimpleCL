@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using SimpleCL.Database;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Quests;
 using SimpleCL.Enums.Server;
@@ -23,6 +20,7 @@ namespace SimpleCL.Services.Game
     {
         private readonly SilkroadServer _silkroadServer;
         private readonly Gateway _gateway;
+        private readonly LocalPlayer _localPlayer = LocalPlayer.Get;
 
         public LocalPlayerService(SilkroadServer silkroadServer, Gateway gateway)
         {
@@ -38,23 +36,21 @@ namespace SimpleCL.Services.Game
             _gateway?.Dispose();
             Program.Gui.ClearMarkers();
             Program.Gui.ClearTiles();
-            
-            var local = LocalPlayer.Get;
 
             var serverTime = packet.ReadUInt();
             var refObjId = packet.ReadUInt();
             var scale = packet.ReadByte();
-            local.Level = packet.ReadByte();
+            _localPlayer.Level = packet.ReadByte();
             var maxLevel = packet.ReadByte();
-            local.ExpGained = packet.ReadULong();
+            _localPlayer.ExpGained = packet.ReadULong();
             var spOffset = packet.ReadUInt();
-            local.Gold = packet.ReadULong();
-            local.Skillpoints = packet.ReadUInt();
+            _localPlayer.Gold = packet.ReadULong();
+            _localPlayer.Skillpoints = packet.ReadUInt();
             var statPoint = packet.ReadUShort();
             var zerkPoints = packet.ReadByte();
             var gatheredExp = packet.ReadUInt(); // GatheredExp according to DaxterSoul, but it's wrong on TRSRO
-            local.MaxHp = packet.ReadUInt();
-            local.MaxMp = packet.ReadUInt();
+            _localPlayer.MaxHp = packet.ReadUInt();
+            _localPlayer.MaxMp = packet.ReadUInt();
             var icon = packet.ReadByte();
             var dailyPk = packet.ReadByte();
             var totalPk = packet.ReadUShort();
@@ -75,12 +71,12 @@ namespace SimpleCL.Services.Game
 
             foreach (var inventoryItem in inv.Where(x => x.Slot > 12))
             {
-                local.Inventory.Add(inventoryItem);
+                _localPlayer.Inventory.Add(inventoryItem);
             }
 
             foreach (var equipment in inv.Where(x => x.Slot < 13))
             {
-                local.EquipmentInventory.Add(equipment);
+                _localPlayer.EquipmentInventory.Add(equipment);
             }
 
             var avatarInventorySize = packet.ReadByte();
@@ -89,7 +85,7 @@ namespace SimpleCL.Services.Game
             var avatars = ParseInventory(packet, avatarInventoryCount, _silkroadServer.Locale, false);
             foreach (var avatar in avatars)
             {
-                local.AvatarInventory.Add(avatar);
+                _localPlayer.AvatarInventory.Add(avatar);
             }
 
             if (_silkroadServer.Locale.IsInternational())
@@ -113,7 +109,7 @@ namespace SimpleCL.Services.Game
                 var jobEquipment = ParseInventory(packet, jobInventoryCount, _silkroadServer.Locale, false);
                 foreach (var jobEquip in jobEquipment)
                 {
-                    local.JobEquipmentInventory.Add(jobEquip);
+                    _localPlayer.JobEquipmentInventory.Add(jobEquip);
                 }
             }
 
@@ -123,7 +119,7 @@ namespace SimpleCL.Services.Game
             while (nextMastery)
             {
                 var mastery = new Mastery(packet.ReadUInt()) {Level = packet.ReadByte()};
-                local.Masteries.Add(mastery);
+                _localPlayer.Masteries.Add(mastery);
                 nextMastery = packet.ReadByte() == 1;
             }
 
@@ -134,7 +130,7 @@ namespace SimpleCL.Services.Game
             while (nextSkill)
             {
                 var skill = new CharacterSkill(packet.ReadUInt()) {Enabled = packet.ReadByte() == 1};
-                local.Skills.Add(skill);
+                _localPlayer.Skills.Add(skill);
                 nextSkill = packet.ReadByte() == 1;
             }
 
@@ -198,7 +194,7 @@ namespace SimpleCL.Services.Game
                 var bookPageCount = packet.ReadUInt();
             });
 
-            local.Uid = packet.ReadUInt();
+            _localPlayer.Uid = packet.ReadUInt();
             var localPoint = new LocalPoint(
                 packet.ReadUShort(),
                 packet.ReadFloat(),
@@ -206,10 +202,10 @@ namespace SimpleCL.Services.Game
                 packet.ReadFloat()
             );
 
-            local.Angle = packet.ReadUShort();
+            _localPlayer.Angle = packet.ReadUShort();
 
             var destinationSet = packet.ReadByte() == 1;
-            local.WalkMode = (Actor.Movement.Mode) packet.ReadByte();
+            _localPlayer.WalkMode = (Actor.Movement.Mode) packet.ReadByte();
 
             if (destinationSet)
             {
@@ -231,19 +227,19 @@ namespace SimpleCL.Services.Game
             else
             {
                 var movementType = packet.ReadByte();
-                local.Angle = packet.ReadUShort();
+                _localPlayer.Angle = packet.ReadUShort();
             }
 
             var lifeState = packet.ReadByte();
             packet.ReadByte();
-            local.Motion = (Actor.Movement.Motion) packet.ReadByte();
+            _localPlayer.Motion = (Actor.Movement.Motion) packet.ReadByte();
             var status = packet.ReadByte();
 
             packet.ReadByte(); // idk what position, but there is an unknown byte before walkspeed
 
-            local.WalkSpeed = packet.ReadFloat();
-            local.RunSpeed = packet.ReadFloat();
-            local.ZerkSpeed = packet.ReadFloat();
+            _localPlayer.WalkSpeed = packet.ReadFloat();
+            _localPlayer.RunSpeed = packet.ReadFloat();
+            _localPlayer.ZerkSpeed = packet.ReadFloat();
             var buffCount = packet.ReadByte();
             buffCount.Repeat(i =>
             {
@@ -255,21 +251,21 @@ namespace SimpleCL.Services.Game
                     var isBuffOwner = packet.ReadByte();
                     if (isBuffOwner == 1)
                     {
-                        buff.CasterUid = local.Uid;
+                        buff.CasterUid = _localPlayer.Uid;
                     }
                 }
 
-                buff.TargetUid = local.Uid;
-                local.Buffs.Add(buff);
+                buff.TargetUid = _localPlayer.Uid;
+                _localPlayer.Buffs.Add(buff);
             });
 
-            local.Name = packet.ReadAscii();
-            local.JobName = packet.ReadAscii();
+            _localPlayer.Name = packet.ReadAscii();
+            _localPlayer.JobName = packet.ReadAscii();
             packet.ReadByte();
             packet.ReadByte();
             var jobType = packet.ReadByte();
-            local.JobLevel = packet.ReadByte();
-            local.JobExpGained = packet.ReadUInt();
+            _localPlayer.JobLevel = packet.ReadByte();
+            _localPlayer.JobExpGained = packet.ReadUInt();
             var jobContribution = packet.ReadUInt();
             var jobReward = packet.ReadUInt();
             var pvpState = packet.ReadByte();
@@ -288,12 +284,13 @@ namespace SimpleCL.Services.Game
             packet.ReadByte();
             var jid = packet.ReadUInt();
 
-            local.LocalPoint = localPoint;
+            _localPlayer.LocalPoint = localPoint;
 
             Program.Gui.RefreshMap(true);
-            Entities.Spawned(local);
+            Entities.Spawned(_localPlayer);
+            Program.Gui.InitBindings();
 
-            server.Log("Successfully joined the game");
+            server.Log("Character spawned");
         }
 
         #endregion
@@ -321,8 +318,21 @@ namespace SimpleCL.Services.Game
             var magDef = packet.ReadUShort();
             var hitRate = packet.ReadUShort();
             var parry = packet.ReadUShort();
-            LocalPlayer.Get.MaxHp = packet.ReadUInt();
-            LocalPlayer.Get.MaxMp = packet.ReadUInt();
+            var maxHp = packet.ReadUInt();
+            
+            if (_localPlayer.Hp > maxHp)
+            {
+                _localPlayer.Hp = maxHp;
+            }
+            _localPlayer.MaxHp = maxHp;
+            
+            var maxMp = packet.ReadUInt();
+            if (_localPlayer.Mp > maxMp)
+            {
+                _localPlayer.Mp = maxMp;
+            }
+            _localPlayer.MaxMp = maxMp;
+            
             var str = packet.ReadUShort();
             var intellect = packet.ReadUShort();
         }
@@ -339,12 +349,12 @@ namespace SimpleCL.Services.Game
             {
                 // Gold changed
                 case 1:
-                    LocalPlayer.Get.Gold = packet.ReadULong();
+                    _localPlayer.Gold = packet.ReadULong();
                     break;
 
                 // Sp changed
                 case 2:
-                    LocalPlayer.Get.Skillpoints = packet.ReadUInt();
+                    _localPlayer.Skillpoints = packet.ReadUInt();
                     break;
                 // Zerk points
                 case 4:
@@ -388,7 +398,7 @@ namespace SimpleCL.Services.Game
             var slot = packet.ReadByte();
             var quantity = packet.ReadUShort();
 
-            var inventory = LocalPlayer.Get.Inventory;
+            var inventory = _localPlayer.Inventory;
             var changedItem = inventory.FirstOrDefault(x => x.Slot == slot);
             if (changedItem == null)
             {
