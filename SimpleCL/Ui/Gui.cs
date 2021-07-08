@@ -6,6 +6,7 @@ using SimpleCL.Enums.Server;
 using SimpleCL.Models;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Skills;
+using SimpleCL.Ui.Components;
 using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Ui
@@ -119,6 +120,11 @@ namespace SimpleCL.Ui
         public bool DebugAgent()
         {
             return debugAgCheckbox.Checked;
+        }
+
+        public Map GetMap()
+        {
+            return minimap;
         }
     }
 }

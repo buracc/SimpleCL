@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Drawing;
 using System.Runtime.CompilerServices;
 using SimpleCL.Annotations;
 using SimpleCL.Database;
-using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities.Fortress;
 using SimpleCL.Models.Entities.Fortress.Structure;
@@ -18,11 +17,23 @@ namespace SimpleCL.Models.Entities
 {
     public class Entity : ILocatable, IIdentifiable, INotifyPropertyChanged
     {
+        #region Members
+
         private LocalPoint _localPoint;
         private string _name;
 
+        #endregion
+
+        #region Properties
+
         public readonly uint Id;
         public readonly string ServerName;
+        public readonly byte TypeId1;
+        public readonly byte TypeId2;
+        public readonly byte TypeId3;
+        public readonly byte TypeId4;
+        
+        public uint Uid { get; set; }
 
         public string Name
         {
@@ -33,12 +44,7 @@ namespace SimpleCL.Models.Entities
                 OnPropertyChanged(nameof(Name));
             }
         }
-
-        public readonly byte TypeId1;
-        public readonly byte TypeId2;
-        public readonly byte TypeId3;
-        public readonly byte TypeId4;
-
+        
         public LocalPoint LocalPoint
         {
             get => _localPoint;
@@ -47,14 +53,33 @@ namespace SimpleCL.Models.Entities
                 _localPoint = value;
                 OnPropertyChanged(nameof(LocalPoint));
                 OnPropertyChanged(nameof(WorldPoint));
+                OnPropertyChanged(nameof(MapLocation));
+            }
+        }
+        
+        public WorldPoint WorldPoint => WorldPoint.FromLocal(LocalPoint);
+        
+        protected readonly NameValueCollection DatabaseData;
+
+        #endregion
+
+        #region UI Properties
+
+        public Size MarkerSize { get; set; }
+        public Point MapLocation
+        {
+            get
+            {
+                var point = Program.Gui.GetMap().GetPoint(WorldPoint);
+                point.X -= MarkerSize.Width / 2;
+                point.Y -= MarkerSize.Height / 2;
+                return point;
             }
         }
 
-        public uint Uid { get; set; }
+        #endregion
 
-        public WorldPoint WorldPoint => WorldPoint.FromLocal(LocalPoint);
-
-        protected readonly NameValueCollection DatabaseData;
+        #region Constructor
 
         public Entity(uint id, string serverName, byte typeId1, byte typeId2, byte typeId3, byte typeId4, string name)
         {
@@ -113,6 +138,10 @@ namespace SimpleCL.Models.Entities
                 throw new EntityParseException("Failed to parse entity: " + id);
             }
         }
+
+        #endregion
+
+        #region Methods
 
         public static Entity FromId(uint id, QueryBuilder queryBuilder = null)
         {
@@ -305,6 +334,8 @@ namespace SimpleCL.Models.Entities
         {
             return GetType().Name + ": " + Name + " [" + Id + "] [" + Uid + "]";
         }
+
+        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 

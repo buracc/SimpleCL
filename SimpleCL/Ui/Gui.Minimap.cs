@@ -21,7 +21,7 @@ namespace SimpleCL.Ui
             var markerTimer = new Timer(100);
             markerTimer.Elapsed += (_, _) =>
             {
-                RefreshMarkers();
+                // RefreshMarkers();
             };
             
             markerTimer.Start();
@@ -209,10 +209,13 @@ namespace SimpleCL.Ui
 
             marker.Size = marker.Image.Size;
 
-            var location = minimap.GetPoint(entity.WorldPoint);
-            location.X -= marker.Image.Size.Width / 2;
-            location.Y -= marker.Image.Size.Height / 2;
-            marker.Location = location;
+            // var location = minimap.GetPoint(entity.WorldPoint);
+            // location.X -= marker.Image.Size.Width / 2;
+            // location.Y -= marker.Image.Size.Height / 2;
+            // marker.Location = location;
+
+            entity.MarkerSize = marker.Image.Size;
+            marker.DataBindings.Add("Location", entity, "MapLocation");
 
             marker.Tag = entity;
 
@@ -271,11 +274,6 @@ namespace SimpleCL.Ui
         public void ClearTiles()
         {
             minimap.RemoveTiles();
-        }
-
-        public void RefreshMarkers()
-        {
-            minimap.UpdateMarkerLocations();
         }
 
         public void RemoveMinimapMarker(uint uid)
