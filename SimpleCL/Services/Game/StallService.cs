@@ -48,26 +48,14 @@ namespace SimpleCL.Services.Game
             byte slot;
             while ((slot = packet.ReadByte()) != byte.MaxValue)
             {
-                try
-                {
-                    var stallItem = new StallItem();
-                    var item = LocalPlayerService.ParseItem(packet, _silkroadServer.Locale);
-                    if (item == null)
-                    {
-                        return;
-                    }
-
-                    stallItem.Item = item;
-                    stallItem.Slot = slot;
-                    var inventorySlot = packet.ReadByte();
-                    stallItem.Quantity = packet.ReadUShort();
-                    stallItem.Price = packet.ReadULong();
-                    player.Stall.Items.Add(stallItem);
-                }
-                catch (Exception)
-                {
-                    server.DebugPacket(packet);
-                }
+                var stallItem = new StallItem();
+                var item = LocalPlayerService.ParseItem(packet, _silkroadServer.Locale, true);
+                stallItem.Item = item;
+                stallItem.Slot = slot;
+                var inventorySlot = packet.ReadByte();
+                stallItem.Quantity = packet.ReadUShort();
+                stallItem.Price = packet.ReadULong();
+                player.Stall.Items.Add(stallItem);
             }
 
             Task.Run(() =>

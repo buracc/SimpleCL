@@ -121,7 +121,6 @@ namespace SimpleCL.Services.Game
             catch (EntityParseException e)
             {
                 server.DebugPacket(packet);
-                Console.WriteLine(e);
                 return;
             }
 
@@ -149,7 +148,7 @@ namespace SimpleCL.Services.Game
                         server.DebugPacket(packet);
                         return;
                     }
-                    
+
                     break;
                 }
 
@@ -373,9 +372,19 @@ namespace SimpleCL.Services.Game
                         try
                         {
                             var refSkillId = packet.ReadUInt();
-                            var buff = new Buff(refSkillId) {RemainingDuration = packet.ReadUInt()};
+                            var buff = new Buff(refSkillId);
 
-                            if (buff.IsAutoTransfer())
+                            if (buff.IsBardAreaBuff())
+                            {
+                                buff.Uid = packet.ReadUInt();
+                                var isBuffOwner = packet.ReadBool();
+                            }
+                            else
+                            {
+                                buff.RemainingDuration = packet.ReadUInt();
+                            }
+
+                            if (buff.IsRecoveryDivision())
                             {
                                 var isBuffOwner = packet.ReadByte();
                                 if (isBuffOwner == 1)
@@ -389,7 +398,6 @@ namespace SimpleCL.Services.Game
                         }
                         catch (EntityParseException)
                         {
-                            Console.WriteLine("failed to parse player buff");
                             server.DebugPacket(packet);
                             throw;
                         }

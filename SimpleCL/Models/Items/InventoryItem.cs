@@ -5,6 +5,7 @@ using System.IO;
 using SimpleCL.Database;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Interaction;
+using SimpleCL.Models.Exceptions;
 using SimpleCL.SecurityApi;
 
 namespace SimpleCL.Models.Items
@@ -46,8 +47,7 @@ namespace SimpleCL.Models.Items
             var data = GameDatabase.Get.GetItemData(id);
             if (data == null)
             {
-                Console.WriteLine("Couldn't parse inventory item with id " + id);
-                return;
+                throw new EntityParseException("Couldn't parse inventory item with id " + id);
             }
 
             Id = id;

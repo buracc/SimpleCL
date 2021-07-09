@@ -247,13 +247,19 @@ namespace SimpleCL.Services.Game
                 var refSkillId = packet.ReadUInt();
                 var buff = new Buff(refSkillId) {RemainingDuration = packet.ReadUInt()};
 
-                if (buff.Attributes.Contains((uint) SkillData.Attribute.AutoTransferEffect))
+                if (buff.IsRecoveryDivision())
                 {
                     var isBuffOwner = packet.ReadByte();
                     if (isBuffOwner == 1)
                     {
                         buff.CasterUid = _localPlayer.Uid;
                     }
+                }
+
+                if (buff.IsBardAreaBuff())
+                {
+                    buff.Uid = packet.ReadUInt();
+                    var isBuffOwner = packet.ReadByte();
                 }
 
                 buff.TargetUid = _localPlayer.Uid;
@@ -475,6 +481,7 @@ namespace SimpleCL.Services.Game
             {
                 case 1:
                 case 4: // job gear
+                case 5:
                     var plus = packet.ReadByte();
                     var variance = packet.ReadULong();
                     var dura = packet.ReadUInt();
@@ -492,8 +499,8 @@ namespace SimpleCL.Services.Game
                     sockets.Repeat(j =>
                     {
                         var socketSlot = packet.ReadByte();
+                        var socketParam = packet.ReadUInt();
                         var socketId = packet.ReadUInt();
-                        var socketParam = packet.ReadByte();
                     });
 
                     // 2 = adv elixirs

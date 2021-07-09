@@ -29,9 +29,25 @@ namespace SimpleCL.Models.Skills
         {
         }
 
-        public bool IsAutoTransfer()
+        public bool IsRecoveryDivision()
         {
-            return Attributes.Any(x => x == (uint) SkillData.Attribute.AutoTransferEffect);
+            return Attributes.Contains(SkillData.Attribute.Timed) 
+                   && Attributes.Contains(SkillData.Attribute.OverTime)
+                   && Attributes.Contains(SkillData.Attribute.AreaEffect)
+                   && Attributes.Contains(SkillData.Attribute.HpMpRecovery)
+                   && Attributes.Contains(SkillData.Attribute.HealWeaponReflect);
+        }
+
+        public bool IsBardAreaBuff()
+        {
+            return Attributes.Contains(SkillData.Attribute.ActiveMpConsumed) 
+                   && Attributes.Contains(SkillData.Attribute.AreaEffect)
+                   && Attributes.Contains(SkillData.Attribute.RequiredItem);
+        }
+
+        public bool IsTimed()
+        {
+            return Attributes.Contains(SkillData.Attribute.Timed);
         }
     }
 }

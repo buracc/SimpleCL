@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SimpleCL.Database;
 using SimpleCL.Enums.Commons;
@@ -29,7 +30,7 @@ namespace SimpleCL.Models.Skills
         public readonly ushort Level;
         public readonly string Icon;
         public readonly string Description;
-        public readonly uint[] Attributes;
+        public readonly List<SkillData.Attribute> Attributes;
         public readonly ushort RequiredGroupId1;
         public readonly ushort RequiredGroupId2;
         public readonly ushort RequiredGroupId3;
@@ -65,7 +66,8 @@ namespace SimpleCL.Models.Skills
             Level = ushort.Parse(data["level"]);
             Icon = data["icon"];
             Description = data["description"];
-            Attributes = Array.ConvertAll(data["attributes"].Split(','), uint.Parse);
+            Attributes = Array.ConvertAll(data["attributes"].Split(','), uint.Parse)
+                .Select(x => (SkillData.Attribute) x).ToList();
             RequiredGroupId1 = ushort.Parse(data["requiredlearn_1"]);
             RequiredGroupId2 = ushort.Parse(data["requiredlearn_2"]);
             RequiredGroupId3 = ushort.Parse(data["requiredlearn_3"]);
@@ -110,12 +112,12 @@ namespace SimpleCL.Models.Skills
         
         public bool IsResSkill()
         {
-            return Attributes.Any(x => x == (uint) SkillData.Attribute.Resurrection);
+            return Attributes.Exists(x => x == SkillData.Attribute.Resurrection);
         }
         
         public bool IsAttackSkill()
         {
-            return Attributes.Any(x => x == (uint) SkillData.Attribute.Attack);
+            return Attributes.Exists(x => x == SkillData.Attribute.Attack);
         }
 
         public override string ToString()
