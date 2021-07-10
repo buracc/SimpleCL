@@ -72,12 +72,12 @@ namespace SimpleCL.Services.Game
 
             foreach (var inventoryItem in inv.Where(x => x.Slot > 12))
             {
-                _localPlayer.Inventory.Add(inventoryItem);
+                Program.Gui.InvokeLater(() => { _localPlayer.Inventory.Add(inventoryItem); });
             }
 
             foreach (var equipment in inv.Where(x => x.Slot < 13))
             {
-                _localPlayer.EquipmentInventory.Add(equipment);
+                Program.Gui.InvokeLater(() => { _localPlayer.EquipmentInventory.Add(equipment); });
             }
 
             var avatarInventorySize = packet.ReadByte();
@@ -86,7 +86,7 @@ namespace SimpleCL.Services.Game
             var avatars = ParseInventory(packet, avatarInventoryCount, _silkroadServer.Locale, false);
             foreach (var avatar in avatars)
             {
-                _localPlayer.AvatarInventory.Add(avatar);
+                Program.Gui.InvokeLater(() => { _localPlayer.AvatarInventory.Add(avatar); });
             }
 
             if (_silkroadServer.Locale.IsInternational())
@@ -110,7 +110,7 @@ namespace SimpleCL.Services.Game
                 var jobEquipment = ParseInventory(packet, jobInventoryCount, _silkroadServer.Locale, false);
                 foreach (var jobEquip in jobEquipment)
                 {
-                    _localPlayer.JobEquipmentInventory.Add(jobEquip);
+                    Program.Gui.InvokeLater(() => { _localPlayer.JobEquipmentInventory.Add(jobEquip); });
                 }
             }
 

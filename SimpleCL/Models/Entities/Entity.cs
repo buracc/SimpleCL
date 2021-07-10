@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Runtime.CompilerServices;
 using SimpleCL.Annotations;
 using SimpleCL.Database;
+using SimpleCL.Enums;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities.Fortress;
 using SimpleCL.Models.Entities.Fortress.Structure;
@@ -50,7 +51,14 @@ namespace SimpleCL.Models.Entities
             get => _localPoint;
             set
             {
+                var old = _localPoint;
                 _localPoint = value;
+
+                if (_localPoint.Equals(old))
+                {
+                    return;
+                }
+                
                 OnPropertyChanged(nameof(LocalPoint));
                 OnPropertyChanged(nameof(WorldPoint));
                 OnPropertyChanged(nameof(MapLocation));
@@ -101,7 +109,7 @@ namespace SimpleCL.Models.Entities
                 case uint.MaxValue:
                     return;
                 case > ushort.MaxValue:
-                    throw new EntityParseException("Entity id longer than expected: " + id);
+                    throw new EntityParseException(id);
             }
 
             if ((DatabaseData = GameDatabase.Get.GetModel(id, queryBuilder)) != null)
@@ -124,18 +132,18 @@ namespace SimpleCL.Models.Entities
 
             if (DatabaseData != null)
             {
-                var tid2 = TypeId1 == 3 ? "tid1" : "tid2";
-                var tid3 = TypeId1 == 3 ? "tid2" : "tid3";
-                var tid4 = TypeId1 == 3 ? "tid3" : "tid4";
-                ServerName = DatabaseData["servername"];
-                Name = this is Player ? "Weed" : DatabaseData["name"];
+                var tid2 = TypeId1 == 3 ? Constants.Strings.Tid1 : Constants.Strings.Tid2;
+                var tid3 = TypeId1 == 3 ? Constants.Strings.Tid2 : Constants.Strings.Tid3;
+                var tid4 = TypeId1 == 3 ? Constants.Strings.Tid3 : Constants.Strings.Tid4;
+                ServerName = DatabaseData[Constants.Strings.ServerName];
+                Name = DatabaseData[Constants.Strings.Name];
                 TypeId2 = byte.Parse(DatabaseData[tid2]);
                 TypeId3 = byte.Parse(DatabaseData[tid3]);
                 TypeId4 = byte.Parse(DatabaseData[tid4]);
             }
             else
             {
-                throw new EntityParseException("Failed to parse entity: " + id);
+                throw new EntityParseException(id);
             }
         }
 
@@ -341,9 +349,18 @@ namespace SimpleCL.Models.Entities
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            var gui = Program.Gui;
+            if (gui == null)
+            {
+                return;
+            }
+
+            Program.Gui.InvokeLater(() =>
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            });
         }
     }
 }

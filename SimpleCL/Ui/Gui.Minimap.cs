@@ -249,7 +249,6 @@ namespace SimpleCL.Ui
         {
             if (!minimap.Markers.ContainsKey(_localPlayer.Uid))
             {
-                Console.WriteLine(_localPlayer.Uid);
                 return;
             }
 
@@ -282,16 +281,6 @@ namespace SimpleCL.Ui
             {
                 Console.WriteLine(e);
             }
-        }
-
-        public void ClearMarkers()
-        {
-            minimap.ClearMarkers();
-        }
-        
-        public void ClearTiles()
-        {
-            minimap.RemoveTiles();
         }
 
         public void RemoveMinimapMarker(uint uid)

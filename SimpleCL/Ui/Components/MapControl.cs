@@ -66,17 +66,10 @@ namespace SimpleCL.Ui.Components
         {
             // Do not paint background
         }
-
-        public void RePaint()
+        
+        public void Destroy()
         {
-            try
-            {
-                RecreateHandle();
-            }
-            catch
-            {
-                // ignored
-            }
+            Parent.Controls.Remove(this);
         }
     }
 }

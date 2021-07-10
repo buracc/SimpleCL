@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Threading;
-using SimpleCL.Models.Character;
+﻿using System.ComponentModel;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Skills;
 using Timer = System.Timers.Timer;

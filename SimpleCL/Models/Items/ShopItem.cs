@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using SimpleCL.Database;
+using SimpleCL.Enums;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Events;
 using SimpleCL.Interaction;
@@ -27,9 +28,9 @@ namespace SimpleCL.Models.Items
             }
 
             Quantity = 1;
-            Price = uint.Parse(nvc["price"]);
-            Tab = byte.Parse(shopData["tab"]);
-            Slot = byte.Parse(shopData["slot"]);
+            Price = uint.Parse(nvc[Constants.Strings.Price]);
+            Tab = byte.Parse(shopData[Constants.Strings.Tab]);
+            Slot = byte.Parse(shopData[Constants.Strings.Slot]);
         }
 
         public void Purchase(int amount)

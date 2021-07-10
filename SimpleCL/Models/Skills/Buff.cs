@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
-using System.Linq;
+using SimpleCL.Enums;
 using SimpleCL.Enums.Skills;
 
 namespace SimpleCL.Models.Skills
 {
     public class Buff : Skill
     {
-        public new Image Icon => Image.FromFile(Directory.GetCurrentDirectory() + "/Icon/" + base.Icon.Replace(".ddj", ".png"));
+        public new Image Icon => Image.FromFile(Directory.GetCurrentDirectory() + Constants.Paths.Icons + base.Icon.Replace(Constants.Strings.Ddj, Constants.Strings.Png));
         public string BuffName => Name;
         [Browsable(false)]
         public uint Uid { get; set; }

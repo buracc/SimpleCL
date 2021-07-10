@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using SimpleCL.Annotations;
+using SimpleCL.Enums;
 using SimpleCL.Enums.Commons;
 using SimpleCL.SecurityApi;
 
@@ -15,7 +16,7 @@ namespace SimpleCL.Models.Entities.Exchange
         public string Description { get; set; }
         public ulong PlayerUid { get; set; }
 
-        public string Status => Opened ? "Opened" : "Modifying";
+        public string Status => Opened ? Constants.Strings.Opened : Constants.Strings.Modifying;
 
         public bool Opened
         {

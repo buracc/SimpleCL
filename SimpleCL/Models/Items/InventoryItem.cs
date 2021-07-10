@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using SimpleCL.Database;
+using SimpleCL.Enums;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Interaction;
 using SimpleCL.Models.Exceptions;
@@ -47,18 +48,18 @@ namespace SimpleCL.Models.Items
             var data = GameDatabase.Get.GetItemData(id);
             if (data == null)
             {
-                throw new EntityParseException("Couldn't parse inventory item with id " + id);
+                throw new EntityParseException(id);
             }
 
             Id = id;
-            ServerName = data["servername"];
-            Name = data["name"];
+            ServerName = data[Constants.Strings.ServerName];
+            Name = data[Constants.Strings.Name];
             TypeId1 = 3;
-            TypeId2 = byte.Parse(data["tid1"]);
-            TypeId3 = byte.Parse(data["tid2"]);
-            TypeId4 = byte.Parse(data["tid3"]);
-            CashItem = byte.Parse(data["cash_item"]) == 1;
-            Icon = Image.FromFile(Directory.GetCurrentDirectory() + "/Icon/" + data["icon"].Replace(".ddj", ".png"));
+            TypeId2 = byte.Parse(data[Constants.Strings.Tid1]);
+            TypeId3 = byte.Parse(data[Constants.Strings.Tid2]);
+            TypeId4 = byte.Parse(data[Constants.Strings.Tid3]);
+            CashItem = byte.Parse(data[Constants.Strings.CashItem]) == 1;
+            Icon = Image.FromFile(Directory.GetCurrentDirectory() + Constants.Paths.Icons + data[Constants.Strings.Icon].Replace(Constants.Strings.Ddj, Constants.Strings.Png));
         }
 
         public static InventoryItem FromId(uint id)

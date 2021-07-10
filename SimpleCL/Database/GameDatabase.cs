@@ -5,6 +5,7 @@ using System.Data.SQLite;
 using System.Globalization;
 using System.IO;
 using Newtonsoft.Json;
+using SimpleCL.Enums;
 using SimpleCL.Enums.Server;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Util;
@@ -35,6 +36,7 @@ namespace SimpleCL.Database
         private readonly Dictionary<uint, NameValueCollection> _skillCache;
         private readonly Dictionary<uint, NameValueCollection> _masteryCache;
         private readonly Dictionary<uint, List<NameValueCollection>> _teleportCache;
+        private readonly Dictionary<uint, List<NameValueCollection>> _shopCache;
         private readonly Dictionary<uint, NameValueCollection> _priceCache;
         public readonly Dictionary<uint, List<SpawnPoint>> SpawnPoints = new();
 
@@ -45,8 +47,11 @@ namespace SimpleCL.Database
             _skillCache = LoadFromCache("skills");
             _masteryCache = LoadFromCache("masteries");
             _priceCache = LoadFromCache("prices");
-            _teleportCache = LoadCachedTeleports("teleports");
+            _teleportCache = LoadListFromCache("teleports");
+            _shopCache = LoadListFromCache("shops");
         }
+
+        #region Retrieve data
 
         private List<NameValueCollection> GetData(string sql, string dbNameExtra = "_DB")
         {
@@ -78,11 +83,19 @@ namespace SimpleCL.Database
             return data;
         }
 
-        public List<NameValueCollection> GetShop(uint npcId)
+        #endregion
+
+        #region Game data
+
+        public uint GetGameVersion()
         {
-            var data = GetData("SELECT * FROM npcgoods WHERE model = " + npcId);
-            return data.IsEmpty() ? new List<NameValueCollection>() : data;
+            var result = GetData("SELECT * FROM data WHERE k = 'version'");
+            return result.IsEmpty() ? 0 : uint.Parse(result[0]["v"]);
         }
+
+        #endregion
+
+        #region Exp
 
         public ulong GetNextLevelExp(byte level)
         {
@@ -101,6 +114,10 @@ namespace SimpleCL.Database
             var data = GetData("SELECT * FROM leveldata WHERE level = " + level);
             return data.IsEmpty() ? 0 : ulong.Parse(data[0]["fellow"]);
         }
+
+        #endregion
+
+        #region Items
 
         public NameValueCollection GetItemData(uint id, QueryBuilder queryBuilder = null)
         {
@@ -127,6 +144,66 @@ namespace SimpleCL.Database
 
             return _itemCache[id] = result[0];
         }
+        
+        public NameValueCollection GetItemPrice(uint id, QueryBuilder queryBuilder = null)
+        {
+            if (_priceCache.ContainsKey(id))
+            {
+                return _priceCache[id];
+            }
+
+            List<NameValueCollection> result;
+            if (queryBuilder != null)
+            {
+                result = queryBuilder.Query("SELECT * FROM items_ext WHERE id = " + id)
+                    .ExecuteSelect(false);
+            }
+            else
+            {
+                result = GetData("SELECT * FROM items_ext WHERE id = " + id);
+            }
+
+            if (result.IsEmpty())
+            {
+                return _priceCache[id] = null;
+            }
+
+            return _priceCache[id] = result[0];
+        }
+
+        #endregion
+
+        #region Shops
+
+        public List<NameValueCollection> GetShop(uint npcId, QueryBuilder queryBuilder = null)
+        {
+            if (_shopCache.ContainsKey(npcId))
+            {
+                return _shopCache[npcId];
+            }
+
+            List<NameValueCollection> result;
+            if (queryBuilder != null)
+            {
+                result = queryBuilder.Query("SELECT * FROM npcgoods WHERE model = " + npcId)
+                    .ExecuteSelect(false);
+            }
+            else
+            {
+                result = GetData("SELECT * FROM npcgoods WHERE model = " + npcId);
+            }
+
+            if (result.IsEmpty())
+            {
+                return _shopCache[npcId] = new List<NameValueCollection>();
+            }
+
+            return _shopCache[npcId] = result;
+        }
+
+        #endregion
+
+        #region Magic options
 
         public NameValueCollection GetMagicOption(uint id, QueryBuilder queryBuilder = null)
         {
@@ -143,6 +220,10 @@ namespace SimpleCL.Database
 
             return result.IsEmpty() ? null : result[0];
         }
+
+        #endregion
+
+        #region Skills
 
         public NameValueCollection GetSkill(uint id, QueryBuilder queryBuilder = null)
         {
@@ -195,32 +276,10 @@ namespace SimpleCL.Database
 
             return _masteryCache[id] = result[0];
         }
-        
-        public NameValueCollection GetItemPrice(uint id, QueryBuilder queryBuilder = null)
-        {
-            if (_priceCache.ContainsKey(id))
-            {
-                return _priceCache[id];
-            }
 
-            List<NameValueCollection> result;
-            if (queryBuilder != null)
-            {
-                result = queryBuilder.Query("SELECT * FROM items_ext WHERE id = " + id)
-                    .ExecuteSelect(false);
-            }
-            else
-            {
-                result = GetData("SELECT * FROM items_ext WHERE id = " + id);
-            }
+        #endregion
 
-            if (result.IsEmpty())
-            {
-                return _priceCache[id] = null;
-            }
-
-            return _priceCache[id] = result[0];
-        }
+        #region Models
 
         public NameValueCollection GetModel(uint id, QueryBuilder queryBuilder = null)
         {
@@ -248,6 +307,10 @@ namespace SimpleCL.Database
             return _modelCache[id] = result[0];
         }
 
+        #endregion
+
+        #region Teleporters
+
         public List<NameValueCollection> GetTeleportLinks(uint id, QueryBuilder queryBuilder = null)
         {
             if (_teleportCache.ContainsKey(id))
@@ -274,11 +337,9 @@ namespace SimpleCL.Database
             return _teleportCache[id] = result;
         }
 
-        public uint GetGameVersion()
-        {
-            var result = GetData("SELECT * FROM data WHERE k = 'version'");
-            return result.IsEmpty() ? 0 : uint.Parse(result[0]["v"]);
-        }
+        #endregion
+
+        #region Spawns
 
         public void LoadSpawns()
         {
@@ -293,7 +354,7 @@ namespace SimpleCL.Database
                 var x = float.Parse(entry["x"], CultureInfo.InvariantCulture);
                 var y = float.Parse(entry["y"], CultureInfo.InvariantCulture);
                 var z = float.Parse(entry["z"], CultureInfo.InvariantCulture);
-                var name = entry["name"];
+                var name = entry[Constants.Strings.Name];
 
                 if (SpawnPoints.ContainsKey(id))
                 {
@@ -306,6 +367,10 @@ namespace SimpleCL.Database
                 }
             }
         }
+
+        #endregion
+
+        #region Cache writers
 
         public void CacheData()
         {
@@ -320,7 +385,8 @@ namespace SimpleCL.Database
             CacheToFile(_masteryCache, "masteries");
             CacheToFile(_priceCache, "prices");
             
-            CacheTeleportsToFile(_teleportCache, "teleports");
+            CacheListToFile(_teleportCache, "teleports");
+            CacheListToFile(_shopCache, "shops");
         }
 
         public void CacheToFile(Dictionary<uint, NameValueCollection> cache, string fileName)
@@ -341,6 +407,33 @@ namespace SimpleCL.Database
             using var file = File.CreateText("Cache/" + fileName + ".json");
             new JsonSerializer().Serialize(file, values);
         }
+        
+        public void CacheListToFile(Dictionary<uint, List<NameValueCollection>> cache, string fileName)
+        {
+            var values = new Dictionary<uint, List<Dictionary<string, string>>>();
+            foreach (var entry in cache)
+            {
+                if (entry.Value == null)
+                {
+                    values[entry.Key] = new List<Dictionary<string, string>>();
+                }
+                else
+                {
+                    values[entry.Key] = new List<Dictionary<string, string>>();
+                    foreach (var link in entry.Value)
+                    {
+                        values[entry.Key].Add(link.ToDictionary());
+                    }
+                }
+            }
+
+            using var file = File.CreateText("Cache/" + fileName + ".json");
+            new JsonSerializer().Serialize(file, values);
+        }
+
+        #endregion
+
+        #region Cache loaders
 
         public Dictionary<uint, NameValueCollection> LoadFromCache(string fileName)
         {
@@ -400,30 +493,7 @@ namespace SimpleCL.Database
             return new Dictionary<uint, NameValueCollection>();
         }
 
-        public void CacheTeleportsToFile(Dictionary<uint, List<NameValueCollection>> cache, string fileName)
-        {
-            var values = new Dictionary<uint, List<Dictionary<string, string>>>();
-            foreach (var entry in cache)
-            {
-                if (entry.Value == null)
-                {
-                    values[entry.Key] = new List<Dictionary<string, string>>();
-                }
-                else
-                {
-                    values[entry.Key] = new List<Dictionary<string, string>>();
-                    foreach (var link in entry.Value)
-                    {
-                        values[entry.Key].Add(link.ToDictionary());
-                    }
-                }
-            }
-
-            using var file = File.CreateText("Cache/" + fileName + ".json");
-            new JsonSerializer().Serialize(file, values);
-        }
-
-        public Dictionary<uint, List<NameValueCollection>> LoadCachedTeleports(string fileName)
+        public Dictionary<uint, List<NameValueCollection>> LoadListFromCache(string fileName)
         {
             if (!Directory.Exists("Cache"))
             {
@@ -481,5 +551,7 @@ namespace SimpleCL.Database
 
             return new Dictionary<uint, List<NameValueCollection>>();
         }
+
+        #endregion
     }
 }

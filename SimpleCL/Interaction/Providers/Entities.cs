@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -8,21 +8,24 @@ using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
 using SimpleCL.Models.Entities.Teleporters;
 using SimpleCL.Models.Skills;
+using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Interaction.Providers
 {
     public static class Entities
     {
-        public static readonly Dictionary<uint, Entity> AllEntities = new();
+        public static readonly ConcurrentDictionary<uint, Entity> AllEntities = new();
         public static readonly BindingList<ITargetable> TargetableEntities = new();
         private static readonly Dictionary<uint, uint> Buffs = new();
-        
+
         public static void Respawn()
         {
             AllEntities.Clear();
             TargetableEntities.Clear();
             Buffs.Clear();
             LocalPlayer.Get.Buffs.Clear();
+            Program.Gui.ClearMarkers();
+            Program.Gui.ClearTiles();
         }
 
         public static void Spawned(Entity e)
@@ -48,13 +51,17 @@ namespace SimpleCL.Interaction.Providers
                 return;
             }
 
-            AllEntities.TryGetValue(uid, out var removed);
-            if (removed is ITargetable targetable)
+            var remove = AllEntities.TryRemove(uid, out var removedEntity);
+            if (!remove)
+            {
+                return;
+            }
+
+            if (removedEntity is ITargetable targetable)
             {
                 TargetableEntities.Remove(targetable);
             }
 
-            AllEntities.Remove(uid);
             Program.Gui.RemoveMinimapMarker(uid);
         }
 
@@ -70,7 +77,7 @@ namespace SimpleCL.Interaction.Providers
             {
                 return;
             }
-            
+
             if (destination != null)
             {
                 actor.StartMovement(destination);
@@ -100,7 +107,8 @@ namespace SimpleCL.Interaction.Providers
                 return;
             }
 
-            actor.Buffs.Add(buff);
+            Program.Gui.InvokeLater(() => { actor.Buffs.Add(buff); });
+
             Buffs[buff.Uid] = buff.TargetUid;
         }
 
@@ -120,7 +128,7 @@ namespace SimpleCL.Interaction.Providers
             var buffsToRemove = actor.Buffs.Where(x => x.Uid == buffUid).ToList();
             foreach (var buff in buffsToRemove)
             {
-                actor.Buffs.Remove(buff);
+                Program.Gui.InvokeLater(() => actor.Buffs.Remove(buff));
                 Buffs.Remove(buff.Uid);
             }
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using SimpleCL.Database;
+using SimpleCL.Enums;
 using SimpleCL.Enums.Items.Type;
 
 namespace SimpleCL.Models.Skills
@@ -26,8 +27,8 @@ namespace SimpleCL.Models.Skills
 
             Id = uint.Parse(data["id"]);
             GroupIndex = sbyte.Parse(data["group_index"]);
-            Name = data["name"];
-            Description = data["name"];
+            Name = data[Constants.Strings.Name];
+            Description = data[Constants.Strings.Name];
             Type = (MasteryType) Enum.Parse(typeof(MasteryType), data["type"]);
             RequiredWeapons = Array.ConvertAll(data["weapon"].Split(','),
                 x => (EquipmentData.SubType.Weapon) byte.Parse(x));

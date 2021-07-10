@@ -4,7 +4,8 @@ namespace SimpleCL.Models.Exceptions
 {
     public class EntityParseException : SystemException
     {
-        public EntityParseException(string message) : base(message)
+        private const string ErrorMsg = "Couldn't parse entity with id: ";
+        public EntityParseException(uint id) : base(ErrorMsg + id)
         {
         }
     }

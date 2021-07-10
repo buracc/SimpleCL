@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SimpleCL.Database;
+using SimpleCL.Enums;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Items.Type;
 using SimpleCL.Enums.Skills;
@@ -48,36 +49,36 @@ namespace SimpleCL.Models.Skills
 
             if (data == null)
             {
-                throw new EntityParseException("Couldn't parse skill with id: " + id);
+                throw new EntityParseException(id);
             }
 
-            Id = uint.Parse(data["id"]);
-            GroupId = ushort.Parse(data["group_id"]);
-            ServerName = data["servername"];
-            Name = data["name"];
-            CastTime = uint.Parse(data["casttime"]);
-            Cooldown = uint.Parse(data["cooldown"]);
-            Duration = int.Parse(data["duration"]);
-            MasteryId = ushort.Parse(data["mastery"]);
-            SkillGroup = sbyte.Parse(data["skillgroup"]);
-            SkillGroupIndex = sbyte.Parse(data["skillgroup_index"]);
-            SpRequired = uint.Parse(data["sp"]);
-            MpRequired = uint.Parse(data["mp"]);
-            Level = ushort.Parse(data["level"]);
-            Icon = data["icon"];
-            Description = data["description"];
-            Attributes = Array.ConvertAll(data["attributes"].Split(','), uint.Parse)
+            Id = uint.Parse(data[Constants.Strings.Id]);
+            GroupId = ushort.Parse(data[Constants.Strings.GroupId]);
+            ServerName = data[Constants.Strings.ServerName];
+            Name = data[Constants.Strings.Name];
+            CastTime = uint.Parse(data[Constants.Strings.CastTime]);
+            Cooldown = uint.Parse(data[Constants.Strings.Cooldown]);
+            Duration = int.Parse(data[Constants.Strings.Duration]);
+            MasteryId = ushort.Parse(data[Constants.Strings.Mastery]);
+            SkillGroup = sbyte.Parse(data[Constants.Strings.SkillGroup]);
+            SkillGroupIndex = sbyte.Parse(data[Constants.Strings.SkillGroupIndex]);
+            SpRequired = uint.Parse(data[Constants.Strings.Sp]);
+            MpRequired = uint.Parse(data[Constants.Strings.Mp]);
+            Level = ushort.Parse(data[Constants.Strings.Level]);
+            Icon = data[Constants.Strings.Icon];
+            Description = data[Constants.Strings.Description];
+            Attributes = Array.ConvertAll(data[Constants.Strings.Attributes].Split(','), uint.Parse)
                 .Select(x => (SkillData.Attribute) x).ToList();
-            RequiredGroupId1 = ushort.Parse(data["requiredlearn_1"]);
-            RequiredGroupId2 = ushort.Parse(data["requiredlearn_2"]);
-            RequiredGroupId3 = ushort.Parse(data["requiredlearn_3"]);
-            RequiredLevel1 = ushort.Parse(data["requiredlearnlevel_1"]);
-            RequiredLevel2 = ushort.Parse(data["requiredlearnlevel_2"]);
-            RequiredLevel3 = ushort.Parse(data["requiredlearnlevel_3"]);
-            RequiredWeapon1 = (EquipmentData.SubType.Weapon) byte.Parse(data["weapon_1"]);
-            RequiredWeapon2 = (EquipmentData.SubType.Weapon) byte.Parse(data["weapon_2"]);
-            Targeted = byte.Parse(data["target_required"]) == 1;
-            Range = ushort.Parse(data["range"]);
+            RequiredGroupId1 = ushort.Parse(data[Constants.Strings.RequiredLearn1]);
+            RequiredGroupId2 = ushort.Parse(data[Constants.Strings.RequiredLearn2]);
+            RequiredGroupId3 = ushort.Parse(data[Constants.Strings.RequiredLearn3]);
+            RequiredLevel1 = ushort.Parse(data[Constants.Strings.RequiredLevel1]);
+            RequiredLevel2 = ushort.Parse(data[Constants.Strings.RequiredLevel2]);
+            RequiredLevel3 = ushort.Parse(data[Constants.Strings.RequiredLevel3]);
+            RequiredWeapon1 = (EquipmentData.SubType.Weapon) byte.Parse(data[Constants.Strings.Weapon1]);
+            RequiredWeapon2 = (EquipmentData.SubType.Weapon) byte.Parse(data[Constants.Strings.Weapon2]);
+            Targeted = byte.Parse(data[Constants.Strings.TargetRequired]) == 1;
+            Range = ushort.Parse(data[Constants.Strings.Range]);
         }
 
         public bool IsOnCooldown()

@@ -120,6 +120,7 @@ namespace SimpleCL.Services.Game
             }
             catch (EntityParseException e)
             {
+                Console.WriteLine(e);
                 server.DebugPacket(packet);
                 return;
             }

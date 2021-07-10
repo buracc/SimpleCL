@@ -50,85 +50,75 @@ namespace SimpleCL.Services.Game
                 return;
             }
 
-            try
+            var type = (Skill.CastType) packet.ReadByte();
+            packet.ReadByte();
+            var id = packet.ReadUInt();
+            var sourceUid = packet.ReadUInt();
+            var skillUid = packet.ReadUInt();
+            packet.ReadUInt();
+            var mainTargetUid = packet.ReadUInt();
+
+            if (sourceUid == LocalPlayer.Get.Uid)
             {
-                var type = (Skill.CastType) packet.ReadByte();
-                packet.ReadByte();
-                var id = packet.ReadUInt();
-                var sourceUid = packet.ReadUInt();
-                var skillUid = packet.ReadUInt();
-                packet.ReadUInt();
-                var mainTargetUid = packet.ReadUInt();
-
-                if (sourceUid == LocalPlayer.Get.Uid)
+                var skillUsed = LocalPlayer.Get.Skills.FirstOrDefault(x => x.Id == id);
+                if (skillUsed == null)
                 {
-                    var skillUsed = LocalPlayer.Get.Skills.FirstOrDefault(x => x.Id == id);
-                    if (skillUsed == null)
-                    {
-                        return;
-                    }
-                    
-                    skillUsed.StartCooldownTimer();
+                    return;
                 }
 
-                var skillEffect = packet.ReadByte();
-
-                switch (skillEffect)
-                {
-                    // damage
-                    case 1:
-                        var targetCount = packet.ReadByte();
-                        var hitCount = packet.ReadByte();
-                
-                        packet.ReadByte();
-            
-                        targetCount.Repeat(i =>
-                        {
-                            var targetUid = packet.ReadUInt();
-                            var dmgEffect = packet.ReadByte();
-                            if (dmgEffect == 128)
-                            {
-                                if (Entities.AllEntities.ContainsKey(targetUid)
-                                    && Entities.AllEntities[targetUid] is Monster)
-                                {
-                                    Entities.Despawned(targetUid);
-                                }
-                            } 
-                            else if (dmgEffect.HasFlags((byte)(Skill.DamageEffect.Block | Skill.DamageEffect.Cancel)))
-                            {
-                                return;
-                            }
-
-                            var damageType = (Skill.DamageType) packet.ReadByte();
-                            var damageValue = packet.ReadUInt();
-                            packet.ReadByte();
-                            packet.ReadByte();
-                            packet.ReadByte();
-                        });
-                        break;
-                    
-                    // targeted (ghostwalk)
-                    case 8:
-                        packet.ReadByte();
-                        var region = packet.ReadUShort();
-                        var localX = packet.ReadUInt();
-                        packet.ReadUInt();
-                        var localY = packet.ReadUInt();
-                        if (Entities.AllEntities.TryGetValue(sourceUid, out var entity) && entity is Actor actor)
-                        {
-                            actor.StopMovementTimer();
-                            actor.LocalPoint = new LocalPoint(region, localX, 0, localY);
-                        }
-                        
-                        break;
-                }
-                
-                
+                skillUsed.StartCooldownTimer();
             }
-            catch (Exception e)
+
+            var skillEffect = packet.ReadByte();
+
+            switch (skillEffect)
             {
-                server.DebugPacket(packet);
-                Console.WriteLine(e);
+                // damage
+                case 1:
+                    var targetCount = packet.ReadByte();
+                    var hitCount = packet.ReadByte();
+
+                    packet.ReadByte();
+
+                    targetCount.Repeat(i =>
+                    {
+                        var targetUid = packet.ReadUInt();
+                        var dmgEffect = packet.ReadByte();
+                        if (dmgEffect == 128)
+                        {
+                            if (Entities.AllEntities.ContainsKey(targetUid)
+                                && Entities.AllEntities[targetUid] is Monster)
+                            {
+                                Entities.Despawned(targetUid);
+                            }
+                        }
+                        else if (dmgEffect.HasFlags((byte) (Skill.DamageEffect.Block | Skill.DamageEffect.Cancel)))
+                        {
+                            return;
+                        }
+
+                        var damageType = (Skill.DamageType) packet.ReadByte();
+                        var damageValue = packet.ReadUInt();
+                        packet.ReadByte();
+                        packet.ReadByte();
+                        packet.ReadByte();
+                    });
+                    break;
+
+                // targeted (ghostwalk)
+                case 8:
+                    packet.ReadByte();
+                    var region = packet.ReadUShort();
+                    var localX = packet.ReadUInt();
+                    packet.ReadUInt();
+                    var localY = packet.ReadUInt();
+                    if (Entities.AllEntities.TryGetValue(sourceUid, out var entity) && entity is Actor actor)
+                    {
+                        actor.StopMovementTimer();
+                        actor.LocalPoint = new LocalPoint(region, localX, 0, localY);
+                    }
+
+                    break;
             }
         }
 

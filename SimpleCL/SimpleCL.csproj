@@ -84,6 +84,7 @@
     <Compile Include="Enums\Chatter\ChatChannel.cs" />
     <Compile Include="Enums\Commons\Locale.cs" />
     <Compile Include="Enums\Commons\Opcodes.cs" />
+    <Compile Include="Enums\Constants.cs" />
     <Compile Include="Enums\Events\EntityStateEvent.cs" />
     <Compile Include="Enums\Events\InventoryAction.cs" />
     <Compile Include="Enums\Items\ItemCategory.cs" />

@@ -27,32 +27,29 @@ namespace SimpleCL.Ui
         public Gui()
         {
             _localPlayer = LocalPlayer.Get;
-            
-            this.InvokeLater(() =>
+
+            base.DoubleBuffered = true;
+            InitializeComponent();
+
+            FormClosed += ExitApplication;
+
+            foreach (var server in SilkroadServer.Values)
             {
-                base.DoubleBuffered = true;
-                InitializeComponent();
+                serverComboBox.Items.Add(server);
+            }
 
-                FormClosed += ExitApplication;
+            serverComboBox.SelectedIndex = 0;
+            GameDatabase.Get.SelectedServer = (SilkroadServer) serverComboBox.SelectedItem;
 
-                foreach (var server in SilkroadServer.Values)
-                {
-                    serverComboBox.Items.Add(server);
-                }
+            usernameBox.Text = Credentials.Username;
+            passwordBox.Text = Credentials.Password;
 
-                serverComboBox.SelectedIndex = 0;
-                GameDatabase.Get.SelectedServer = (SilkroadServer) serverComboBox.SelectedItem;
+            InitAttackTab();
+            InitBuffsGrid();
+            InitInventories();
+            InitMapTimers();
 
-                usernameBox.Text = Credentials.Username;
-                passwordBox.Text = Credentials.Password;
-
-                InitAttackTab();
-                InitBuffsGrid();
-                InitInventories();
-                InitMapTimers();
-            
-                CenterToScreen();
-            });
+            CenterToScreen();
         }
 
         public void InitBindings()
@@ -61,48 +58,56 @@ namespace SimpleCL.Ui
             {
                 return;
             }
-            
-            nameLabelValue.DataBindings.Add("Text", _localPlayer, "Name");
-            jobNameLabelValue.DataBindings.Add("Text", _localPlayer, "JobName");
 
-            hpProgressBar.DataBindings.Add("Maximum", _localPlayer, "MaxHp");
-            mpProgressBar.DataBindings.Add("Maximum", _localPlayer, "MaxMp");
-            hpProgressBar.DataBindings.Add("Value", _localPlayer, "Hp");
-            mpProgressBar.DataBindings.Add("Value", _localPlayer, "Mp");
-            
-            expProgressBar.DataBindings.Add("Value", _localPlayer, "ExpPercent");
-            expProgressBar.DataBindings.Add("CustomText", _localPlayer, "ExpPercentString");
-            jobExpProgressBar.DataBindings.Add("Value", _localPlayer, "JobExpPercent");
-            jobExpProgressBar.DataBindings.Add("CustomText", _localPlayer, "JobExpPercentString");
-            
-            levelLabelValue.DataBindings.Add("Text", _localPlayer, "Level");
-            jobLevelLabelValue.DataBindings.Add("Text", _localPlayer, "JobLevel");
-            
-            spLabelValue.DataBindings.Add("Text", _localPlayer, "SkillpointsString");
-            goldLabelValue.DataBindings.Add("Text", _localPlayer, "GoldString");
-            goldAmountLabel.DataBindings.Add("Text", _localPlayer, "GoldString");
+            this.InvokeLater(() =>
+            {
+                nameLabelValue.DataBindings.Add("Text", _localPlayer, "Name");
+                jobNameLabelValue.DataBindings.Add("Text", _localPlayer, "JobName");
 
-            localCoordsLabelValue.DataBindings.Add("Text", _localPlayer, "LocalPoint");
-            currLocalLabelValue.DataBindings.Add("Text", _localPlayer, "LocalPoint");
-            
-            worldCoordsLabelValue.DataBindings.Add("Text", _localPlayer, "WorldPoint");
-            currWorldLabelValue.DataBindings.Add("Text", _localPlayer, "WorldPoint");
+                hpProgressBar.DataBindings.Add("Maximum", _localPlayer, "MaxHp");
+                mpProgressBar.DataBindings.Add("Maximum", _localPlayer, "MaxMp");
+                hpProgressBar.DataBindings.Add("Value", _localPlayer, "Hp");
+                mpProgressBar.DataBindings.Add("Value", _localPlayer, "Mp");
+
+                expProgressBar.DataBindings.Add("Value", _localPlayer, "ExpPercent");
+                expProgressBar.DataBindings.Add("CustomText", _localPlayer, "ExpPercentString");
+                jobExpProgressBar.DataBindings.Add("Value", _localPlayer, "JobExpPercent");
+                jobExpProgressBar.DataBindings.Add("CustomText", _localPlayer, "JobExpPercentString");
+
+                levelLabelValue.DataBindings.Add("Text", _localPlayer, "Level");
+                jobLevelLabelValue.DataBindings.Add("Text", _localPlayer, "JobLevel");
+
+                spLabelValue.DataBindings.Add("Text", _localPlayer, "SkillpointsString");
+                goldLabelValue.DataBindings.Add("Text", _localPlayer, "GoldString");
+                goldAmountLabel.DataBindings.Add("Text", _localPlayer, "GoldString");
+
+                localCoordsLabelValue.DataBindings.Add("Text", _localPlayer, "LocalPoint");
+                currLocalLabelValue.DataBindings.Add("Text", _localPlayer, "LocalPoint");
+
+                worldCoordsLabelValue.DataBindings.Add("Text", _localPlayer, "WorldPoint");
+                currWorldLabelValue.DataBindings.Add("Text", _localPlayer, "WorldPoint");
+            });
+
             _dataBound = true;
         }
 
         public void ToggleControls(bool enabled)
         {
-            usernameBox.Enabled = enabled;
-            passwordBox.Enabled = enabled;
-            loginButton.Enabled = enabled;
-            serverComboBox.Enabled = enabled;
+            this.InvokeLater(() =>
+            {
+                credentialsGroup.Enabled = enabled;
+            });
         }
 
         public void Log(string message)
         {
-            loggerBox.Items.Add(message);
-            loggerBox.SelectedIndex = loggerBox.Items.Count - 1;
-            loggerBox.SelectedIndex = -1;
+            this.InvokeLater(() =>
+                {
+                    loggerBox.Items.Add(message);
+                    loggerBox.SelectedIndex = loggerBox.Items.Count - 1;
+                    loggerBox.SelectedIndex = -1;
+                }
+            );
         }
 
         private void ExitApplication(object sender, EventArgs e)
@@ -126,6 +131,16 @@ namespace SimpleCL.Ui
         public Map GetMap()
         {
             return minimap;
+        }
+
+        public void ClearMarkers()
+        {
+            minimap.ClearMarkers();
+        }
+
+        public void ClearTiles()
+        {
+            minimap.ClearTiles();
         }
     }
 }

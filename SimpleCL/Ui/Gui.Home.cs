@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using SimpleCL.Database;
 using SimpleCL.Enums.Server;
-using SimpleCL.Models.Character;
 using SimpleCL.Models.Skills;
 using SimpleCL.Network;
 using SimpleCL.Services.Login;

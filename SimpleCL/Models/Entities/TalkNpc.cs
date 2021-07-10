@@ -1,4 +1,5 @@
 ﻿using System;
+using SimpleCL.Enums;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Interaction;
 using SimpleCL.SecurityApi;
@@ -13,13 +14,13 @@ namespace SimpleCL.Models.Entities
             {
                 return ServerName switch
                 {
-                    _ when ServerName.Contains("WAREHOUSE") => "xy_guild",
-                    _ when ServerName.Contains("ACCESSORY") => "xy_etc",
-                    _ when ServerName.Contains("SMITH") => "xy_weapon",
-                    _ when ServerName.Contains("POTION") => "xy_potion",
-                    _ when ServerName.Contains("ARMOR") => "xy_armor",
-                    _ when ServerName.Contains("HORSE") => "xy_stable",
-                    _ => "mm_sign_npc"
+                    _ when ServerName.Contains(Constants.Strings.Warehouse) => Constants.Strings.GuildStorageIcon,
+                    _ when ServerName.Contains(Constants.Strings.Accessory) => Constants.Strings.EtcIcon,
+                    _ when ServerName.Contains(Constants.Strings.Smith) => Constants.Strings.SmithIcon,
+                    _ when ServerName.Contains(Constants.Strings.Potion) => Constants.Strings.PotionIcon,
+                    _ when ServerName.Contains(Constants.Strings.Armor) => Constants.Strings.ArmorIcon,
+                    _ when ServerName.Contains(Constants.Strings.Horse) => Constants.Strings.StableIcon,
+                    _ => Constants.Strings.NpcIcon
                 };
             }
         }

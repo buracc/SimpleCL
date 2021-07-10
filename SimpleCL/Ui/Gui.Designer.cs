@@ -34,7 +34,7 @@ namespace SimpleCL.Ui
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.GroupBox credentialsGroup;
+            
             this.serverComboBox = new System.Windows.Forms.ComboBox();
             this.serverLabel = new System.Windows.Forms.Label();
             this.loginButton = new System.Windows.Forms.Button();
@@ -1057,5 +1057,6 @@ namespace SimpleCL.Ui
         private TextProgressBar mpProgressBar;
         private TextProgressBar jobExpProgressBar;
         private System.Windows.Forms.Button attackButton;
+        private System.Windows.Forms.GroupBox credentialsGroup;
     }
 }

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using SimpleCL.Interaction.Pathing;
+using SimpleCL.Interaction.Providers;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
 using SimpleCL.Util.Extension;
@@ -13,7 +15,8 @@ namespace SimpleCL.Ui.Components
     public class Map : Panel
     {
         private readonly Dictionary<string, MapTile> _mapSectors = new();
-        public readonly Dictionary<uint, MapControl> Markers = new();
+        public readonly ConcurrentDictionary<uint, MapControl> Markers = new();
+        private readonly ToolTip _toolTip = new();
 
         private string _filePath;
         private Size _tileSize;
@@ -54,9 +57,10 @@ namespace SimpleCL.Ui.Components
                 _tileSize = new Size((int) Math.Round(Width / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero),
                     (int) Math.Round(Height / (2.0 * _zoom + 1), MidpointRounding.AwayFromZero));
                 _tileCount = 2 * _zoom + 3;
+
                 RemoveTiles();
                 UpdateTiles();
-                UpdateMarkerLocations();
+                NotifyMarkerLocations();
             }
         }
 
@@ -76,7 +80,7 @@ namespace SimpleCL.Ui.Components
 
                 RemoveTiles();
                 UpdateTiles();
-                UpdateMarkerLocations();
+                NotifyMarkerLocations();
             }
         }
 
@@ -157,16 +161,16 @@ namespace SimpleCL.Ui.Components
 
         public void UpdateTiles()
         {
+            var tileAvg = _tileCount / 2;
+            var relativePosX = (int) Math.Round(MapCenter.X % 192 * _tileSize.Width / 192.0 +
+                                                (MapCenter.X < 0 ? _tileSize.Width : 0));
+            var relativePosY = (int) Math.Round(MapCenter.Y % 192 * _tileSize.Height / 192.0 +
+                                                (MapCenter.Y < 0 ? _tileSize.Height : 0));
+            var marginX = (int) Math.Round(_tileSize.Width / 2.0 - _tileSize.Width - relativePosX);
+            var marginY = (int) Math.Round(_tileSize.Height / 2.0 - _tileSize.Height * 2 + relativePosY);
+
             this.InvokeLater(() =>
             {
-                var tileAvg = _tileCount / 2;
-                var relativePosX = (int) Math.Round(MapCenter.X % 192 * _tileSize.Width / 192.0 +
-                                                    (MapCenter.X < 0 ? _tileSize.Width : 0));
-                var relativePosY = (int) Math.Round(MapCenter.Y % 192 * _tileSize.Height / 192.0 +
-                                                    (MapCenter.Y < 0 ? _tileSize.Height : 0));
-                var marginX = (int) Math.Round(_tileSize.Width / 2.0 - _tileSize.Width - relativePosX);
-                var marginY = (int) Math.Round(_tileSize.Height / 2.0 - _tileSize.Height * 2 + relativePosY);
-
                 var i = 0;
                 for (var sectorY = tileAvg + MapCenter.YSector; sectorY >= -tileAvg + MapCenter.YSector; sectorY--)
                 {
@@ -195,14 +199,12 @@ namespace SimpleCL.Ui.Components
                         }
                         else
                         {
-                            var x = sectorX;
-                            var y = sectorY;
-                            sector = new MapTile(x, y)
+                            sector = new MapTile(sectorX, sectorY)
                             {
                                 Name = path, Size = _tileSize, Location = sectorLocation
                             };
 
-                            sector.MouseClick += MapClicked;
+                            sector.MouseClick += sector.MapClicked;
 
                             sector.LoadAsyncTile(path, _tileSize);
                             _mapSectors[path] = sector;
@@ -220,15 +222,15 @@ namespace SimpleCL.Ui.Components
 
         public void ClearTiles()
         {
+            var minAvg = _tileCount / 2;
+
+            var ySectorMin = -minAvg + MapCenter.YSector;
+            var ySectorMax = minAvg + MapCenter.YSector;
+            var xSectorMin = -minAvg + MapCenter.XSector;
+            var xSectorMax = minAvg + MapCenter.XSector;
+
             this.InvokeLater(() =>
             {
-                var minAvg = _tileCount / 2;
-
-                var ySectorMin = -minAvg + MapCenter.YSector;
-                var ySectorMax = minAvg + MapCenter.YSector;
-                var xSectorMin = -minAvg + MapCenter.XSector;
-                var xSectorMax = minAvg + MapCenter.XSector;
-
                 foreach (var tile in _mapSectors.Values.Where(tile =>
                     tile.SectorX < xSectorMin || tile.SectorX > xSectorMax || tile.SectorY < ySectorMin ||
                     tile.SectorY > ySectorMax))
@@ -242,9 +244,9 @@ namespace SimpleCL.Ui.Components
         {
             this.InvokeLater(() =>
             {
-                foreach (var tile in _mapSectors.Values)
+                foreach (var kvp in _mapSectors)
                 {
-                    Controls.RemoveByKey(tile.Name);
+                    kvp.Value.Destroy();
                 }
 
                 _mapSectors.Clear();
@@ -269,7 +271,7 @@ namespace SimpleCL.Ui.Components
                 UpdateTiles();
             }
 
-            UpdateMarkerLocations();
+            NotifyMarkerLocations();
         }
 
         public Point GetPoint(WorldPoint coords)
@@ -280,7 +282,7 @@ namespace SimpleCL.Ui.Components
             {
                 X = (int) Math.Round((coords.X - MapCenter.X) / (192.0 / _tileSize.Width) +
                     _tileSize.Width * tileAvg - _tileSize.Width / 2.0),
-                Y = (int) Math.Round((coords.Y - MapCenter.Y) / (192.0 / _tileSize.Height) * (-1) +
+                Y = (int) Math.Round((coords.Y - MapCenter.Y) / (192.0 / _tileSize.Height) * -1 +
                     _tileSize.Height * tileAvg - _tileSize.Height / 2.0)
             };
         }
@@ -337,7 +339,7 @@ namespace SimpleCL.Ui.Components
 
                     stallMenu.Items.Add(stallVisitItem);
                     stallMenu.Items.Add(stallLeaveItem);
-                    new ToolTip().SetToolTip(marker, player.Stall.Title);
+                    _toolTip.SetToolTip(marker, player.Stall.Title);
                     marker.ContextMenuStrip = stallMenu;
                 }
                 else if (player.LifeState == Actor.Health.LifeState.Dead)
@@ -407,27 +409,37 @@ namespace SimpleCL.Ui.Components
         {
             this.InvokeLater(() =>
             {
-                foreach (var keyValuePair in Markers.Where(
-                    keyValuePair => Controls.ContainsKey(keyValuePair.Value.Name)))
+                foreach (var kvp in Markers)
                 {
-                    Controls.RemoveByKey(keyValuePair.Value.Name);
+                    kvp.Value.Destroy();
                 }
-            });
 
-            Markers.Clear();
+                Markers.Clear();
+            });
         }
 
         public void RemoveMarker(uint uniqueId)
         {
-            if (!Markers.ContainsKey(uniqueId))
+            var removed = Markers.TryRemove(uniqueId, out var removedMarker);
+
+            if (!removed)
             {
                 return;
             }
 
-            var marker = Markers[uniqueId];
-            this.InvokeLater(() => { Controls.RemoveByKey(marker.Name); });
+            this.InvokeLater(() => { removedMarker.Destroy(); });
+        }
 
-            Markers.Remove(uniqueId);
+        public void NotifyMarkerLocations()
+        {
+            foreach (var kvp in Markers)
+            {
+                var uid = kvp.Key;
+                if (Entities.AllEntities.TryGetValue(uid, out var entity))
+                {
+                    entity.OnPropertyChanged("MapLocation");
+                }
+            }
         }
 
         public void UpdateMarkerLocations()
@@ -455,21 +467,6 @@ namespace SimpleCL.Ui.Components
                     }
                 }
             });
-        }
-
-        private void MapClicked(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Left)
-            {
-                return;
-            }
-
-            var t = (MapTile) sender;
-            var clickPoint = new Point(t.Location.X + e.Location.X, t.Location.Y + e.Location.Y);
-            var coord = GetCoord(clickPoint);
-            var world = WorldPoint.FromLocal(coord);
-            Movement.WalkTo(coord);
-            Program.Gui.Log("Moving to [" + world + "]");
         }
     }
 }
