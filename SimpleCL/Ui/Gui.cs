@@ -47,7 +47,7 @@ namespace SimpleCL.Ui
             InitAttackTab();
             InitBuffsGrid();
             InitInventories();
-            InitMapTimers();
+            InitMap();
 
             CenterToScreen();
         }
@@ -140,7 +140,7 @@ namespace SimpleCL.Ui
 
         public void ClearTiles()
         {
-            minimap.ClearTiles();
+            minimap.RemoveTiles();
         }
     }
 }

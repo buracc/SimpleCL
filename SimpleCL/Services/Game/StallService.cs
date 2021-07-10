@@ -49,7 +49,7 @@ namespace SimpleCL.Services.Game
             while ((slot = packet.ReadByte()) != byte.MaxValue)
             {
                 var stallItem = new StallItem();
-                var item = LocalPlayerService.ParseItem(packet, _silkroadServer.Locale, true);
+                var item = LocalPlayerService.ParseItem(packet, _silkroadServer.Locale);
                 stallItem.Item = item;
                 stallItem.Slot = slot;
                 var inventorySlot = packet.ReadByte();

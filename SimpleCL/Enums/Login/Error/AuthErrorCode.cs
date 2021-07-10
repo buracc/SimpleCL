@@ -5,5 +5,6 @@
         InvalidCredentials = 1,
         ServerFull = 4,
         IpLimit = 5,
+        LogoutProcess = 10,
     }
 }

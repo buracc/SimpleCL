@@ -15,17 +15,8 @@ namespace SimpleCL.Ui
 {
     partial class Gui
     {
-
-        private void InitMapTimers()
+        private void InitMap()
         {
-            var markerTimer = new Timer(100);
-            markerTimer.Elapsed += (_, _) =>
-            {
-                // RefreshMarkers();
-            };
-            
-            markerTimer.Start();
-            
             var mapTimer = new Timer(10000);
             mapTimer.Elapsed += (_, _) =>
             {
@@ -38,6 +29,13 @@ namespace SimpleCL.Ui
             };
             
             mapTimer.Start();
+
+            mapVisibleCheckbox.CheckedChanged += (_, _) => minimap.Visible = mapVisibleCheckbox.Checked;
+
+            clearMarkersButton.Click += (sender, args) =>
+            {
+                minimap.ClearMarkers();
+            };
         }
 
         public void AddMinimapMarker(Entity entity)

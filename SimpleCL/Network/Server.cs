@@ -98,8 +98,6 @@ namespace SimpleCL.Network
         private void HeartBeat(object source, ElapsedEventArgs e)
         {
             Inject(new Packet(Opcodes.HEARTBEAT));
-
-            // Program.Gui.RefreshGui();
         }
 
         public void Disconnect()
@@ -182,9 +180,9 @@ namespace SimpleCL.Network
                 {
                     try
                     {
-                        Console.WriteLine("Injecting queued packet: " + queuedPacket.Opcode.ToString("X"));
-                        Console.WriteLine("Data: ");
-                        DebugPacket(queuedPacket);
+                        // Console.WriteLine("Injecting queued packet: " + queuedPacket.Opcode.ToString("X"));
+                        // Console.WriteLine("Data: ");
+                        // DebugPacket(queuedPacket);
                         Inject(queuedPacket);
                         continue;
                     }
@@ -218,8 +216,10 @@ namespace SimpleCL.Network
                 var outgoing = Security.TransferOutgoing();
                 if (outgoing != null)
                 {
-                    foreach (var buffer in outgoing.Select(pair => pair.Key))
+                    foreach (var kvp in outgoing)
                     {
+                        var buffer = kvp.Key;
+                        Console.WriteLine("sending packet: " + kvp.Value.Opcode.ToString("X"));
                         success = SocketError.Success;
 
                         while (buffer.Offset != buffer.Size)

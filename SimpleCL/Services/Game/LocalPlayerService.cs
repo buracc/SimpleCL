@@ -542,6 +542,20 @@ namespace SimpleCL.Services.Game
                     switch (inventoryItem.TypeId3)
                     {
                         case 1:
+                            if (inventoryItem.TypeId4 == 3)
+                            {
+                                var spawnState = packet.ReadByte();
+                                if (spawnState == 2)
+                                {
+                                    var modelId = packet.ReadUInt();
+                                    var fellowName = packet.ReadAscii();
+                                    var level = packet.ReadByte();
+                                    packet.ReadByte();
+                                }
+                                
+                                break;
+                            }
+                            
                             var state = packet.ReadByte();
                             var refObjId = packet.ReadUInt();
                             var name = packet.ReadAscii();
@@ -549,7 +563,6 @@ namespace SimpleCL.Services.Game
                             switch (inventoryItem.TypeId4)
                             {
                                 case 1:
-                                case 3:
                                     var level = packet.ReadByte();
                                     break;
 

@@ -295,6 +295,10 @@ namespace SimpleCL.Services.Login
                         case AuthErrorCode.ServerFull:
                             server.Log("Server is full.");
                             break;
+                        
+                        case AuthErrorCode.LogoutProcess:
+                            server.Log("Account is in the process of logging out.");
+                            break;
                     
                         default:
                             server.Log("Unhandled auth error code: " + error);

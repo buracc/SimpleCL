@@ -45,24 +45,8 @@ namespace SimpleCL.Ui.Components
 
         public void Destroy()
         {
-            MouseClick -= MapClicked;
-            Parent.Controls.Remove(this);
+            Image?.Dispose();
             Dispose(true);
-        }
-        
-        public void MapClicked(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Left)
-            {
-                return;
-            }
-
-            var t = (MapTile) sender;
-            var clickPoint = new Point(t.Location.X + e.Location.X, t.Location.Y + e.Location.Y);
-            var coord = Program.Gui.GetMap().GetCoord(clickPoint);
-            var world = WorldPoint.FromLocal(coord);
-            Movement.WalkTo(coord);
-            Program.Gui.Log("Moving to [" + world + "]");
         }
     }
 }

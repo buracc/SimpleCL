@@ -3,9 +3,11 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using SimpleCL.Interaction.Pathing;
 using SimpleCL.Interaction.Providers;
+using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
 using SimpleCL.Util.Extension;
@@ -204,7 +206,7 @@ namespace SimpleCL.Ui.Components
                                 Name = path, Size = _tileSize, Location = sectorLocation
                             };
 
-                            sector.MouseClick += sector.MapClicked;
+                            sector.MouseClick += MapClicked;
 
                             sector.LoadAsyncTile(path, _tileSize);
                             _mapSectors[path] = sector;
@@ -246,6 +248,7 @@ namespace SimpleCL.Ui.Components
             {
                 foreach (var kvp in _mapSectors)
                 {
+                    Controls.Remove(kvp.Value);
                     kvp.Value.Destroy();
                 }
 
@@ -407,15 +410,10 @@ namespace SimpleCL.Ui.Components
 
         public void ClearMarkers()
         {
-            this.InvokeLater(() =>
+            foreach (var uid in Markers.Select(x => x.Key).ToList())
             {
-                foreach (var kvp in Markers)
-                {
-                    kvp.Value.Destroy();
-                }
-
-                Markers.Clear();
-            });
+                RemoveMarker(uid);
+            }
         }
 
         public void RemoveMarker(uint uniqueId)
@@ -427,7 +425,11 @@ namespace SimpleCL.Ui.Components
                 return;
             }
 
-            this.InvokeLater(() => { removedMarker.Destroy(); });
+            this.InvokeLater(() =>
+            {
+                Controls.Remove(removedMarker);
+                removedMarker.Destroy();
+            });
         }
 
         public void NotifyMarkerLocations()
@@ -467,6 +469,21 @@ namespace SimpleCL.Ui.Components
                     }
                 }
             });
+        }
+
+        public void MapClicked(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left)
+            {
+                return;
+            }
+
+            var t = (MapTile) sender;
+            var clickPoint = new Point(t.Location.X + e.Location.X, t.Location.Y + e.Location.Y);
+            var coord = GetCoord(clickPoint);
+            var world = WorldPoint.FromLocal(coord);
+            Movement.WalkTo(coord);
+            Program.Gui.Log("Moving to [" + world + "]");
         }
     }
 }

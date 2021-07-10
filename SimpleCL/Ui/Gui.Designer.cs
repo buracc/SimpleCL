@@ -34,46 +34,50 @@ namespace SimpleCL.Ui
         /// </summary>
         private void InitializeComponent()
         {
-            
-            this.serverComboBox = new System.Windows.Forms.ComboBox();
-            this.serverLabel = new System.Windows.Forms.Label();
-            this.loginButton = new System.Windows.Forms.Button();
-            this.usernameLabel = new System.Windows.Forms.Label();
-            this.passwordBox = new System.Windows.Forms.TextBox();
-            this.usernameBox = new System.Windows.Forms.TextBox();
-            this.passwordLabel = new System.Windows.Forms.Label();
-            this.tabControl = new System.Windows.Forms.TabControl();
-            this.homeTab = new System.Windows.Forms.TabPage();
-            this.buffsGroupBox = new System.Windows.Forms.GroupBox();
+            System.Windows.Forms.Label serverLabel;
+            System.Windows.Forms.Label usernameLabel;
+            System.Windows.Forms.Label passwordLabel;
+            System.Windows.Forms.GroupBox buffsGroupBox;
+            System.Windows.Forms.GroupBox statisticsBox;
+            System.Windows.Forms.Label worldCoordsLabel;
+            System.Windows.Forms.Label jobExpLabel;
+            System.Windows.Forms.Label jobLevelLabel;
+            System.Windows.Forms.Label jobNameLabel;
+            System.Windows.Forms.Label nameLabel;
+            System.Windows.Forms.Label localCoordsLabel;
+            System.Windows.Forms.Label goldLabel;
+            System.Windows.Forms.Label spLabel;
+            System.Windows.Forms.Label expLabel;
+            System.Windows.Forms.Label levelLabel;
+            System.Windows.Forms.Label mpLabel;
+            System.Windows.Forms.Label hpLabel;
+            System.Windows.Forms.Label label3;
+            System.Windows.Forms.Label label2;
+            System.Windows.Forms.Label label1;
+            System.Windows.Forms.Label currWorldLabel;
+            System.Windows.Forms.Label currLocalLabel;
             this.buffsDataGridView = new System.Windows.Forms.DataGridView();
-            this.statisticsBox = new System.Windows.Forms.GroupBox();
             this.worldCoordsLabelValue = new System.Windows.Forms.Label();
-            this.worldCoordsLabel = new System.Windows.Forms.Label();
             this.jobExpProgressBar = new SimpleCL.Ui.Components.TextProgressBar();
             this.hpProgressBar = new SimpleCL.Ui.Components.TextProgressBar();
             this.mpProgressBar = new SimpleCL.Ui.Components.TextProgressBar();
             this.expProgressBar = new SimpleCL.Ui.Components.TextProgressBar();
-            this.jobExpLabel = new System.Windows.Forms.Label();
             this.jobLevelLabelValue = new System.Windows.Forms.Label();
-            this.jobLevelLabel = new System.Windows.Forms.Label();
             this.jobNameLabelValue = new System.Windows.Forms.Label();
-            this.jobNameLabel = new System.Windows.Forms.Label();
             this.nameLabelValue = new System.Windows.Forms.Label();
-            this.nameLabel = new System.Windows.Forms.Label();
             this.localCoordsLabelValue = new System.Windows.Forms.Label();
             this.goldLabelValue = new System.Windows.Forms.Label();
             this.spLabelValue = new System.Windows.Forms.Label();
             this.levelLabelValue = new System.Windows.Forms.Label();
-            this.localCoordsLabel = new System.Windows.Forms.Label();
-            this.goldLabel = new System.Windows.Forms.Label();
-            this.spLabel = new System.Windows.Forms.Label();
-            this.expLabel = new System.Windows.Forms.Label();
-            this.levelLabel = new System.Windows.Forms.Label();
-            this.mpLabel = new System.Windows.Forms.Label();
-            this.hpLabel = new System.Windows.Forms.Label();
+            this.credentialsGroup = new System.Windows.Forms.GroupBox();
+            this.serverComboBox = new System.Windows.Forms.ComboBox();
+            this.loginButton = new System.Windows.Forms.Button();
+            this.passwordBox = new System.Windows.Forms.TextBox();
+            this.usernameBox = new System.Windows.Forms.TextBox();
+            this.tabControl = new System.Windows.Forms.TabControl();
+            this.homeTab = new System.Windows.Forms.TabPage();
             this.inventoryPage = new System.Windows.Forms.TabPage();
             this.goldAmountLabel = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.refreshInventoriesButton = new System.Windows.Forms.Button();
             this.inventoryTabControl = new System.Windows.Forms.TabControl();
             this.inventoryInvTab = new System.Windows.Forms.TabPage();
@@ -94,16 +98,15 @@ namespace SimpleCL.Ui
             this.addEntityButton = new System.Windows.Forms.Button();
             this.nearEntitiesListBox = new System.Windows.Forms.ListBox();
             this.availSkillsListBox = new System.Windows.Forms.ListBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.attackEntitiesListBox = new System.Windows.Forms.ListBox();
             this.attackSkillsListBox = new System.Windows.Forms.ListBox();
             this.movementTab = new System.Windows.Forms.TabPage();
+            this.clearMarkersButton = new System.Windows.Forms.Button();
+            this.doubleMarkersButton = new System.Windows.Forms.Button();
+            this.mapVisibleCheckbox = new System.Windows.Forms.CheckBox();
             this.mapPanel = new System.Windows.Forms.Panel();
             this.minimap = new SimpleCL.Ui.Components.Map();
-            this.currWorldLabel = new System.Windows.Forms.Label();
             this.currWorldLabelValue = new System.Windows.Forms.Label();
-            this.currLocalLabel = new System.Windows.Forms.Label();
             this.currLocalLabelValue = new System.Windows.Forms.Label();
             this.devTab = new System.Windows.Forms.TabPage();
             this.debugAgCheckbox = new System.Windows.Forms.CheckBox();
@@ -111,13 +114,34 @@ namespace SimpleCL.Ui
             this.loggerBox = new System.Windows.Forms.ListBox();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripProgressBar2 = new System.Windows.Forms.ToolStripProgressBar();
-            credentialsGroup = new System.Windows.Forms.GroupBox();
-            credentialsGroup.SuspendLayout();
+            serverLabel = new System.Windows.Forms.Label();
+            usernameLabel = new System.Windows.Forms.Label();
+            passwordLabel = new System.Windows.Forms.Label();
+            buffsGroupBox = new System.Windows.Forms.GroupBox();
+            statisticsBox = new System.Windows.Forms.GroupBox();
+            worldCoordsLabel = new System.Windows.Forms.Label();
+            jobExpLabel = new System.Windows.Forms.Label();
+            jobLevelLabel = new System.Windows.Forms.Label();
+            jobNameLabel = new System.Windows.Forms.Label();
+            nameLabel = new System.Windows.Forms.Label();
+            localCoordsLabel = new System.Windows.Forms.Label();
+            goldLabel = new System.Windows.Forms.Label();
+            spLabel = new System.Windows.Forms.Label();
+            expLabel = new System.Windows.Forms.Label();
+            levelLabel = new System.Windows.Forms.Label();
+            mpLabel = new System.Windows.Forms.Label();
+            hpLabel = new System.Windows.Forms.Label();
+            label3 = new System.Windows.Forms.Label();
+            label2 = new System.Windows.Forms.Label();
+            label1 = new System.Windows.Forms.Label();
+            currWorldLabel = new System.Windows.Forms.Label();
+            currLocalLabel = new System.Windows.Forms.Label();
+            buffsGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize) (this.buffsDataGridView)).BeginInit();
+            statisticsBox.SuspendLayout();
+            this.credentialsGroup.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.homeTab.SuspendLayout();
-            this.buffsGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.buffsDataGridView)).BeginInit();
-            this.statisticsBox.SuspendLayout();
             this.inventoryPage.SuspendLayout();
             this.inventoryTabControl.SuspendLayout();
             this.inventoryInvTab.SuspendLayout();
@@ -135,114 +159,39 @@ namespace SimpleCL.Ui
             this.devTab.SuspendLayout();
             this.SuspendLayout();
             // 
-            // credentialsGroup
-            // 
-            credentialsGroup.Controls.Add(this.serverComboBox);
-            credentialsGroup.Controls.Add(this.serverLabel);
-            credentialsGroup.Controls.Add(this.loginButton);
-            credentialsGroup.Controls.Add(this.usernameLabel);
-            credentialsGroup.Controls.Add(this.passwordBox);
-            credentialsGroup.Controls.Add(this.usernameBox);
-            credentialsGroup.Controls.Add(this.passwordLabel);
-            credentialsGroup.Location = new System.Drawing.Point(6, 6);
-            credentialsGroup.Name = "credentialsGroup";
-            credentialsGroup.Size = new System.Drawing.Size(262, 113);
-            credentialsGroup.TabIndex = 6;
-            credentialsGroup.TabStop = false;
-            credentialsGroup.Text = "Credentials";
-            // 
-            // serverComboBox
-            // 
-            this.serverComboBox.Location = new System.Drawing.Point(69, 74);
-            this.serverComboBox.Name = "serverComboBox";
-            this.serverComboBox.Size = new System.Drawing.Size(122, 21);
-            this.serverComboBox.TabIndex = 9;
-            // 
             // serverLabel
             // 
-            this.serverLabel.Location = new System.Drawing.Point(6, 77);
-            this.serverLabel.Name = "serverLabel";
-            this.serverLabel.Size = new System.Drawing.Size(57, 17);
-            this.serverLabel.TabIndex = 10;
-            this.serverLabel.Text = "Server";
-            // 
-            // loginButton
-            // 
-            this.loginButton.Location = new System.Drawing.Point(197, 22);
-            this.loginButton.Name = "loginButton";
-            this.loginButton.Size = new System.Drawing.Size(57, 73);
-            this.loginButton.TabIndex = 8;
-            this.loginButton.Text = "Login";
-            this.loginButton.UseVisualStyleBackColor = true;
-            this.loginButton.Click += new System.EventHandler(this.LoginClicked);
+            serverLabel.Location = new System.Drawing.Point(6, 77);
+            serverLabel.Name = "serverLabel";
+            serverLabel.Size = new System.Drawing.Size(57, 17);
+            serverLabel.TabIndex = 10;
+            serverLabel.Text = "Server";
             // 
             // usernameLabel
             // 
-            this.usernameLabel.Location = new System.Drawing.Point(6, 25);
-            this.usernameLabel.Name = "usernameLabel";
-            this.usernameLabel.Size = new System.Drawing.Size(57, 17);
-            this.usernameLabel.TabIndex = 1;
-            this.usernameLabel.Text = "Username";
-            // 
-            // passwordBox
-            // 
-            this.passwordBox.Location = new System.Drawing.Point(69, 48);
-            this.passwordBox.Name = "passwordBox";
-            this.passwordBox.Size = new System.Drawing.Size(122, 20);
-            this.passwordBox.TabIndex = 2;
-            this.passwordBox.UseSystemPasswordChar = true;
-            // 
-            // usernameBox
-            // 
-            this.usernameBox.Location = new System.Drawing.Point(69, 22);
-            this.usernameBox.Name = "usernameBox";
-            this.usernameBox.Size = new System.Drawing.Size(122, 20);
-            this.usernameBox.TabIndex = 0;
+            usernameLabel.Location = new System.Drawing.Point(6, 25);
+            usernameLabel.Name = "usernameLabel";
+            usernameLabel.Size = new System.Drawing.Size(57, 17);
+            usernameLabel.TabIndex = 1;
+            usernameLabel.Text = "Username";
             // 
             // passwordLabel
             // 
-            this.passwordLabel.Location = new System.Drawing.Point(6, 51);
-            this.passwordLabel.Name = "passwordLabel";
-            this.passwordLabel.Size = new System.Drawing.Size(57, 17);
-            this.passwordLabel.TabIndex = 3;
-            this.passwordLabel.Text = "Password";
-            // 
-            // tabControl
-            // 
-            this.tabControl.Controls.Add(this.homeTab);
-            this.tabControl.Controls.Add(this.inventoryPage);
-            this.tabControl.Controls.Add(this.chatTab);
-            this.tabControl.Controls.Add(this.attackTab);
-            this.tabControl.Controls.Add(this.movementTab);
-            this.tabControl.Controls.Add(this.devTab);
-            this.tabControl.Location = new System.Drawing.Point(12, 12);
-            this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(776, 407);
-            this.tabControl.TabIndex = 4;
-            // 
-            // homeTab
-            // 
-            this.homeTab.Controls.Add(this.buffsGroupBox);
-            this.homeTab.Controls.Add(this.statisticsBox);
-            this.homeTab.Controls.Add(credentialsGroup);
-            this.homeTab.Location = new System.Drawing.Point(4, 22);
-            this.homeTab.Name = "homeTab";
-            this.homeTab.Padding = new System.Windows.Forms.Padding(3);
-            this.homeTab.Size = new System.Drawing.Size(768, 381);
-            this.homeTab.TabIndex = 0;
-            this.homeTab.Text = "Home";
-            this.homeTab.UseVisualStyleBackColor = true;
+            passwordLabel.Location = new System.Drawing.Point(6, 51);
+            passwordLabel.Name = "passwordLabel";
+            passwordLabel.Size = new System.Drawing.Size(57, 17);
+            passwordLabel.TabIndex = 3;
+            passwordLabel.Text = "Password";
             // 
             // buffsGroupBox
             // 
-            this.buffsGroupBox.Controls.Add(this.buffsDataGridView);
-            this.buffsGroupBox.Location = new System.Drawing.Point(6, 125);
-            this.buffsGroupBox.Name = "buffsGroupBox";
-            this.buffsGroupBox.Size = new System.Drawing.Size(262, 250);
-            this.buffsGroupBox.TabIndex = 8;
-            this.buffsGroupBox.TabStop = false;
-            this.buffsGroupBox.Text = "Buffs";
+            buffsGroupBox.Controls.Add(this.buffsDataGridView);
+            buffsGroupBox.Location = new System.Drawing.Point(6, 125);
+            buffsGroupBox.Name = "buffsGroupBox";
+            buffsGroupBox.Size = new System.Drawing.Size(262, 250);
+            buffsGroupBox.TabIndex = 8;
+            buffsGroupBox.TabStop = false;
+            buffsGroupBox.Text = "Buffs";
             // 
             // buffsDataGridView
             // 
@@ -261,36 +210,36 @@ namespace SimpleCL.Ui
             // 
             // statisticsBox
             // 
-            this.statisticsBox.Controls.Add(this.worldCoordsLabelValue);
-            this.statisticsBox.Controls.Add(this.worldCoordsLabel);
-            this.statisticsBox.Controls.Add(this.jobExpProgressBar);
-            this.statisticsBox.Controls.Add(this.hpProgressBar);
-            this.statisticsBox.Controls.Add(this.mpProgressBar);
-            this.statisticsBox.Controls.Add(this.expProgressBar);
-            this.statisticsBox.Controls.Add(this.jobExpLabel);
-            this.statisticsBox.Controls.Add(this.jobLevelLabelValue);
-            this.statisticsBox.Controls.Add(this.jobLevelLabel);
-            this.statisticsBox.Controls.Add(this.jobNameLabelValue);
-            this.statisticsBox.Controls.Add(this.jobNameLabel);
-            this.statisticsBox.Controls.Add(this.nameLabelValue);
-            this.statisticsBox.Controls.Add(this.nameLabel);
-            this.statisticsBox.Controls.Add(this.localCoordsLabelValue);
-            this.statisticsBox.Controls.Add(this.goldLabelValue);
-            this.statisticsBox.Controls.Add(this.spLabelValue);
-            this.statisticsBox.Controls.Add(this.levelLabelValue);
-            this.statisticsBox.Controls.Add(this.localCoordsLabel);
-            this.statisticsBox.Controls.Add(this.goldLabel);
-            this.statisticsBox.Controls.Add(this.spLabel);
-            this.statisticsBox.Controls.Add(this.expLabel);
-            this.statisticsBox.Controls.Add(this.levelLabel);
-            this.statisticsBox.Controls.Add(this.mpLabel);
-            this.statisticsBox.Controls.Add(this.hpLabel);
-            this.statisticsBox.Location = new System.Drawing.Point(274, 6);
-            this.statisticsBox.Name = "statisticsBox";
-            this.statisticsBox.Size = new System.Drawing.Size(488, 254);
-            this.statisticsBox.TabIndex = 7;
-            this.statisticsBox.TabStop = false;
-            this.statisticsBox.Text = "Statistics";
+            statisticsBox.Controls.Add(this.worldCoordsLabelValue);
+            statisticsBox.Controls.Add(worldCoordsLabel);
+            statisticsBox.Controls.Add(this.jobExpProgressBar);
+            statisticsBox.Controls.Add(this.hpProgressBar);
+            statisticsBox.Controls.Add(this.mpProgressBar);
+            statisticsBox.Controls.Add(this.expProgressBar);
+            statisticsBox.Controls.Add(jobExpLabel);
+            statisticsBox.Controls.Add(this.jobLevelLabelValue);
+            statisticsBox.Controls.Add(jobLevelLabel);
+            statisticsBox.Controls.Add(this.jobNameLabelValue);
+            statisticsBox.Controls.Add(jobNameLabel);
+            statisticsBox.Controls.Add(this.nameLabelValue);
+            statisticsBox.Controls.Add(nameLabel);
+            statisticsBox.Controls.Add(this.localCoordsLabelValue);
+            statisticsBox.Controls.Add(this.goldLabelValue);
+            statisticsBox.Controls.Add(this.spLabelValue);
+            statisticsBox.Controls.Add(this.levelLabelValue);
+            statisticsBox.Controls.Add(localCoordsLabel);
+            statisticsBox.Controls.Add(goldLabel);
+            statisticsBox.Controls.Add(spLabel);
+            statisticsBox.Controls.Add(expLabel);
+            statisticsBox.Controls.Add(levelLabel);
+            statisticsBox.Controls.Add(mpLabel);
+            statisticsBox.Controls.Add(hpLabel);
+            statisticsBox.Location = new System.Drawing.Point(274, 6);
+            statisticsBox.Name = "statisticsBox";
+            statisticsBox.Size = new System.Drawing.Size(488, 254);
+            statisticsBox.TabIndex = 7;
+            statisticsBox.TabStop = false;
+            statisticsBox.Text = "Statistics";
             // 
             // worldCoordsLabelValue
             // 
@@ -302,11 +251,11 @@ namespace SimpleCL.Ui
             // 
             // worldCoordsLabel
             // 
-            this.worldCoordsLabel.Location = new System.Drawing.Point(6, 224);
-            this.worldCoordsLabel.Name = "worldCoordsLabel";
-            this.worldCoordsLabel.Size = new System.Drawing.Size(78, 22);
-            this.worldCoordsLabel.TabIndex = 30;
-            this.worldCoordsLabel.Text = "World";
+            worldCoordsLabel.Location = new System.Drawing.Point(6, 224);
+            worldCoordsLabel.Name = "worldCoordsLabel";
+            worldCoordsLabel.Size = new System.Drawing.Size(78, 22);
+            worldCoordsLabel.TabIndex = 30;
+            worldCoordsLabel.Text = "World";
             // 
             // jobExpProgressBar
             // 
@@ -358,11 +307,11 @@ namespace SimpleCL.Ui
             // 
             // jobExpLabel
             // 
-            this.jobExpLabel.Location = new System.Drawing.Point(6, 135);
-            this.jobExpLabel.Name = "jobExpLabel";
-            this.jobExpLabel.Size = new System.Drawing.Size(78, 22);
-            this.jobExpLabel.TabIndex = 24;
-            this.jobExpLabel.Text = "Job EXP";
+            jobExpLabel.Location = new System.Drawing.Point(6, 135);
+            jobExpLabel.Name = "jobExpLabel";
+            jobExpLabel.Size = new System.Drawing.Size(78, 22);
+            jobExpLabel.TabIndex = 24;
+            jobExpLabel.Text = "Job EXP";
             // 
             // jobLevelLabelValue
             // 
@@ -374,11 +323,11 @@ namespace SimpleCL.Ui
             // 
             // jobLevelLabel
             // 
-            this.jobLevelLabel.Location = new System.Drawing.Point(174, 91);
-            this.jobLevelLabel.Name = "jobLevelLabel";
-            this.jobLevelLabel.Size = new System.Drawing.Size(78, 22);
-            this.jobLevelLabel.TabIndex = 22;
-            this.jobLevelLabel.Text = "Job level";
+            jobLevelLabel.Location = new System.Drawing.Point(174, 91);
+            jobLevelLabel.Name = "jobLevelLabel";
+            jobLevelLabel.Size = new System.Drawing.Size(78, 22);
+            jobLevelLabel.TabIndex = 22;
+            jobLevelLabel.Text = "Job level";
             // 
             // jobNameLabelValue
             // 
@@ -390,11 +339,11 @@ namespace SimpleCL.Ui
             // 
             // jobNameLabel
             // 
-            this.jobNameLabel.Location = new System.Drawing.Point(174, 22);
-            this.jobNameLabel.Name = "jobNameLabel";
-            this.jobNameLabel.Size = new System.Drawing.Size(78, 22);
-            this.jobNameLabel.TabIndex = 20;
-            this.jobNameLabel.Text = "Job alias";
+            jobNameLabel.Location = new System.Drawing.Point(174, 22);
+            jobNameLabel.Name = "jobNameLabel";
+            jobNameLabel.Size = new System.Drawing.Size(78, 22);
+            jobNameLabel.TabIndex = 20;
+            jobNameLabel.Text = "Job alias";
             // 
             // nameLabelValue
             // 
@@ -406,11 +355,11 @@ namespace SimpleCL.Ui
             // 
             // nameLabel
             // 
-            this.nameLabel.Location = new System.Drawing.Point(6, 22);
-            this.nameLabel.Name = "nameLabel";
-            this.nameLabel.Size = new System.Drawing.Size(78, 22);
-            this.nameLabel.TabIndex = 18;
-            this.nameLabel.Text = "Name";
+            nameLabel.Location = new System.Drawing.Point(6, 22);
+            nameLabel.Name = "nameLabel";
+            nameLabel.Size = new System.Drawing.Size(78, 22);
+            nameLabel.TabIndex = 18;
+            nameLabel.Text = "Name";
             // 
             // localCoordsLabelValue
             // 
@@ -446,64 +395,179 @@ namespace SimpleCL.Ui
             // 
             // localCoordsLabel
             // 
-            this.localCoordsLabel.Location = new System.Drawing.Point(6, 202);
-            this.localCoordsLabel.Name = "localCoordsLabel";
-            this.localCoordsLabel.Size = new System.Drawing.Size(78, 22);
-            this.localCoordsLabel.TabIndex = 8;
-            this.localCoordsLabel.Text = "Local";
+            localCoordsLabel.Location = new System.Drawing.Point(6, 202);
+            localCoordsLabel.Name = "localCoordsLabel";
+            localCoordsLabel.Size = new System.Drawing.Size(78, 22);
+            localCoordsLabel.TabIndex = 8;
+            localCoordsLabel.Text = "Local";
             // 
             // goldLabel
             // 
-            this.goldLabel.Location = new System.Drawing.Point(6, 180);
-            this.goldLabel.Name = "goldLabel";
-            this.goldLabel.Size = new System.Drawing.Size(78, 22);
-            this.goldLabel.TabIndex = 7;
-            this.goldLabel.Text = "Gold";
+            goldLabel.Location = new System.Drawing.Point(6, 180);
+            goldLabel.Name = "goldLabel";
+            goldLabel.Size = new System.Drawing.Size(78, 22);
+            goldLabel.TabIndex = 7;
+            goldLabel.Text = "Gold";
             // 
             // spLabel
             // 
-            this.spLabel.Location = new System.Drawing.Point(6, 158);
-            this.spLabel.Name = "spLabel";
-            this.spLabel.Size = new System.Drawing.Size(78, 22);
-            this.spLabel.TabIndex = 4;
-            this.spLabel.Text = "SP";
+            spLabel.Location = new System.Drawing.Point(6, 158);
+            spLabel.Name = "spLabel";
+            spLabel.Size = new System.Drawing.Size(78, 22);
+            spLabel.TabIndex = 4;
+            spLabel.Text = "SP";
             // 
             // expLabel
             // 
-            this.expLabel.Location = new System.Drawing.Point(6, 113);
-            this.expLabel.Name = "expLabel";
-            this.expLabel.Size = new System.Drawing.Size(78, 22);
-            this.expLabel.TabIndex = 3;
-            this.expLabel.Text = "EXP";
+            expLabel.Location = new System.Drawing.Point(6, 113);
+            expLabel.Name = "expLabel";
+            expLabel.Size = new System.Drawing.Size(78, 22);
+            expLabel.TabIndex = 3;
+            expLabel.Text = "EXP";
             // 
             // levelLabel
             // 
-            this.levelLabel.Location = new System.Drawing.Point(6, 91);
-            this.levelLabel.Name = "levelLabel";
-            this.levelLabel.Size = new System.Drawing.Size(78, 22);
-            this.levelLabel.TabIndex = 2;
-            this.levelLabel.Text = "Level";
+            levelLabel.Location = new System.Drawing.Point(6, 91);
+            levelLabel.Name = "levelLabel";
+            levelLabel.Size = new System.Drawing.Size(78, 22);
+            levelLabel.TabIndex = 2;
+            levelLabel.Text = "Level";
             // 
             // mpLabel
             // 
-            this.mpLabel.Location = new System.Drawing.Point(6, 69);
-            this.mpLabel.Name = "mpLabel";
-            this.mpLabel.Size = new System.Drawing.Size(78, 22);
-            this.mpLabel.TabIndex = 1;
-            this.mpLabel.Text = "MP";
+            mpLabel.Location = new System.Drawing.Point(6, 69);
+            mpLabel.Name = "mpLabel";
+            mpLabel.Size = new System.Drawing.Size(78, 22);
+            mpLabel.TabIndex = 1;
+            mpLabel.Text = "MP";
             // 
             // hpLabel
             // 
-            this.hpLabel.Location = new System.Drawing.Point(6, 47);
-            this.hpLabel.Name = "hpLabel";
-            this.hpLabel.Size = new System.Drawing.Size(78, 22);
-            this.hpLabel.TabIndex = 0;
-            this.hpLabel.Text = "HP";
+            hpLabel.Location = new System.Drawing.Point(6, 47);
+            hpLabel.Name = "hpLabel";
+            hpLabel.Size = new System.Drawing.Size(78, 22);
+            hpLabel.TabIndex = 0;
+            hpLabel.Text = "HP";
+            // 
+            // label3
+            // 
+            label3.Location = new System.Drawing.Point(261, 352);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(53, 23);
+            label3.TabIndex = 2;
+            label3.Text = "Gold:";
+            // 
+            // label2
+            // 
+            label2.Location = new System.Drawing.Point(421, 259);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(75, 19);
+            label2.TabIndex = 3;
+            label2.Text = "Entities";
+            // 
+            // label1
+            // 
+            label1.Location = new System.Drawing.Point(201, 259);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(75, 19);
+            label1.TabIndex = 2;
+            label1.Text = "Skills";
+            // 
+            // currWorldLabel
+            // 
+            currWorldLabel.Location = new System.Drawing.Point(291, 358);
+            currWorldLabel.Name = "currWorldLabel";
+            currWorldLabel.Size = new System.Drawing.Size(39, 23);
+            currWorldLabel.TabIndex = 9;
+            currWorldLabel.Text = "World";
+            // 
+            // currLocalLabel
+            // 
+            currLocalLabel.Location = new System.Drawing.Point(0, 358);
+            currLocalLabel.Name = "currLocalLabel";
+            currLocalLabel.Size = new System.Drawing.Size(46, 23);
+            currLocalLabel.TabIndex = 7;
+            currLocalLabel.Text = "Local";
+            // 
+            // credentialsGroup
+            // 
+            this.credentialsGroup.Controls.Add(this.serverComboBox);
+            this.credentialsGroup.Controls.Add(serverLabel);
+            this.credentialsGroup.Controls.Add(this.loginButton);
+            this.credentialsGroup.Controls.Add(usernameLabel);
+            this.credentialsGroup.Controls.Add(this.passwordBox);
+            this.credentialsGroup.Controls.Add(this.usernameBox);
+            this.credentialsGroup.Controls.Add(passwordLabel);
+            this.credentialsGroup.Location = new System.Drawing.Point(6, 6);
+            this.credentialsGroup.Name = "credentialsGroup";
+            this.credentialsGroup.Size = new System.Drawing.Size(262, 113);
+            this.credentialsGroup.TabIndex = 6;
+            this.credentialsGroup.TabStop = false;
+            this.credentialsGroup.Text = "Credentials";
+            // 
+            // serverComboBox
+            // 
+            this.serverComboBox.Location = new System.Drawing.Point(69, 74);
+            this.serverComboBox.Name = "serverComboBox";
+            this.serverComboBox.Size = new System.Drawing.Size(122, 21);
+            this.serverComboBox.TabIndex = 9;
+            // 
+            // loginButton
+            // 
+            this.loginButton.Location = new System.Drawing.Point(197, 22);
+            this.loginButton.Name = "loginButton";
+            this.loginButton.Size = new System.Drawing.Size(57, 73);
+            this.loginButton.TabIndex = 8;
+            this.loginButton.Text = "Login";
+            this.loginButton.UseVisualStyleBackColor = true;
+            this.loginButton.Click += new System.EventHandler(this.LoginClicked);
+            // 
+            // passwordBox
+            // 
+            this.passwordBox.Location = new System.Drawing.Point(69, 48);
+            this.passwordBox.Name = "passwordBox";
+            this.passwordBox.Size = new System.Drawing.Size(122, 20);
+            this.passwordBox.TabIndex = 2;
+            this.passwordBox.UseSystemPasswordChar = true;
+            // 
+            // usernameBox
+            // 
+            this.usernameBox.Location = new System.Drawing.Point(69, 22);
+            this.usernameBox.Name = "usernameBox";
+            this.usernameBox.Size = new System.Drawing.Size(122, 20);
+            this.usernameBox.TabIndex = 0;
+            // 
+            // tabControl
+            // 
+            this.tabControl.Controls.Add(this.homeTab);
+            this.tabControl.Controls.Add(this.inventoryPage);
+            this.tabControl.Controls.Add(this.chatTab);
+            this.tabControl.Controls.Add(this.attackTab);
+            this.tabControl.Controls.Add(this.movementTab);
+            this.tabControl.Controls.Add(this.devTab);
+            this.tabControl.Location = new System.Drawing.Point(12, 12);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(776, 407);
+            this.tabControl.TabIndex = 4;
+            // 
+            // homeTab
+            // 
+            this.homeTab.Controls.Add(buffsGroupBox);
+            this.homeTab.Controls.Add(statisticsBox);
+            this.homeTab.Controls.Add(this.credentialsGroup);
+            this.homeTab.Location = new System.Drawing.Point(4, 22);
+            this.homeTab.Name = "homeTab";
+            this.homeTab.Padding = new System.Windows.Forms.Padding(3);
+            this.homeTab.Size = new System.Drawing.Size(768, 381);
+            this.homeTab.TabIndex = 0;
+            this.homeTab.Text = "Home";
+            this.homeTab.UseVisualStyleBackColor = true;
             // 
             // inventoryPage
             // 
             this.inventoryPage.Controls.Add(this.goldAmountLabel);
-            this.inventoryPage.Controls.Add(this.label3);
+            this.inventoryPage.Controls.Add(label3);
             this.inventoryPage.Controls.Add(this.refreshInventoriesButton);
             this.inventoryPage.Controls.Add(this.inventoryTabControl);
             this.inventoryPage.Location = new System.Drawing.Point(4, 22);
@@ -520,14 +584,6 @@ namespace SimpleCL.Ui
             this.goldAmountLabel.Size = new System.Drawing.Size(160, 23);
             this.goldAmountLabel.TabIndex = 3;
             this.goldAmountLabel.Text = "0";
-            // 
-            // label3
-            // 
-            this.label3.Location = new System.Drawing.Point(261, 352);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(53, 23);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Gold:";
             // 
             // refreshInventoriesButton
             // 
@@ -691,8 +747,8 @@ namespace SimpleCL.Ui
             this.attackTab.Controls.Add(this.addEntityButton);
             this.attackTab.Controls.Add(this.nearEntitiesListBox);
             this.attackTab.Controls.Add(this.availSkillsListBox);
-            this.attackTab.Controls.Add(this.label2);
-            this.attackTab.Controls.Add(this.label1);
+            this.attackTab.Controls.Add(label2);
+            this.attackTab.Controls.Add(label1);
             this.attackTab.Controls.Add(this.attackEntitiesListBox);
             this.attackTab.Controls.Add(this.attackSkillsListBox);
             this.attackTab.Location = new System.Drawing.Point(4, 22);
@@ -768,22 +824,6 @@ namespace SimpleCL.Ui
             this.availSkillsListBox.Size = new System.Drawing.Size(147, 160);
             this.availSkillsListBox.TabIndex = 4;
             // 
-            // label2
-            // 
-            this.label2.Location = new System.Drawing.Point(421, 259);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(75, 19);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Entities";
-            // 
-            // label1
-            // 
-            this.label1.Location = new System.Drawing.Point(201, 259);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(75, 19);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Skills";
-            // 
             // attackEntitiesListBox
             // 
             this.attackEntitiesListBox.FormattingEnabled = true;
@@ -802,10 +842,13 @@ namespace SimpleCL.Ui
             // 
             // movementTab
             // 
+            this.movementTab.Controls.Add(this.clearMarkersButton);
+            this.movementTab.Controls.Add(this.doubleMarkersButton);
+            this.movementTab.Controls.Add(this.mapVisibleCheckbox);
             this.movementTab.Controls.Add(this.mapPanel);
-            this.movementTab.Controls.Add(this.currWorldLabel);
+            this.movementTab.Controls.Add(currWorldLabel);
             this.movementTab.Controls.Add(this.currWorldLabelValue);
-            this.movementTab.Controls.Add(this.currLocalLabel);
+            this.movementTab.Controls.Add(currLocalLabel);
             this.movementTab.Controls.Add(this.currLocalLabelValue);
             this.movementTab.Location = new System.Drawing.Point(4, 22);
             this.movementTab.Name = "movementTab";
@@ -813,6 +856,35 @@ namespace SimpleCL.Ui
             this.movementTab.TabIndex = 4;
             this.movementTab.Text = "Movement";
             this.movementTab.UseVisualStyleBackColor = true;
+            // 
+            // clearMarkersButton
+            // 
+            this.clearMarkersButton.Location = new System.Drawing.Point(574, 353);
+            this.clearMarkersButton.Name = "clearMarkersButton";
+            this.clearMarkersButton.Size = new System.Drawing.Size(45, 23);
+            this.clearMarkersButton.TabIndex = 14;
+            this.clearMarkersButton.Text = "C";
+            this.clearMarkersButton.UseVisualStyleBackColor = true;
+            // 
+            // doubleMarkersButton
+            // 
+            this.doubleMarkersButton.Location = new System.Drawing.Point(521, 353);
+            this.doubleMarkersButton.Name = "doubleMarkersButton";
+            this.doubleMarkersButton.Size = new System.Drawing.Size(47, 23);
+            this.doubleMarkersButton.TabIndex = 13;
+            this.doubleMarkersButton.Text = "D";
+            this.doubleMarkersButton.UseVisualStyleBackColor = true;
+            // 
+            // mapVisibleCheckbox
+            // 
+            this.mapVisibleCheckbox.Checked = true;
+            this.mapVisibleCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.mapVisibleCheckbox.Location = new System.Drawing.Point(647, 357);
+            this.mapVisibleCheckbox.Name = "mapVisibleCheckbox";
+            this.mapVisibleCheckbox.Size = new System.Drawing.Size(104, 16);
+            this.mapVisibleCheckbox.TabIndex = 12;
+            this.mapVisibleCheckbox.Text = "Visible";
+            this.mapVisibleCheckbox.UseVisualStyleBackColor = true;
             // 
             // mapPanel
             // 
@@ -829,29 +901,13 @@ namespace SimpleCL.Ui
             this.minimap.Size = new System.Drawing.Size(800, 800);
             this.minimap.TabIndex = 10;
             // 
-            // currWorldLabel
-            // 
-            this.currWorldLabel.Location = new System.Drawing.Point(291, 358);
-            this.currWorldLabel.Name = "currWorldLabel";
-            this.currWorldLabel.Size = new System.Drawing.Size(39, 23);
-            this.currWorldLabel.TabIndex = 9;
-            this.currWorldLabel.Text = "World";
-            // 
             // currWorldLabelValue
             // 
             this.currWorldLabelValue.Location = new System.Drawing.Point(336, 358);
             this.currWorldLabelValue.Name = "currWorldLabelValue";
-            this.currWorldLabelValue.Size = new System.Drawing.Size(278, 23);
+            this.currWorldLabelValue.Size = new System.Drawing.Size(179, 23);
             this.currWorldLabelValue.TabIndex = 8;
             this.currWorldLabelValue.Text = "0, 0";
-            // 
-            // currLocalLabel
-            // 
-            this.currLocalLabel.Location = new System.Drawing.Point(0, 358);
-            this.currLocalLabel.Name = "currLocalLabel";
-            this.currLocalLabel.Size = new System.Drawing.Size(46, 23);
-            this.currLocalLabel.TabIndex = 7;
-            this.currLocalLabel.Text = "Local";
             // 
             // currLocalLabelValue
             // 
@@ -920,13 +976,13 @@ namespace SimpleCL.Ui
             this.MaximizeBox = false;
             this.Name = "Gui";
             this.Text = "SimpleCL";
-            credentialsGroup.ResumeLayout(false);
-            credentialsGroup.PerformLayout();
+            buffsGroupBox.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize) (this.buffsDataGridView)).EndInit();
+            statisticsBox.ResumeLayout(false);
+            this.credentialsGroup.ResumeLayout(false);
+            this.credentialsGroup.PerformLayout();
             this.tabControl.ResumeLayout(false);
             this.homeTab.ResumeLayout(false);
-            this.buffsGroupBox.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize) (this.buffsDataGridView)).EndInit();
-            this.statisticsBox.ResumeLayout(false);
             this.inventoryPage.ResumeLayout(false);
             this.inventoryTabControl.ResumeLayout(false);
             this.inventoryInvTab.ResumeLayout(false);
@@ -945,14 +1001,16 @@ namespace SimpleCL.Ui
             this.ResumeLayout(false);
         }
 
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button doubleMarkersButton;
+        private System.Windows.Forms.Button clearMarkersButton;
+
+        private System.Windows.Forms.CheckBox mapVisibleCheckbox;
+
         private System.Windows.Forms.Label goldAmountLabel;
 
         private System.Windows.Forms.Button refreshInventoriesButton;
 
         private System.Windows.Forms.DataGridView buffsDataGridView;
-
-        private System.Windows.Forms.GroupBox buffsGroupBox;
 
         private System.Windows.Forms.Button addEntityButton;
         private System.Windows.Forms.Button removeEntityButton;
@@ -964,12 +1022,7 @@ namespace SimpleCL.Ui
         private System.Windows.Forms.Panel mapPanel;
 
 
-        private System.Windows.Forms.Label currLocalLabel;
-        private System.Windows.Forms.Label currWorldLabel;
         private System.Windows.Forms.Label currWorldLabelValue;
-
-        private System.Windows.Forms.Label worldCoordsLabel;
-        private System.Windows.Forms.Label localCoordsLabel;
 
         private System.Windows.Forms.TabPage movementTab;
         private System.Windows.Forms.Label currLocalLabelValue;
@@ -977,13 +1030,10 @@ namespace SimpleCL.Ui
         private System.Windows.Forms.TabPage devTab;
         private System.Windows.Forms.CheckBox debugGwCheckbox;
         private System.Windows.Forms.CheckBox debugAgCheckbox;
-        
-        private System.Windows.Forms.Label nameLabel;
+
         private System.Windows.Forms.Label nameLabelValue;
         private System.Windows.Forms.Label jobNameLabelValue;
-        private System.Windows.Forms.Label jobNameLabel;
         private System.Windows.Forms.Label jobLevelLabelValue;
-        private System.Windows.Forms.Label jobLevelLabel;
 
         private System.Windows.Forms.DataGridView inventoryDataGridView;
         private System.Windows.Forms.DataGridView equipmentDataGridView;
@@ -999,8 +1049,6 @@ namespace SimpleCL.Ui
 
         private System.Windows.Forms.TabPage inventoryPage;
 
-        private System.Windows.Forms.Label jobExpLabel;
-
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar2;
 
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
@@ -1013,16 +1061,8 @@ namespace SimpleCL.Ui
 
         private System.Windows.Forms.Label levelLabelValue;
 
-        private System.Windows.Forms.Label hpLabel;
-        private System.Windows.Forms.Label mpLabel;
-        private System.Windows.Forms.Label levelLabel;
-        private System.Windows.Forms.Label expLabel;
-        private System.Windows.Forms.Label spLabel;
-        private System.Windows.Forms.Label goldLabel;
-
 
         private System.Windows.Forms.TabPage homeTab;
-        private System.Windows.Forms.GroupBox statisticsBox;
 
         private System.Windows.Forms.TabPage chatTab;
         private System.Windows.Forms.ListBox chatBox;
@@ -1033,25 +1073,20 @@ namespace SimpleCL.Ui
 
         private System.Windows.Forms.TextBox passwordBox;
         private System.Windows.Forms.TabControl tabControl;
-        private System.Windows.Forms.Label passwordLabel;
 
         private System.Windows.Forms.TextBox usernameBox;
-        private System.Windows.Forms.Label usernameLabel;
 
-        private System.Windows.Forms.Label serverLabel;
         private System.Windows.Forms.ComboBox serverComboBox;
         
         private System.Windows.Forms.TabPage attackTab;
         private System.Windows.Forms.ListBox attackSkillsListBox;
         private System.Windows.Forms.ListBox attackEntitiesListBox;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListBox availSkillsListBox;
 
         #endregion
 
         
-        private Map minimap;
+        private SimpleCL.Ui.Components.Map minimap;
         private TextProgressBar expProgressBar;
         private TextProgressBar hpProgressBar;
         private TextProgressBar mpProgressBar;
