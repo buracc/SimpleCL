@@ -552,10 +552,10 @@ namespace SimpleCL.Services.Game
                                     var level = packet.ReadByte();
                                     packet.ReadByte();
                                 }
-                                
+
                                 break;
                             }
-                            
+
                             var state = packet.ReadByte();
                             var refObjId = packet.ReadUInt();
                             var name = packet.ReadAscii();

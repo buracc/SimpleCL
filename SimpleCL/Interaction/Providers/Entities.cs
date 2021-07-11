@@ -63,6 +63,8 @@ namespace SimpleCL.Interaction.Providers
             }
 
             Program.Gui.RemoveMinimapMarker(uid);
+            
+            removedEntity.Dispose();
         }
 
         public static void Moved(uint uid, LocalPoint destination = null, ushort angle = 0)
@@ -128,7 +130,13 @@ namespace SimpleCL.Interaction.Providers
             var buffsToRemove = actor.Buffs.Where(x => x.Uid == buffUid).ToList();
             foreach (var buff in buffsToRemove)
             {
-                Program.Gui.InvokeLater(() => actor.Buffs.Remove(buff));
+                buff.Dispose();
+                Program.Gui.InvokeLater(() =>
+                {
+                    var removed = actor.Buffs[actor.Buffs.IndexOf(buff)];
+                    removed?.Dispose();
+                    actor.Buffs.Remove(buff);
+                });
                 Buffs.Remove(buff.Uid);
             }
         }

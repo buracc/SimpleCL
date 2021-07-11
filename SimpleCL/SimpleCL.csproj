@@ -120,7 +120,6 @@
     <Compile Include="Models\Entities\CharacterPet.cs" />
     <Compile Include="Models\Entities\Cos.cs" />
     <Compile Include="Models\Entities\Exchange\Stall.cs" />
-    <Compile Include="Models\Entities\Exchange\StallItem.cs" />
     <Compile Include="Models\Entities\Fortress\Structure\FortressCommandPost.cs" />
     <Compile Include="Models\Entities\Fortress\Structure\FortressDefenseCamp.cs" />
     <Compile Include="Models\Entities\Fortress\Structure\FortressGate.cs" />
@@ -160,6 +159,7 @@
     <Compile Include="Models\ITargetable.cs" />
     <Compile Include="Models\Items\InventoryItem.cs" />
     <Compile Include="Models\Items\ShopItem.cs" />
+    <Compile Include="Models\Items\StallItem.cs" />
     <Compile Include="Models\Server\GameServer.cs" />
     <Compile Include="Models\Skills\Buff.cs" />
     <Compile Include="Models\Skills\CharacterSkill.cs" />

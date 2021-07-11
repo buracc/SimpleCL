@@ -1,11 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Threading.Tasks;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Server;
 using SimpleCL.Interaction.Providers;
 using SimpleCL.Models.Entities;
 using SimpleCL.Models.Entities.Exchange;
+using SimpleCL.Models.Items;
 using SimpleCL.Network;
 using SimpleCL.SecurityApi;
 using SimpleCL.Ui;
@@ -48,9 +47,7 @@ namespace SimpleCL.Services.Game
             byte slot;
             while ((slot = packet.ReadByte()) != byte.MaxValue)
             {
-                var stallItem = new StallItem();
-                var item = LocalPlayerService.ParseItem(packet, _silkroadServer.Locale);
-                stallItem.Item = item;
+                var stallItem = StallItem.ParseItem(packet, _silkroadServer.Locale);
                 stallItem.Slot = slot;
                 var inventorySlot = packet.ReadByte();
                 stallItem.Quantity = packet.ReadUShort();
@@ -117,7 +114,7 @@ namespace SimpleCL.Services.Game
                 return;
             }
 
-            StallWindow?.InvokeLater(() => { StallWindow?.Close(); });
+            StallWindow?.InvokeLater(() => { StallWindow?.Exit(); });
         }
     }
 }

@@ -56,6 +56,20 @@ namespace SimpleCL.Models.Entities
             LocalPlayer.Get.Tracing = true;
             InteractionQueue.PacketQueue.Enqueue(actionPacket);
         }
+
+        public new void Dispose()
+        {
+            base.Dispose();
+            
+            foreach (var inventoryItem in InventoryItems)
+            {
+                inventoryItem?.Dispose();
+            }
+            
+            InventoryItems?.Clear();
+            
+            Stall?.Dispose();
+        }
         
         public enum Interaction : byte
         {

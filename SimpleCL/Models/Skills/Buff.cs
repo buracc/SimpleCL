@@ -7,9 +7,9 @@ using SimpleCL.Enums.Skills;
 
 namespace SimpleCL.Models.Skills
 {
-    public class Buff : Skill
+    public class Buff : Skill, IDisposable
     {
-        public new Image Icon => Image.FromFile(Directory.GetCurrentDirectory() + Constants.Paths.Icons + base.Icon.Replace(Constants.Strings.Ddj, Constants.Strings.Png));
+        public Image Icon { get; set; }
         public string BuffName => Name;
         [Browsable(false)]
         public uint Uid { get; set; }
@@ -26,6 +26,8 @@ namespace SimpleCL.Models.Skills
 
         public Buff(uint id) : base(id)
         {
+            Icon = Image.FromFile(Directory.GetCurrentDirectory() + Constants.Paths.Icons +
+                                  IconPath.Replace(Constants.Strings.Ddj, Constants.Strings.Png));
         }
 
         public bool IsRecoveryDivision()
@@ -47,6 +49,11 @@ namespace SimpleCL.Models.Skills
         public bool IsTimed()
         {
             return Attributes.Contains(SkillData.Attribute.Timed);
+        }
+
+        public void Dispose()
+        {
+            Icon?.Dispose();
         }
     }
 }

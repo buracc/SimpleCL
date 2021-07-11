@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using SimpleCL.Models.Entities;
 using SimpleCL.Models.Entities.Exchange;
+using SimpleCL.Models.Items;
 using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Ui
@@ -93,6 +94,12 @@ namespace SimpleCL.Ui
             e.Cancel = true;
             _player.Stall.Leave();
             ClosedByUser = false;
+        }
+
+        public void Exit()
+        {
+            _player?.Stall?.Dispose();
+            Close();
         }
     }
 }

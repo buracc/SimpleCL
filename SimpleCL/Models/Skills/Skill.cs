@@ -29,7 +29,7 @@ namespace SimpleCL.Models.Skills
         public readonly uint SpRequired;
         public readonly uint MpRequired;
         public readonly ushort Level;
-        public readonly string Icon;
+        public readonly string IconPath;
         public readonly string Description;
         public readonly List<SkillData.Attribute> Attributes;
         public readonly ushort RequiredGroupId1;
@@ -65,7 +65,7 @@ namespace SimpleCL.Models.Skills
             SpRequired = uint.Parse(data[Constants.Strings.Sp]);
             MpRequired = uint.Parse(data[Constants.Strings.Mp]);
             Level = ushort.Parse(data[Constants.Strings.Level]);
-            Icon = data[Constants.Strings.Icon];
+            IconPath = data[Constants.Strings.Icon];
             Description = data[Constants.Strings.Description];
             Attributes = Array.ConvertAll(data[Constants.Strings.Attributes].Split(','), uint.Parse)
                 .Select(x => (SkillData.Attribute) x).ToList();

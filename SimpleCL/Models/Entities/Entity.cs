@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
@@ -16,7 +17,7 @@ using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Models.Entities
 {
-    public class Entity : ILocatable, IIdentifiable, INotifyPropertyChanged
+    public class Entity : ILocatable, IIdentifiable, INotifyPropertyChanged, IDisposable
     {
         #region Members
 
@@ -337,6 +338,20 @@ namespace SimpleCL.Models.Entities
         public override int GetHashCode()
         {
             return (int) Uid;
+        }
+
+        public void Dispose()
+        {
+            switch (this)
+            {
+                case Player player:
+                    player.Dispose();
+                    break;
+                
+                case Actor actor:
+                    actor.Dispose();
+                    break;
+            }
         }
 
         public override string ToString()

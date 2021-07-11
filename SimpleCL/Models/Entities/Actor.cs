@@ -1,11 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Skills;
 using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Models.Entities
 {
-    public class Actor : Entity
+    public class Actor : Entity, IDisposable
     {
         private uint _hp;
         private uint _mp;
@@ -205,6 +206,17 @@ namespace SimpleCL.Models.Entities
                 Unk07 = 0x40000000,
                 Unk08 = 0x80000000
             }
+        }
+
+        public void Dispose()
+        {
+            _movementTimer?.Dispose();
+            foreach (var buff in Buffs)
+            {
+                buff.Dispose();
+            }
+            
+            Buffs.Clear();
         }
     }
 }

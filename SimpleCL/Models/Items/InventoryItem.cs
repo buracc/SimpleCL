@@ -11,7 +11,14 @@ using SimpleCL.SecurityApi;
 
 namespace SimpleCL.Models.Items
 {
-    public class InventoryItem : IComparable<InventoryItem>
+    /// <summary>
+    /// todo:
+    /// - make items disposable
+    /// - dispose images before disposing item
+    /// - same thing to buffs
+    /// - correctly clear all items/buffs on entity despawn
+    /// </summary>
+    public class InventoryItem : IComparable<InventoryItem>, IDisposable
     {
         public Image Icon { get; set; }
         public byte Slot { get; set; }
@@ -101,6 +108,11 @@ namespace SimpleCL.Models.Items
         public override string ToString()
         {
             return Name;
+        }
+
+        public void Dispose()
+        {
+            Icon?.Dispose();
         }
     }
 }
