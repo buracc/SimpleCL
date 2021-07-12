@@ -101,7 +101,7 @@ namespace SimpleCL.Models.Entities
             Name = name;
         }
 
-        public Entity(uint id, QueryBuilder queryBuilder = null)
+        public Entity(uint id)
         {
             Id = id;
 
@@ -113,17 +113,17 @@ namespace SimpleCL.Models.Entities
                     throw new EntityParseException(id);
             }
 
-            if ((DatabaseData = GameDatabase.Get.GetModel(id, queryBuilder)) != null)
+            if ((DatabaseData = GameDatabase.Get.GetModel(id)) != null)
             {
                 TypeId1 = 1;
             }
-            else if ((DatabaseData = GameDatabase.Get.GetItemData(id, queryBuilder)) != null)
+            else if ((DatabaseData = GameDatabase.Get.GetItemData(id)) != null)
             {
                 TypeId1 = 3;
             }
             else
             {
-                var teleLinks = GameDatabase.Get.GetTeleportLinks(id, queryBuilder);
+                var teleLinks = GameDatabase.Get.GetTeleportLinks(id);
                 if (teleLinks.IsNotEmpty())
                 {
                     DatabaseData = teleLinks[0];
@@ -152,9 +152,9 @@ namespace SimpleCL.Models.Entities
 
         #region Methods
 
-        public static Entity FromId(uint id, QueryBuilder queryBuilder = null)
+        public static Entity FromId(uint id)
         {
-            var entity = new Entity(id, queryBuilder);
+            var entity = new Entity(id);
             if (entity.IsSkillAoe())
             {
                 return new SkillAoe(id);

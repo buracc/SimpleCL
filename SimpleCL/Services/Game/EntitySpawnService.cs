@@ -61,31 +61,23 @@ namespace SimpleCL.Services.Game
         [PacketHandler(Opcodes.Agent.Response.ENTITY_GROUP_SPAWN_END)]
         public void GroupSpawnEnd(Server server, Packet packet)
         {
-            QueryBuilder queryBuilder = null;
-
-            if (_spawnCount > 0)
+            if (_spawnPacket == null)
             {
-                queryBuilder = new QueryBuilder(DirectoryUtils.GetDbFile(GameDatabase.Get.SelectedServer.Name + "_DB"),
-                    true);
+                return;
             }
-
-            if (_spawnPacket != null)
+            
+            _spawnPacket.Lock();
+            _spawnCount.Repeat(i =>
             {
-                _spawnPacket.Lock();
-                _spawnCount.Repeat(i =>
+                if (_spawnType == 1)
                 {
-                    if (_spawnType == 1)
-                    {
-                        EntitySpawn(server, _spawnPacket, queryBuilder);
-                    }
-                    else
-                    {
-                        EntityDespawn(server, _spawnPacket);
-                    }
-                });
-            }
-
-            queryBuilder?.Finish();
+                    EntitySpawn(server, _spawnPacket);
+                }
+                else
+                {
+                    EntityDespawn(server, _spawnPacket);
+                }
+            });
         }
 
         #endregion
@@ -109,14 +101,14 @@ namespace SimpleCL.Services.Game
             Entities.Despawned(uid);
         }
 
-        private void EntitySpawn(Server server, Packet packet, QueryBuilder queryBuilder = null)
+        private void EntitySpawn(Server server, Packet packet)
         {
             var refObjId = packet.ReadUInt();
             Entity entity;
 
             try
             {
-                entity = Entity.FromId(refObjId, queryBuilder);
+                entity = Entity.FromId(refObjId);
             }
             catch (EntityParseException e)
             {
