@@ -101,8 +101,6 @@ namespace SimpleCL.Ui
             this.attackEntitiesListBox = new System.Windows.Forms.ListBox();
             this.attackSkillsListBox = new System.Windows.Forms.ListBox();
             this.movementTab = new System.Windows.Forms.TabPage();
-            this.clearMarkersButton = new System.Windows.Forms.Button();
-            this.doubleMarkersButton = new System.Windows.Forms.Button();
             this.mapVisibleCheckbox = new System.Windows.Forms.CheckBox();
             this.mapPanel = new System.Windows.Forms.Panel();
             this.minimap = new SimpleCL.Ui.Components.Map();
@@ -842,8 +840,6 @@ namespace SimpleCL.Ui
             // 
             // movementTab
             // 
-            this.movementTab.Controls.Add(this.clearMarkersButton);
-            this.movementTab.Controls.Add(this.doubleMarkersButton);
             this.movementTab.Controls.Add(this.mapVisibleCheckbox);
             this.movementTab.Controls.Add(this.mapPanel);
             this.movementTab.Controls.Add(currWorldLabel);
@@ -856,24 +852,6 @@ namespace SimpleCL.Ui
             this.movementTab.TabIndex = 4;
             this.movementTab.Text = "Movement";
             this.movementTab.UseVisualStyleBackColor = true;
-            // 
-            // clearMarkersButton
-            // 
-            this.clearMarkersButton.Location = new System.Drawing.Point(574, 353);
-            this.clearMarkersButton.Name = "clearMarkersButton";
-            this.clearMarkersButton.Size = new System.Drawing.Size(45, 23);
-            this.clearMarkersButton.TabIndex = 14;
-            this.clearMarkersButton.Text = "C";
-            this.clearMarkersButton.UseVisualStyleBackColor = true;
-            // 
-            // doubleMarkersButton
-            // 
-            this.doubleMarkersButton.Location = new System.Drawing.Point(521, 353);
-            this.doubleMarkersButton.Name = "doubleMarkersButton";
-            this.doubleMarkersButton.Size = new System.Drawing.Size(47, 23);
-            this.doubleMarkersButton.TabIndex = 13;
-            this.doubleMarkersButton.Text = "D";
-            this.doubleMarkersButton.UseVisualStyleBackColor = true;
             // 
             // mapVisibleCheckbox
             // 
@@ -1000,9 +978,6 @@ namespace SimpleCL.Ui
             this.devTab.ResumeLayout(false);
             this.ResumeLayout(false);
         }
-
-        private System.Windows.Forms.Button doubleMarkersButton;
-        private System.Windows.Forms.Button clearMarkersButton;
 
         private System.Windows.Forms.CheckBox mapVisibleCheckbox;
 

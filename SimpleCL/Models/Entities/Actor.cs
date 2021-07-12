@@ -209,7 +209,7 @@ namespace SimpleCL.Models.Entities
             }
         }
 
-        public void Dispose()
+        public new void Dispose()
         {
             _movementTimer?.Dispose();
             

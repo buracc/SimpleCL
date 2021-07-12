@@ -31,11 +31,6 @@ namespace SimpleCL.Ui
             mapTimer.Start();
 
             mapVisibleCheckbox.CheckedChanged += (_, _) => minimap.Visible = mapVisibleCheckbox.Checked;
-
-            clearMarkersButton.Click += (sender, args) =>
-            {
-                minimap.ClearMarkers();
-            };
         }
 
         public void AddMinimapMarker(Entity entity)

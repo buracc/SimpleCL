@@ -60,8 +60,6 @@ namespace SimpleCL.Models.Entities
 
         public new void Dispose()
         {
-            base.Dispose();
-            
             InventoryItems?.DisposeAll();
             InventoryItems?.Clear();
             
