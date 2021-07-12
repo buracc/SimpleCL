@@ -26,7 +26,7 @@ namespace SimpleCL.Models.Entities
 
         public void Select()
         {
-            var shopPacket = new Packet(Opcodes.Agent.Request.ENTITY_SELECT_OBJECT);
+            var shopPacket = new Packet(Opcode.Agent.Request.ENTITY_SELECT_OBJECT);
             shopPacket.WriteUInt(Uid);
 
             foreach (var shopItem in Items)
@@ -40,7 +40,7 @@ namespace SimpleCL.Models.Entities
 
         public void Open()
         {
-            var shopPacket = new Packet(Opcodes.Agent.Request.ENTITY_NPC_OPEN);
+            var shopPacket = new Packet(Opcode.Agent.Request.ENTITY_NPC_OPEN);
             shopPacket.WriteUInt(Uid);
             shopPacket.WriteByte(1);
             InteractionQueue.PacketQueue.Enqueue(shopPacket);
@@ -48,7 +48,7 @@ namespace SimpleCL.Models.Entities
 
         public void Close()
         {
-            var closePacket = new Packet(Opcodes.Agent.Request.ENTITY_NPC_CLOSE);
+            var closePacket = new Packet(Opcode.Agent.Request.ENTITY_NPC_CLOSE);
             closePacket.WriteUInt(Uid);
             InteractionQueue.PacketQueue.Enqueue(closePacket);
         }

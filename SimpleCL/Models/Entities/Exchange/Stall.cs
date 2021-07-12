@@ -35,7 +35,7 @@ namespace SimpleCL.Models.Entities.Exchange
 
         public void Visit()
         {
-            var openPacket = new Packet(Opcodes.Agent.Request.STALL_TALK);
+            var openPacket = new Packet(Opcode.Agent.Request.STALL_TALK);
             openPacket.WriteUInt(PlayerUid);
             Interaction.InteractionQueue.PacketQueue.Enqueue(openPacket);
         }
@@ -43,7 +43,7 @@ namespace SimpleCL.Models.Entities.Exchange
 
         public void Leave()
         {
-            var exitPacket = new Packet(Opcodes.Agent.Request.STALL_LEAVE);
+            var exitPacket = new Packet(Opcode.Agent.Request.STALL_LEAVE);
             Interaction.InteractionQueue.PacketQueue.Enqueue(exitPacket);
         }
         

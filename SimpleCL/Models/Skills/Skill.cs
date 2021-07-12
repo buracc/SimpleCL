@@ -93,7 +93,7 @@ namespace SimpleCL.Models.Skills
 
         public void Cast()
         {
-            var actionPacket = new Packet(Opcodes.Agent.Request.CHAR_ACTION);
+            var actionPacket = new Packet(Opcode.Agent.Request.CHAR_ACTION);
             actionPacket.WriteByte(1);
             actionPacket.WriteByte(4);
             actionPacket.WriteUInt(Id);
@@ -103,7 +103,7 @@ namespace SimpleCL.Models.Skills
         
         public void Cancel()
         {
-            var actionPacket = new Packet(Opcodes.Agent.Request.CHAR_ACTION);
+            var actionPacket = new Packet(Opcode.Agent.Request.CHAR_ACTION);
             actionPacket.WriteByte(1);
             actionPacket.WriteByte(5);
             actionPacket.WriteUInt(Id);

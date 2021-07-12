@@ -14,7 +14,7 @@ namespace SimpleCL.SecurityApi
 		{
 			const int bytesPerLine = 16;
 			var output = new StringBuilder();
-			var ascii_output = new StringBuilder();
+			var asciiOutput = new StringBuilder();
 			var length = count;
 			if (length % bytesPerLine != 0)
 			{
@@ -26,8 +26,8 @@ namespace SimpleCL.SecurityApi
 				{
 					if (x > 0)
 					{
-						output.AppendFormat("  {0}{1}", ascii_output.ToString(), Environment.NewLine);
-						ascii_output.Clear();
+						output.AppendFormat("  {0}{1}", asciiOutput, Environment.NewLine);
+						asciiOutput.Clear();
 					}
 					if (x != length)
 					{
@@ -38,19 +38,19 @@ namespace SimpleCL.SecurityApi
 				{
 					output.AppendFormat("{0:X2} ", buffer[offset + x]);
 					var ch = (char)buffer[offset + x];
-					if (!Char.IsControl(ch))
+					if (!char.IsControl(ch))
 					{
-						ascii_output.AppendFormat("{0}", ch);
+						asciiOutput.AppendFormat("{0}", ch);
 					}
 					else
 					{
-						ascii_output.Append(".");
+						asciiOutput.Append(".");
 					}
 				}
 				else
 				{
 					output.Append("   ");
-					ascii_output.Append(".");
+					asciiOutput.Append(".");
 				}
 			}
 			return output.ToString();

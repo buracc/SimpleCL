@@ -17,7 +17,7 @@ namespace SimpleCL.Models.Items
         public void Purchase()
         {
             Program.Gui.Log("Purchasing: " + Name + " for " + Price);
-            var buyPacket = new Packet(Opcodes.Agent.Request.STALL_BUY);
+            var buyPacket = new Packet(Opcode.Agent.Request.STALL_BUY);
             buyPacket.WriteByte(Slot);
             InteractionQueue.PacketQueue.Enqueue(buyPacket);
         }

@@ -31,7 +31,7 @@ namespace SimpleCL.Services.Game
 
         #region Spawned
 
-        [PacketHandler(Opcodes.Agent.Response.CHAR_DATA_CHUNK)]
+        [PacketHandler(Opcode.Agent.Response.CHAR_DATA_CHUNK)]
         public void GameJoined(Server server, Packet packet)
         {
             _gateway?.Dispose();
@@ -304,17 +304,17 @@ namespace SimpleCL.Services.Game
 
         #region CelestialPosition
 
-        [PacketHandler(Opcodes.Agent.Response.CHAR_CELESTIAL_POSITION)]
+        [PacketHandler(Opcode.Agent.Response.CHAR_CELESTIAL_POSITION)]
         public void GameReady(Server server, Packet packet)
         {
-            server.Inject(new Packet(Opcodes.Agent.Request.GAME_READY));
+            server.Inject(new Packet(Opcode.Agent.Request.GAME_READY));
         }
 
         #endregion
 
         #region StatChanged
 
-        [PacketHandler(Opcodes.Agent.Response.CHAR_STAT)]
+        [PacketHandler(Opcode.Agent.Response.CHAR_STAT)]
         public void CharacterStats(Server server, Packet packet)
         {
             var phyMin = packet.ReadUInt();
@@ -350,7 +350,7 @@ namespace SimpleCL.Services.Game
 
         #region CharInfo
 
-        [PacketHandler(Opcodes.Agent.Response.CHAR_INFO_UPDATE)]
+        [PacketHandler(Opcode.Agent.Response.CHAR_INFO_UPDATE)]
         public void CharacterInfo(Server server, Packet packet)
         {
             var updateType = packet.ReadByte();
@@ -381,7 +381,7 @@ namespace SimpleCL.Services.Game
 
         #region ExpGained
 
-        [PacketHandler(Opcodes.Agent.Response.CHAR_XP_UPDATE)]
+        [PacketHandler(Opcode.Agent.Response.CHAR_XP_UPDATE)]
         public void ExpGained(Server server, Packet packet)
         {
             var sourceUid = packet.ReadUInt();
@@ -396,7 +396,7 @@ namespace SimpleCL.Services.Game
 
         #region Inventory
 
-        [PacketHandler(Opcodes.Agent.Response.INVENTORY_ITEM_USE)]
+        [PacketHandler(Opcode.Agent.Response.INVENTORY_ITEM_USE)]
         public void ItemUse(Server server, Packet packet)
         {
             if (!packet.ReadBool())
@@ -426,7 +426,7 @@ namespace SimpleCL.Services.Game
 
         #endregion
 
-        [PacketHandler(Opcodes.Agent.Response.GAME_INVITE)]
+        [PacketHandler(Opcode.Agent.Response.GAME_INVITE)]
         public void ExchangeStart(Server server, Packet packet)
         {
             var type = packet.ReadByte();

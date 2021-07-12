@@ -79,14 +79,13 @@ namespace SimpleCL.Network
 
         public void Log(string message, bool toGui = true)
         {
-            var logMsg = "[" + GetType().Name + "] " + message;
             if (toGui && Program.Gui != null)
             {
-                Program.Gui.Log(logMsg);
+                Program.Gui.Log(message, GetType().Name);
             }
             else
             {
-                Console.WriteLine(logMsg);
+                Console.WriteLine(message);
             }
         }
 
@@ -97,7 +96,7 @@ namespace SimpleCL.Network
 
         private void HeartBeat(object source, ElapsedEventArgs e)
         {
-            Inject(new Packet(Opcodes.HEARTBEAT));
+            Inject(new Packet(Opcode.HEARTBEAT));
         }
 
         public void Disconnect()
@@ -180,9 +179,6 @@ namespace SimpleCL.Network
                 {
                     try
                     {
-                        // Console.WriteLine("Injecting queued packet: " + queuedPacket.Opcode.ToString("X"));
-                        // Console.WriteLine("Data: ");
-                        // DebugPacket(queuedPacket);
                         Inject(queuedPacket);
                         continue;
                     }
@@ -196,15 +192,15 @@ namespace SimpleCL.Network
                 if (incomingPackets != null && incomingPackets.IsNotEmpty())
                 {
                     foreach (var packet in incomingPackets.Where(packet =>
-                        packet.Opcode != Opcodes.HANDSHAKE && packet.Opcode != Opcodes.HANDSHAKE_ACCEPT))
+                        packet.Opcode != Opcode.HANDSHAKE && packet.Opcode != Opcode.HANDSHAKE_ACCEPT))
                     {
                         if (this is Agent && Program.Gui.DebugAgent() ||
                             this is Gateway && Program.Gui.DebugGateway())
                         {
-                            DebugPacket(packet);
+                            LogPacket(packet);
                         }
 
-                        if (packet.Opcode == Opcodes.IDENTITY && !_timer.Enabled)
+                        if (packet.Opcode == Opcode.IDENTITY && !_timer.Enabled)
                         {
                             _timer.Start();
                         }
@@ -219,7 +215,6 @@ namespace SimpleCL.Network
                     foreach (var kvp in outgoing)
                     {
                         var buffer = kvp.Key;
-                        Console.WriteLine("sending packet: " + kvp.Value.Opcode.ToString("X"));
                         success = SocketError.Success;
 
                         while (buffer.Offset != buffer.Size)
@@ -262,6 +257,14 @@ namespace SimpleCL.Network
         {
             Log(packet.Opcode.ToString("X"), toGui);
             Log("\n" + Utility.HexDump(packet.GetBytes()), toGui);
+        }
+        
+        private void LogPacket(Packet packet)
+        {
+            if (Program.Gui.FilteredOpcodes.Contains(packet.Opcode.ToString("X")) || Program.Gui.FilteredOpcodes.Contains("0"))
+            {
+                Program.Gui.LogPacket($"{packet.Opcode:X}\n{Utility.HexDump(packet.GetBytes())}");
+            }
         }
     }
 }

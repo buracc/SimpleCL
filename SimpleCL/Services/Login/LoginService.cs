@@ -30,14 +30,14 @@ namespace SimpleCL.Services.Login
 
         #region SendIdentity
 
-        [PacketHandler(Opcodes.IDENTITY)]
+        [PacketHandler(Opcode.IDENTITY)]
         public void SendIdentity(Server server, Packet packet)
         {
             switch (server)
             {
                 case Gateway:
                 {
-                    var identity = new Packet(Opcodes.Gateway.Request.PATCH, true);
+                    var identity = new Packet(Opcode.Gateway.Request.PATCH, true);
                     identity.WriteByte(_silkroadServer.Locale);
                     identity.WriteAscii("SR_Client");
                     identity.WriteUInt(GameDatabase.Get.GetGameVersion());
@@ -46,7 +46,7 @@ namespace SimpleCL.Services.Login
                 }
                 case Agent agent:
                 {
-                    var login = new Packet(Opcodes.Agent.Request.AUTH, true);
+                    var login = new Packet(Opcode.Agent.Request.AUTH, true);
                     login.WriteUInt(agent.SessionId);
                     login.WriteAscii(_username);
                     login.WriteAscii(_password);
@@ -63,17 +63,17 @@ namespace SimpleCL.Services.Login
 
         #region RequestServerlist
 
-        [PacketHandler(Opcodes.Gateway.Response.PATCH)]
+        [PacketHandler(Opcode.Gateway.Response.PATCH)]
         public void RequestServerlist(Server server, Packet packet)
         {
-            server.Inject(new Packet(Opcodes.Gateway.Request.SERVERLIST, true));
+            server.Inject(new Packet(Opcode.Gateway.Request.SERVERLIST, true));
         }
 
         #endregion
 
         #region SendLogin
 
-        [PacketHandler(Opcodes.Gateway.Response.SERVERLIST)]
+        [PacketHandler(Opcode.Gateway.Response.SERVERLIST)]
         public void SendLogin(Server server, Packet packet)
         {
             var servers = new List<GameServer>();
@@ -103,7 +103,7 @@ namespace SimpleCL.Services.Login
 
         #region SendPasscode
 
-        [PacketHandler(Opcodes.Gateway.Response.LOGIN2)]
+        [PacketHandler(Opcode.Gateway.Response.LOGIN2)]
         public void SendPasscode(Server server, Packet packet)
         {
             new PasscodeEnter(server).ShowDialog();
@@ -113,7 +113,7 @@ namespace SimpleCL.Services.Login
 
         #region PasscodeResponse
 
-        [PacketHandler(Opcodes.Gateway.Response.PASSCODE)]
+        [PacketHandler(Opcode.Gateway.Response.PASSCODE)]
         public void PasscodeResponse(Server server, Packet packet)
         {
             packet.ReadByte();
@@ -132,7 +132,7 @@ namespace SimpleCL.Services.Login
 
         #region AgentAuth
 
-        [PacketHandler(Opcodes.Gateway.Response.AGENT_AUTH)]
+        [PacketHandler(Opcode.Gateway.Response.AGENT_AUTH)]
         public void AgentAuth(Server server, Packet packet)
         {
             var result = packet.ReadByte();
@@ -249,7 +249,7 @@ namespace SimpleCL.Services.Login
 
         #region LoginQueue
 
-        [PacketHandler(Opcodes.Gateway.Response.QUEUE_POSITION)]
+        [PacketHandler(Opcode.Gateway.Response.QUEUE_POSITION)]
         public void LoginQueuePosition(Server server, Packet packet)
         {
             packet.ReadByte();
@@ -264,7 +264,7 @@ namespace SimpleCL.Services.Login
 
         #region RequestCharSelect
 
-        [PacketHandler(Opcodes.Agent.Response.AUTH)]
+        [PacketHandler(Opcode.Agent.Response.AUTH)]
         public void EnterCharacterSelect(Server server, Packet packet)
         {
             var result = packet.ReadByte();
@@ -272,7 +272,7 @@ namespace SimpleCL.Services.Login
             {
                 case 1:
                 {
-                    var charSelect = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_ACTION);
+                    var charSelect = new Packet(Opcode.Agent.Request.CHARACTER_SELECTION_ACTION);
                     charSelect.WriteByte(2);
                     server.Inject(charSelect);
                     return;

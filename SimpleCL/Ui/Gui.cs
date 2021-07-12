@@ -48,6 +48,7 @@ namespace SimpleCL.Ui
             InitBuffsGrid();
             InitInventories();
             InitMap();
+            InitDevControls();
 
             CenterToScreen();
         }
@@ -99,17 +100,6 @@ namespace SimpleCL.Ui
             });
         }
 
-        public void Log(string message)
-        {
-            this.InvokeLater(() =>
-                {
-                    loggerBox.Items.Add(message);
-                    loggerBox.SelectedIndex = loggerBox.Items.Count - 1;
-                    loggerBox.SelectedIndex = -1;
-                }
-            );
-        }
-
         private void ExitApplication(object sender, EventArgs e)
         {
             GameDatabase.Get.CacheData();
@@ -117,17 +107,7 @@ namespace SimpleCL.Ui
             Application.Exit();
             Environment.Exit(0);
         }
-
-        public bool DebugGateway()
-        {
-            return debugGwCheckbox.Checked;
-        }
-
-        public bool DebugAgent()
-        {
-            return debugAgCheckbox.Checked;
-        }
-
+        
         public Map GetMap()
         {
             return minimap;

@@ -56,6 +56,7 @@ namespace SimpleCL.Ui
             System.Windows.Forms.Label label1;
             System.Windows.Forms.Label currWorldLabel;
             System.Windows.Forms.Label currLocalLabel;
+            System.Windows.Forms.Label label4;
             this.buffsDataGridView = new System.Windows.Forms.DataGridView();
             this.worldCoordsLabelValue = new System.Windows.Forms.Label();
             this.jobExpProgressBar = new SimpleCL.Ui.Components.TextProgressBar();
@@ -107,6 +108,10 @@ namespace SimpleCL.Ui
             this.currWorldLabelValue = new System.Windows.Forms.Label();
             this.currLocalLabelValue = new System.Windows.Forms.Label();
             this.devTab = new System.Windows.Forms.TabPage();
+            this.packetLoggerGroupBox = new System.Windows.Forms.GroupBox();
+            this.packetlogRtb = new System.Windows.Forms.RichTextBox();
+            this.filterPacketTextBox = new System.Windows.Forms.TextBox();
+            this.filteredPacketsListBox = new System.Windows.Forms.ListBox();
             this.debugAgCheckbox = new System.Windows.Forms.CheckBox();
             this.debugGwCheckbox = new System.Windows.Forms.CheckBox();
             this.loggerBox = new System.Windows.Forms.ListBox();
@@ -134,6 +139,7 @@ namespace SimpleCL.Ui
             label1 = new System.Windows.Forms.Label();
             currWorldLabel = new System.Windows.Forms.Label();
             currLocalLabel = new System.Windows.Forms.Label();
+            label4 = new System.Windows.Forms.Label();
             buffsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.buffsDataGridView)).BeginInit();
             statisticsBox.SuspendLayout();
@@ -155,6 +161,7 @@ namespace SimpleCL.Ui
             this.movementTab.SuspendLayout();
             this.mapPanel.SuspendLayout();
             this.devTab.SuspendLayout();
+            this.packetLoggerGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // serverLabel
@@ -486,6 +493,14 @@ namespace SimpleCL.Ui
             currLocalLabel.Size = new System.Drawing.Size(46, 23);
             currLocalLabel.TabIndex = 7;
             currLocalLabel.Text = "Local";
+            // 
+            // label4
+            // 
+            label4.Location = new System.Drawing.Point(14, 154);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(142, 15);
+            label4.TabIndex = 5;
+            label4.Text = "Logged opcodes";
             // 
             // credentialsGroup
             // 
@@ -897,6 +912,10 @@ namespace SimpleCL.Ui
             // 
             // devTab
             // 
+            this.devTab.Controls.Add(this.packetLoggerGroupBox);
+            this.devTab.Controls.Add(label4);
+            this.devTab.Controls.Add(this.filterPacketTextBox);
+            this.devTab.Controls.Add(this.filteredPacketsListBox);
             this.devTab.Controls.Add(this.debugAgCheckbox);
             this.devTab.Controls.Add(this.debugGwCheckbox);
             this.devTab.Location = new System.Drawing.Point(4, 22);
@@ -904,6 +923,40 @@ namespace SimpleCL.Ui
             this.devTab.Size = new System.Drawing.Size(768, 381);
             this.devTab.TabIndex = 3;
             this.devTab.Text = "Developer";
+            // 
+            // packetLoggerGroupBox
+            // 
+            this.packetLoggerGroupBox.Controls.Add(this.packetlogRtb);
+            this.packetLoggerGroupBox.Location = new System.Drawing.Point(194, 3);
+            this.packetLoggerGroupBox.Name = "packetLoggerGroupBox";
+            this.packetLoggerGroupBox.Size = new System.Drawing.Size(562, 368);
+            this.packetLoggerGroupBox.TabIndex = 6;
+            this.packetLoggerGroupBox.TabStop = false;
+            this.packetLoggerGroupBox.Text = "Packet logger";
+            // 
+            // packetlogRtb
+            // 
+            this.packetlogRtb.Location = new System.Drawing.Point(6, 19);
+            this.packetlogRtb.Name = "packetlogRtb";
+            this.packetlogRtb.ReadOnly = true;
+            this.packetlogRtb.Size = new System.Drawing.Size(550, 343);
+            this.packetlogRtb.TabIndex = 2;
+            this.packetlogRtb.Text = "";
+            // 
+            // filterPacketTextBox
+            // 
+            this.filterPacketTextBox.Location = new System.Drawing.Point(14, 172);
+            this.filterPacketTextBox.Name = "filterPacketTextBox";
+            this.filterPacketTextBox.Size = new System.Drawing.Size(142, 20);
+            this.filterPacketTextBox.TabIndex = 4;
+            // 
+            // filteredPacketsListBox
+            // 
+            this.filteredPacketsListBox.FormattingEnabled = true;
+            this.filteredPacketsListBox.Location = new System.Drawing.Point(14, 198);
+            this.filteredPacketsListBox.Name = "filteredPacketsListBox";
+            this.filteredPacketsListBox.Size = new System.Drawing.Size(142, 173);
+            this.filteredPacketsListBox.TabIndex = 3;
             // 
             // debugAgCheckbox
             // 
@@ -976,8 +1029,16 @@ namespace SimpleCL.Ui
             this.movementTab.ResumeLayout(false);
             this.mapPanel.ResumeLayout(false);
             this.devTab.ResumeLayout(false);
+            this.devTab.PerformLayout();
+            this.packetLoggerGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.GroupBox packetLoggerGroupBox;
+
+        private System.Windows.Forms.RichTextBox packetlogRtb;
+        private System.Windows.Forms.ListBox filteredPacketsListBox;
+        private System.Windows.Forms.TextBox filterPacketTextBox;
 
         private System.Windows.Forms.CheckBox mapVisibleCheckbox;
 

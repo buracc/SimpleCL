@@ -63,7 +63,7 @@ namespace SimpleCL.Models.Entities
 
         public void Attack(Skill skill = null)
         {
-            var attackPacket = new Packet(Opcodes.Agent.Request.CHAR_ACTION);
+            var attackPacket = new Packet(Opcode.Agent.Request.CHAR_ACTION);
             attackPacket.WriteByte(1);
             if (skill == null || skill.Id == 1)
             {

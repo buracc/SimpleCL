@@ -16,7 +16,7 @@ namespace SimpleCL.Services.Game
     {
         #region BuffAdded
 
-        [PacketHandler(Opcodes.Agent.Response.SKILL_BUFF_START)]
+        [PacketHandler(Opcode.Agent.Response.SKILL_BUFF_START)]
         public void BuffStart(Server server, Packet packet)
         {
             var targetUid = packet.ReadUInt();
@@ -29,7 +29,7 @@ namespace SimpleCL.Services.Game
 
         #region BuffRemoved
 
-        [PacketHandler(Opcodes.Agent.Response.SKILL_BUFF_END)]
+        [PacketHandler(Opcode.Agent.Response.SKILL_BUFF_END)]
         public void BuffEnd(Server server, Packet packet)
         {
             if (packet.ReadBool())
@@ -42,7 +42,7 @@ namespace SimpleCL.Services.Game
 
         #region EntityAction
 
-        [PacketHandler(Opcodes.Agent.Response.CHAR_ACTION_DATA)]
+        [PacketHandler(Opcode.Agent.Response.CHAR_ACTION_DATA)]
         public void SkillCast(Server server, Packet packet)
         {
             if (!packet.ReadBool())

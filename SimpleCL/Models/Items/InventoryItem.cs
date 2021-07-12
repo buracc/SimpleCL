@@ -89,7 +89,7 @@ namespace SimpleCL.Models.Items
 
         public void Use()
         {
-            var usePacket = new Packet(Opcodes.Agent.Request.INVENTORY_ITEM_USE, true);
+            var usePacket = new Packet(Opcode.Agent.Request.INVENTORY_ITEM_USE, true);
             usePacket.WriteByte(Slot);
             usePacket.WriteByte(CashItem ? (byte) 0x31 : (byte) 0x30);
             usePacket.WriteByte(0x0C);

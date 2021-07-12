@@ -13,7 +13,7 @@ namespace SimpleCL.Services.Game
     {
         #region HealthChanged
 
-        [PacketHandler(Opcodes.Agent.Response.ENTITY_POTION_UPDATE)]
+        [PacketHandler(Opcode.Agent.Response.ENTITY_POTION_UPDATE)]
         public void HealthChanged(Server server, Packet packet)
         {
             var uid = packet.ReadUInt();

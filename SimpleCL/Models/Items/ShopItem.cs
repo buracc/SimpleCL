@@ -35,7 +35,7 @@ namespace SimpleCL.Models.Items
 
         public void Purchase(int amount)
         {
-            var buyPacket = new Packet(Opcodes.Agent.Request.INVENTORY_OPERATION);
+            var buyPacket = new Packet(Opcode.Agent.Request.INVENTORY_OPERATION);
             buyPacket.WriteByte((byte) InventoryAction.ShopToInventory);
             buyPacket.WriteByte(Tab);
             buyPacket.WriteByte(Slot);

@@ -23,7 +23,7 @@ namespace SimpleCL.Services.Login
 
         #region CharSelect
 
-        [PacketHandler(Opcodes.Agent.Response.CHARACTER_SELECTION_ACTION)]
+        [PacketHandler(Opcode.Agent.Response.CHARACTER_SELECTION_ACTION)]
         public void SelectCharacter(Server server, Packet packet)
         {
             var action = packet.ReadByte();

@@ -27,7 +27,7 @@ namespace SimpleCL.Models.Entities
 
         public void Attack(Skill skill)
         {
-            var attackPacket = new Packet(Opcodes.Agent.Request.CHAR_ACTION);
+            var attackPacket = new Packet(Opcode.Agent.Request.CHAR_ACTION);
             attackPacket.WriteByte(1);
             if (skill.Id == 1)
             {
@@ -41,7 +41,7 @@ namespace SimpleCL.Models.Entities
             
             attackPacket.WriteByte(1);
             attackPacket.WriteUInt(Uid);
-            var selectTarget = new Packet(Opcodes.Agent.Request.ENTITY_SELECT_OBJECT);
+            var selectTarget = new Packet(Opcode.Agent.Request.ENTITY_SELECT_OBJECT);
             selectTarget.WriteUInt(Uid);
             InteractionQueue.PacketQueue.Enqueue(selectTarget);
             InteractionQueue.PacketQueue.Enqueue(attackPacket);
@@ -49,7 +49,7 @@ namespace SimpleCL.Models.Entities
 
         public void Trace()
         {
-            var actionPacket = new Packet(Opcodes.Agent.Request.CHAR_ACTION);
+            var actionPacket = new Packet(Opcode.Agent.Request.CHAR_ACTION);
             actionPacket.WriteByte(1);
             actionPacket.WriteByte(3);
             actionPacket.WriteByte(1);

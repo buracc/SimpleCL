@@ -11,7 +11,7 @@ namespace SimpleCL.Services.Game
     {
         #region OnChatMessage
 
-        [PacketHandler(Opcodes.Agent.Response.CHAT_UPDATE)]
+        [PacketHandler(Opcode.Agent.Response.CHAT_UPDATE)]
         public void ChatUpdated(Server server, Packet packet)
         {
             var channel = (ChatChannel) packet.ReadByte();

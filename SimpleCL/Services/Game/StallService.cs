@@ -24,7 +24,7 @@ namespace SimpleCL.Services.Game
 
         #region Opened
 
-        [PacketHandler(Opcodes.Agent.Response.STALL_TALK)]
+        [PacketHandler(Opcode.Agent.Response.STALL_TALK)]
         public void StallOpen(Server server, Packet packet)
         {
             if (!packet.ReadBool())
@@ -69,7 +69,7 @@ namespace SimpleCL.Services.Game
 
         #region Created
 
-        [PacketHandler(Opcodes.Agent.Response.STALL_ENTITY_CREATE)]
+        [PacketHandler(Opcode.Agent.Response.STALL_ENTITY_CREATE)]
         public void StallCreate(Server server, Packet packet)
         {
             if (!Entities.AllEntities.TryGetValue(packet.ReadUInt(), out var entity) || entity is not Player player)
@@ -92,7 +92,7 @@ namespace SimpleCL.Services.Game
 
         #region Destroyed
 
-        [PacketHandler(Opcodes.Agent.Response.STALL_ENTITY_DESTROY)]
+        [PacketHandler(Opcode.Agent.Response.STALL_ENTITY_DESTROY)]
         public void StallDestroy(Server server, Packet packet)
         {
             if (!Entities.AllEntities.TryGetValue(packet.ReadUInt(), out var entity) || entity is not Player player)
@@ -106,7 +106,7 @@ namespace SimpleCL.Services.Game
 
         #endregion
 
-        [PacketHandler(Opcodes.Agent.Response.STALL_LEAVE)]
+        [PacketHandler(Opcode.Agent.Response.STALL_LEAVE)]
         public void StallLeave(Server server, Packet packet)
         {
             if (!packet.ReadBool())

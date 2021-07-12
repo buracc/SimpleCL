@@ -49,7 +49,7 @@ namespace SimpleCL.Ui
             var encodedPasscode = Encoding.ASCII.GetBytes(passcodeString);
             var encryptedPasscode = _blowfish.Encode(encodedPasscode);
 
-            var passcode = new Packet(Opcodes.Gateway.Request.PASSCODE, true);
+            var passcode = new Packet(Opcode.Gateway.Request.PASSCODE, true);
             passcode.WriteByte(4);
             passcode.WriteUShort(passcodeString.Length);
             passcode.WriteByteArray(encryptedPasscode);

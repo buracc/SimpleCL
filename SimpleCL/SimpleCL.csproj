@@ -83,7 +83,7 @@
     <Compile Include="Database\QueryBuilder.cs" />
     <Compile Include="Enums\Chatter\ChatChannel.cs" />
     <Compile Include="Enums\Commons\Locale.cs" />
-    <Compile Include="Enums\Commons\Opcodes.cs" />
+    <Compile Include="Enums\Commons\Opcode.cs" />
     <Compile Include="Enums\Constants.cs" />
     <Compile Include="Enums\Events\EntityStateEvent.cs" />
     <Compile Include="Enums\Events\InventoryAction.cs" />
@@ -182,7 +182,7 @@
     <Compile Include="SecurityApi\PacketWriter.cs" />
     <Compile Include="SecurityApi\Security.cs" />
     <Compile Include="SecurityApi\TransferBuffer.cs" />
-    <Compile Include="SecurityApi\Ultility.cs" />
+    <Compile Include="SecurityApi\Utility.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -218,6 +218,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Ui\Gui.Designer.cs">
+      <DependentUpon>Gui.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Gui.Developer.cs">
       <DependentUpon>Gui.cs</DependentUpon>
     </Compile>
     <Compile Include="Ui\Gui.Home.cs">

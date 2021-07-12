@@ -31,7 +31,7 @@ namespace SimpleCL.Models.Entities
 
         public void Talk()
         {
-            var talkPacket = new Packet(Opcodes.Agent.Request.ENTITY_SELECT_OBJECT);
+            var talkPacket = new Packet(Opcode.Agent.Request.ENTITY_SELECT_OBJECT);
             talkPacket.WriteUInt(Uid);
             InteractionQueue.PacketQueue.Enqueue(talkPacket);
         }

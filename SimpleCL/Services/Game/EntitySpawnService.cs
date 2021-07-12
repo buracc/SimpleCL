@@ -27,13 +27,13 @@ namespace SimpleCL.Services.Game
 
         #region SingleSpawn
 
-        [PacketHandler(Opcodes.Agent.Response.ENTITY_SOLO_SPAWN)]
+        [PacketHandler(Opcode.Agent.Response.ENTITY_SOLO_SPAWN)]
         public void SingleEntitySpawn(Server server, Packet packet)
         {
             EntitySpawn(server, packet);
         }
 
-        [PacketHandler(Opcodes.Agent.Response.ENTITY_SOLO_DESPAWN)]
+        [PacketHandler(Opcode.Agent.Response.ENTITY_SOLO_DESPAWN)]
         public void SingleEntityDespawn(Server server, Packet packet)
         {
             EntityDespawn(server, packet);
@@ -43,22 +43,22 @@ namespace SimpleCL.Services.Game
 
         #region GroupSpawn
 
-        [PacketHandler(Opcodes.Agent.Response.ENTITY_GROUP_SPAWN_START)]
+        [PacketHandler(Opcode.Agent.Response.ENTITY_GROUP_SPAWN_START)]
         public void GroupSpawnStart(Server server, Packet packet)
         {
             _spawnType = packet.ReadByte();
             _spawnCount = packet.ReadUShort();
 
-            _spawnPacket = new Packet(Opcodes.Agent.Response.ENTITY_GROUP_SPAWN_CHUNK);
+            _spawnPacket = new Packet(Opcode.Agent.Response.ENTITY_GROUP_SPAWN_CHUNK);
         }
 
-        [PacketHandler(Opcodes.Agent.Response.ENTITY_GROUP_SPAWN_CHUNK)]
+        [PacketHandler(Opcode.Agent.Response.ENTITY_GROUP_SPAWN_CHUNK)]
         public void GroupSpawnChunk(Server server, Packet packet)
         {
             _spawnPacket?.WriteByteArray(packet.GetBytes());
         }
 
-        [PacketHandler(Opcodes.Agent.Response.ENTITY_GROUP_SPAWN_END)]
+        [PacketHandler(Opcode.Agent.Response.ENTITY_GROUP_SPAWN_END)]
         public void GroupSpawnEnd(Server server, Packet packet)
         {
             if (_spawnPacket == null)
@@ -84,11 +84,11 @@ namespace SimpleCL.Services.Game
 
         #region OnTeleport
 
-        [PacketHandler(Opcodes.Agent.Response.TELEPORT_READY)]
+        [PacketHandler(Opcode.Agent.Response.TELEPORT_READY)]
         public void TeleportUse(Server server, Packet packet)
         {
             Entities.Respawn();
-            server.Inject(new Packet(Opcodes.Agent.Request.TELEPORT_READY));
+            server.Inject(new Packet(Opcode.Agent.Request.TELEPORT_READY));
         }
 
         #endregion
@@ -220,7 +220,7 @@ namespace SimpleCL.Services.Game
                         }
 
                         var rarity = packet.ReadByte();
-                        if (packet.Opcode != Opcodes.Agent.Response.ENTITY_SOLO_SPAWN)
+                        if (packet.Opcode != Opcode.Agent.Response.ENTITY_SOLO_SPAWN)
                         {
                             break;
                         }
@@ -535,7 +535,7 @@ namespace SimpleCL.Services.Game
                         }
                     }
 
-                    if (packet.Opcode == Opcodes.Agent.Response.ENTITY_SOLO_SPAWN)
+                    if (packet.Opcode == Opcode.Agent.Response.ENTITY_SOLO_SPAWN)
                     {
                         packet.ReadByte();
                     }

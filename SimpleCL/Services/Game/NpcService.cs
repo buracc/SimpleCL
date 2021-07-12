@@ -14,7 +14,7 @@ namespace SimpleCL.Services.Game
         private ShopWindow ShopWindow { get; set; }
         public static Shop SelectedShop = null;
 
-        [PacketHandler(Opcodes.Agent.Response.ENTITY_SELECT_OBJECT)]
+        [PacketHandler(Opcode.Agent.Response.ENTITY_SELECT_OBJECT)]
         public void NpcSelect(Server server, Packet packet)
         {
             while (SelectedShop == null)
@@ -24,7 +24,7 @@ namespace SimpleCL.Services.Game
             SelectedShop.Open();
         }
         
-        [PacketHandler(Opcodes.Agent.Response.ENTITY_NPC_OPEN)]
+        [PacketHandler(Opcode.Agent.Response.ENTITY_NPC_OPEN)]
         public void NpcOpen(Server server, Packet packet)
         {
             if (!packet.ReadBool())
@@ -46,7 +46,7 @@ namespace SimpleCL.Services.Game
             });
         }
         
-        [PacketHandler(Opcodes.Agent.Response.ENTITY_NPC_CLOSE)]
+        [PacketHandler(Opcode.Agent.Response.ENTITY_NPC_CLOSE)]
         public void NpcClose(Server server, Packet packet)
         {
             if (!packet.ReadBool())

@@ -14,7 +14,7 @@ namespace SimpleCL.Services.Game
     {
         #region OnMovement
 
-        [PacketHandler(Opcodes.Agent.Response.ENTITY_MOVEMENT)]
+        [PacketHandler(Opcode.Agent.Response.ENTITY_MOVEMENT)]
         public void EntityMovement(Server server, Packet packet)
         {
             var uid = packet.ReadUInt();
@@ -93,7 +93,7 @@ namespace SimpleCL.Services.Game
 
         #region MovementHalted
 
-        [PacketHandler(Opcodes.Agent.Response.ENTITY_MOVEMENT_HALT)]
+        [PacketHandler(Opcode.Agent.Response.ENTITY_MOVEMENT_HALT)]
         public void EntityHalt(Server server, Packet packet)
         {
             var uid = packet.ReadUInt();
@@ -112,7 +112,7 @@ namespace SimpleCL.Services.Game
 
         #region AngleChanged
 
-        [PacketHandler(Opcodes.Agent.Response.ENTITY_MOVEMENT_ANGLE)]
+        [PacketHandler(Opcode.Agent.Response.ENTITY_MOVEMENT_ANGLE)]
         public void EntityAngle(Server server, Packet packet)
         {
             Entities.Moved(packet.ReadUInt(), angle: packet.ReadUShort());
@@ -122,7 +122,7 @@ namespace SimpleCL.Services.Game
 
         #region SpeedChanged
 
-        [PacketHandler(Opcodes.Agent.Response.ENTITY_SPEED)]
+        [PacketHandler(Opcode.Agent.Response.ENTITY_SPEED)]
         public void EntitySpeed(Server server, Packet packet)
         {
             Entities.SpeedChanged(

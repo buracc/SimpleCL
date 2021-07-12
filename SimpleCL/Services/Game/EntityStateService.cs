@@ -8,7 +8,7 @@ namespace SimpleCL.Services.Game
 {
     public class EntityStateService : Service
     {
-        [PacketHandler(Opcodes.Agent.Response.ENTITY_CHANGE_STATUS)]
+        [PacketHandler(Opcode.Agent.Response.ENTITY_CHANGE_STATUS)]
         public void StateChange(Server server, Packet packet)
         {
             if (!Entities.AllEntities.TryGetValue(packet.ReadUInt(), out var entity) || entity is not Actor actor)

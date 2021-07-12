@@ -23,7 +23,7 @@ namespace SimpleCL.Models.Entities.Teleporters
 
         public void Teleport(Teleport teleporter)
         {
-            var teleportPacket = new Packet(Opcodes.Agent.Request.TELEPORT_USE);
+            var teleportPacket = new Packet(Opcode.Agent.Request.TELEPORT_USE);
             teleportPacket.WriteUInt(teleporter.Uid);
             teleportPacket.WriteByte(2);
             teleportPacket.WriteUInt(DestinationId);

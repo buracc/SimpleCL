@@ -4,7 +4,7 @@ namespace SimpleCL.Enums.Commons {
     // / <summary>
     // / A list of <see cref="MessageID"/>s values (a.k.a. Opcodes).
     // / </summary>
-    public static class Opcodes {
+    public static class Opcode {
         /*
 		 * Request  = C -> S
 		 * Response = S -> C

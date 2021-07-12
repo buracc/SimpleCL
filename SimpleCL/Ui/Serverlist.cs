@@ -47,7 +47,7 @@ namespace SimpleCL.Ui
                 return;
             }
             
-            var login = new Packet(Opcodes.Gateway.Request.LOGIN2, true);
+            var login = new Packet(Opcode.Gateway.Request.LOGIN2, true);
             login.WriteByte(Locale.SRO_TR_Official_GameGami);
             login.WriteAscii(_username);
             login.WriteAscii(_password);

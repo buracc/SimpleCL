@@ -40,7 +40,7 @@ namespace SimpleCL.Ui
 
             LocalPlayer.Get.MaxHp = selected.Hp;
             LocalPlayer.Get.MaxMp = selected.Mp;
-            var characterJoin = new Packet(Opcodes.Agent.Request.CHARACTER_SELECTION_JOIN);
+            var characterJoin = new Packet(Opcode.Agent.Request.CHARACTER_SELECTION_JOIN);
             characterJoin.WriteAscii(selected.Name);
             _agent.Inject(characterJoin);
             Dispose(true);
