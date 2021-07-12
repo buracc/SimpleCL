@@ -34,7 +34,6 @@ namespace SimpleCL.Models.Entities
         public readonly byte TypeId2;
         public readonly byte TypeId3;
         public readonly byte TypeId4;
-        
         public uint Uid { get; set; }
 
         public string Name
@@ -147,6 +146,8 @@ namespace SimpleCL.Models.Entities
                 throw new EntityParseException(id);
             }
         }
+        
+        
 
         #endregion
 
@@ -376,6 +377,11 @@ namespace SimpleCL.Models.Entities
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             });
+        }
+
+        ~Entity()
+        {
+            Dispose();
         }
     }
 }

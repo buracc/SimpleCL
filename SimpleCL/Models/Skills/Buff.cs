@@ -55,5 +55,10 @@ namespace SimpleCL.Models.Skills
         {
             Icon?.Dispose();
         }
+
+        ~Buff()
+        {
+            Dispose();
+        }
     }
 }

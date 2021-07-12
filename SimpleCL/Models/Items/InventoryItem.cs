@@ -107,5 +107,10 @@ namespace SimpleCL.Models.Items
         {
             Icon?.Dispose();
         }
+
+        ~InventoryItem()
+        {
+            Dispose();
+        }
     }
 }
