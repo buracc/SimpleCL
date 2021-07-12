@@ -6,6 +6,7 @@ using SimpleCL.Models.Entities.Exchange;
 using SimpleCL.Models.Items;
 using SimpleCL.Models.Skills;
 using SimpleCL.SecurityApi;
+using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Models.Entities
 {
@@ -61,11 +62,7 @@ namespace SimpleCL.Models.Entities
         {
             base.Dispose();
             
-            foreach (var inventoryItem in InventoryItems)
-            {
-                inventoryItem?.Dispose();
-            }
-            
+            InventoryItems?.DisposeAll();
             InventoryItems?.Clear();
             
             Stall?.Dispose();

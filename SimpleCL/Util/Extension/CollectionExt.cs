@@ -28,5 +28,13 @@ namespace SimpleCL.Util.Extension
         {
             return string.Join(",", collection.AllKeys.Select(key => collection[key]));
         }
+
+        public static void DisposeAll(this IEnumerable collection)
+        {
+            foreach (var o in collection.OfType<IDisposable>())
+            {
+                o.Dispose();
+            }
+        }
     }
 }

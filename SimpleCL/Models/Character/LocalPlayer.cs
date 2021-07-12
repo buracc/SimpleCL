@@ -5,6 +5,7 @@ using SimpleCL.Database;
 using SimpleCL.Models.Entities;
 using SimpleCL.Models.Items;
 using SimpleCL.Models.Skills;
+using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Models.Character
 {
@@ -186,5 +187,25 @@ namespace SimpleCL.Models.Character
         }
 
         #endregion
+
+        public new void Dispose()
+        {
+            base.Dispose();
+            
+            Skills.DisposeAll();
+            Skills.Clear();
+            
+            Inventory.DisposeAll();
+            Inventory.Clear();
+            
+            EquipmentInventory.DisposeAll();
+            EquipmentInventory.Clear();
+            
+            AvatarInventory.DisposeAll();
+            AvatarInventory.Clear();
+            
+            JobEquipmentInventory.DisposeAll();
+            JobEquipmentInventory.Clear();
+        }
     }
 }

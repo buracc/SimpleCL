@@ -6,6 +6,7 @@ using SimpleCL.Enums;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Models.Items;
 using SimpleCL.SecurityApi;
+using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Models.Entities.Exchange
 {
@@ -48,11 +49,7 @@ namespace SimpleCL.Models.Entities.Exchange
         
         public void Dispose()
         {
-            foreach (var stallItem in Items)
-            {
-                stallItem.Dispose();
-            }
-            
+            Items.DisposeAll();
             Items.Clear();
         }
 

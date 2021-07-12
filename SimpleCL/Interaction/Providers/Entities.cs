@@ -20,10 +20,17 @@ namespace SimpleCL.Interaction.Providers
 
         public static void Respawn()
         {
+            AllEntities.DisposeAll();
             AllEntities.Clear();
+            
+            TargetableEntities.DisposeAll();
             TargetableEntities.Clear();
+            
+            Buffs.DisposeAll();
             Buffs.Clear();
-            LocalPlayer.Get.Buffs.Clear();
+            
+            LocalPlayer.Get.Dispose();
+            
             Program.Gui.ClearMarkers();
             Program.Gui.ClearTiles();
         }

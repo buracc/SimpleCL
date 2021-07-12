@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Skills;
+using SimpleCL.Util.Extension;
 using Timer = System.Timers.Timer;
 
 namespace SimpleCL.Models.Entities
@@ -211,11 +212,8 @@ namespace SimpleCL.Models.Entities
         public void Dispose()
         {
             _movementTimer?.Dispose();
-            foreach (var buff in Buffs)
-            {
-                buff.Dispose();
-            }
             
+            Buffs.DisposeAll();
             Buffs.Clear();
         }
     }
