@@ -65,7 +65,7 @@ namespace SimpleCL.Services.Game
             {
                 return;
             }
-            
+
             _spawnPacket.Lock();
             _spawnCount.Repeat(i =>
             {
@@ -121,27 +121,17 @@ namespace SimpleCL.Services.Game
             {
                 case SkillAoe skillAoe:
                 {
-                    try
-                    {
-                        packet.ReadUInt();
-                        var skillId = packet.ReadUInt();
-                        skillAoe.Skill = new Skill(skillId);
-                        skillAoe.Uid = packet.ReadUInt();
-                        skillAoe.LocalPoint = new LocalPoint(
-                            packet.ReadUShort(),
-                            packet.ReadFloat(),
-                            packet.ReadFloat(),
-                            packet.ReadFloat()
-                        );
-                        var angle = packet.ReadUShort();
-                    }
-                    catch (EntityParseException)
-                    {
-                        Console.WriteLine("failed to parse skillaoe");
-                        server.DebugPacket(packet);
-                        return;
-                    }
-
+                    packet.ReadUInt();
+                    var skillId = packet.ReadUInt();
+                    skillAoe.Skill = new Skill(skillId);
+                    skillAoe.Uid = packet.ReadUInt();
+                    skillAoe.LocalPoint = new LocalPoint(
+                        packet.ReadUShort(),
+                        packet.ReadFloat(),
+                        packet.ReadFloat(),
+                        packet.ReadFloat()
+                    );
+                    var angle = packet.ReadUShort();
                     break;
                 }
 
@@ -249,20 +239,11 @@ namespace SimpleCL.Services.Game
                             player.InventoryItems.Clear();
                             equipmentCount.Repeat(i =>
                             {
-                                try
+                                var item = InventoryItem.FromId(packet.ReadUInt());
+                                player.InventoryItems.Add(item);
+                                if (item.IsEquipment())
                                 {
-                                    var item = InventoryItem.FromId(packet.ReadUInt());
-                                    player.InventoryItems.Add(item);
-                                    if (item.IsEquipment())
-                                    {
-                                        var plus = packet.ReadByte();
-                                    }
-                                }
-                                catch (Exception)
-                                {
-                                    Console.WriteLine("failed to parse player equipment");
-                                    server.DebugPacket(packet);
-                                    throw;
+                                    var plus = packet.ReadByte();
                                 }
                             });
 
@@ -270,20 +251,11 @@ namespace SimpleCL.Services.Game
                             var avatarCount = packet.ReadByte();
                             avatarCount.Repeat(i =>
                             {
-                                try
+                                var item = InventoryItem.FromId(packet.ReadUInt());
+                                player.InventoryItems.Add(item);
+                                if (item.IsEquipment())
                                 {
-                                    var item = InventoryItem.FromId(packet.ReadUInt());
-                                    player.InventoryItems.Add(item);
-                                    if (item.IsEquipment())
-                                    {
-                                        var plus = packet.ReadByte();
-                                    }
-                                }
-                                catch (Exception)
-                                {
-                                    Console.WriteLine("failed to parse player avatars");
-                                    server.DebugPacket(packet);
-                                    throw;
+                                    var plus = packet.ReadByte();
                                 }
                             });
 
@@ -362,38 +334,30 @@ namespace SimpleCL.Services.Game
                     var buffCount = packet.ReadByte();
                     buffCount.Repeat(i =>
                     {
-                        try
+                        var refSkillId = packet.ReadUInt();
+                        var buff = new Buff(refSkillId);
+
+                        if (buff.IsBardAreaBuff())
                         {
-                            var refSkillId = packet.ReadUInt();
-                            var buff = new Buff(refSkillId);
-
-                            if (buff.IsBardAreaBuff())
-                            {
-                                buff.Uid = packet.ReadUInt();
-                                var isBuffOwner = packet.ReadBool();
-                            }
-                            else
-                            {
-                                buff.RemainingDuration = packet.ReadUInt();
-                            }
-
-                            if (buff.IsRecoveryDivision())
-                            {
-                                var isBuffOwner = packet.ReadByte();
-                                if (isBuffOwner == 1)
-                                {
-                                    buff.CasterUid = actor.Uid;
-                                }
-                            }
-
-                            buff.TargetUid = actor.Uid;
-                            actor.Buffs.Add(buff);
+                            buff.Uid = packet.ReadUInt();
+                            var isBuffOwner = packet.ReadBool();
                         }
-                        catch (EntityParseException)
+                        else
                         {
-                            server.DebugPacket(packet);
-                            throw;
+                            buff.RemainingDuration = packet.ReadUInt();
                         }
+
+                        if (buff.IsRecoveryDivision())
+                        {
+                            var isBuffOwner = packet.ReadByte();
+                            if (isBuffOwner == 1)
+                            {
+                                buff.CasterUid = actor.Uid;
+                            }
+                        }
+
+                        buff.TargetUid = actor.Uid;
+                        actor.Buffs.Add(buff);
                     });
 
                     switch (actor)
