@@ -33,7 +33,7 @@ namespace SimpleCL.Models.Entities
         {
             var talkPacket = new Packet(Opcode.Agent.Request.ENTITY_SELECT_OBJECT);
             talkPacket.WriteUInt(Uid);
-            InteractionQueue.PacketQueue.Enqueue(talkPacket);
+            talkPacket.Send();
         }
     }
 }

@@ -192,20 +192,23 @@ namespace SimpleCL.Models.Character
         {
             base.Dispose();
             
-            Skills.DisposeAll();
-            Skills.Clear();
+            Program.Gui.InvokeLater(() =>
+            {
+                Skills.DisposeAll();
+                Skills.Clear();
             
-            Inventory.DisposeAll();
-            Inventory.Clear();
+                Inventory.DisposeAll();
+                Inventory.Clear();
             
-            EquipmentInventory.DisposeAll();
-            EquipmentInventory.Clear();
+                EquipmentInventory.DisposeAll();
+                EquipmentInventory.Clear();
             
-            AvatarInventory.DisposeAll();
-            AvatarInventory.Clear();
+                AvatarInventory.DisposeAll();
+                AvatarInventory.Clear();
             
-            JobEquipmentInventory.DisposeAll();
-            JobEquipmentInventory.Clear();
+                JobEquipmentInventory.DisposeAll();
+                JobEquipmentInventory.Clear();
+            });
         }
     }
 }

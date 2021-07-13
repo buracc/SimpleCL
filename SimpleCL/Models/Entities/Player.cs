@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SimpleCL.Enums.Commons;
+using SimpleCL.Enums.Items;
 using SimpleCL.Interaction;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Entities.Exchange;
@@ -22,7 +23,7 @@ namespace SimpleCL.Models.Entities
 
         public bool IsWearingJobSuit()
         {
-            return InventoryItems.Exists(item => item.IsEquipment() && item.TypeId3 == 7);
+            return InventoryItems.Exists(item => item.Category == ItemCategory.Equipment && item.TypeId3 == 7);
         }
 
         public void Attack(Skill skill)
@@ -43,8 +44,8 @@ namespace SimpleCL.Models.Entities
             attackPacket.WriteUInt(Uid);
             var selectTarget = new Packet(Opcode.Agent.Request.ENTITY_SELECT_OBJECT);
             selectTarget.WriteUInt(Uid);
-            InteractionQueue.PacketQueue.Enqueue(selectTarget);
-            InteractionQueue.PacketQueue.Enqueue(attackPacket);
+            selectTarget.Send();
+            attackPacket.Send();
         }
 
         public void Trace()
@@ -55,7 +56,7 @@ namespace SimpleCL.Models.Entities
             actionPacket.WriteByte(1);
             actionPacket.WriteUInt(Uid);
             LocalPlayer.Get.Tracing = true;
-            InteractionQueue.PacketQueue.Enqueue(actionPacket);
+            actionPacket.Send();
         }
 
         public new void Dispose()

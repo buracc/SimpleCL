@@ -5,8 +5,15 @@ using System.IO;
 using SimpleCL.Database;
 using SimpleCL.Enums;
 using SimpleCL.Enums.Commons;
+using SimpleCL.Enums.Events;
+using SimpleCL.Enums.Items;
+using SimpleCL.Enums.Items.Type;
 using SimpleCL.Interaction;
 using SimpleCL.Models.Exceptions;
+using SimpleCL.Models.Items.Consumables;
+using SimpleCL.Models.Items.Equipables;
+using SimpleCL.Models.Items.JobEquipables;
+using SimpleCL.Models.Items.Summons;
 using SimpleCL.SecurityApi;
 
 namespace SimpleCL.Models.Items
@@ -15,19 +22,18 @@ namespace SimpleCL.Models.Items
     {
         public Image Icon { get; set; }
         public byte Slot { get; set; }
-        [Browsable(false)]
-        public uint Id { get; }
-        [Browsable(false)]
-        public string ServerName { get; }
+        [Browsable(false)] public uint Id { get; }
+        [Browsable(false)] public string ServerName { get; }
         public string Name { get; }
 
         private ushort _quantity;
 
         public readonly byte TypeId1;
-        public readonly byte TypeId2;
+        public readonly ItemCategory Category;
         public readonly byte TypeId3;
         public readonly byte TypeId4;
         public readonly bool CashItem;
+        public readonly ushort Stack;
 
         public ushort Quantity
         {
@@ -55,31 +61,48 @@ namespace SimpleCL.Models.Items
             ServerName = data[Constants.Strings.ServerName];
             Name = data[Constants.Strings.Name];
             TypeId1 = 3;
-            TypeId2 = byte.Parse(data[Constants.Strings.Tid1]);
+            Category = (ItemCategory) byte.Parse(data[Constants.Strings.Tid1]);
             TypeId3 = byte.Parse(data[Constants.Strings.Tid2]);
             TypeId4 = byte.Parse(data[Constants.Strings.Tid3]);
             CashItem = byte.Parse(data[Constants.Strings.CashItem]) == 1;
-            Icon = Image.FromFile(Directory.GetCurrentDirectory() + Constants.Paths.Icons + data[Constants.Strings.Icon].Replace(Constants.Strings.Ddj, Constants.Strings.Png));
+            Stack = ushort.Parse(data[Constants.Strings.Stack]);
+            Icon = Image.FromFile(Directory.GetCurrentDirectory() + Constants.Paths.Icons +
+                                  data[Constants.Strings.Icon].Replace(Constants.Strings.Ddj, Constants.Strings.Png));
         }
 
         public static InventoryItem FromId(uint id)
         {
-            return new(id);
-        }
+            var item = new InventoryItem(id);
+            switch (item.Category)
+            {
+                case ItemCategory.Equipment:
+                {
+                    var equip = new Equipment(id);
+                    if (equip.EquipmentType == Equipment.Type.Avatar)
+                    {
+                        return new Avatar(id);
+                    }
 
-        public bool IsEquipment()
-        {
-            return TypeId2 == 1;
-        }
+                    return equip.SlotType == Equipment.EquipmentSlot.Weapon ? new Weapon(id) : equip;
+                }
+                case ItemCategory.Summon:
+                    return new SummonItem(id);
+                case ItemCategory.Consumable:
+                    var consumable = new Consumable(id);
+                    return consumable.Variant switch
+                    {
+                        ConsumableType.Variant.Scroll => new Scroll(id),
+                        ConsumableType.Variant.Potion => new Potion(id),
+                        _ => consumable
+                    };
 
-        public bool IsCos()
-        {
-            return TypeId2 == 2;
-        }
+                case ItemCategory.JobEquipment:
+                    return new JobEquipment(id);
+                case ItemCategory.FellowEquipment:
+                    return new FellowEquipment(id);
+            }
 
-        public bool IsConsumable()
-        {
-            return TypeId2 == 3;
+            return item;
         }
 
         public int CompareTo(InventoryItem other)
@@ -95,7 +118,17 @@ namespace SimpleCL.Models.Items
             usePacket.WriteByte(0x0C);
             usePacket.WriteByte(TypeId3);
             usePacket.WriteByte(TypeId4);
-            InteractionQueue.PacketQueue.Enqueue(usePacket);
+            usePacket.Send();
+        }
+
+        public void Move(byte currentSlot, byte targetSlot, InventoryAction action = InventoryAction.InventoryToInventory, ushort quantity = 0)
+        {
+            var packet = new Packet(Opcode.Agent.Request.INVENTORY_OPERATION);
+            packet.WriteByte(action);
+            packet.WriteByte(currentSlot);
+            packet.WriteByte(targetSlot);
+            packet.WriteUShort(quantity);
+            packet.Send();
         }
 
         public override string ToString()

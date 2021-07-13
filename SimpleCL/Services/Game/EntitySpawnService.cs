@@ -2,6 +2,7 @@
 using System.Linq;
 using SimpleCL.Database;
 using SimpleCL.Enums.Commons;
+using SimpleCL.Enums.Items;
 using SimpleCL.Enums.Skills;
 using SimpleCL.Interaction.Providers;
 using SimpleCL.Models.Coordinates;
@@ -241,7 +242,7 @@ namespace SimpleCL.Services.Game
                             {
                                 var item = InventoryItem.FromId(packet.ReadUInt());
                                 player.InventoryItems.Add(item);
-                                if (item.IsEquipment())
+                                if (item.Category == ItemCategory.Equipment)
                                 {
                                     var plus = packet.ReadByte();
                                 }
@@ -253,7 +254,7 @@ namespace SimpleCL.Services.Game
                             {
                                 var item = InventoryItem.FromId(packet.ReadUInt());
                                 player.InventoryItems.Add(item);
-                                if (item.IsEquipment())
+                                if (item.Category == ItemCategory.Equipment)
                                 {
                                     var plus = packet.ReadByte();
                                 }

@@ -12,7 +12,7 @@ namespace SimpleCL.Models.Skills
         public readonly string Name;
         public readonly string Description;
         public readonly MasteryType Type;
-        public readonly EquipmentData.SubType.Weapon[] RequiredWeapons;
+        public readonly EquipmentType.Weapon[] RequiredWeapons;
         public readonly string IconPath;
         public ushort Level { get; set; }
 
@@ -31,7 +31,7 @@ namespace SimpleCL.Models.Skills
             Description = data[Constants.Strings.Name];
             Type = (MasteryType) Enum.Parse(typeof(MasteryType), data["type"]);
             RequiredWeapons = Array.ConvertAll(data["weapon"].Split(','),
-                x => (EquipmentData.SubType.Weapon) byte.Parse(x));
+                x => (EquipmentType.Weapon) byte.Parse(x));
             IconPath = data["icon"];
         }
 

@@ -17,7 +17,7 @@ namespace SimpleCL.Interaction.Pathing
         {
             if (LocalPlayer.Get.Tracing)
             {
-                InteractionQueue.PacketQueue.Enqueue(new Packet(opcode: Opcode.Agent.Request.CHAR_ACTION, false, false,
+                InteractionQueue.PacketQueue.Enqueue(new Packet(Opcode.Agent.Request.CHAR_ACTION, false, false,
                     new byte[] {0x02}));
             }
 
@@ -38,7 +38,7 @@ namespace SimpleCL.Interaction.Pathing
                 packet.WriteUShort(y);
             }
 
-            InteractionQueue.PacketQueue.Enqueue(packet);
+            packet.Send();
         }
     }
 }

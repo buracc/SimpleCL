@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SimpleCL.Enums.Commons;
+using SimpleCL.Enums.Items;
 using SimpleCL.Enums.Quests;
 using SimpleCL.Enums.Server;
 using SimpleCL.Enums.Skills;
@@ -394,38 +395,6 @@ namespace SimpleCL.Services.Game
 
         #endregion
 
-        #region Inventory
-
-        [PacketHandler(Opcode.Agent.Response.INVENTORY_ITEM_USE)]
-        public void ItemUse(Server server, Packet packet)
-        {
-            if (!packet.ReadBool())
-            {
-                return;
-            }
-
-            var slot = packet.ReadByte();
-            var quantity = packet.ReadUShort();
-
-            var inventory = _localPlayer.Inventory;
-            var changedItem = inventory.FirstOrDefault(x => x.Slot == slot);
-            if (changedItem == null)
-            {
-                return;
-            }
-
-            if (quantity == 0)
-            {
-                inventory.Remove(changedItem);
-            }
-            else
-            {
-                changedItem.Quantity = quantity;
-            }
-        }
-
-        #endregion
-
         [PacketHandler(Opcode.Agent.Response.GAME_INVITE)]
         public void ExchangeStart(Server server, Packet packet)
         {
@@ -477,11 +446,11 @@ namespace SimpleCL.Services.Game
             var refItemId = packet.ReadUInt();
             var inventoryItem = InventoryItem.FromId(refItemId);
 
-            switch (inventoryItem.TypeId2)
+            switch (inventoryItem.Category)
             {
-                case 1:
-                case 4: // job gear
-                case 5:
+                case ItemCategory.Equipment:
+                case ItemCategory.JobEquipment:
+                case ItemCategory.FellowEquipment:
                     var plus = packet.ReadByte();
                     var variance = packet.ReadULong();
                     var dura = packet.ReadUInt();
@@ -538,7 +507,7 @@ namespace SimpleCL.Services.Game
 
                     break;
 
-                case 2:
+                case ItemCategory.Summon:
                     switch (inventoryItem.TypeId3)
                     {
                         case 1:
@@ -589,7 +558,7 @@ namespace SimpleCL.Services.Game
 
                     break;
 
-                case 3:
+                case ItemCategory.Consumable:
                     var stackCount = packet.ReadUShort();
 
                     inventoryItem.Quantity = stackCount;

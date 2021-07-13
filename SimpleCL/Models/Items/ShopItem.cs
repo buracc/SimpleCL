@@ -41,7 +41,7 @@ namespace SimpleCL.Models.Items
             buyPacket.WriteByte(Slot);
             buyPacket.WriteUShort((ushort) amount);
             buyPacket.WriteUInt(ShopUid);
-            InteractionQueue.PacketQueue.Enqueue(buyPacket);
+            buyPacket.Send();
         }
     }
 }

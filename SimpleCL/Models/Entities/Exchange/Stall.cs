@@ -37,20 +37,23 @@ namespace SimpleCL.Models.Entities.Exchange
         {
             var openPacket = new Packet(Opcode.Agent.Request.STALL_TALK);
             openPacket.WriteUInt(PlayerUid);
-            Interaction.InteractionQueue.PacketQueue.Enqueue(openPacket);
+            openPacket.Send();
         }
 
 
         public void Leave()
         {
             var exitPacket = new Packet(Opcode.Agent.Request.STALL_LEAVE);
-            Interaction.InteractionQueue.PacketQueue.Enqueue(exitPacket);
+            exitPacket.Send();
         }
         
         public void Dispose()
         {
-            Items.DisposeAll();
-            Items.Clear();
+            Program.Gui.InvokeLater(() =>
+            {
+                Items.DisposeAll();
+                Items.Clear();
+            });
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

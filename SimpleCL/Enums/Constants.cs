@@ -35,6 +35,7 @@ namespace SimpleCL.Enums
             public const string CashItem = "cash_item";
             public const string Icon = "icon";
             public const string Slot = "slot";
+            public const string Stack = "stack";
 
             #endregion
 

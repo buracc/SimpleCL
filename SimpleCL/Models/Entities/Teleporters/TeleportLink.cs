@@ -27,7 +27,7 @@ namespace SimpleCL.Models.Entities.Teleporters
             teleportPacket.WriteUInt(teleporter.Uid);
             teleportPacket.WriteByte(2);
             teleportPacket.WriteUInt(DestinationId);
-            InteractionQueue.PacketQueue.Enqueue(teleportPacket);
+            teleportPacket.Send();
         }
     }
 }

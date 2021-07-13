@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using SimpleCL.Enums.Commons;
+using SimpleCL.Enums.Items;
 using SimpleCL.Interaction;
 using SimpleCL.SecurityApi;
 using SimpleCL.Util.Extension;
@@ -19,7 +20,7 @@ namespace SimpleCL.Models.Items
             Program.Gui.Log("Purchasing: " + Name + " for " + Price);
             var buyPacket = new Packet(Opcode.Agent.Request.STALL_BUY);
             buyPacket.WriteByte(Slot);
-            InteractionQueue.PacketQueue.Enqueue(buyPacket);
+            buyPacket.Send();
         }
         
         public override string ToString()
@@ -58,11 +59,11 @@ namespace SimpleCL.Models.Items
             var refItemId = packet.ReadUInt();
             var inventoryItem = new StallItem(refItemId);
 
-            switch (inventoryItem.TypeId2)
+            switch (inventoryItem.Category)
             {
-                case 1:
-                case 4: // job gear
-                case 5:
+                case ItemCategory.Equipment:
+                case ItemCategory.JobEquipment: // job gear
+                case ItemCategory.FellowEquipment:
                     var plus = packet.ReadByte();
                     var variance = packet.ReadULong();
                     var dura = packet.ReadUInt();
@@ -119,7 +120,7 @@ namespace SimpleCL.Models.Items
 
                     break;
 
-                case 2:
+                case ItemCategory.Summon:
                     switch (inventoryItem.TypeId3)
                     {
                         case 1:
@@ -170,7 +171,7 @@ namespace SimpleCL.Models.Items
 
                     break;
 
-                case 3:
+                case ItemCategory.Consumable:
                     var stackCount = packet.ReadUShort();
 
                     inventoryItem.Quantity = stackCount;

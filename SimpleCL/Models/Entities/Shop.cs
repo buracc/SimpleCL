@@ -35,7 +35,7 @@ namespace SimpleCL.Models.Entities
             }
 
             NpcService.SelectedShop = this;
-            InteractionQueue.PacketQueue.Enqueue(shopPacket);
+            shopPacket.Send();
         }
 
         public void Open()
@@ -43,14 +43,14 @@ namespace SimpleCL.Models.Entities
             var shopPacket = new Packet(Opcode.Agent.Request.ENTITY_NPC_OPEN);
             shopPacket.WriteUInt(Uid);
             shopPacket.WriteByte(1);
-            InteractionQueue.PacketQueue.Enqueue(shopPacket);
+            shopPacket.Send();
         }
 
         public void Close()
         {
             var closePacket = new Packet(Opcode.Agent.Request.ENTITY_NPC_CLOSE);
             closePacket.WriteUInt(Uid);
-            InteractionQueue.PacketQueue.Enqueue(closePacket);
+            closePacket.Send();
         }
     }
 }

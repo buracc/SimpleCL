@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using SimpleCL.Interaction;
 
 namespace SimpleCL.SecurityApi
 {
@@ -14,6 +15,11 @@ namespace SimpleCL.SecurityApi
 		private bool m_locked;
 		byte[] m_reader_bytes;
 		object m_lock;
+
+		public void Send()
+		{
+			InteractionQueue.PacketQueue.Enqueue(this);
+		}
 
 		public ushort Opcode
 		{

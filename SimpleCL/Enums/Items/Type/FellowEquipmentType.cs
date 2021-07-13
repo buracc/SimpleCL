@@ -1,9 +1,9 @@
 ﻿namespace SimpleCL.Enums.Items.Type
 {
     // ItemCategory == 5
-    public static class FellowEquipmentData
+    public static class FellowEquipmentType
     {
-        public enum Type : byte
+        public enum Slot : byte
         {
             Claw = 1,
             Charm = 2,
@@ -14,12 +14,9 @@
             Tattoo = 7
         }
 
-        public static class SubType
+        public enum Fellow : byte
         {
-            public enum All : byte
-            {
-                All = 0
-            }
+            Fellow = 0
         }
     }
 }

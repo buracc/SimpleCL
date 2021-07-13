@@ -214,6 +214,12 @@ namespace SimpleCL.Network
                 {
                     foreach (var kvp in outgoing)
                     {
+                        if (this is Agent && Program.Gui.DebugAgent() ||
+                            this is Gateway && Program.Gui.DebugGateway())
+                        {
+                            LogPacket(kvp.Value);
+                        }
+                        
                         var buffer = kvp.Key;
                         success = SocketError.Success;
 

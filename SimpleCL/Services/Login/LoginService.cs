@@ -157,6 +157,7 @@ namespace SimpleCL.Services.Login
                     agent.RegisterService(new EntityStateService());
                     agent.RegisterService(new StallService(_silkroadServer));
                     agent.RegisterService(new NpcService());
+                    agent.RegisterService(new InventoryService());
                     
                     // agent.Debug = true;
                     agent.Start();

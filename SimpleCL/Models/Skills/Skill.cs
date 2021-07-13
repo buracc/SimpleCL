@@ -38,8 +38,8 @@ namespace SimpleCL.Models.Skills
         public readonly ushort RequiredLevel1;
         public readonly ushort RequiredLevel2;
         public readonly ushort RequiredLevel3;
-        public readonly EquipmentData.SubType.Weapon RequiredWeapon1;
-        public readonly EquipmentData.SubType.Weapon RequiredWeapon2;
+        public readonly EquipmentType.Weapon RequiredWeapon1;
+        public readonly EquipmentType.Weapon RequiredWeapon2;
         public readonly bool Targeted;
         public readonly ushort Range;
 
@@ -75,8 +75,8 @@ namespace SimpleCL.Models.Skills
             RequiredLevel1 = ushort.Parse(data[Constants.Strings.RequiredLevel1]);
             RequiredLevel2 = ushort.Parse(data[Constants.Strings.RequiredLevel2]);
             RequiredLevel3 = ushort.Parse(data[Constants.Strings.RequiredLevel3]);
-            RequiredWeapon1 = (EquipmentData.SubType.Weapon) byte.Parse(data[Constants.Strings.Weapon1]);
-            RequiredWeapon2 = (EquipmentData.SubType.Weapon) byte.Parse(data[Constants.Strings.Weapon2]);
+            RequiredWeapon1 = (EquipmentType.Weapon) byte.Parse(data[Constants.Strings.Weapon1]);
+            RequiredWeapon2 = (EquipmentType.Weapon) byte.Parse(data[Constants.Strings.Weapon2]);
             Targeted = byte.Parse(data[Constants.Strings.TargetRequired]) == 1;
             Range = ushort.Parse(data[Constants.Strings.Range]);
         }
@@ -98,7 +98,7 @@ namespace SimpleCL.Models.Skills
             actionPacket.WriteByte(4);
             actionPacket.WriteUInt(Id);
             actionPacket.WriteByte(0);
-            InteractionQueue.PacketQueue.Enqueue(actionPacket);
+            actionPacket.Send();
         }
         
         public void Cancel()
@@ -108,7 +108,7 @@ namespace SimpleCL.Models.Skills
             actionPacket.WriteByte(5);
             actionPacket.WriteUInt(Id);
             actionPacket.WriteByte(0);
-            InteractionQueue.PacketQueue.Enqueue(actionPacket);
+            actionPacket.Send();
         }
         
         public bool IsResSkill()
