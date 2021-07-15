@@ -126,8 +126,8 @@ namespace SimpleCL.Models.Items
                         case 1:
                             if (inventoryItem.TypeId4 == 3)
                             {
-                                var spawnState = packet.ReadByte();
-                                if (spawnState == 2)
+                                var fellowState = packet.ReadByte(); // ? 
+                                if (fellowState >= 2)
                                 {
                                     var modelId = packet.ReadUInt();
                                     var fellowName = packet.ReadAscii();

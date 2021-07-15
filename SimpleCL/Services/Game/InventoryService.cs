@@ -77,11 +77,11 @@ namespace SimpleCL.Services.Game
                         break;
                 }
             });
-            
+
             Program.Gui.InvokeLater(() => { Program.Gui.RefreshInventories(); });
         }
 
-        public void InventoryToInventory(Packet packet)
+        private void InventoryToInventory(Packet packet)
         {
             var startSlot = packet.ReadByte();
             var endSlot = packet.ReadByte();
@@ -149,7 +149,7 @@ namespace SimpleCL.Services.Game
             }
         }
 
-        public void AvatarToInventory(Packet packet)
+        private void AvatarToInventory(Packet packet)
         {
             var avatarSlot = packet.ReadByte();
             var targetSlot = packet.ReadByte();
@@ -166,7 +166,7 @@ namespace SimpleCL.Services.Game
             _localPlayer.AvatarInventory.Remove(movedItem);
         }
 
-        public void InventoryToAvatar(Packet packet)
+        private void InventoryToAvatar(Packet packet)
         {
             var inventorySlot = packet.ReadByte();
             var targetSlot = packet.ReadByte();
@@ -183,7 +183,7 @@ namespace SimpleCL.Services.Game
             _localPlayer.AvatarInventory.Add(movedItem);
         }
 
-        public void JobToInventory(Packet packet)
+        private void JobToInventory(Packet packet)
         {
             var jobSlot = packet.ReadByte();
             var targetSlot = packet.ReadByte();
@@ -200,7 +200,7 @@ namespace SimpleCL.Services.Game
             _localPlayer.Inventory.Add(movedItem);
         }
 
-        public void InventoryToJob(Packet packet)
+        private void InventoryToJob(Packet packet)
         {
             var invSlot = packet.ReadByte();
             var targetSlot = packet.ReadByte();
