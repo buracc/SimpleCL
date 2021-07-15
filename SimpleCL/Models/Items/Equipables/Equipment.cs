@@ -22,6 +22,7 @@ namespace SimpleCL.Models.Items.Equipables
                         3 => EquipmentSlot.Ring,
                         _ => EquipmentSlot.Unknown
                     },
+                    4 => EquipmentSlot.Shield,
                     6 => EquipmentSlot.Weapon,
                     7 => EquipmentSlot.Cape,
                     _ => TypeId4 switch
@@ -69,11 +70,12 @@ namespace SimpleCL.Models.Items.Equipables
         {
             var action = this is Avatar ? InventoryAction.InventoryToAvatar : InventoryAction.InventoryToInventory;
             var secondRing = LocalPlayer.Get.EquipmentInventory.FirstOrDefault(x => x.Slot == 12);
-            var targetSlot = EquipmentType switch
+            byte targetSlot = EquipmentType switch
             {
                 Type.Regular => SlotType switch
                 {
                     EquipmentSlot.Weapon => 6,
+                    EquipmentSlot.Shield => 7,
                     EquipmentSlot.Head => 0,
                     EquipmentSlot.Shoulders => 2,
                     EquipmentSlot.Chest => 1,
@@ -82,9 +84,9 @@ namespace SimpleCL.Models.Items.Equipables
                     EquipmentSlot.Feet => 5,
                     EquipmentSlot.Earring => 9,
                     EquipmentSlot.Necklace => 10,
-                    EquipmentSlot.Ring => secondRing == null ? 12 : 11,
+                    EquipmentSlot.Ring => (byte) (secondRing == null ? 12 : 11),
                     EquipmentSlot.Cape => 8,
-                    EquipmentSlot.Unknown or _ => -1
+                    EquipmentSlot.Unknown or _ => 255
                 },
                 Type.Avatar => ((Avatar) this).SlotType switch
                 {
@@ -93,17 +95,17 @@ namespace SimpleCL.Models.Items.Equipables
                     Avatar.EquipmentSlot.Dress => 1,
                     Avatar.EquipmentSlot.Devil => 4,
                     Avatar.EquipmentSlot.Flag => 3,
-                    Avatar.EquipmentSlot.Unknown or _ => -1
+                    Avatar.EquipmentSlot.Unknown or _ => 255
                 },
-                Type.Unknown or _ => -1
+                Type.Unknown or _ => 255
             };
 
-            if (targetSlot == -1)
+            if (targetSlot == 255)
             {
                 return;
             }
             
-            Move(Slot, (byte) targetSlot, action);
+            Move(Slot, targetSlot, action);
         }
 
         public void UnEquip()
@@ -121,6 +123,7 @@ namespace SimpleCL.Models.Items.Equipables
         public enum EquipmentSlot
         {
             Weapon,
+            Shield,
             Head,
             Shoulders,
             Chest,

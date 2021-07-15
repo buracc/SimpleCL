@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using SimpleCL.Interaction.Providers;
+using SimpleCL.Models;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
@@ -44,19 +45,21 @@ namespace SimpleCL.Interaction
                         continue;
                     }
 
-                    var attackableEntity = Entities.TargetableEntities
+                    var attackableEntity = (ITargetable) Entities.AllEntities.Values
                         .OrderBy(x => ((ILocatable) x).WorldPoint.DistanceTo(LocalPlayer.Get.WorldPoint))
                         .FirstOrDefault(x =>
                         {
-                            switch (selectedEntity)
+                            if (x is not ITargetable)
                             {
-                                case Player player:
-                                    return x is Player p && player.Uid == p.Uid;
-                                case Monster monster:
-                                    return x is Monster m && monster.Id == m.Id && m.Hp > 0;
-                                default:
-                                    return false;
+                                return false;
                             }
+
+                            return selectedEntity switch
+                            {
+                                Player player => x is Player p && player.Uid == p.Uid,
+                                Monster monster => x is Monster m && monster.Id == m.Id && m.Hp > 0,
+                                _ => false
+                            };
                         });
 
                     if (attackableEntity == null)

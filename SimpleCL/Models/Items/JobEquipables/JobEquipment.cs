@@ -1,4 +1,8 @@
-﻿using SimpleCL.Models.Items.Equipables;
+﻿using System;
+using System.Linq;
+using SimpleCL.Enums.Events;
+using SimpleCL.Models.Character;
+using SimpleCL.Models.Items.Equipables;
 
 namespace SimpleCL.Models.Items.JobEquipables
 {
@@ -52,12 +56,35 @@ namespace SimpleCL.Models.Items.JobEquipables
         
         public void Equip()
         {
+            var secondRing = LocalPlayer.Get.JobEquipmentInventory.FirstOrDefault(x => x.Slot == 10);
+
+            byte targetSlot = SlotType switch
+            {
+                Equipment.EquipmentSlot.Weapon => 6,
+                Equipment.EquipmentSlot.Head => 0,
+                Equipment.EquipmentSlot.Shoulders => 2,
+                Equipment.EquipmentSlot.Chest => 1,
+                Equipment.EquipmentSlot.Legs => 4,
+                Equipment.EquipmentSlot.Hands => 3,
+                Equipment.EquipmentSlot.Feet => 5,
+                Equipment.EquipmentSlot.Earring => 7,
+                Equipment.EquipmentSlot.Necklace => 8,
+                Equipment.EquipmentSlot.Ring => (byte) (secondRing == null ? 10 : 9),
+                Equipment.EquipmentSlot.Cape => 8,
+                Equipment.EquipmentSlot.Unknown or _ => 255
+            };
+
+            if (targetSlot == 255)
+            {
+                return;
+            }
             
+            Move(Slot, targetSlot, InventoryAction.InventoryToJob);
         }
 
         public void UnEquip()
         {
-            
+            Move(Slot, 0x0D, InventoryAction.JobToInventory);
         }
 
         public enum Job

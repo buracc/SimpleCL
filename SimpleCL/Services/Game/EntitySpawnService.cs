@@ -457,7 +457,7 @@ namespace SimpleCL.Services.Game
 
                                 case Cos cos:
                                 {
-                                    if (!cos.IsHorse())
+                                    if (cos is not Horse)
                                     {
                                         if (cos is AttackPet || cos is PickPet || cos is FellowPet)
                                         {
@@ -465,14 +465,21 @@ namespace SimpleCL.Services.Game
                                         }
 
                                         var owner = packet.ReadAscii();
+                                        if (cos is QuestPet)
+                                        {
+                                            packet.ReadUShort();
+                                            packet.ReadUShort();
+                                            packet.ReadByte();
+                                            break;
+                                        }
+                                        
                                         var jobType = packet.ReadByte();
-
-                                        if (!cos.IsPickPet())
+                                        if (cos is not PickPet)
                                         {
                                             var pvpState = packet.ReadByte();
                                         }
 
-                                        if (cos.IsGuildGuard())
+                                        if (cos is GuildGuard)
                                         {
                                             var ownerObjId = packet.ReadUInt();
                                         }

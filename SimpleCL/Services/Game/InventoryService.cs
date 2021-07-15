@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Events;
 using SimpleCL.Models.Character;
+using SimpleCL.Models.Items;
 using SimpleCL.Network;
 using SimpleCL.SecurityApi;
 using SimpleCL.Util.Extension;
@@ -54,76 +56,29 @@ namespace SimpleCL.Services.Game
 
             var type = (InventoryAction) packet.ReadByte();
 
-            switch (type)
+            Program.Gui.InvokeLater(() =>
             {
-                case InventoryAction.InventoryToInventory:
-                    InventoryToInventory(packet);
-                    break;
-                case InventoryAction.StorageToStorage:
-                    break;
-                case InventoryAction.InventoryToStorage:
-                    break;
-                case InventoryAction.StorageToInventory:
-                    break;
-                case InventoryAction.InventoryToExchange:
-                    break;
-                case InventoryAction.ExchangeToInventory:
-                    break;
-                case InventoryAction.GroundToInventory:
-                    break;
-                case InventoryAction.InventoryToGround:
-                    break;
-                case InventoryAction.ShopToInventory:
-                    break;
-                case InventoryAction.InventoryToShop:
-                    break;
-                case InventoryAction.InventoryGoldToGround:
-                    break;
-                case InventoryAction.StorageGoldToInventory:
-                    break;
-                case InventoryAction.InventoryGoldToStorage:
-                    break;
-                case InventoryAction.InventoryGoldToExchange:
-                    break;
-                case InventoryAction.QuestToInventory:
-                    break;
-                case InventoryAction.InventoryToQuest:
-                    break;
-                case InventoryAction.TransportToTransport:
-                    break;
-                case InventoryAction.GroundToPet:
-                    break;
-                case InventoryAction.ShopToTransport:
-                    break;
-                case InventoryAction.TransportToShop:
-                    break;
-                case InventoryAction.PetToPet:
-                    break;
-                case InventoryAction.PetToInventory:
-                    break;
-                case InventoryAction.InventoryToPet:
-                    break;
-                case InventoryAction.GroundToPetToInventory:
-                    break;
-                case InventoryAction.GuildToGuild:
-                    break;
-                case InventoryAction.InventoryToGuild:
-                    break;
-                case InventoryAction.GuildToInventory:
-                    break;
-                case InventoryAction.InventoryGoldToGuild:
-                    break;
-                case InventoryAction.GuildGoldToInventory:
-                    break;
-                case InventoryAction.ShopBuyBack:
-                    break;
-                case InventoryAction.AvatarToInventory:
-                    break;
-                case InventoryAction.InventoryToAvatar:
-                    break;
-                default:
-                    return;
-            }
+                switch (type)
+                {
+                    case InventoryAction.InventoryToInventory:
+                        InventoryToInventory(packet);
+                        break;
+                    case InventoryAction.AvatarToInventory:
+                        AvatarToInventory(packet);
+                        break;
+                    case InventoryAction.InventoryToAvatar:
+                        InventoryToAvatar(packet);
+                        break;
+                    case InventoryAction.JobToInventory:
+                        JobToInventory(packet);
+                        break;
+                    case InventoryAction.InventoryToJob:
+                        InventoryToJob(packet);
+                        break;
+                }
+            });
+            
+            Program.Gui.InvokeLater(() => { Program.Gui.RefreshInventories(); });
         }
 
         public void InventoryToInventory(Packet packet)
@@ -141,46 +96,125 @@ namespace SimpleCL.Services.Game
                 return;
             }
 
-            Program.Gui.InvokeLater(() =>
+            var itemAtTargetSlot = _localPlayer.Inventory.FirstOrDefault(x => x.Slot == endSlot);
+            if (itemAtTargetSlot != null)
             {
-                var itemAtTargetSlot = _localPlayer.Inventory.FirstOrDefault(x => x.Slot == endSlot);
-                if (itemAtTargetSlot != null)
+                if (itemAtTargetSlot.Id.Equals(movedItem.Id) && itemAtTargetSlot.Quantity < itemAtTargetSlot.Stack)
                 {
-                    if (itemAtTargetSlot.Id.Equals(movedItem.Id) && itemAtTargetSlot.Quantity < itemAtTargetSlot.Stack)
+                    var remainingQuantity = movedItem.Quantity - quantity;
+                    if (remainingQuantity <= 0)
                     {
-                        var remainingQuantity = quantity + itemAtTargetSlot.Quantity - itemAtTargetSlot.Stack;
-                        if (remainingQuantity > 0)
-                        {
-                            movedItem.Quantity -= (ushort) remainingQuantity;
-                            itemAtTargetSlot.Quantity = itemAtTargetSlot.Stack;
-                            return;
-                        }
-
-                        itemAtTargetSlot.Quantity += quantity;
-                        if (_localPlayer.Inventory.Remove(movedItem) || _localPlayer.EquipmentInventory.Remove(movedItem))
+                        if (_localPlayer.Inventory.Remove(movedItem) ||
+                            _localPlayer.EquipmentInventory.Remove(movedItem))
                         {
                             movedItem.Dispose();
                         }
 
+                        itemAtTargetSlot.Quantity += quantity;
                         return;
                     }
 
-                    itemAtTargetSlot.Slot = startSlot;
-                    movedItem.Slot = endSlot;
+                    itemAtTargetSlot.Quantity += quantity;
+                    movedItem.Quantity -= quantity;
                     return;
                 }
 
+                itemAtTargetSlot.Slot = startSlot;
                 movedItem.Slot = endSlot;
-                if (_localPlayer.EquipmentInventory.Contains(movedItem))
-                {
-                    _localPlayer.Inventory.Add(movedItem);
-                    _localPlayer.EquipmentInventory.Remove(movedItem);
-                    return;
-                }
+                return;
+            }
 
+            if (quantity < movedItem.Quantity)
+            {
+                movedItem.Quantity -= quantity;
+                var item = InventoryItem.FromId(movedItem.Id);
+                item.Quantity = quantity;
+                item.Slot = endSlot;
+                _localPlayer.Inventory.Add(item);
+                return;
+            }
+
+            movedItem.Slot = endSlot;
+            if (_localPlayer.EquipmentInventory.Contains(movedItem))
+            {
+                _localPlayer.Inventory.Add(movedItem);
+                _localPlayer.EquipmentInventory.Remove(movedItem);
+                return;
+            }
+
+            if (movedItem.Slot < 13)
+            {
                 _localPlayer.EquipmentInventory.Add(movedItem);
                 _localPlayer.Inventory.Remove(movedItem);
-            });
+            }
+        }
+
+        public void AvatarToInventory(Packet packet)
+        {
+            var avatarSlot = packet.ReadByte();
+            var targetSlot = packet.ReadByte();
+
+            var movedItem = _localPlayer.AvatarInventory.FirstOrDefault(x => x.Slot == avatarSlot);
+
+            if (movedItem == null)
+            {
+                return;
+            }
+
+            movedItem.Slot = targetSlot;
+            _localPlayer.Inventory.Add(movedItem);
+            _localPlayer.AvatarInventory.Remove(movedItem);
+        }
+
+        public void InventoryToAvatar(Packet packet)
+        {
+            var inventorySlot = packet.ReadByte();
+            var targetSlot = packet.ReadByte();
+
+            var movedItem = _localPlayer.Inventory.FirstOrDefault(x => x.Slot == inventorySlot);
+
+            if (movedItem == null)
+            {
+                return;
+            }
+
+            movedItem.Slot = targetSlot;
+            _localPlayer.Inventory.Remove(movedItem);
+            _localPlayer.AvatarInventory.Add(movedItem);
+        }
+
+        public void JobToInventory(Packet packet)
+        {
+            var jobSlot = packet.ReadByte();
+            var targetSlot = packet.ReadByte();
+
+            var movedItem = _localPlayer.JobEquipmentInventory.FirstOrDefault(x => x.Slot == jobSlot);
+
+            if (movedItem == null)
+            {
+                return;
+            }
+
+            movedItem.Slot = targetSlot;
+            _localPlayer.JobEquipmentInventory.Remove(movedItem);
+            _localPlayer.Inventory.Add(movedItem);
+        }
+
+        public void InventoryToJob(Packet packet)
+        {
+            var invSlot = packet.ReadByte();
+            var targetSlot = packet.ReadByte();
+
+            var movedItem = _localPlayer.Inventory.FirstOrDefault(x => x.Slot == invSlot);
+
+            if (movedItem == null)
+            {
+                return;
+            }
+
+            movedItem.Slot = targetSlot;
+            _localPlayer.Inventory.Remove(movedItem);
+            _localPlayer.JobEquipmentInventory.Add(movedItem);
         }
     }
 }

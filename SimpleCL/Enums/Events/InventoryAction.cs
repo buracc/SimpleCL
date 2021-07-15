@@ -43,6 +43,11 @@
         ShopBuyBack = 34,
 
         AvatarToInventory = 35,
-        InventoryToAvatar = 36
+        InventoryToAvatar = 36,
+        
+        InventoryToJob = 47,
+        JobToInventory = 48,
+        
+        Unknown = 255
     }
 }

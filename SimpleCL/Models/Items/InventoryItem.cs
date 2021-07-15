@@ -127,7 +127,12 @@ namespace SimpleCL.Models.Items
             packet.WriteByte(action);
             packet.WriteByte(currentSlot);
             packet.WriteByte(targetSlot);
-            packet.WriteUShort(quantity);
+            
+            if (action != InventoryAction.InventoryToAvatar && action != InventoryAction.AvatarToInventory)
+            {
+                packet.WriteUShort(quantity);
+            }
+            
             packet.Send();
         }
 

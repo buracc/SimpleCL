@@ -15,16 +15,21 @@ namespace SimpleCL.Interaction.Providers
     public static class Entities
     {
         public static readonly ConcurrentDictionary<uint, Entity> AllEntities = new();
-        public static readonly BindingList<ITargetable> TargetableEntities = new();
+
+        public static BindingList<Entity> TargetableEntities
+        {
+            get
+            {
+                return new(AllEntities.Values.Where(x => x is ITargetable).ToList());
+            }
+        }
+
         private static readonly Dictionary<uint, uint> Buffs = new();
 
         public static void Respawn()
         {
             AllEntities.DisposeAll();
             AllEntities.Clear();
-            
-            TargetableEntities.DisposeAll();
-            TargetableEntities.Clear();
             
             Buffs.DisposeAll();
             Buffs.Clear();
@@ -43,11 +48,6 @@ namespace SimpleCL.Interaction.Providers
             }
 
             AllEntities[e.Uid] = e;
-            if (e is ITargetable targetable)
-            {
-                TargetableEntities.Add(targetable);
-            }
-
             Program.Gui.AddMinimapMarker(e);
         }
 
@@ -63,12 +63,7 @@ namespace SimpleCL.Interaction.Providers
             {
                 return;
             }
-
-            if (removedEntity is ITargetable targetable)
-            {
-                TargetableEntities.Remove(targetable);
-            }
-
+            
             Program.Gui.RemoveMinimapMarker(uid);
             
             removedEntity.Dispose();
