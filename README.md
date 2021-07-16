@@ -13,7 +13,11 @@ Preview:
 - Character selection
 - Display and update character information
 - Buffs display and cancelling buffs
-- Inventory & Using items, Equipment, Avatar, Job equips
+- Inventory
+    - Use consumables (Potions, scrolls, pets)
+    - (Un)Equip equipment
+    - Move items to slot
+    - Split stackables
 - Display in-game chat
 - Attack nearby entities (& with skills)
 - Minimap
@@ -21,10 +25,11 @@ Preview:
     
     Right click menus:
     - Local player: Cast self buff
-    - Players: Trace
+    - Players: Trace, Attack with skill, Cast buff, Resurrect dead player with skill
     - Stalls: Open/Close stall
     - Shops: Open/Close shop
-    - Monsters: Attack selected monster with selected skills
+    - Monsters: Attack with skill
+    - Summons/COS: Unsummon
     - Teleporters: Use teleporter
 - View stalls and shops, purchase items
 - Simple packet logger
