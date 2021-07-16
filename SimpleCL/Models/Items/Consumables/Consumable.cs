@@ -6,7 +6,7 @@ namespace SimpleCL.Models.Items.Consumables
     {
         public ConsumableType.Variant Variant => (ConsumableType.Variant) TypeId3;
         
-        public Consumable(uint id) : base(id)
+        public Consumable(uint id, uint rentTypeId) : base(id, rentTypeId)
         {
         }
     }

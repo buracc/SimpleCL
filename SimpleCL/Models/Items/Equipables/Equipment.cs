@@ -52,7 +52,7 @@ namespace SimpleCL.Models.Items.Equipables
             }
         }
 
-        public Equipment(uint id) : base(id)
+        public Equipment(uint id, uint rentTypeId) : base(id, rentTypeId)
         {
         }
 

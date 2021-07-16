@@ -8,7 +8,6 @@ using SimpleCL.Enums.Commons;
 using SimpleCL.Enums.Events;
 using SimpleCL.Enums.Items;
 using SimpleCL.Enums.Items.Type;
-using SimpleCL.Interaction;
 using SimpleCL.Models.Exceptions;
 using SimpleCL.Models.Items.Consumables;
 using SimpleCL.Models.Items.Equipables;
@@ -20,6 +19,9 @@ namespace SimpleCL.Models.Items
 {
     public class InventoryItem : IComparable<InventoryItem>, IDisposable
     {
+        private uint _rentTypeId;
+        [Browsable(false)]
+        public uint Uid { get; set; }
         public Image Icon { get; set; }
         public byte Slot { get; set; }
         [Browsable(false)] public uint Id { get; }
@@ -49,7 +51,7 @@ namespace SimpleCL.Models.Items
             Name = name;
         }
 
-        public InventoryItem(uint id)
+        public InventoryItem(uint id, uint rentTypeId)
         {
             var data = GameDatabase.Get.GetItemData(id);
             if (data == null)
@@ -57,6 +59,7 @@ namespace SimpleCL.Models.Items
                 throw new EntityParseException(id);
             }
 
+            _rentTypeId = rentTypeId;
             Id = id;
             ServerName = data[Constants.Strings.ServerName];
             Name = data[Constants.Strings.Name];
@@ -70,36 +73,36 @@ namespace SimpleCL.Models.Items
                                   data[Constants.Strings.Icon].Replace(Constants.Strings.Ddj, Constants.Strings.Png));
         }
 
-        public static InventoryItem FromId(uint id)
+        public static InventoryItem FromId(uint id, uint rentTypeId = 0)
         {
-            var item = new InventoryItem(id);
+            var item = new InventoryItem(id, rentTypeId);
             switch (item.Category)
             {
                 case ItemCategory.Equipment:
                 {
-                    var equip = new Equipment(id);
+                    var equip = new Equipment(id, rentTypeId);
                     if (equip.EquipmentType == Equipment.Type.Avatar)
                     {
-                        return new Avatar(id);
+                        return new Avatar(id, rentTypeId);
                     }
 
-                    return equip.SlotType == Equipment.EquipmentSlot.Weapon ? new Weapon(id) : equip;
+                    return equip.SlotType == Equipment.EquipmentSlot.Weapon ? new Weapon(id, rentTypeId) : equip;
                 }
                 case ItemCategory.Summon:
-                    return new SummonItem(id);
+                    return new Summon(id, rentTypeId);
                 case ItemCategory.Consumable:
-                    var consumable = new Consumable(id);
+                    var consumable = new Consumable(id, rentTypeId);
                     return consumable.Variant switch
                     {
-                        ConsumableType.Variant.Scroll => new Scroll(id),
-                        ConsumableType.Variant.Potion => new Potion(id),
+                        ConsumableType.Variant.Scroll => new Scroll(id, rentTypeId),
+                        ConsumableType.Variant.Potion => new Potion(id, rentTypeId),
                         _ => consumable
                     };
 
                 case ItemCategory.JobEquipment:
-                    return new JobEquipment(id);
+                    return new JobEquipment(id, rentTypeId);
                 case ItemCategory.FellowEquipment:
-                    return new FellowEquipment(id);
+                    return new FellowEquipment(id, rentTypeId);
             }
 
             return item;
@@ -114,25 +117,38 @@ namespace SimpleCL.Models.Items
         {
             var usePacket = new Packet(Opcode.Agent.Request.INVENTORY_ITEM_USE, true);
             usePacket.WriteByte(Slot);
-            usePacket.WriteByte(CashItem ? (byte) 0x31 : (byte) 0x30);
-            usePacket.WriteByte(0x0C);
+            usePacket.WriteByte(CashItem ? 0x31 : 0x30);
+            var usageType2 = Category switch
+            {
+                ItemCategory.Consumable => 0x0C,
+                ItemCategory.Summon => 0x08,
+                _ => 0xFF
+            };
+            
+            if (usageType2 == 0xFF)
+            {
+                return;
+            }
+
+            usePacket.WriteByte(usageType2);
             usePacket.WriteByte(TypeId3);
             usePacket.WriteByte(TypeId4);
             usePacket.Send();
         }
 
-        public void Move(byte currentSlot, byte targetSlot, InventoryAction action = InventoryAction.InventoryToInventory, ushort quantity = 0)
+        public void Move(byte currentSlot, byte targetSlot,
+            InventoryAction action = InventoryAction.InventoryToInventory, ushort quantity = 0)
         {
             var packet = new Packet(Opcode.Agent.Request.INVENTORY_OPERATION);
             packet.WriteByte(action);
             packet.WriteByte(currentSlot);
             packet.WriteByte(targetSlot);
-            
+
             if (action != InventoryAction.InventoryToAvatar && action != InventoryAction.AvatarToInventory)
             {
                 packet.WriteUShort(quantity);
             }
-            
+
             packet.Send();
         }
 

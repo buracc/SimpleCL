@@ -3,7 +3,7 @@
     public class FellowEquipment : InventoryItem
     {
         public EquipmentSlot SlotType => (EquipmentSlot) TypeId3;
-        public FellowEquipment(uint id) : base(id)
+        public FellowEquipment(uint id, uint rentTypeId) : base(id, rentTypeId)
         {
         }
 

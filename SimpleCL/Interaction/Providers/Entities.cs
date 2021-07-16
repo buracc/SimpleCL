@@ -6,6 +6,7 @@ using SimpleCL.Models;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities;
+using SimpleCL.Models.Entities.Npcs;
 using SimpleCL.Models.Entities.Teleporters;
 using SimpleCL.Models.Skills;
 using SimpleCL.Util.Extension;

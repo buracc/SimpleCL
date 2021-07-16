@@ -2,6 +2,7 @@
 {
     public class SkillData
     {
+        // 1819175795,1685418593,1818977380,1919250793
         public enum Attribute: uint
         {
             Attack = 6386804,
@@ -14,7 +15,9 @@
             OverTime = 1886743667,
             HealWeaponReflect = 1836542056,
             Timed = 1685418593,
-            AutoTransferEffect = 1701213281
+            AutoTransferEffect = 1701213281,
+            LinkedSkill = 1819175795,
+            DamageDivide = 1818977380
         }
     }
 }

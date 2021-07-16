@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Models.Entities;
+using SimpleCL.Models.Entities.Npcs;
 using SimpleCL.Network;
 using SimpleCL.SecurityApi;
 using SimpleCL.Ui;

@@ -6,7 +6,7 @@ namespace SimpleCL.Models.Items.Consumables
     {
         public ConsumableType.Scroll ScrollType => (ConsumableType.Scroll) TypeId4;
         
-        public Scroll(uint id) : base(id)
+        public Scroll(uint id, uint rentTypeId) : base(id, rentTypeId)
         {
         }
     }

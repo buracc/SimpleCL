@@ -5,7 +5,8 @@ using System.Linq;
 using System.Windows.Forms;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Entities;
-using SimpleCL.Models.Entities.Pet;
+using SimpleCL.Models.Entities.Npcs;
+using SimpleCL.Models.Entities.Pets;
 using SimpleCL.Models.Entities.Teleporters;
 using SimpleCL.Ui.Components;
 using SimpleCL.Util.Extension;
@@ -45,19 +46,19 @@ namespace SimpleCL.Ui
                     var shopMenu = new ContextMenuStrip();
                     var shopMenuItem = new ToolStripMenuItem
                     {
-                        Text = "Open",
-                        Name = shop.ToString()
+                        Text = "Open shop"
                     };
 
                     shopMenuItem.Click += (_, _) =>
                     {
-                        Log("Opening shop: " + shop.Name);
+                        Log($"Opening shop [{shop.Name}]");
                         shop.Select();
                     };
 
                     shopMenu.Items.Add(shopMenuItem);
                     marker.ContextMenuStrip = shopMenu;
                     break;
+                
                 case TalkNpc talkNpc:
                     marker.Image = (Bitmap) Properties.Resources.ResourceManager.GetObject(talkNpc.MapIcon);
                     break;
@@ -65,20 +66,41 @@ namespace SimpleCL.Ui
                 case Monster monster:
                     marker.Image = Properties.Resources.mm_sign_monster;
                     var monsterMenu = new ContextMenuStrip();
+                    monsterMenu.MaximumSize = new Size(250, 400);
+                    
                     var monsterMenuitem = new ToolStripMenuItem
                     {
-                        Text = "Attack",
-                        Name = monster.ToString()
+                        Text = "Attack"
                     };
 
                     monsterMenuitem.Click += (_, _) =>
                     {
                         var skill = SelectedSkills.FirstOrDefault(x => !x.IsOnCooldown());
-                        Log("Going to attack " + monster.Name + " with skill " + skill);
+                        Log($"Attacking [{monster.Name}] with skill [{skill?.Name}]");
                         monster.Attack(skill);
                     };
+                    
+                    var castItem = new ToolStripMenuItem
+                    {
+                        Text = "Cast"
+                    };
+                    
+                    foreach (var skill in _localPlayer.Skills.Where(x => x.IsAttackSkill() && x.Targeted))
+                    {
+                        var menuitem = new ToolStripMenuItem
+                        {
+                            Text = skill.Name
+                        };
+
+                        menuitem.Click += (_, _) => monster.Attack(skill);
+
+                        castItem.DropDownItems.Add(
+                            menuitem
+                        );
+                    }
 
                     monsterMenu.Items.Add(monsterMenuitem);
+                    monsterMenu.Items.Add(castItem);
 
                     marker.ContextMenuStrip = monsterMenu;
                     break;
@@ -94,8 +116,7 @@ namespace SimpleCL.Ui
                     {
                         var menuitem = new ToolStripMenuItem
                         {
-                            Text = skill.Name,
-                            Name = skill.ToString()
+                            Text = skill.Name
                         };
 
                         menuitem.Click += (_, _) => skill.Cast();
@@ -120,8 +141,8 @@ namespace SimpleCL.Ui
 
                         stallVisitItem.Click += (_, _) =>
                         {
-                            Log("Opening " + player.Name + "'s stall");
                             player.Stall.Visit();
+                            Log($"Opening [{player.Name}]'s stall");
                         };
                         
                         var stallLeaveItem = new ToolStripMenuItem
@@ -131,8 +152,8 @@ namespace SimpleCL.Ui
 
                         stallLeaveItem.Click += (_, _) =>
                         {
-                            Log("Closing " + player.Name + "'s stall");
                             player.Stall.Leave();
+                            Log($"Closing [{player.Name}]'s stall");
                         };
 
                         stallMenu.Items.Add(stallVisitItem);
@@ -145,6 +166,39 @@ namespace SimpleCL.Ui
                     if (player.LifeState == Actor.Health.LifeState.Dead)
                     {
                         marker.Image = Properties.Resources.mm_sign_skull;
+                        marker.Image = Properties.Resources.mm_sign_skull;
+                    
+                        var resSkills = _localPlayer.Skills.Where(x => x.IsResSkill()).ToList();
+                        if (resSkills.Any())
+                        {
+                            var resMenu = new ContextMenuStrip();
+                            var resSubMenu = new ToolStripMenuItem("Resurrect");
+                        
+                            foreach (var resSkill in resSkills)
+                            {
+                                var resItem = new ToolStripMenuItem
+                                {
+                                    Text = resSkill.Name
+                                };
+
+                                resItem.Click += (_, _) =>
+                                {
+                                    player.Attack(resSkill);
+                                    Log($"Ressing [{player.Name}] with skill [{resSkill.Name}]");
+                                };
+
+                                resSubMenu.DropDownItems.Add(
+                                    resItem
+                                );
+                            }
+
+                            marker.ContextMenuStrip = resMenu;
+                        }
+                        else
+                        {
+                            marker.ContextMenuStrip = null;
+                        }
+                        
                         break;
                     }
                     
@@ -158,31 +212,78 @@ namespace SimpleCL.Ui
 
                     traceItem.Click += (_, _) =>
                     {
-                        Log("Going to trace " + player.Name);
                         player.Trace();
+                        Log($"Going to trace [{player.Name}]");
                     };
                     
-                    // todo: add casting buffs on player
-                    // var buffItem = new ToolStripMenuItem
-                    // {
-                    //     Text = "Trace",
-                    //     Name = player.ToString()
-                    // };
-                    //
-                    // buffItem.Click += (_, _) =>
-                    // {
-                    //     Log("Going to trace " + player.Name);
-                    //     player.Trace();
-                    // };
+                    var buffItem = new ToolStripMenuItem
+                    {
+                        Text = "Buff"
+                    };
+                    
+                    foreach (var skill in _localPlayer.Skills.Where(x => !x.IsAttackSkill() && x.Targeted))
+                    {
+                        var menuitem = new ToolStripMenuItem
+                        {
+                            Text = skill.Name
+                        };
 
+                        menuitem.Click += (_, _) =>
+                        {
+                            player.Attack(skill);
+                            Log($"Casting buff [{skill.Name}] on [{player.Name}]");
+                        };
+
+                        buffItem.DropDownItems.Add(
+                            menuitem
+                        );
+                    }
+                    
+                    var attackItem = new ToolStripMenuItem
+                    {
+                        Text = "Attack"
+                    };
+                    
+                    foreach (var skill in _localPlayer.Skills.Where(x => x.IsAttackSkill() && x.Targeted))
+                    {
+                        var menuitem = new ToolStripMenuItem
+                        {
+                            Text = skill.Name
+                        };
+
+                        menuitem.Click += (_, _) =>
+                        {
+                            player.Attack(skill);
+                            Log($"Attacking [{player.Name}] with skill [{skill.Name}]");
+                        };
+
+                        attackItem.DropDownItems.Add(
+                            menuitem
+                        );
+                    }
+                    
+                    playerMenu.Items.Add(attackItem);
+                    playerMenu.Items.Add(buffItem);
                     playerMenu.Items.Add(traceItem);
 
                     marker.ContextMenuStrip = playerMenu;
                     break;
 
-                case PickPet:
-                case AttackPet:
-                case FellowPet:
+                case CharacterPet pet:
+                    marker.Image = Properties.Resources.mm_sign_animal;
+                    var summonMenu = new ContextMenuStrip();
+                    var terminateItem = new ToolStripMenuItem("Unsummon");
+                    
+                    terminateItem.Click += (_, _) =>
+                    {
+                        pet.Unsummon();
+                        Log($"Recalling pet [{pet.Name}]");
+                    };
+                    
+                    summonMenu.Items.Add(terminateItem);
+                    marker.ContextMenuStrip = summonMenu;
+                    break;
+                
                 case Horse:
                     marker.Image = Properties.Resources.mm_sign_animal;
                     break;
@@ -200,7 +301,11 @@ namespace SimpleCL.Ui
                                 Tag = teleporter
                             };
 
-                            menuitem.Click += (sender, args) => teleportLink.Teleport(teleporter);
+                            menuitem.Click += (_, _) =>
+                            {
+                                teleportLink.Teleport(teleporter);
+                                Log($"Teleporting to [{teleportLink.Name}]");
+                            };
 
                             teleportMenu.Items.Add(
                                 menuitem
@@ -219,12 +324,6 @@ namespace SimpleCL.Ui
             }
 
             marker.Size = marker.Image.Size;
-
-            // var location = minimap.GetPoint(entity.WorldPoint);
-            // location.X -= marker.Image.Size.Width / 2;
-            // location.Y -= marker.Image.Size.Height / 2;
-            // marker.Location = location;
-
             entity.MarkerSize = marker.Image.Size;
             marker.DataBindings.Add("Location", entity, "MapLocation");
 

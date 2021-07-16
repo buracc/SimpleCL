@@ -1,10 +1,8 @@
-﻿using System;
-using SimpleCL.Enums;
+﻿using SimpleCL.Enums;
 using SimpleCL.Enums.Commons;
-using SimpleCL.Interaction;
 using SimpleCL.SecurityApi;
 
-namespace SimpleCL.Models.Entities
+namespace SimpleCL.Models.Entities.Npcs
 {
     public class TalkNpc : Npc
     {

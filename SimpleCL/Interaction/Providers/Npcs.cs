@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SimpleCL.Models.Entities;
+using SimpleCL.Models.Entities.Npcs;
 using SimpleCL.Util.Extension;
 
 namespace SimpleCL.Interaction.Providers

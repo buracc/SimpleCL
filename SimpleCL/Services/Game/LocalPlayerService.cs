@@ -50,9 +50,11 @@ namespace SimpleCL.Services.Game
             _localPlayer.Skillpoints = packet.ReadUInt();
             var statPoint = packet.ReadUShort();
             var zerkPoints = packet.ReadByte();
-            var gatheredExp = packet.ReadUInt(); // GatheredExp according to DaxterSoul, but it's wrong on TRSRO
+            var gatheredExp = packet.ReadUInt();
             _localPlayer.MaxHp = packet.ReadUInt();
             _localPlayer.MaxMp = packet.ReadUInt();
+            _localPlayer.Hp = _localPlayer.MaxHp;
+            _localPlayer.Mp = _localPlayer.MaxMp;
             var icon = packet.ReadByte();
             var dailyPk = packet.ReadByte();
             var totalPk = packet.ReadUShort();
@@ -444,7 +446,7 @@ namespace SimpleCL.Services.Game
             }
 
             var refItemId = packet.ReadUInt();
-            var inventoryItem = InventoryItem.FromId(refItemId);
+            var inventoryItem = InventoryItem.FromId(refItemId, rentType);
 
             switch (inventoryItem.Category)
             {
@@ -514,7 +516,7 @@ namespace SimpleCL.Services.Game
                             if (inventoryItem.TypeId4 == 3)
                             {
                                 var spawnState = packet.ReadByte();
-                                if (spawnState == 2)
+                                if (spawnState >= 2)
                                 {
                                     var modelId = packet.ReadUInt();
                                     var fellowName = packet.ReadAscii();

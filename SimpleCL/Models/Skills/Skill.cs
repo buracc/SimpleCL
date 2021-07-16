@@ -113,12 +113,12 @@ namespace SimpleCL.Models.Skills
         
         public bool IsResSkill()
         {
-            return Attributes.Exists(x => x == SkillData.Attribute.Resurrection);
+            return Attributes.Contains(SkillData.Attribute.Resurrection);
         }
         
         public bool IsAttackSkill()
         {
-            return Attributes.Exists(x => x == SkillData.Attribute.Attack);
+            return Attributes.Contains(SkillData.Attribute.Attack);
         }
 
         public override string ToString()

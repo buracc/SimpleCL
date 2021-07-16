@@ -7,6 +7,7 @@ using SimpleCL.Models.Items;
 using SimpleCL.Models.Items.Consumables;
 using SimpleCL.Models.Items.Equipables;
 using SimpleCL.Models.Items.JobEquipables;
+using SimpleCL.Models.Items.Summons;
 
 namespace SimpleCL.Ui
 {
@@ -109,6 +110,7 @@ namespace SimpleCL.Ui
                     case Equipment:
                         args.ContextMenuStrip = GetEquipItemMenu();
                         return;
+                    case Summon:
                     case Consumable:
                         args.ContextMenuStrip = GetUseItemMenu();
                         break;
@@ -177,12 +179,15 @@ namespace SimpleCL.Ui
 
                 var currRow = inventoryDataGridView.Rows[currentCell.RowIndex];
                 var selectedItem = currRow.DataBoundItem;
-                if (selectedItem is not Consumable consumable)
+                switch (selectedItem)
                 {
-                    return;
+                    case Consumable consumable:
+                        consumable.Use();
+                        break;
+                    case Summon summon:
+                        summon.Call();
+                        break;
                 }
-
-                consumable.Use();
             };
 
             useItemMenuStrip.Items.Add(useMenuItem);

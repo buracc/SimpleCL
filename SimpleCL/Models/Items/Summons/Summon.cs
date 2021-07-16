@@ -1,11 +1,11 @@
 ﻿namespace SimpleCL.Models.Items.Summons
 {
-    public class SummonItem : InventoryItem
+    public class Summon : InventoryItem
     {
         public Variant CosVariant => (Variant) TypeId3;
         public Pet PetType => (Pet) TypeId4;
         
-        public SummonItem(uint id) : base(id)
+        public Summon(uint id, uint rentTypeId) : base(id, rentTypeId)
         {
         }
 
@@ -24,14 +24,9 @@
             Unknown
         }
 
-        public void Summon()
+        public void Call()
         {
-            
-        }
-
-        public void Terminate()
-        {
-            
+            Use();
         }
     }
 }

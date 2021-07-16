@@ -17,7 +17,7 @@ namespace SimpleCL.Models.Items.Equipables
             }
         }
 
-        public Avatar(uint id) : base(id)
+        public Avatar(uint id, uint rentTypeId) : base(id, rentTypeId)
         {
         }
 

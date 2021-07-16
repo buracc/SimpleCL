@@ -10,7 +10,8 @@ using SimpleCL.Models.Coordinates;
 using SimpleCL.Models.Entities.Fortress;
 using SimpleCL.Models.Entities.Fortress.Structure;
 using SimpleCL.Models.Entities.Mob;
-using SimpleCL.Models.Entities.Pet;
+using SimpleCL.Models.Entities.Npcs;
+using SimpleCL.Models.Entities.Pets;
 using SimpleCL.Models.Entities.Teleporters;
 using SimpleCL.Models.Exceptions;
 using SimpleCL.Util.Extension;
@@ -195,8 +196,18 @@ namespace SimpleCL.Models.Entities
 
                     if (npc.IsTalk())
                     {
+                        if (npc.ServerName.Contains("WAREHOUSE"))
+                        {
+                            return new Storage(id);
+                        }
+                        
                         var shopData = GameDatabase.Get.GetShop(id);
-                        return shopData.IsNotEmpty() ? new Shop(id, shopData) : new TalkNpc(id);
+                        if (shopData.IsNotEmpty())
+                        {
+                            return new Shop(id, shopData);
+                        }
+                        
+                        return new TalkNpc(id);
                     }
 
                     if (npc.IsCos())

@@ -16,6 +16,8 @@ namespace SimpleCL.Ui.Components
 {
     public class Map : Panel
     {
+        private readonly LocalPlayer _localPlayer = LocalPlayer.Get;
+
         private readonly Dictionary<string, MapTile> _mapSectors = new();
         public readonly ConcurrentDictionary<uint, MapControl> Markers = new();
         private readonly ToolTip _toolTip = new();
@@ -325,7 +327,7 @@ namespace SimpleCL.Ui.Components
 
                     stallVisitItem.Click += (_, _) =>
                     {
-                        Program.Gui.Log("Opening " + player.Name + "'s stall");
+                        Program.Gui.Log($"Opening [{player.Name}]'s stall");
                         player.Stall.Visit();
                     };
 
@@ -336,7 +338,7 @@ namespace SimpleCL.Ui.Components
 
                     stallLeaveItem.Click += (_, _) =>
                     {
-                        Program.Gui.Log("Closing " + player.Name + "'s stall");
+                        Program.Gui.Log($"Closing [{player.Name}]'s stall");
                         player.Stall.Leave();
                     };
 
@@ -348,7 +350,38 @@ namespace SimpleCL.Ui.Components
                 else if (player.LifeState == Actor.Health.LifeState.Dead)
                 {
                     marker.Image = Properties.Resources.mm_sign_skull;
-                    marker.ContextMenuStrip = null;
+                    marker.Image = Properties.Resources.mm_sign_skull;
+
+                    var resSkills = _localPlayer.Skills.Where(x => x.IsResSkill()).ToList();
+                    if (resSkills.Any())
+                    {
+                        var resMenu = new ContextMenuStrip();
+                        var resSubMenu = new ToolStripMenuItem("Resurrect");
+
+                        foreach (var resSkill in resSkills)
+                        {
+                            var resItem = new ToolStripMenuItem
+                            {
+                                Text = resSkill.Name
+                            };
+
+                            resItem.Click += (_, _) =>
+                            {
+                                player.Attack(resSkill);
+                                Program.Gui.Log($"Ressing [{player.Name}] with skill [{resSkill.Name}]");
+                            };
+
+                            resSubMenu.DropDownItems.Add(
+                                resItem
+                            );
+                        }
+
+                        marker.ContextMenuStrip = resMenu;
+                    }
+                    else
+                    {
+                        marker.ContextMenuStrip = null;
+                    }
                 }
                 else
                 {
@@ -357,29 +390,65 @@ namespace SimpleCL.Ui.Components
                     var playerMenu = new ContextMenuStrip();
                     var traceItem = new ToolStripMenuItem
                     {
-                        Text = "Trace",
+                        Text = "Trace"
                     };
 
                     traceItem.Click += (_, _) =>
                     {
-                        Program.Gui.Log("Going to trace " + player.Name);
                         player.Trace();
+                        Program.Gui.Log($"Going to trace [{player.Name}]");
                     };
 
-                    // todo: add casting buffs on player
-                    // var buffItem = new ToolStripMenuItem
-                    // {
-                    //     Text = "Trace",
-                    //     Name = player.ToString()
-                    // };
-                    //
-                    // buffItem.Click += (_, _) =>
-                    // {
-                    //     Log("Going to trace " + player.Name);
-                    //     player.Trace();
-                    // };
+                    var buffItem = new ToolStripMenuItem
+                    {
+                        Text = "Buff"
+                    };
 
+                    foreach (var skill in _localPlayer.Skills.Where(x => !x.IsAttackSkill() && x.Targeted))
+                    {
+                        var menuitem = new ToolStripMenuItem
+                        {
+                            Text = skill.Name
+                        };
+
+                        menuitem.Click += (_, _) =>
+                        {
+                            player.Attack(skill);
+                            Program.Gui.Log($"Casting buff [{skill.Name}] on [{player.Name}]");
+                        };
+
+                        buffItem.DropDownItems.Add(
+                            menuitem
+                        );
+                    }
+
+                    var attackItem = new ToolStripMenuItem
+                    {
+                        Text = "Attack"
+                    };
+
+                    foreach (var skill in _localPlayer.Skills.Where(x => x.IsAttackSkill() && x.Targeted))
+                    {
+                        var menuitem = new ToolStripMenuItem
+                        {
+                            Text = skill.Name
+                        };
+
+                        menuitem.Click += (_, _) =>
+                        {
+                            player.Attack(skill);
+                            Program.Gui.Log($"Attacking [{player.Name}] with skill [{skill.Name}]");
+                        };
+
+                        attackItem.DropDownItems.Add(
+                            menuitem
+                        );
+                    }
+
+                    playerMenu.Items.Add(attackItem);
+                    playerMenu.Items.Add(buffItem);
                     playerMenu.Items.Add(traceItem);
+
                     marker.ContextMenuStrip = playerMenu;
                 }
 

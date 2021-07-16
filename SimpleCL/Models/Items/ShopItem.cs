@@ -18,7 +18,7 @@ namespace SimpleCL.Models.Items
         [Browsable(false)]
         public uint ShopUid { get; set; }
 
-        public ShopItem(uint id, NameValueCollection shopData) : base(id)
+        public ShopItem(uint id, NameValueCollection shopData, uint rentTypeId) : base(id, rentTypeId)
         {
             var nvc = GameDatabase.Get.GetItemPrice(id);
             if (nvc == null)

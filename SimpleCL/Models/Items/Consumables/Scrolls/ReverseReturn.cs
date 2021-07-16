@@ -2,7 +2,7 @@
 {
     public class ReverseReturn : Scroll
     {
-        public ReverseReturn(uint id) : base(id)
+        public ReverseReturn(uint id, uint rentTypeId) : base(id, rentTypeId)
         {
         }
 

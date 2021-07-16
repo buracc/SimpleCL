@@ -6,7 +6,7 @@ namespace SimpleCL.Models.Items.Consumables
     {
         public ConsumableType.Potion PotionType => (ConsumableType.Potion) TypeId4;
         
-        public Potion(uint id) : base(id)
+        public Potion(uint id, uint rentTypeId) : base(id, rentTypeId)
         {
         }
 

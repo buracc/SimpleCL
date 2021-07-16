@@ -4,7 +4,7 @@
     {
         public Type WeaponType => (Type) TypeId4;
 
-        public Weapon(uint id) : base(id)
+        public Weapon(uint id, uint rentTypeId) : base(id, rentTypeId)
         {
         }
 

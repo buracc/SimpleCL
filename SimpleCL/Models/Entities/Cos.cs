@@ -1,4 +1,7 @@
-﻿namespace SimpleCL.Models.Entities
+﻿using SimpleCL.Enums.Commons;
+using SimpleCL.SecurityApi;
+
+namespace SimpleCL.Models.Entities
 {
     public class Cos : Npc
     {
@@ -54,6 +57,19 @@
         public bool IsCharacterPet()
         {
             return IsAttackPet() || IsFellowPet() || IsPickPet() || IsHorse() || IsTransport();
+        }
+
+        public void Terminate()
+        {
+            if (this is CharacterPet pet)
+            {
+                pet.Unsummon();
+                return;
+            }
+            
+            var packet = new Packet(Opcode.Agent.Request.COS_TERMINATE);
+            packet.WriteUInt(Uid);
+            packet.Send();
         }
     }
 }

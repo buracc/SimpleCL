@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 using SimpleCL.Models.Entities;
+using SimpleCL.Models.Entities.Npcs;
 using SimpleCL.Models.Items;
 
 namespace SimpleCL.Ui

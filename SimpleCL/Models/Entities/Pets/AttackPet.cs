@@ -1,4 +1,4 @@
-﻿namespace SimpleCL.Models.Entities.Pet
+﻿namespace SimpleCL.Models.Entities.Pets
 {
     public class AttackPet : CharacterPet
     {

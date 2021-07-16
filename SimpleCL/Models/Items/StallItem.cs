@@ -11,7 +11,7 @@ namespace SimpleCL.Models.Items
     {
         public ulong Price { get; set; }
         
-        public StallItem(uint id) : base(id)
+        public StallItem(uint id, uint rentTypeId) : base(id, rentTypeId)
         {
         }
 
@@ -57,7 +57,7 @@ namespace SimpleCL.Models.Items
             }
 
             var refItemId = packet.ReadUInt();
-            var inventoryItem = new StallItem(refItemId);
+            var inventoryItem = new StallItem(refItemId, rentType);
 
             switch (inventoryItem.Category)
             {

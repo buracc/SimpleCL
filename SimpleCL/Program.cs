@@ -8,7 +8,7 @@ namespace SimpleCL
     internal static class Program
     {
         public static Gui Gui { get; private set; }
-
+        
         [STAThread]
         public static void Main(string[] args)
         {

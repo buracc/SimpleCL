@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using SimpleCL.Database;
 using SimpleCL.Enums;
 using SimpleCL.Enums.Commons;
-using SimpleCL.Interaction;
 using SimpleCL.Models.Items;
 using SimpleCL.SecurityApi;
 using SimpleCL.Services.Game;
 
-namespace SimpleCL.Models.Entities
+namespace SimpleCL.Models.Entities.Npcs
 {
     public class Shop : TalkNpc
     {
@@ -20,7 +17,7 @@ namespace SimpleCL.Models.Entities
         {
             foreach (var nvc in shopData)
             {
-                Items.Add(new ShopItem(uint.Parse(nvc[Constants.Strings.Item]), nvc));
+                Items.Add(new ShopItem(uint.Parse(nvc[Constants.Strings.Item]), nvc, 0));
             }
         }
 

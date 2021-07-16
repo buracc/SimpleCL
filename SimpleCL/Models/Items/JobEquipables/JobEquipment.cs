@@ -50,7 +50,7 @@ namespace SimpleCL.Models.Items.JobEquipables
             }
         }
 
-        public JobEquipment(uint id) : base(id)
+        public JobEquipment(uint id, uint rentTypeId) : base(id, rentTypeId)
         {
         }
         

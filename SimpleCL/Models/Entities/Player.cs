@@ -42,8 +42,10 @@ namespace SimpleCL.Models.Entities
             
             attackPacket.WriteByte(1);
             attackPacket.WriteUInt(Uid);
+            
             var selectTarget = new Packet(Opcode.Agent.Request.ENTITY_SELECT_OBJECT);
             selectTarget.WriteUInt(Uid);
+            
             selectTarget.Send();
             attackPacket.Send();
         }
@@ -61,6 +63,8 @@ namespace SimpleCL.Models.Entities
 
         public new void Dispose()
         {
+            base.Dispose();
+            
             InventoryItems?.DisposeAll();
             InventoryItems?.Clear();
             
