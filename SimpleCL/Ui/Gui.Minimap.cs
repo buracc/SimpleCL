@@ -92,7 +92,11 @@ namespace SimpleCL.Ui
                             Text = skill.Name
                         };
 
-                        menuitem.Click += (_, _) => monster.Attack(skill);
+                        menuitem.Click += (_, _) =>
+                        {
+                            monster.Attack(skill);
+                            Log($"Attacking monster [{monster.Name}] with skill [{skill.Name}]");
+                        };
 
                         castItem.DropDownItems.Add(
                             menuitem
@@ -119,7 +123,10 @@ namespace SimpleCL.Ui
                             Text = skill.Name
                         };
 
-                        menuitem.Click += (_, _) => skill.Cast();
+                        menuitem.Click += (_, _) =>
+                        {
+                            skill.Cast();
+                        };
 
                         localPlayerMenu.Items.Add(
                             menuitem
@@ -271,6 +278,12 @@ namespace SimpleCL.Ui
 
                 case CharacterPet pet:
                     marker.Image = Properties.Resources.mm_sign_animal;
+                    
+                    if (pet.OwnerUid != _localPlayer.Uid)
+                    {
+                        break;
+                    }
+                    
                     var summonMenu = new ContextMenuStrip();
                     var terminateItem = new ToolStripMenuItem("Unsummon");
                     

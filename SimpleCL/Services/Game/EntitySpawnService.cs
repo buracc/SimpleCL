@@ -238,11 +238,11 @@ namespace SimpleCL.Services.Game
 
                             var invSize = packet.ReadByte();
                             var equipmentCount = packet.ReadByte();
-                            player.InventoryItems.Clear();
+                            player.Inventory.Clear();
                             equipmentCount.Repeat(i =>
                             {
                                 var item = InventoryItem.FromId(packet.ReadUInt());
-                                player.InventoryItems.Add(item);
+                                player.Inventory.Add(item);
                                 if (item.Category == ItemCategory.Equipment)
                                 {
                                     var plus = packet.ReadByte();
@@ -254,7 +254,7 @@ namespace SimpleCL.Services.Game
                             avatarCount.Repeat(i =>
                             {
                                 var item = InventoryItem.FromId(packet.ReadUInt());
-                                player.InventoryItems.Add(item);
+                                player.Inventory.Add(item);
                                 if (item.Category == ItemCategory.Equipment)
                                 {
                                     var plus = packet.ReadByte();
@@ -485,7 +485,7 @@ namespace SimpleCL.Services.Game
                                             var ownerObjId = packet.ReadUInt();
                                         }
 
-                                        var ownerUid = packet.ReadUInt();
+                                        cos.OwnerUid = packet.ReadUInt();
 
                                         if (cos is FellowPet)
                                         {

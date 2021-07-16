@@ -148,8 +148,8 @@ namespace SimpleCL.Models.Character
 
         public readonly List<Mastery> Masteries = new();
         public readonly BindingList<CharacterSkill> Skills = new();
-        public BindingList<InventoryItem> Inventory = new();
-        public BindingList<InventoryItem> EquipmentInventory = new();
+        public new readonly BindingList<InventoryItem> Inventory = new();
+        public readonly BindingList<InventoryItem> EquipmentInventory = new();
         public readonly BindingList<InventoryItem> AvatarInventory = new();
         public readonly BindingList<InventoryItem> JobEquipmentInventory = new();
 

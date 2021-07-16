@@ -148,8 +148,6 @@ namespace SimpleCL.Models.Entities
             }
         }
         
-        
-
         #endregion
 
         #region Methods

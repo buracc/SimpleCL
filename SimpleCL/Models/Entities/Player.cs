@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using SimpleCL.Enums.Commons;
-using SimpleCL.Enums.Items;
-using SimpleCL.Interaction;
 using SimpleCL.Models.Character;
 using SimpleCL.Models.Entities.Exchange;
 using SimpleCL.Models.Items;
+using SimpleCL.Models.Items.Equipables;
 using SimpleCL.Models.Skills;
 using SimpleCL.SecurityApi;
 using SimpleCL.Util.Extension;
@@ -13,7 +12,7 @@ namespace SimpleCL.Models.Entities
 {
     public class Player : Actor, ITargetable
     {
-        public readonly List<InventoryItem> InventoryItems = new();
+        public readonly List<InventoryItem> Inventory = new();
         public Interaction InteractionType { get; set; }
         public Stall Stall { get; set; }
         
@@ -23,7 +22,7 @@ namespace SimpleCL.Models.Entities
 
         public bool IsWearingJobSuit()
         {
-            return InventoryItems.Exists(item => item.Category == ItemCategory.Equipment && item.TypeId3 == 7);
+            return Inventory.Exists(item => item is Equipment {SlotType: Equipment.EquipmentSlot.Cape});
         }
 
         public void Attack(Skill skill)
@@ -65,8 +64,8 @@ namespace SimpleCL.Models.Entities
         {
             base.Dispose();
             
-            InventoryItems?.DisposeAll();
-            InventoryItems?.Clear();
+            Inventory?.DisposeAll();
+            Inventory?.Clear();
             
             Stall?.Dispose();
         }

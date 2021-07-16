@@ -5,6 +5,7 @@ namespace SimpleCL.Models.Entities
 {
     public class Cos : Npc
     {
+        public uint OwnerUid { get; set; }
         public Cos(uint id) : base(id)
         {
         }
