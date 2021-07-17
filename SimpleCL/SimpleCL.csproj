@@ -178,6 +178,7 @@
     <Compile Include="Network\Agent.cs" />
     <Compile Include="Network\Gateway.cs" />
     <Compile Include="Network\Server.cs" />
+    <Compile Include="Network\Socks.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\Game\ChatService.cs" />
     <Compile Include="Services\Game\EntitySkillService.cs" />

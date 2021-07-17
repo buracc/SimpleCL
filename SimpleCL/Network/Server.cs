@@ -20,7 +20,8 @@ namespace SimpleCL.Network
         public readonly Thread ServerThread;
         protected readonly Security Security = new();
         protected readonly TransferBuffer RecvBuffer = new(8192, 0, 0);
-        protected readonly Socket Socket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        protected readonly Socket Socket;
+        // protected readonly Socket Socket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
         private readonly List<Service> _services = new();
         private readonly List<Tuple<ushort, PacketHandler>> _handlers = new();
@@ -31,8 +32,9 @@ namespace SimpleCL.Network
         private readonly Timer _timer = new(6666);
         private bool _disposed;
 
-        protected Server()
+        protected Server(string ip, ushort port)
         {
+            Socket = Socks.Connect("38.125.97.173", 35617, ip, port, "burakarossi", "112123");
             ServerThread = new Thread(Loop);
         }
 

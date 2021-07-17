@@ -8,7 +8,7 @@ namespace SimpleCL.Network
         private readonly string _ip;
         private readonly ushort _port;
 
-        public Gateway(string ip, ushort port)
+        public Gateway(string ip, ushort port) : base(ip, port)
         {
             _ip = ip;
             _port = port;
@@ -19,8 +19,8 @@ namespace SimpleCL.Network
             try
             {
                 Log("Connecting to gateway " + _ip + ":" + _port);
-                Socket.Connect(_ip, _port);
-                Log("Connected to gateway");
+                // Socket.Connect(_ip, _port);
+                
             }
             catch (SocketException e)
             {
@@ -29,6 +29,7 @@ namespace SimpleCL.Network
                 return;
             }
 
+            Log("Connected to gateway");
             ServerThread.Start();
             Socket.Blocking = false;
             Socket.NoDelay = true;
