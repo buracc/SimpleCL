@@ -74,9 +74,10 @@ namespace SimpleCL.Network
                 Socket.Blocking = false;
                 Socket.NoDelay = true;
             }
-            catch
+            catch (Exception e)
             {
                 Log("Connection failed");
+                Console.WriteLine(e);
             }
         }
 
@@ -320,8 +321,9 @@ namespace SimpleCL.Network
         
         public void Start()
         {
-            if (!Socket.Connected)
+            if (Socket is not {Connected: true})
             {
+                Disconnect();
                 return;
             }
             
