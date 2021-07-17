@@ -20,12 +20,14 @@ namespace SimpleCL.Services.Login
         private readonly string _username;
         private readonly string _password;
         private readonly SilkroadServer _silkroadServer;
+        private readonly Gateway _gateway;
 
-        public LoginService(string username, string password, SilkroadServer silkroadServer)
+        public LoginService(string username, string password, SilkroadServer silkroadServer, Gateway gateway)
         {
             _username = username;
             _password = password;
             _silkroadServer = silkroadServer;
+            _gateway = gateway;
         }
 
         #region SendIdentity
@@ -143,7 +145,7 @@ namespace SimpleCL.Services.Login
                     var agentIp = packet.ReadAscii();
                     var agentPort = packet.ReadUShort();
 
-                    var agent = new Agent(agentIp, agentPort, sessionId);
+                    var agent = new Agent(agentIp, agentPort, sessionId, _gateway);
                     
                     agent.RegisterService(this);
                     

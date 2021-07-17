@@ -15,6 +15,8 @@ namespace SimpleCL.Ui
     {
         private const ushort GatewayPort = 15779;
 
+        private readonly Map _minimap = new();
+
         private readonly ToolTip _toolTip = new();
 
         public readonly BindingList<CharacterSkill> SelectedSkills = new();
@@ -43,13 +45,12 @@ namespace SimpleCL.Ui
 
             usernameBox.Text = Credentials.Username;
             passwordBox.Text = Credentials.Password;
-
-            InitAttackTab();
-            InitBuffsGrid();
-            InitInventories();
+            
+            InitHome();
             InitMap();
+            InitAttackTab();
+            InitInventories();
             InitDevControls();
-
             CenterToScreen();
         }
 
@@ -110,17 +111,17 @@ namespace SimpleCL.Ui
         
         public Map GetMap()
         {
-            return minimap;
+            return _minimap;
         }
 
         public void ClearMarkers()
         {
-            minimap.ClearMarkers();
+            _minimap.ClearMarkers();
         }
 
         public void ClearTiles()
         {
-            minimap.RemoveTiles();
+            _minimap.RemoveTiles();
         }
     }
 }

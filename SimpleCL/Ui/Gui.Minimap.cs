@@ -18,6 +18,12 @@ namespace SimpleCL.Ui
     {
         private void InitMap()
         {
+            mapPanel.Controls.Add(_minimap);
+            _minimap.Location = new Point(-31, -214);
+            _minimap.Name = "minimap";
+            _minimap.Size = new Size(800, 800);
+            _minimap.TabIndex = 10;
+            
             var mapTimer = new Timer(10000);
             mapTimer.Elapsed += (_, _) =>
             {
@@ -31,7 +37,7 @@ namespace SimpleCL.Ui
             
             mapTimer.Start();
 
-            mapVisibleCheckbox.CheckedChanged += (_, _) => minimap.Visible = mapVisibleCheckbox.Checked;
+            mapVisibilityCheckbox.CheckedChanged += (_, _) => _minimap.Visible = mapVisibilityCheckbox.Checked;
         }
 
         public void AddMinimapMarker(Entity entity)
@@ -342,22 +348,22 @@ namespace SimpleCL.Ui
 
             marker.Tag = entity;
 
-            minimap.AddMarker(entity.Uid, marker);
+            _minimap.AddMarker(entity.Uid, marker);
         }
 
         public void RefreshPlayerMarker(uint uid)
         {
-            minimap.UpdatePlayerMarker(uid);
+            _minimap.UpdatePlayerMarker(uid);
         }
 
         public void SetLocalPlayerMarkerAngle()
         {
-            if (!minimap.Markers.ContainsKey(_localPlayer.Uid))
+            if (!_minimap.Markers.ContainsKey(_localPlayer.Uid))
             {
                 return;
             }
 
-            var marker = minimap.Markers[_localPlayer.Uid];
+            var marker = _minimap.Markers[_localPlayer.Uid];
             var image = Properties.Resources.mm_sign_character;
             var rotated = new Bitmap(image.Width, image.Height);
             var graphics = Graphics.FromImage(rotated);
@@ -380,7 +386,7 @@ namespace SimpleCL.Ui
                     return;
                 }
 
-                minimap.SetView(_localPlayer.WorldPoint, force);
+                _minimap.SetView(_localPlayer.WorldPoint, force);
             }
             catch (Exception e)
             {
@@ -390,7 +396,7 @@ namespace SimpleCL.Ui
 
         public void RemoveMinimapMarker(uint uid)
         {
-            minimap.RemoveMarker(uid);
+            _minimap.RemoveMarker(uid);
         }
     }
 }

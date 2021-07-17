@@ -19,12 +19,22 @@ namespace SimpleCL.Ui
 
             GameDatabase.Get.SelectedServer = selectedServer;
 
+            var proxyIp = proxyIpTextBox.TextLength == 0 ? null : proxyIpTextBox.Text;
+            var proxyPort = proxyPortTextBox.TextLength == 0 ? 0 : int.Parse(proxyPortTextBox.Text);
+            var proxyUser = proxyUsernameBox.TextLength == 0 ? null : proxyUsernameBox.Text;
+            var proxyPass = proxyPasswordBox.TextLength == 0 ? null : proxyPasswordBox.Text;
+
             var gw = new Gateway(selectedServer.GatewayIps[new Random().Next(selectedServer.GatewayIps.Length)],
-                GatewayPort);
-            gw.RegisterService(new LoginService(usernameBox.Text, passwordBox.Text, selectedServer));
+                GatewayPort, proxyIp, proxyPort, proxyUser, proxyPass);
+            gw.RegisterService(new LoginService(usernameBox.Text, passwordBox.Text, selectedServer, gw));
             gw.Start();
 
             ToggleControls(false);
+        }
+
+        private void InitHome()
+        {
+            InitBuffsGrid();
         }
         
         private void InitBuffsGrid()

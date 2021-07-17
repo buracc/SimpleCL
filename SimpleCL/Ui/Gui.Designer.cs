@@ -57,6 +57,8 @@ namespace SimpleCL.Ui
             System.Windows.Forms.Label currWorldLabel;
             System.Windows.Forms.Label currLocalLabel;
             System.Windows.Forms.Label label4;
+            System.Windows.Forms.Label label5;
+            System.Windows.Forms.Label label6;
             this.buffsDataGridView = new System.Windows.Forms.DataGridView();
             this.worldCoordsLabelValue = new System.Windows.Forms.Label();
             this.jobExpProgressBar = new SimpleCL.Ui.Components.TextProgressBar();
@@ -71,6 +73,8 @@ namespace SimpleCL.Ui
             this.spLabelValue = new System.Windows.Forms.Label();
             this.levelLabelValue = new System.Windows.Forms.Label();
             this.credentialsGroup = new System.Windows.Forms.GroupBox();
+            this.proxyPortTextBox = new System.Windows.Forms.TextBox();
+            this.proxyIpTextBox = new System.Windows.Forms.TextBox();
             this.serverComboBox = new System.Windows.Forms.ComboBox();
             this.loginButton = new System.Windows.Forms.Button();
             this.passwordBox = new System.Windows.Forms.TextBox();
@@ -102,9 +106,8 @@ namespace SimpleCL.Ui
             this.attackEntitiesListBox = new System.Windows.Forms.ListBox();
             this.attackSkillsListBox = new System.Windows.Forms.ListBox();
             this.movementTab = new System.Windows.Forms.TabPage();
-            this.mapVisibleCheckbox = new System.Windows.Forms.CheckBox();
+            this.mapVisibilityCheckbox = new System.Windows.Forms.CheckBox();
             this.mapPanel = new System.Windows.Forms.Panel();
-            this.minimap = new SimpleCL.Ui.Components.Map();
             this.currWorldLabelValue = new System.Windows.Forms.Label();
             this.currLocalLabelValue = new System.Windows.Forms.Label();
             this.devTab = new System.Windows.Forms.TabPage();
@@ -117,6 +120,8 @@ namespace SimpleCL.Ui
             this.loggerBox = new System.Windows.Forms.ListBox();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripProgressBar2 = new System.Windows.Forms.ToolStripProgressBar();
+            this.proxyPasswordBox = new System.Windows.Forms.TextBox();
+            this.proxyUsernameBox = new System.Windows.Forms.TextBox();
             serverLabel = new System.Windows.Forms.Label();
             usernameLabel = new System.Windows.Forms.Label();
             passwordLabel = new System.Windows.Forms.Label();
@@ -140,6 +145,8 @@ namespace SimpleCL.Ui
             currWorldLabel = new System.Windows.Forms.Label();
             currLocalLabel = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
+            label5 = new System.Windows.Forms.Label();
+            label6 = new System.Windows.Forms.Label();
             buffsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.buffsDataGridView)).BeginInit();
             statisticsBox.SuspendLayout();
@@ -159,7 +166,6 @@ namespace SimpleCL.Ui
             this.chatTab.SuspendLayout();
             this.attackTab.SuspendLayout();
             this.movementTab.SuspendLayout();
-            this.mapPanel.SuspendLayout();
             this.devTab.SuspendLayout();
             this.packetLoggerGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -191,9 +197,9 @@ namespace SimpleCL.Ui
             // buffsGroupBox
             // 
             buffsGroupBox.Controls.Add(this.buffsDataGridView);
-            buffsGroupBox.Location = new System.Drawing.Point(6, 125);
+            buffsGroupBox.Location = new System.Drawing.Point(6, 164);
             buffsGroupBox.Name = "buffsGroupBox";
-            buffsGroupBox.Size = new System.Drawing.Size(262, 250);
+            buffsGroupBox.Size = new System.Drawing.Size(262, 211);
             buffsGroupBox.TabIndex = 8;
             buffsGroupBox.TabStop = false;
             buffsGroupBox.Text = "Buffs";
@@ -210,7 +216,7 @@ namespace SimpleCL.Ui
             this.buffsDataGridView.Name = "buffsDataGridView";
             this.buffsDataGridView.ReadOnly = true;
             this.buffsDataGridView.RowHeadersVisible = false;
-            this.buffsDataGridView.Size = new System.Drawing.Size(248, 225);
+            this.buffsDataGridView.Size = new System.Drawing.Size(248, 183);
             this.buffsDataGridView.TabIndex = 0;
             // 
             // statisticsBox
@@ -502,8 +508,22 @@ namespace SimpleCL.Ui
             label4.TabIndex = 5;
             label4.Text = "Logged opcodes";
             // 
+            // label5
+            // 
+            label5.Location = new System.Drawing.Point(6, 104);
+            label5.Name = "label5";
+            label5.Size = new System.Drawing.Size(57, 17);
+            label5.TabIndex = 12;
+            label5.Text = "Proxy";
+            // 
             // credentialsGroup
             // 
+            this.credentialsGroup.Controls.Add(this.proxyPasswordBox);
+            this.credentialsGroup.Controls.Add(label6);
+            this.credentialsGroup.Controls.Add(this.proxyUsernameBox);
+            this.credentialsGroup.Controls.Add(this.proxyPortTextBox);
+            this.credentialsGroup.Controls.Add(label5);
+            this.credentialsGroup.Controls.Add(this.proxyIpTextBox);
             this.credentialsGroup.Controls.Add(this.serverComboBox);
             this.credentialsGroup.Controls.Add(serverLabel);
             this.credentialsGroup.Controls.Add(this.loginButton);
@@ -513,10 +533,24 @@ namespace SimpleCL.Ui
             this.credentialsGroup.Controls.Add(passwordLabel);
             this.credentialsGroup.Location = new System.Drawing.Point(6, 6);
             this.credentialsGroup.Name = "credentialsGroup";
-            this.credentialsGroup.Size = new System.Drawing.Size(262, 113);
+            this.credentialsGroup.Size = new System.Drawing.Size(262, 157);
             this.credentialsGroup.TabIndex = 6;
             this.credentialsGroup.TabStop = false;
             this.credentialsGroup.Text = "Credentials";
+            // 
+            // proxyPortTextBox
+            // 
+            this.proxyPortTextBox.Location = new System.Drawing.Point(197, 101);
+            this.proxyPortTextBox.Name = "proxyPortTextBox";
+            this.proxyPortTextBox.Size = new System.Drawing.Size(57, 20);
+            this.proxyPortTextBox.TabIndex = 13;
+            // 
+            // proxyIpTextBox
+            // 
+            this.proxyIpTextBox.Location = new System.Drawing.Point(69, 101);
+            this.proxyIpTextBox.Name = "proxyIpTextBox";
+            this.proxyIpTextBox.Size = new System.Drawing.Size(122, 20);
+            this.proxyIpTextBox.TabIndex = 11;
             // 
             // serverComboBox
             // 
@@ -855,7 +889,7 @@ namespace SimpleCL.Ui
             // 
             // movementTab
             // 
-            this.movementTab.Controls.Add(this.mapVisibleCheckbox);
+            this.movementTab.Controls.Add(this.mapVisibilityCheckbox);
             this.movementTab.Controls.Add(this.mapPanel);
             this.movementTab.Controls.Add(currWorldLabel);
             this.movementTab.Controls.Add(this.currWorldLabelValue);
@@ -868,31 +902,23 @@ namespace SimpleCL.Ui
             this.movementTab.Text = "Movement";
             this.movementTab.UseVisualStyleBackColor = true;
             // 
-            // mapVisibleCheckbox
+            // mapVisibilityCheckbox
             // 
-            this.mapVisibleCheckbox.Checked = true;
-            this.mapVisibleCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.mapVisibleCheckbox.Location = new System.Drawing.Point(647, 357);
-            this.mapVisibleCheckbox.Name = "mapVisibleCheckbox";
-            this.mapVisibleCheckbox.Size = new System.Drawing.Size(104, 16);
-            this.mapVisibleCheckbox.TabIndex = 12;
-            this.mapVisibleCheckbox.Text = "Visible";
-            this.mapVisibleCheckbox.UseVisualStyleBackColor = true;
+            this.mapVisibilityCheckbox.Checked = true;
+            this.mapVisibilityCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.mapVisibilityCheckbox.Location = new System.Drawing.Point(647, 357);
+            this.mapVisibilityCheckbox.Name = "mapVisibilityCheckbox";
+            this.mapVisibilityCheckbox.Size = new System.Drawing.Size(104, 16);
+            this.mapVisibilityCheckbox.TabIndex = 12;
+            this.mapVisibilityCheckbox.Text = "Visible";
+            this.mapVisibilityCheckbox.UseVisualStyleBackColor = true;
             // 
             // mapPanel
             // 
-            this.mapPanel.Controls.Add(this.minimap);
             this.mapPanel.Location = new System.Drawing.Point(3, 3);
             this.mapPanel.Name = "mapPanel";
             this.mapPanel.Size = new System.Drawing.Size(762, 352);
             this.mapPanel.TabIndex = 11;
-            // 
-            // minimap
-            // 
-            this.minimap.Location = new System.Drawing.Point(-31, -214);
-            this.minimap.Name = "minimap";
-            this.minimap.Size = new System.Drawing.Size(800, 800);
-            this.minimap.TabIndex = 10;
             // 
             // currWorldLabelValue
             // 
@@ -995,6 +1021,29 @@ namespace SimpleCL.Ui
             this.toolStripProgressBar2.Name = "toolStripProgressBar2";
             this.toolStripProgressBar2.Size = new System.Drawing.Size(100, 15);
             // 
+            // proxyPasswordBox
+            // 
+            this.proxyPasswordBox.Location = new System.Drawing.Point(162, 127);
+            this.proxyPasswordBox.Name = "proxyPasswordBox";
+            this.proxyPasswordBox.Size = new System.Drawing.Size(92, 20);
+            this.proxyPasswordBox.TabIndex = 16;
+            this.proxyPasswordBox.UseSystemPasswordChar = true;
+            // 
+            // label6
+            // 
+            label6.Location = new System.Drawing.Point(6, 130);
+            label6.Name = "label6";
+            label6.Size = new System.Drawing.Size(57, 17);
+            label6.TabIndex = 15;
+            label6.Text = "Login";
+            // 
+            // proxyUsernameBox
+            // 
+            this.proxyUsernameBox.Location = new System.Drawing.Point(69, 127);
+            this.proxyUsernameBox.Name = "proxyUsernameBox";
+            this.proxyUsernameBox.Size = new System.Drawing.Size(87, 20);
+            this.proxyUsernameBox.TabIndex = 14;
+            // 
             // Gui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1027,12 +1076,17 @@ namespace SimpleCL.Ui
             this.chatTab.ResumeLayout(false);
             this.attackTab.ResumeLayout(false);
             this.movementTab.ResumeLayout(false);
-            this.mapPanel.ResumeLayout(false);
             this.devTab.ResumeLayout(false);
             this.devTab.PerformLayout();
             this.packetLoggerGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.TextBox proxyPasswordBox;
+        private System.Windows.Forms.TextBox proxyUsernameBox;
+
+        private System.Windows.Forms.TextBox proxyIpTextBox;
+        private System.Windows.Forms.TextBox proxyPortTextBox;
 
         private System.Windows.Forms.GroupBox packetLoggerGroupBox;
 
@@ -1040,7 +1094,7 @@ namespace SimpleCL.Ui
         private System.Windows.Forms.ListBox filteredPacketsListBox;
         private System.Windows.Forms.TextBox filterPacketTextBox;
 
-        private System.Windows.Forms.CheckBox mapVisibleCheckbox;
+        private System.Windows.Forms.CheckBox mapVisibilityCheckbox;
 
         private System.Windows.Forms.Label goldAmountLabel;
 
@@ -1120,9 +1174,7 @@ namespace SimpleCL.Ui
         private System.Windows.Forms.ListBox availSkillsListBox;
 
         #endregion
-
         
-        private SimpleCL.Ui.Components.Map minimap;
         private TextProgressBar expProgressBar;
         private TextProgressBar hpProgressBar;
         private TextProgressBar mpProgressBar;

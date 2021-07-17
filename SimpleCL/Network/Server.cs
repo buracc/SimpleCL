@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Timers;
 using SimpleCL.Enums.Commons;
@@ -20,8 +21,8 @@ namespace SimpleCL.Network
         public readonly Thread ServerThread;
         protected readonly Security Security = new();
         protected readonly TransferBuffer RecvBuffer = new(8192, 0, 0);
+
         protected readonly Socket Socket;
-        // protected readonly Socket Socket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
         private readonly List<Service> _services = new();
         private readonly List<Tuple<ushort, PacketHandler>> _handlers = new();
@@ -32,9 +33,48 @@ namespace SimpleCL.Network
         private readonly Timer _timer = new(6666);
         private bool _disposed;
 
-        protected Server(string ip, ushort port)
+        protected Server(
+            string ip,
+            ushort port,
+            string proxyIp,
+            int proxyPort,
+            string proxyUser,
+            string proxyPass
+        )
         {
-            Socket = Socks.Connect("38.125.97.173", 35617, ip, port, "burakarossi", "112123");
+            var sb = new StringBuilder($"Connecting to [{ip}:{port}]");
+            if (proxyIp != null)
+            {
+                sb.Append($" || Proxy: [{proxyIp}:{proxyPort}]");
+
+                if (proxyUser != null)
+                {
+                    sb.Append($"[{proxyUser}:{proxyPass}]");
+                }
+            }
+            
+            Log(sb.ToString());
+            
+            try
+            {
+                if (proxyIp != null && proxyPort != 0)
+                {
+                    Socket = Socks.Connect(proxyIp, proxyPort, ip, port, proxyUser, proxyPass);
+                }
+                else
+                {
+                    Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    Socket.Connect(ip, port);
+                }
+                
+                Log("Connection successful");
+            }
+            catch
+            {
+                Log("Connection failed");
+                return;
+            }
+
             ServerThread = new Thread(Loop);
         }
 
@@ -221,7 +261,7 @@ namespace SimpleCL.Network
                         {
                             LogPacket(kvp.Value);
                         }
-                        
+
                         var buffer = kvp.Key;
                         success = SocketError.Success;
 
@@ -266,10 +306,11 @@ namespace SimpleCL.Network
             Log(packet.Opcode.ToString("X"), toGui);
             Log("\n" + Utility.HexDump(packet.GetBytes()), toGui);
         }
-        
+
         private void LogPacket(Packet packet)
         {
-            if (Program.Gui.FilteredOpcodes.Contains(packet.Opcode.ToString("X")) || Program.Gui.FilteredOpcodes.Contains("0"))
+            if (Program.Gui.FilteredOpcodes.Contains(packet.Opcode.ToString("X")) ||
+                Program.Gui.FilteredOpcodes.Contains("0"))
             {
                 Program.Gui.LogPacket($"{packet.Opcode:X}\n{Utility.HexDump(packet.GetBytes())}");
             }

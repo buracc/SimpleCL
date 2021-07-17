@@ -5,31 +5,27 @@ namespace SimpleCL.Network
 {
     public class Gateway : Server
     {
-        private readonly string _ip;
-        private readonly ushort _port;
+        public string ProxyIp { get; }
+        public int ProxyPort { get; }
+        public string ProxyUser { get; }
+        public string ProxyPass { get; }
 
-        public Gateway(string ip, ushort port) : base(ip, port)
+        public Gateway(string ip,
+            ushort port,
+            string proxyIp = null,
+            int proxyPort = 0,
+            string proxyUser = null,
+            string proxyPass = null
+        ) : base(ip, port, proxyIp, proxyPort, proxyUser, proxyPass)
         {
-            _ip = ip;
-            _port = port;
+            ProxyIp = proxyIp;
+            ProxyPort = proxyPort;
+            ProxyUser = proxyUser;
+            ProxyPass = proxyPass;
         }
 
         public void Start()
         {
-            try
-            {
-                Log("Connecting to gateway " + _ip + ":" + _port);
-                // Socket.Connect(_ip, _port);
-                
-            }
-            catch (SocketException e)
-            {
-                Log("Unable to connect gateway " + _ip + ":" + _port);
-                Console.WriteLine(e);
-                return;
-            }
-
-            Log("Connected to gateway");
             ServerThread.Start();
             Socket.Blocking = false;
             Socket.NoDelay = true;

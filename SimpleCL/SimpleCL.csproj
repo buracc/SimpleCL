@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')"/>
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -15,7 +15,7 @@
         <LangVersion>default</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
+        <PlatformTarget>x86</PlatformTarget>
         <DebugSymbols>true</DebugSymbols>
         <DebugType>full</DebugType>
         <Optimize>true</Optimize>
@@ -42,18 +42,18 @@
             <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
             <Private>True</Private>
         </Reference>
-        <Reference Include="Microsoft.CSharp"/>
-        <Reference Include="Microsoft.VisualBasic"/>
-        <Reference Include="mscorlib"/>
+        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="Microsoft.VisualBasic" />
+        <Reference Include="mscorlib" />
         <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
             <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
             <Private>True</Private>
         </Reference>
-        <Reference Include="System"/>
-        <Reference Include="System.ComponentModel.DataAnnotations"/>
-        <Reference Include="System.Core"/>
-        <Reference Include="System.Data"/>
-        <Reference Include="System.Data.DataSetExtensions"/>
+        <Reference Include="System" />
+        <Reference Include="System.ComponentModel.DataAnnotations" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Data.DataSetExtensions" />
         <Reference Include="System.Data.SQLite, Version=1.0.114.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139">
             <HintPath>..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\lib\net46\System.Data.SQLite.dll</HintPath>
             <Private>True</Private>
@@ -66,148 +66,148 @@
             <HintPath>..\packages\System.Data.SQLite.Linq.1.0.114.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
             <Private>True</Private>
         </Reference>
-        <Reference Include="System.Deployment"/>
-        <Reference Include="System.Drawing"/>
+        <Reference Include="System.Deployment" />
+        <Reference Include="System.Drawing" />
         <Reference Include="System.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
             <HintPath>..\..\..\..\..\Windows\Microsoft.NET\Framework64\v4.0.30319\System.Linq.dll</HintPath>
         </Reference>
-        <Reference Include="System.Net.Http"/>
-        <Reference Include="System.Numerics"/>
-        <Reference Include="System.Windows.Forms"/>
-        <Reference Include="System.Xml"/>
-        <Reference Include="System.Xml.Linq"/>
+        <Reference Include="System.Net.Http" />
+        <Reference Include="System.Numerics" />
+        <Reference Include="System.Windows.Forms" />
+        <Reference Include="System.Xml" />
+        <Reference Include="System.Xml.Linq" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Credentials.cs"/>
-        <Compile Include="Database\GameDatabase.cs"/>
-        <Compile Include="Database\QueryBuilder.cs"/>
-        <Compile Include="Enums\Chatter\ChatChannel.cs"/>
-        <Compile Include="Enums\Commons\Locale.cs"/>
-        <Compile Include="Enums\Commons\Opcode.cs"/>
-        <Compile Include="Enums\Constants.cs"/>
-        <Compile Include="Enums\Events\EntityStateEvent.cs"/>
-        <Compile Include="Enums\Events\InventoryAction.cs"/>
-        <Compile Include="Enums\Items\ItemCategory.cs"/>
-        <Compile Include="Enums\Items\Type\ConsumableType.cs"/>
-        <Compile Include="Enums\Items\Type\CosType.cs"/>
-        <Compile Include="Enums\Items\Type\EquipmentType.cs"/>
-        <Compile Include="Enums\Items\Type\FellowEquipmentType.cs"/>
-        <Compile Include="Enums\Items\Type\JobEquipmentType.cs"/>
-        <Compile Include="Enums\Login\Error\AuthErrorCode.cs"/>
-        <Compile Include="Enums\Login\Error\LoginBlockType.cs"/>
-        <Compile Include="Enums\Login\Error\LoginErrorCode.cs"/>
-        <Compile Include="Enums\Quests\QuestType.cs"/>
-        <Compile Include="Enums\Server\ServerCapacity.cs"/>
-        <Compile Include="Enums\Server\SilkroadServer.cs"/>
-        <Compile Include="Enums\Skills\SkillData.cs"/>
-        <Compile Include="Interaction\Providers\Entities.cs"/>
-        <Compile Include="Interaction\Providers\Monsters.cs"/>
-        <Compile Include="Interaction\Providers\Npcs.cs"/>
-        <Compile Include="Interaction\Providers\Pets.cs"/>
-        <Compile Include="Interaction\Providers\Players.cs"/>
-        <Compile Include="Interaction\Providers\Teleports.cs"/>
-        <Compile Include="Interaction\InteractionQueue.cs"/>
-        <Compile Include="Interaction\Pathing\Movement.cs"/>
-        <Compile Include="Models\Character\LocalPlayer.cs"/>
-        <Compile Include="Models\Character\Character.cs"/>
-        <Compile Include="Models\Chatter\ChatMessage.cs"/>
-        <Compile Include="Models\Coordinates\ICoord.cs"/>
-        <Compile Include="Models\Coordinates\LocalPoint.cs"/>
-        <Compile Include="Models\Coordinates\ILocatable.cs"/>
-        <Compile Include="Models\Coordinates\SpawnPoint.cs"/>
-        <Compile Include="Models\Coordinates\WorldPoint.cs"/>
-        <Compile Include="Models\Entities\CharacterPet.cs"/>
-        <Compile Include="Models\Entities\Cos.cs"/>
-        <Compile Include="Models\Entities\Exchange\Stall.cs"/>
-        <Compile Include="Models\Entities\Fortress\Structure\FortressCommandPost.cs"/>
-        <Compile Include="Models\Entities\Fortress\Structure\FortressDefenseCamp.cs"/>
-        <Compile Include="Models\Entities\Fortress\Structure\FortressGate.cs"/>
-        <Compile Include="Models\Entities\Fortress\Structure\FortressHeart.cs"/>
-        <Compile Include="Models\Entities\Fortress\Structure\FortressObstacle.cs"/>
-        <Compile Include="Models\Entities\Fortress\Structure\FortressTower.cs"/>
-        <Compile Include="Models\Entities\GroundItem.cs"/>
-        <Compile Include="Models\Entities\Mask.cs"/>
-        <Compile Include="Models\Entities\Mob\Flower.cs"/>
-        <Compile Include="Models\Entities\Mob\TraderCaravan.cs"/>
-        <Compile Include="Models\Entities\Mob\ThiefCaravan.cs"/>
-        <Compile Include="Models\Entities\Npcs\Shop.cs"/>
-        <Compile Include="Models\Entities\Npcs\Storage.cs"/>
-        <Compile Include="Models\Entities\Npcs\TalkNpc.cs"/>
-        <Compile Include="Models\Entities\Pets\AttackPet.cs"/>
-        <Compile Include="Models\Entities\Pets\FellowPet.cs"/>
-        <Compile Include="Models\Entities\Pets\GuildGuard.cs"/>
-        <Compile Include="Models\Entities\Pets\Horse.cs"/>
-        <Compile Include="Models\Entities\Pets\PickPet.cs"/>
-        <Compile Include="Models\Entities\Pets\QuestPet.cs"/>
-        <Compile Include="Models\Entities\Pets\Transport.cs"/>
-        <Compile Include="Models\Entities\Entity.cs"/>
-        <Compile Include="Models\Entities\FortressCos.cs"/>
-        <Compile Include="Models\Entities\Fortress\FortressDefenseGuard.cs"/>
-        <Compile Include="Models\Entities\Fortress\FortressFlag.cs"/>
-        <Compile Include="Models\Entities\Fortress\FortressMonster.cs"/>
-        <Compile Include="Models\Entities\Fortress\FortressPatrolGuard.cs"/>
-        <Compile Include="Models\Entities\FortressStructure.cs"/>
-        <Compile Include="Models\Entities\Monster.cs"/>
-        <Compile Include="Models\Entities\Npc.cs"/>
-        <Compile Include="Models\Entities\Actor.cs"/>
-        <Compile Include="Models\Entities\Player.cs"/>
-        <Compile Include="Models\Entities\SkillAoe.cs"/>
-        <Compile Include="Models\Entities\Teleporters\Teleport.cs"/>
-        <Compile Include="Models\Entities\Teleporters\TeleportLink.cs"/>
-        <Compile Include="Models\Exceptions\EntityParseException.cs"/>
-        <Compile Include="Models\IIdentifiable.cs"/>
-        <Compile Include="Models\ITargetable.cs"/>
-        <Compile Include="Models\Items\Consumables\Consumable.cs"/>
-        <Compile Include="Models\Items\Consumables\Potion.cs"/>
-        <Compile Include="Models\Items\Consumables\Scroll.cs"/>
-        <Compile Include="Models\Items\Consumables\Scrolls\ReverseReturn.cs"/>
-        <Compile Include="Models\Items\Equipables\Avatar.cs"/>
-        <Compile Include="Models\Items\Equipables\Equipment.cs"/>
-        <Compile Include="Models\Items\Equipables\FellowEquipment.cs"/>
-        <Compile Include="Models\Items\Equipables\Weapon.cs"/>
-        <Compile Include="Models\Items\InventoryItem.cs"/>
-        <Compile Include="Models\Items\JobEquipables\JobEquipment.cs"/>
-        <Compile Include="Models\Items\ShopItem.cs"/>
-        <Compile Include="Models\Items\StallItem.cs"/>
-        <Compile Include="Models\Items\Summons\Summon.cs"/>
-        <Compile Include="Models\Server\GameServer.cs"/>
-        <Compile Include="Models\Skills\Buff.cs"/>
-        <Compile Include="Models\Skills\CharacterSkill.cs"/>
-        <Compile Include="Models\Skills\Mastery.cs"/>
-        <Compile Include="Models\Skills\Skill.cs"/>
-        <Compile Include="Network\Agent.cs"/>
-        <Compile Include="Network\Gateway.cs"/>
-        <Compile Include="Network\Server.cs"/>
-        <Compile Include="Network\Socks.cs"/>
-        <Compile Include="Properties\Annotations.cs"/>
-        <Compile Include="Services\Game\ChatService.cs"/>
-        <Compile Include="Services\Game\EntitySkillService.cs"/>
-        <Compile Include="Services\Game\EntityStateService.cs"/>
-        <Compile Include="Services\Game\InventoryService.cs"/>
-        <Compile Include="Services\Game\LocalPlayerService.cs"/>
-        <Compile Include="Services\Game\EntityMovementService.cs"/>
-        <Compile Include="Services\Game\EntitySpawnService.cs"/>
-        <Compile Include="Services\Game\EntityHealthService.cs"/>
-        <Compile Include="SecurityApi\Blowfish.cs"/>
-        <Compile Include="SecurityApi\Packet.cs"/>
-        <Compile Include="SecurityApi\PacketReader.cs"/>
-        <Compile Include="SecurityApi\PacketWriter.cs"/>
-        <Compile Include="SecurityApi\Security.cs"/>
-        <Compile Include="SecurityApi\TransferBuffer.cs"/>
-        <Compile Include="SecurityApi\Utility.cs"/>
-        <Compile Include="Program.cs"/>
-        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="Credentials.cs" />
+        <Compile Include="Database\GameDatabase.cs" />
+        <Compile Include="Database\QueryBuilder.cs" />
+        <Compile Include="Enums\Chatter\ChatChannel.cs" />
+        <Compile Include="Enums\Commons\Locale.cs" />
+        <Compile Include="Enums\Commons\Opcode.cs" />
+        <Compile Include="Enums\Constants.cs" />
+        <Compile Include="Enums\Events\EntityStateEvent.cs" />
+        <Compile Include="Enums\Events\InventoryAction.cs" />
+        <Compile Include="Enums\Items\ItemCategory.cs" />
+        <Compile Include="Enums\Items\Type\ConsumableType.cs" />
+        <Compile Include="Enums\Items\Type\CosType.cs" />
+        <Compile Include="Enums\Items\Type\EquipmentType.cs" />
+        <Compile Include="Enums\Items\Type\FellowEquipmentType.cs" />
+        <Compile Include="Enums\Items\Type\JobEquipmentType.cs" />
+        <Compile Include="Enums\Login\Error\AuthErrorCode.cs" />
+        <Compile Include="Enums\Login\Error\LoginBlockType.cs" />
+        <Compile Include="Enums\Login\Error\LoginErrorCode.cs" />
+        <Compile Include="Enums\Quests\QuestType.cs" />
+        <Compile Include="Enums\Server\ServerCapacity.cs" />
+        <Compile Include="Enums\Server\SilkroadServer.cs" />
+        <Compile Include="Enums\Skills\SkillData.cs" />
+        <Compile Include="Interaction\Providers\Entities.cs" />
+        <Compile Include="Interaction\Providers\Monsters.cs" />
+        <Compile Include="Interaction\Providers\Npcs.cs" />
+        <Compile Include="Interaction\Providers\Pets.cs" />
+        <Compile Include="Interaction\Providers\Players.cs" />
+        <Compile Include="Interaction\Providers\Teleports.cs" />
+        <Compile Include="Interaction\InteractionQueue.cs" />
+        <Compile Include="Interaction\Pathing\Movement.cs" />
+        <Compile Include="Models\Character\LocalPlayer.cs" />
+        <Compile Include="Models\Character\Character.cs" />
+        <Compile Include="Models\Chatter\ChatMessage.cs" />
+        <Compile Include="Models\Coordinates\ICoord.cs" />
+        <Compile Include="Models\Coordinates\LocalPoint.cs" />
+        <Compile Include="Models\Coordinates\ILocatable.cs" />
+        <Compile Include="Models\Coordinates\SpawnPoint.cs" />
+        <Compile Include="Models\Coordinates\WorldPoint.cs" />
+        <Compile Include="Models\Entities\CharacterPet.cs" />
+        <Compile Include="Models\Entities\Cos.cs" />
+        <Compile Include="Models\Entities\Exchange\Stall.cs" />
+        <Compile Include="Models\Entities\Fortress\Structure\FortressCommandPost.cs" />
+        <Compile Include="Models\Entities\Fortress\Structure\FortressDefenseCamp.cs" />
+        <Compile Include="Models\Entities\Fortress\Structure\FortressGate.cs" />
+        <Compile Include="Models\Entities\Fortress\Structure\FortressHeart.cs" />
+        <Compile Include="Models\Entities\Fortress\Structure\FortressObstacle.cs" />
+        <Compile Include="Models\Entities\Fortress\Structure\FortressTower.cs" />
+        <Compile Include="Models\Entities\GroundItem.cs" />
+        <Compile Include="Models\Entities\Mask.cs" />
+        <Compile Include="Models\Entities\Mob\Flower.cs" />
+        <Compile Include="Models\Entities\Mob\TraderCaravan.cs" />
+        <Compile Include="Models\Entities\Mob\ThiefCaravan.cs" />
+        <Compile Include="Models\Entities\Npcs\Shop.cs" />
+        <Compile Include="Models\Entities\Npcs\Storage.cs" />
+        <Compile Include="Models\Entities\Npcs\TalkNpc.cs" />
+        <Compile Include="Models\Entities\Pets\AttackPet.cs" />
+        <Compile Include="Models\Entities\Pets\FellowPet.cs" />
+        <Compile Include="Models\Entities\Pets\GuildGuard.cs" />
+        <Compile Include="Models\Entities\Pets\Horse.cs" />
+        <Compile Include="Models\Entities\Pets\PickPet.cs" />
+        <Compile Include="Models\Entities\Pets\QuestPet.cs" />
+        <Compile Include="Models\Entities\Pets\Transport.cs" />
+        <Compile Include="Models\Entities\Entity.cs" />
+        <Compile Include="Models\Entities\FortressCos.cs" />
+        <Compile Include="Models\Entities\Fortress\FortressDefenseGuard.cs" />
+        <Compile Include="Models\Entities\Fortress\FortressFlag.cs" />
+        <Compile Include="Models\Entities\Fortress\FortressMonster.cs" />
+        <Compile Include="Models\Entities\Fortress\FortressPatrolGuard.cs" />
+        <Compile Include="Models\Entities\FortressStructure.cs" />
+        <Compile Include="Models\Entities\Monster.cs" />
+        <Compile Include="Models\Entities\Npc.cs" />
+        <Compile Include="Models\Entities\Actor.cs" />
+        <Compile Include="Models\Entities\Player.cs" />
+        <Compile Include="Models\Entities\SkillAoe.cs" />
+        <Compile Include="Models\Entities\Teleporters\Teleport.cs" />
+        <Compile Include="Models\Entities\Teleporters\TeleportLink.cs" />
+        <Compile Include="Models\Exceptions\EntityParseException.cs" />
+        <Compile Include="Models\IIdentifiable.cs" />
+        <Compile Include="Models\ITargetable.cs" />
+        <Compile Include="Models\Items\Consumables\Consumable.cs" />
+        <Compile Include="Models\Items\Consumables\Potion.cs" />
+        <Compile Include="Models\Items\Consumables\Scroll.cs" />
+        <Compile Include="Models\Items\Consumables\Scrolls\ReverseReturn.cs" />
+        <Compile Include="Models\Items\Equipables\Avatar.cs" />
+        <Compile Include="Models\Items\Equipables\Equipment.cs" />
+        <Compile Include="Models\Items\Equipables\FellowEquipment.cs" />
+        <Compile Include="Models\Items\Equipables\Weapon.cs" />
+        <Compile Include="Models\Items\InventoryItem.cs" />
+        <Compile Include="Models\Items\JobEquipables\JobEquipment.cs" />
+        <Compile Include="Models\Items\ShopItem.cs" />
+        <Compile Include="Models\Items\StallItem.cs" />
+        <Compile Include="Models\Items\Summons\Summon.cs" />
+        <Compile Include="Models\Server\GameServer.cs" />
+        <Compile Include="Models\Skills\Buff.cs" />
+        <Compile Include="Models\Skills\CharacterSkill.cs" />
+        <Compile Include="Models\Skills\Mastery.cs" />
+        <Compile Include="Models\Skills\Skill.cs" />
+        <Compile Include="Network\Agent.cs" />
+        <Compile Include="Network\Gateway.cs" />
+        <Compile Include="Network\Server.cs" />
+        <Compile Include="Network\Socks.cs" />
+        <Compile Include="Properties\Annotations.cs" />
+        <Compile Include="Services\Game\ChatService.cs" />
+        <Compile Include="Services\Game\EntitySkillService.cs" />
+        <Compile Include="Services\Game\EntityStateService.cs" />
+        <Compile Include="Services\Game\InventoryService.cs" />
+        <Compile Include="Services\Game\LocalPlayerService.cs" />
+        <Compile Include="Services\Game\EntityMovementService.cs" />
+        <Compile Include="Services\Game\EntitySpawnService.cs" />
+        <Compile Include="Services\Game\EntityHealthService.cs" />
+        <Compile Include="SecurityApi\Blowfish.cs" />
+        <Compile Include="SecurityApi\Packet.cs" />
+        <Compile Include="SecurityApi\PacketReader.cs" />
+        <Compile Include="SecurityApi\PacketWriter.cs" />
+        <Compile Include="SecurityApi\Security.cs" />
+        <Compile Include="SecurityApi\TransferBuffer.cs" />
+        <Compile Include="SecurityApi\Utility.cs" />
+        <Compile Include="Program.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Properties\Resources.Designer.cs">
             <DesignTime>True</DesignTime>
             <AutoGen>True</AutoGen>
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
-        <Compile Include="Services\Game\NpcService.cs"/>
-        <Compile Include="Services\Game\StallService.cs"/>
-        <Compile Include="Services\Login\CharacterSelectService.cs"/>
-        <Compile Include="Services\Login\LoginService.cs"/>
-        <Compile Include="Services\PacketHandlerAttribute.cs"/>
-        <Compile Include="Services\Service.cs"/>
+        <Compile Include="Services\Game\NpcService.cs" />
+        <Compile Include="Services\Game\StallService.cs" />
+        <Compile Include="Services\Login\CharacterSelectService.cs" />
+        <Compile Include="Services\Login\LoginService.cs" />
+        <Compile Include="Services\PacketHandlerAttribute.cs" />
+        <Compile Include="Services\Service.cs" />
         <Compile Include="Ui\CharacterSelection.cs">
             <SubType>Form</SubType>
         </Compile>
@@ -274,15 +274,15 @@
         <Compile Include="Ui\StallWindow.Designer.cs">
             <DependentUpon>StallWindow.cs</DependentUpon>
         </Compile>
-        <Compile Include="Util\DirectoryUtils.cs"/>
-        <Compile Include="Util\Extension\CollectionExt.cs"/>
-        <Compile Include="Util\Extension\NumberExt.cs"/>
-        <Compile Include="Util\Extension\UiExt.cs"/>
-        <Compile Include="Util\NetworkUtils.cs"/>
+        <Compile Include="Util\DirectoryUtils.cs" />
+        <Compile Include="Util\Extension\CollectionExt.cs" />
+        <Compile Include="Util\Extension\NumberExt.cs" />
+        <Compile Include="Util\Extension\UiExt.cs" />
+        <Compile Include="Util\NetworkUtils.cs" />
     </ItemGroup>
     <ItemGroup>
-        <None Include="App.config"/>
-        <None Include="packages.config"/>
+        <None Include="App.config" />
+        <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="Properties\Resources.resx">
@@ -309,49 +309,49 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-        <Content Include="Resources\mm_sign_animal.png"/>
-        <Content Include="Resources\mm_sign_character.png"/>
-        <Content Include="Resources\mm_sign_monster.png"/>
-        <Content Include="Resources\mm_sign_npc.png"/>
-        <Content Include="Resources\mm_sign_otherplayer.png"/>
-        <Content Include="Resources\mm_sign_spawn.png"/>
-        <Content Include="Resources\mm_sign_unique.png"/>
-        <Content Include="Resources\TRSRO_DB.db3"/>
-        <Content Include="Resources\xy_armor.PNG"/>
-        <Content Include="Resources\xy_ch_bow.PNG"/>
-        <Content Include="Resources\xy_ch_heal.PNG"/>
-        <Content Include="Resources\xy_ch_spear.PNG"/>
-        <Content Include="Resources\xy_ch_sword.PNG"/>
-        <Content Include="Resources\xy_dungeon.PNG"/>
-        <Content Include="Resources\xy_etc.PNG"/>
-        <Content Include="Resources\xy_ferry.PNG"/>
-        <Content Include="Resources\xy_flyship.PNG"/>
-        <Content Include="Resources\xy_gate.png"/>
-        <Content Include="Resources\xy_guild.PNG"/>
-        <Content Include="Resources\xy_hunter.PNG"/>
-        <Content Include="Resources\xy_maksa.PNG"/>
-        <Content Include="Resources\xy_market _1.PNG"/>
-        <Content Include="Resources\xy_market_1.PNG"/>
-        <Content Include="Resources\xy_market_2.PNG"/>
-        <Content Include="Resources\xy_merchant.PNG"/>
-        <Content Include="Resources\xy_new.PNG"/>
-        <Content Include="Resources\xy_npc.PNG"/>
-        <Content Include="Resources\xy_oction.PNG"/>
-        <Content Include="Resources\xy_potion.PNG"/>
-        <Content Include="Resources\xy_returnicon.PNG"/>
-        <Content Include="Resources\xy_returnicon_focus.PNG"/>
+        <Content Include="Resources\mm_sign_animal.png" />
+        <Content Include="Resources\mm_sign_character.png" />
+        <Content Include="Resources\mm_sign_monster.png" />
+        <Content Include="Resources\mm_sign_npc.png" />
+        <Content Include="Resources\mm_sign_otherplayer.png" />
+        <Content Include="Resources\mm_sign_spawn.png" />
+        <Content Include="Resources\mm_sign_unique.png" />
+        <Content Include="Resources\TRSRO_DB.db3" />
+        <Content Include="Resources\xy_armor.PNG" />
+        <Content Include="Resources\xy_ch_bow.PNG" />
+        <Content Include="Resources\xy_ch_heal.PNG" />
+        <Content Include="Resources\xy_ch_spear.PNG" />
+        <Content Include="Resources\xy_ch_sword.PNG" />
+        <Content Include="Resources\xy_dungeon.PNG" />
+        <Content Include="Resources\xy_etc.PNG" />
+        <Content Include="Resources\xy_ferry.PNG" />
+        <Content Include="Resources\xy_flyship.PNG" />
+        <Content Include="Resources\xy_gate.png" />
+        <Content Include="Resources\xy_guild.PNG" />
+        <Content Include="Resources\xy_hunter.PNG" />
+        <Content Include="Resources\xy_maksa.PNG" />
+        <Content Include="Resources\xy_market _1.PNG" />
+        <Content Include="Resources\xy_market_1.PNG" />
+        <Content Include="Resources\xy_market_2.PNG" />
+        <Content Include="Resources\xy_merchant.PNG" />
+        <Content Include="Resources\xy_new.PNG" />
+        <Content Include="Resources\xy_npc.PNG" />
+        <Content Include="Resources\xy_oction.PNG" />
+        <Content Include="Resources\xy_potion.PNG" />
+        <Content Include="Resources\xy_returnicon.PNG" />
+        <Content Include="Resources\xy_returnicon_focus.PNG" />
     </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
         <PropertyGroup>
             <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them. For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
         </PropertyGroup>
-        <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))"/>
-        <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))"/>
-        <Error Condition="!Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets'))"/>
+        <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+        <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+        <Error Condition="!Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets'))" />
     </Target>
-    <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')"/>
-    <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')"/>
+    <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+    <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.114.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
            Other similar extension points exist, see Microsoft.Common.targets.
       <Target Name="BeforeBuild">
