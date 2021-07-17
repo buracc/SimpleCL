@@ -10,6 +10,16 @@ namespace SimpleCL.Ui
 {
     partial class Gui
     {
+        private void InitHome()
+        {
+            proxyIpTextBox.Text = Credentials.ProxyIp;
+            proxyPortTextBox.Text = Credentials.ProxyPort.ToString();
+            proxyUsernameBox.Text = Credentials.ProxyUsername;
+            proxyPasswordBox.Text = Credentials.ProxyPassword;
+            
+            InitBuffsGrid();
+        }
+        
         private void LoginClicked(object sender, EventArgs e)
         {
             if (serverComboBox.SelectedItem is not SilkroadServer selectedServer)
@@ -32,11 +42,6 @@ namespace SimpleCL.Ui
             ToggleControls(false);
         }
 
-        private void InitHome()
-        {
-            InitBuffsGrid();
-        }
-        
         private void InitBuffsGrid()
         {
             buffsDataGridView.DataSource = _localPlayer.Buffs;

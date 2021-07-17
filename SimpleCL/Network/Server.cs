@@ -42,6 +42,8 @@ namespace SimpleCL.Network
             string proxyPass
         )
         {
+            ServerThread = new Thread(Loop);
+            
             var sb = new StringBuilder($"Connecting to [{ip}:{port}]");
             if (proxyIp != null)
             {
@@ -68,14 +70,14 @@ namespace SimpleCL.Network
                 }
                 
                 Log("Connection successful");
+                
+                Socket.Blocking = false;
+                Socket.NoDelay = true;
             }
             catch
             {
                 Log("Connection failed");
-                return;
             }
-
-            ServerThread = new Thread(Loop);
         }
 
         public void RegisterService(Service service)
@@ -314,6 +316,16 @@ namespace SimpleCL.Network
             {
                 Program.Gui.LogPacket($"{packet.Opcode:X}\n{Utility.HexDump(packet.GetBytes())}");
             }
+        }
+        
+        public void Start()
+        {
+            if (!Socket.Connected)
+            {
+                return;
+            }
+            
+            ServerThread.Start();
         }
     }
 }

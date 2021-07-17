@@ -23,12 +23,5 @@ namespace SimpleCL.Network
             ProxyUser = proxyUser;
             ProxyPass = proxyPass;
         }
-
-        public void Start()
-        {
-            ServerThread.Start();
-            Socket.Blocking = false;
-            Socket.NoDelay = true;
-        }
     }
 }

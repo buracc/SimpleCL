@@ -9,12 +9,5 @@
         {
             SessionId = sessionId;
         }
-
-        public void Start()
-        {
-            ServerThread.Start();
-            Socket.Blocking = false;
-            Socket.NoDelay = true;
-        }
     }
 }
