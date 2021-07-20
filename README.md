@@ -2,11 +2,13 @@
 An attempt at creating a simple clientless login framework for Silkroad Online, using SilkroadSecurityApi. At the same time becoming familiar with C#.
 
 Preview:
+- ![Preview](https://i.imgur.com/V9Q4rXt.png)
 - ![Preview](https://i.imgur.com/ExOLUUr.png)
 - ![Preview](https://i.imgur.com/KgociE2.png)
 - ![Preview](https://i.imgur.com/VUaEjor.png)
 
 # Current features:
+- Attaching sro_client
 - Login
 - Server selection
 - Passcode entry
