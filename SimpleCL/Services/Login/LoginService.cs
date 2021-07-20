@@ -162,7 +162,7 @@ namespace SimpleCL.Services.Login
                     agent.RegisterService(new InventoryService());
                     
                     // agent.Debug = true;
-                    agent.Start();
+                    // agent.Start();
                     break;
 
                 case 2:

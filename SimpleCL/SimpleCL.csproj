@@ -78,6 +78,8 @@
         <Reference Include="System.Xml.Linq" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Client\Injector.cs" />
+        <Compile Include="Client\SilkroadClient.cs" />
         <Compile Include="Credentials.cs" />
         <Compile Include="Database\GameDatabase.cs" />
         <Compile Include="Database\QueryBuilder.cs" />
@@ -155,6 +157,8 @@
         <Compile Include="Models\Entities\Teleporters\Teleport.cs" />
         <Compile Include="Models\Entities\Teleporters\TeleportLink.cs" />
         <Compile Include="Models\Exceptions\EntityParseException.cs" />
+        <Compile Include="Models\Exceptions\SroClientLaunchException.cs" />
+        <Compile Include="Models\Exceptions\SroClientNotFoundException.cs" />
         <Compile Include="Models\IIdentifiable.cs" />
         <Compile Include="Models\ITargetable.cs" />
         <Compile Include="Models\Items\Consumables\Consumable.cs" />

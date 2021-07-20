@@ -12,10 +12,10 @@ namespace SimpleCL.Ui
     {
         private void InitHome()
         {
-            proxyIpTextBox.Text = Credentials.ProxyIp;
-            proxyPortTextBox.Text = Credentials.ProxyPort.ToString();
-            proxyUsernameBox.Text = Credentials.ProxyUsername;
-            proxyPasswordBox.Text = Credentials.ProxyPassword;
+            // proxyIpTextBox.Text = Credentials.ProxyIp;
+            // proxyPortTextBox.Text = Credentials.ProxyPort.ToString();
+            // proxyUsernameBox.Text = Credentials.ProxyUsername;
+            // proxyPasswordBox.Text = Credentials.ProxyPassword;
             
             InitBuffsGrid();
         }
@@ -35,10 +35,13 @@ namespace SimpleCL.Ui
             var proxyPass = proxyPasswordBox.TextLength == 0 ? null : proxyPasswordBox.Text;
 
             var gw = new Gateway(selectedServer.GatewayIps[new Random().Next(selectedServer.GatewayIps.Length)],
-                GatewayPort, proxyIp, proxyPort, proxyUser, proxyPass);
+                GatewayPort, proxyIp, proxyPort, proxyUser, proxyPass, clientCheckBox.Checked, selectedServer.Locale);
             gw.RegisterService(new LoginService(usernameBox.Text, passwordBox.Text, selectedServer, gw));
-            gw.Start();
-
+            if (!clientCheckBox.Checked)
+            {
+                gw.Start();
+            }
+            
             ToggleControls(false);
         }
 

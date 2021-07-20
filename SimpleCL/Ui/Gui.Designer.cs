@@ -73,6 +73,8 @@ namespace SimpleCL.Ui
             this.spLabelValue = new System.Windows.Forms.Label();
             this.levelLabelValue = new System.Windows.Forms.Label();
             this.credentialsGroup = new System.Windows.Forms.GroupBox();
+            this.proxyPasswordBox = new System.Windows.Forms.TextBox();
+            this.proxyUsernameBox = new System.Windows.Forms.TextBox();
             this.proxyPortTextBox = new System.Windows.Forms.TextBox();
             this.proxyIpTextBox = new System.Windows.Forms.TextBox();
             this.serverComboBox = new System.Windows.Forms.ComboBox();
@@ -120,8 +122,7 @@ namespace SimpleCL.Ui
             this.loggerBox = new System.Windows.Forms.ListBox();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripProgressBar2 = new System.Windows.Forms.ToolStripProgressBar();
-            this.proxyPasswordBox = new System.Windows.Forms.TextBox();
-            this.proxyUsernameBox = new System.Windows.Forms.TextBox();
+            this.clientCheckBox = new System.Windows.Forms.CheckBox();
             serverLabel = new System.Windows.Forms.Label();
             usernameLabel = new System.Windows.Forms.Label();
             passwordLabel = new System.Windows.Forms.Label();
@@ -516,8 +517,17 @@ namespace SimpleCL.Ui
             label5.TabIndex = 12;
             label5.Text = "Proxy";
             // 
+            // label6
+            // 
+            label6.Location = new System.Drawing.Point(6, 130);
+            label6.Name = "label6";
+            label6.Size = new System.Drawing.Size(57, 17);
+            label6.TabIndex = 15;
+            label6.Text = "Login";
+            // 
             // credentialsGroup
             // 
+            this.credentialsGroup.Controls.Add(this.clientCheckBox);
             this.credentialsGroup.Controls.Add(this.proxyPasswordBox);
             this.credentialsGroup.Controls.Add(label6);
             this.credentialsGroup.Controls.Add(this.proxyUsernameBox);
@@ -537,6 +547,21 @@ namespace SimpleCL.Ui
             this.credentialsGroup.TabIndex = 6;
             this.credentialsGroup.TabStop = false;
             this.credentialsGroup.Text = "Credentials";
+            // 
+            // proxyPasswordBox
+            // 
+            this.proxyPasswordBox.Location = new System.Drawing.Point(162, 127);
+            this.proxyPasswordBox.Name = "proxyPasswordBox";
+            this.proxyPasswordBox.Size = new System.Drawing.Size(92, 20);
+            this.proxyPasswordBox.TabIndex = 16;
+            this.proxyPasswordBox.UseSystemPasswordChar = true;
+            // 
+            // proxyUsernameBox
+            // 
+            this.proxyUsernameBox.Location = new System.Drawing.Point(69, 127);
+            this.proxyUsernameBox.Name = "proxyUsernameBox";
+            this.proxyUsernameBox.Size = new System.Drawing.Size(87, 20);
+            this.proxyUsernameBox.TabIndex = 14;
             // 
             // proxyPortTextBox
             // 
@@ -561,9 +586,9 @@ namespace SimpleCL.Ui
             // 
             // loginButton
             // 
-            this.loginButton.Location = new System.Drawing.Point(197, 22);
+            this.loginButton.Location = new System.Drawing.Point(197, 48);
             this.loginButton.Name = "loginButton";
-            this.loginButton.Size = new System.Drawing.Size(57, 73);
+            this.loginButton.Size = new System.Drawing.Size(57, 47);
             this.loginButton.TabIndex = 8;
             this.loginButton.Text = "Login";
             this.loginButton.UseVisualStyleBackColor = true;
@@ -1021,28 +1046,14 @@ namespace SimpleCL.Ui
             this.toolStripProgressBar2.Name = "toolStripProgressBar2";
             this.toolStripProgressBar2.Size = new System.Drawing.Size(100, 15);
             // 
-            // proxyPasswordBox
+            // clientCheckBox
             // 
-            this.proxyPasswordBox.Location = new System.Drawing.Point(162, 127);
-            this.proxyPasswordBox.Name = "proxyPasswordBox";
-            this.proxyPasswordBox.Size = new System.Drawing.Size(92, 20);
-            this.proxyPasswordBox.TabIndex = 16;
-            this.proxyPasswordBox.UseSystemPasswordChar = true;
-            // 
-            // label6
-            // 
-            label6.Location = new System.Drawing.Point(6, 130);
-            label6.Name = "label6";
-            label6.Size = new System.Drawing.Size(57, 17);
-            label6.TabIndex = 15;
-            label6.Text = "Login";
-            // 
-            // proxyUsernameBox
-            // 
-            this.proxyUsernameBox.Location = new System.Drawing.Point(69, 127);
-            this.proxyUsernameBox.Name = "proxyUsernameBox";
-            this.proxyUsernameBox.Size = new System.Drawing.Size(87, 20);
-            this.proxyUsernameBox.TabIndex = 14;
+            this.clientCheckBox.Location = new System.Drawing.Point(197, 22);
+            this.clientCheckBox.Name = "clientCheckBox";
+            this.clientCheckBox.Size = new System.Drawing.Size(57, 24);
+            this.clientCheckBox.TabIndex = 17;
+            this.clientCheckBox.Text = "Client";
+            this.clientCheckBox.UseVisualStyleBackColor = true;
             // 
             // Gui
             // 
@@ -1081,6 +1092,8 @@ namespace SimpleCL.Ui
             this.packetLoggerGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.CheckBox clientCheckBox;
 
         private System.Windows.Forms.TextBox proxyPasswordBox;
         private System.Windows.Forms.TextBox proxyUsernameBox;

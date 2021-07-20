@@ -19,15 +19,18 @@ namespace SimpleCL.Network
     public abstract class Server : IDisposable
     {
         public readonly Thread ServerThread;
-        protected readonly Security Security = new();
-        protected readonly TransferBuffer RecvBuffer = new(8192, 0, 0);
+        protected readonly Security RemoteSecurity = new();
+        protected readonly Security LocalSecurity = new();
+
+        protected readonly TransferBuffer RecvBuffer = new(4096, 0, 0);
+        protected readonly TransferBuffer LocalRecvBuffer = new(4096, 0, 0);
 
         protected readonly Socket Socket;
 
         private readonly List<Service> _services = new();
         private readonly List<Tuple<ushort, PacketHandler>> _handlers = new();
         private readonly ConcurrentQueue<Action> _actions = new();
-
+        
         private delegate void PacketHandler(Server server, Packet packet);
 
         private readonly Timer _timer = new(6666);
@@ -39,7 +42,8 @@ namespace SimpleCL.Network
             string proxyIp,
             int proxyPort,
             string proxyUser,
-            string proxyPass
+            string proxyPass,
+            bool launchClient
         )
         {
             ServerThread = new Thread(Loop);
@@ -111,7 +115,7 @@ namespace SimpleCL.Network
             _handlers.RemoveAll(x => x.Item2.Target?.GetType() == typeof(T));
         }
 
-        private void Notify(Packet packet)
+        protected void Notify(Packet packet)
         {
             foreach (var (opcode, handler) in _handlers)
             {
@@ -136,7 +140,7 @@ namespace SimpleCL.Network
 
         public void Inject(Packet packet)
         {
-            Security.Send(packet);
+            RemoteSecurity.Send(packet);
         }
 
         private void HeartBeat(object source, ElapsedEventArgs e)
@@ -212,7 +216,7 @@ namespace SimpleCL.Network
 
                 try
                 {
-                    Security.Recv(RecvBuffer);
+                    RemoteSecurity.Recv(RecvBuffer);
                 }
                 catch (Exception e)
                 {
@@ -233,16 +237,20 @@ namespace SimpleCL.Network
                     }
                 }
 
-                var incomingPackets = Security.TransferIncoming();
+                var incomingPackets = RemoteSecurity.TransferIncoming();
                 if (incomingPackets != null && incomingPackets.IsNotEmpty())
                 {
-                    foreach (var packet in incomingPackets.Where(packet =>
-                        packet.Opcode != Opcode.HANDSHAKE && packet.Opcode != Opcode.HANDSHAKE_ACCEPT))
+                    foreach (var packet in incomingPackets)
                     {
+                        if (packet.Opcode is Opcode.HANDSHAKE or Opcode.HANDSHAKE_ACCEPT)
+                        {
+                            continue;
+                        }
+                        
                         if (this is Agent && Program.Gui.DebugAgent() ||
                             this is Gateway && Program.Gui.DebugGateway())
                         {
-                            LogPacket(packet);
+                            LogPacket(packet, $"Remote -> {GetType().Name}");
                         }
 
                         if (packet.Opcode == Opcode.IDENTITY && !_timer.Enabled)
@@ -251,10 +259,11 @@ namespace SimpleCL.Network
                         }
 
                         Notify(packet);
+                        LocalSecurity.Send(packet);
                     }
                 }
 
-                var outgoing = Security.TransferOutgoing();
+                var outgoing = RemoteSecurity.TransferOutgoing();
                 if (outgoing != null)
                 {
                     foreach (var kvp in outgoing)
@@ -262,7 +271,7 @@ namespace SimpleCL.Network
                         if (this is Agent && Program.Gui.DebugAgent() ||
                             this is Gateway && Program.Gui.DebugGateway())
                         {
-                            LogPacket(kvp.Value);
+                            LogPacket(kvp.Value, $"{GetType().Name} -> Remote");
                         }
 
                         var buffer = kvp.Key;
@@ -310,12 +319,13 @@ namespace SimpleCL.Network
             Log("\n" + Utility.HexDump(packet.GetBytes()), toGui);
         }
 
-        private void LogPacket(Packet packet)
+        protected void LogPacket(Packet packet, string context = "Server")
         {
             if (Program.Gui.FilteredOpcodes.Contains(packet.Opcode.ToString("X")) ||
                 Program.Gui.FilteredOpcodes.Contains("0"))
             {
-                Program.Gui.LogPacket($"{packet.Opcode:X}\n{Utility.HexDump(packet.GetBytes())}");
+                Program.Gui.LogPacket($"[{context}][{packet.Opcode:X}]\n{Utility.HexDump(packet.GetBytes())}");
+                Console.WriteLine($"[{context}][{packet.Opcode:X}]\n{Utility.HexDump(packet.GetBytes())}");
             }
         }
         
