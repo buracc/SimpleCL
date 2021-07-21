@@ -20,7 +20,7 @@ namespace SimpleCL.Client
         public bool Inject()
         {
             var handle = OpenProcess(0x2 | 0x8 | 0x10 | 0x20 | 0x400, 1, (uint) _srProcess.Id);
-            
+
             if (handle == IntPtr.Zero)
             {
                 return false;
@@ -32,20 +32,19 @@ namespace SimpleCL.Client
             {
                 return false;
             }
-            
+
             CreateMutex(IntPtr.Zero, false, "Silkroad Online Launcher");
             CreateMutex(IntPtr.Zero, false, "Ready");
-            
+
             if (!File.Exists(_dllPath))
             {
-                return false;
-                // throw new DllNotFoundException("Dll not found");
+                throw new DllNotFoundException("Dll not found");
             }
 
             var allocMemAddress = VirtualAllocEx(handle, (IntPtr) null, (IntPtr) _dllPath.Length,
-                (uint) VaeEnums.AllocationType.MemCommit |
-                (uint) VaeEnums.AllocationType.MemReserve,
-                (uint) VaeEnums.ProtectionConstants.PageExecuteReadwrite);
+                (uint) AllocationType.MemCommit |
+                (uint) AllocationType.MemReserve,
+                (uint) ProtectionConstants.PageExecuteReadwrite);
 
             if (allocMemAddress == IntPtr.Zero)
             {
@@ -146,23 +145,20 @@ namespace SimpleCL.Client
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern UInt32 WaitForSingleObject(IntPtr hHandle, UInt32 dwMilliseconds);
 
-        public static class VaeEnums
+        public enum AllocationType
         {
-            public enum AllocationType
-            {
-                MemCommit = 0x1000,
-                MemReserve = 0x2000,
-                MemReset = 0x80000,
-            }
+            MemCommit = 0x1000,
+            MemReserve = 0x2000,
+            MemReset = 0x80000,
+        }
 
-            public enum ProtectionConstants
-            {
-                PageExecute = 0X10,
-                PageExecuteRead = 0X20,
-                PageExecuteReadwrite = 0X40,
-                PageExecuteWritecopy = 0X80,
-                PageNoaccess = 0X01
-            }
+        public enum ProtectionConstants
+        {
+            PageExecute = 0X10,
+            PageExecuteRead = 0X20,
+            PageExecuteReadwrite = 0X40,
+            PageExecuteWritecopy = 0X80,
+            PageNoaccess = 0X01
         }
     }
 }

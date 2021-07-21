@@ -54,6 +54,7 @@ namespace SimpleCL.Network
                     _socket.Close();
                     throw new SocksAuthException("Authentication method not supported");
                 case USER_PASS_AUTH when _username == null || _password == null:
+                    _socket.Close();
                     throw new ArgumentException("No username or password provided");
             }
 

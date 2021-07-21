@@ -116,7 +116,7 @@ namespace SimpleCL.Services.Game
             {
                 Console.WriteLine(e);
                 server.DebugPacket(packet);
-                return;
+                throw;
             }
 
             switch (entity)
@@ -398,34 +398,41 @@ namespace SimpleCL.Services.Game
 
                             if (p.IsWearingJobSuit())
                             {
-                                byte unks = 12;
-                                unks.Repeat(i => { packet.ReadByte(); });
+                                byte unknownBytes = 12;
+                                unknownBytes.Repeat(i => { packet.ReadByte(); });
                             }
                             else
                             {
                                 var guildId = packet.ReadUInt();
                                 var grantName = packet.ReadAscii();
+                                var lastCrestRev = packet.ReadUInt();
+                                var unionId = packet.ReadUInt();
+                                var unionLastCrestRev = packet.ReadUInt();
+                                var friendly = packet.ReadBool();
+                                var siegeAuthority = packet.ReadByte();
 
-                                if (p.InteractionType == Player.Interaction.OnStall)
+                                switch (p.InteractionType)
                                 {
-                                    byte unks = 14;
-                                    unks.Repeat(i => { packet.ReadByte(); });
-
-                                    var stallName = packet.ReadUnicode();
-                                    p.Stall = new Stall
+                                    case Player.Interaction.OnStall:
                                     {
-                                        Title = stallName,
-                                        PlayerUid = p.Uid
-                                    };
+                                        var stallName = packet.ReadUnicode();
+                                        p.Stall = new Stall
+                                        {
+                                            Title = stallName,
+                                            PlayerUid = p.Uid
+                                        };
+                                        var decorationItemId = packet.ReadUInt();
+                                        break;
+                                    }
+                                    case Player.Interaction.OnExchange:
+                                        break;
+                                }
 
-                                    unks = 16;
-                                    unks.Repeat(i => { packet.ReadByte(); });
-                                }
-                                else
+                                byte unknownBytes = 12;
+                                unknownBytes.Repeat(i =>
                                 {
-                                    byte unks = 26;
-                                    unks.Repeat(i => { packet.ReadByte(); });
-                                }
+                                    packet.ReadByte();
+                                });
                             }
 
                             break;

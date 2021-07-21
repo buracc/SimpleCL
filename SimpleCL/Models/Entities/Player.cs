@@ -73,7 +73,7 @@ namespace SimpleCL.Models.Entities
         public enum Interaction : byte
         {
             None = 0,
-            OnExchangeProbably = 2,
+            OnExchange = 2,
             OnStall = 3,
             OnShop = 6
         }

@@ -213,8 +213,11 @@ namespace SimpleCL.Models.Entities
         {
             _movementTimer?.Dispose();
             
-            Buffs.DisposeAll();
-            Buffs.Clear();
+            Program.Gui.InvokeLater(() =>
+            {
+                Buffs.DisposeAll();
+                Buffs.Clear();
+            });
         }
     }
 }
