@@ -305,11 +305,16 @@ namespace SimpleCL.Services.Game
 
         #endregion
 
-        #region CelestialPosition
+        #region GameReady
 
         [PacketHandler(Opcode.Agent.Response.CHAR_CELESTIAL_POSITION)]
         public void GameReady(Server server, Packet packet)
         {
+            if (server.IsProxying())
+            {
+                return;
+            }
+            
             server.Inject(new Packet(Opcode.Agent.Request.GAME_READY));
         }
 

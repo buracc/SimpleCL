@@ -10,9 +10,6 @@ namespace SimpleCL.Ui
 
         private void InitDevControls()
         {
-            debugAgCheckbox.Checked = true;
-            debugGwCheckbox.Checked = true;
-            
             filterPacketTextBox.KeyDown += (sender, args) =>
             {
                 if (args.KeyCode == Keys.Enter)
@@ -66,6 +63,26 @@ namespace SimpleCL.Ui
         public bool DebugAgent()
         {
             return debugAgCheckbox.Checked;
+        }
+        
+        public bool DebugClient()
+        {
+            return debugClientCheckbox.Checked;
+        }
+
+        public bool DebugServer()
+        {
+            return debugServerCheckbox.Checked;
+        }
+        
+        public bool DebugIncoming()
+        {
+            return incomingCheckbox.Checked;
+        }
+
+        public bool DebugOutgoing()
+        {
+            return outgoingCheckbox.Checked;
         }
 
         public void Log(string message, string sender = "SimpleCL")

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
@@ -19,11 +18,9 @@ namespace SimpleCL.Network
     public abstract class Server : IDisposable
     {
         public readonly Thread ServerThread;
-        protected readonly Security RemoteSecurity = new();
-        protected readonly Security LocalSecurity = new();
+        protected readonly Security Security = new();
 
-        protected readonly TransferBuffer RecvBuffer = new(4096, 0, 0);
-        protected readonly TransferBuffer LocalRecvBuffer = new(4096, 0, 0);
+        protected readonly TransferBuffer RecvBuffer = new(8192, 0, 0);
 
         protected readonly Socket Socket;
 
@@ -32,30 +29,32 @@ namespace SimpleCL.Network
         private readonly ConcurrentQueue<Action> _actions = new();
         
         private delegate void PacketHandler(Server server, Packet packet);
-
+        
+        public Proxy Proxy { get; set; }
+        
         private readonly Timer _timer = new(6666);
-        private bool _disposed;
+        public bool Disposed;
 
         protected Server(
             string ip,
             ushort port,
-            string proxyIp,
-            int proxyPort,
-            string proxyUser,
-            string proxyPass,
-            bool launchClient
+            string socksIp,
+            int socksPort,
+            string socksUser,
+            string socksPass,
+            bool useClient
         )
         {
             ServerThread = new Thread(Loop);
             
             var sb = new StringBuilder($"Connecting to [{ip}:{port}]");
-            if (proxyIp != null)
+            if (socksIp != null)
             {
-                sb.Append($" || Proxy: [{proxyIp}:{proxyPort}]");
+                sb.Append($" || Proxy: [{socksIp}:{socksPort}]");
 
-                if (proxyUser != null)
+                if (socksUser != null)
                 {
-                    sb.Append($"[{proxyUser}:{proxyPass}]");
+                    sb.Append($"[{socksUser}:{socksPass}]");
                 }
             }
             
@@ -63,9 +62,9 @@ namespace SimpleCL.Network
             
             try
             {
-                if (proxyIp != null && proxyPort != 0)
+                if (socksIp != null && socksPort != 0)
                 {
-                    Socket = Socks.Connect(proxyIp, proxyPort, ip, port, proxyUser, proxyPass);
+                    Socket = Socks.Connect(socksIp, socksPort, ip, port, socksUser, socksPass);
                 }
                 else
                 {
@@ -83,6 +82,11 @@ namespace SimpleCL.Network
                 Log("Connection failed");
                 Console.WriteLine(e);
             }
+        }
+
+        public bool IsProxying()
+        {
+            return Proxy != null && Proxy.IsConnected();
         }
 
         public void RegisterService(Service service)
@@ -115,7 +119,7 @@ namespace SimpleCL.Network
             _handlers.RemoveAll(x => x.Item2.Target?.GetType() == typeof(T));
         }
 
-        protected void Notify(Packet packet)
+        public void Notify(Packet packet)
         {
             foreach (var (opcode, handler) in _handlers)
             {
@@ -140,7 +144,7 @@ namespace SimpleCL.Network
 
         public void Inject(Packet packet)
         {
-            RemoteSecurity.Send(packet);
+            Security.Send(packet);
         }
 
         private void HeartBeat(object source, ElapsedEventArgs e)
@@ -161,7 +165,7 @@ namespace SimpleCL.Network
                 _services.Clear();
                 _handlers.Clear();
                 Socket?.Dispose();
-                _disposed = true;
+                Disposed = true;
             });
         }
 
@@ -216,7 +220,7 @@ namespace SimpleCL.Network
 
                 try
                 {
-                    RemoteSecurity.Recv(RecvBuffer);
+                    Security.Recv(RecvBuffer);
                 }
                 catch (Exception e)
                 {
@@ -237,7 +241,7 @@ namespace SimpleCL.Network
                     }
                 }
 
-                var incomingPackets = RemoteSecurity.TransferIncoming();
+                var incomingPackets = Security.TransferIncoming();
                 if (incomingPackets != null && incomingPackets.IsNotEmpty())
                 {
                     foreach (var packet in incomingPackets)
@@ -247,8 +251,8 @@ namespace SimpleCL.Network
                             continue;
                         }
                         
-                        if (this is Agent && Program.Gui.DebugAgent() ||
-                            this is Gateway && Program.Gui.DebugGateway())
+                        if (this is Agent && Program.Gui.DebugAgent() && Program.Gui.DebugServer() && Program.Gui.DebugIncoming() ||
+                            this is Gateway && Program.Gui.DebugGateway() && Program.Gui.DebugServer() && Program.Gui.DebugIncoming())
                         {
                             LogPacket(packet, $"Remote -> {GetType().Name}");
                         }
@@ -258,18 +262,24 @@ namespace SimpleCL.Network
                             _timer.Start();
                         }
 
-                        Notify(packet);
-                        LocalSecurity.Send(packet);
+                        if (Proxy != null && Proxy.IsConnected())
+                        {
+                            Proxy.Receive(packet);
+                        }
+                        else
+                        {
+                            Notify(packet);
+                        }
                     }
                 }
 
-                var outgoing = RemoteSecurity.TransferOutgoing();
+                var outgoing = Security.TransferOutgoing();
                 if (outgoing != null)
                 {
                     foreach (var kvp in outgoing)
                     {
-                        if (this is Agent && Program.Gui.DebugAgent() ||
-                            this is Gateway && Program.Gui.DebugGateway())
+                        if (this is Agent && Program.Gui.DebugAgent() && Program.Gui.DebugServer() && Program.Gui.DebugOutgoing()||
+                            this is Gateway && Program.Gui.DebugGateway() && Program.Gui.DebugServer() && Program.Gui.DebugOutgoing())
                         {
                             LogPacket(kvp.Value, $"{GetType().Name} -> Remote");
                         }
@@ -305,7 +315,7 @@ namespace SimpleCL.Network
                 Thread.Sleep(1);
             }
 
-            if (_disposed)
+            if (Disposed)
             {
                 return;
             }
@@ -319,7 +329,7 @@ namespace SimpleCL.Network
             Log("\n" + Utility.HexDump(packet.GetBytes()), toGui);
         }
 
-        protected void LogPacket(Packet packet, string context = "Server")
+        public void LogPacket(Packet packet, string context = "Server")
         {
             if (Program.Gui.FilteredOpcodes.Contains(packet.Opcode.ToString("X")) ||
                 Program.Gui.FilteredOpcodes.Contains("0"))

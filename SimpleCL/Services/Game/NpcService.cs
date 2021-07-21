@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using SimpleCL.Enums.Commons;
 using SimpleCL.Models.Entities;
@@ -18,11 +19,7 @@ namespace SimpleCL.Services.Game
         [PacketHandler(Opcode.Agent.Response.ENTITY_SELECT_OBJECT)]
         public void NpcSelect(Server server, Packet packet)
         {
-            while (SelectedShop == null)
-            {
-            }
-            
-            SelectedShop.Open();
+            SelectedShop?.Open();
         }
         
         [PacketHandler(Opcode.Agent.Response.ENTITY_NPC_OPEN)]
@@ -32,11 +29,12 @@ namespace SimpleCL.Services.Game
             {
                 return;
             }
-            
-            while (SelectedShop == null)
-            {
-            }
 
+            if (SelectedShop == null)
+            {
+                return; 
+            }
+            
             Task.Run(() =>
             {
                 Program.Gui.InvokeLater(() =>

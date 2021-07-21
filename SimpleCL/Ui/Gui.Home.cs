@@ -35,9 +35,9 @@ namespace SimpleCL.Ui
             var proxyPass = proxyPasswordBox.TextLength == 0 ? null : proxyPasswordBox.Text;
 
             var gw = new Gateway(selectedServer.GatewayIps[new Random().Next(selectedServer.GatewayIps.Length)],
-                GatewayPort, proxyIp, proxyPort, proxyUser, proxyPass, clientCheckBox.Checked, selectedServer.Locale);
+                GatewayPort, proxyIp, proxyPort, proxyUser, proxyPass, clientCheckbox.Checked, selectedServer.Locale);
             gw.RegisterService(new LoginService(usernameBox.Text, passwordBox.Text, selectedServer, gw));
-            if (!clientCheckBox.Checked)
+            if (!clientCheckbox.Checked)
             {
                 gw.Start();
             }

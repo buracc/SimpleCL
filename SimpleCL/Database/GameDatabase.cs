@@ -49,6 +49,8 @@ namespace SimpleCL.Database
             _priceCache = LoadFromCache("prices");
             _teleportCache = LoadListFromCache("teleports");
             _shopCache = LoadListFromCache("shops");
+            
+            _selectedServer = SilkroadServer.Trsro;
         }
 
         #region Retrieve data

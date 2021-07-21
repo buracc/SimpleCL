@@ -21,8 +21,7 @@ namespace Pk2Extractor
             pk2Extractor.StoreItems();
             pk2Extractor.ExtractItemIcons();
             pk2Extractor.ExtractSkillIcons();
-            
-            // pk2Extractor.AddMinimap();
+            pk2Extractor.AddMinimap();
         }
     }
 }

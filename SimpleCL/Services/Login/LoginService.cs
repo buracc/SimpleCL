@@ -46,6 +46,7 @@ namespace SimpleCL.Services.Login
                     server.Inject(identity);
                     return;
                 }
+                
                 case Agent agent:
                 {
                     var login = new Packet(Opcode.Agent.Request.AUTH, true);
@@ -68,6 +69,19 @@ namespace SimpleCL.Services.Login
         [PacketHandler(Opcode.Gateway.Response.PATCH)]
         public void RequestServerlist(Server server, Packet packet)
         {
+            var status = packet.ReadByte();
+            if (status == 2)
+            {
+                server.Log("The game requires an update");
+                server.Disconnect();
+                return;
+            }
+            
+            if (server.IsProxying())
+            {
+                return;
+            }
+            
             server.Inject(new Packet(Opcode.Gateway.Request.SERVERLIST, true));
         }
 
@@ -270,6 +284,11 @@ namespace SimpleCL.Services.Login
         [PacketHandler(Opcode.Agent.Response.AUTH)]
         public void EnterCharacterSelect(Server server, Packet packet)
         {
+            if (server.IsProxying())
+            {
+                return;
+            }
+            
             var result = packet.ReadByte();
             switch (result)
             {

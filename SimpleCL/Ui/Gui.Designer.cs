@@ -59,6 +59,9 @@ namespace SimpleCL.Ui
             System.Windows.Forms.Label label4;
             System.Windows.Forms.Label label5;
             System.Windows.Forms.Label label6;
+            System.Windows.Forms.GroupBox groupBox2;
+            System.Windows.Forms.GroupBox groupBox3;
+            System.Windows.Forms.GroupBox groupBox4;
             this.buffsDataGridView = new System.Windows.Forms.DataGridView();
             this.worldCoordsLabelValue = new System.Windows.Forms.Label();
             this.jobExpProgressBar = new SimpleCL.Ui.Components.TextProgressBar();
@@ -72,7 +75,15 @@ namespace SimpleCL.Ui
             this.goldLabelValue = new System.Windows.Forms.Label();
             this.spLabelValue = new System.Windows.Forms.Label();
             this.levelLabelValue = new System.Windows.Forms.Label();
+            this.incomingCheckbox = new System.Windows.Forms.CheckBox();
+            this.outgoingCheckbox = new System.Windows.Forms.CheckBox();
+            this.debugClientCheckbox = new System.Windows.Forms.CheckBox();
+            this.debugServerCheckbox = new System.Windows.Forms.CheckBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.debugGwCheckbox = new System.Windows.Forms.CheckBox();
+            this.debugAgCheckbox = new System.Windows.Forms.CheckBox();
             this.credentialsGroup = new System.Windows.Forms.GroupBox();
+            this.clientCheckbox = new System.Windows.Forms.CheckBox();
             this.proxyPasswordBox = new System.Windows.Forms.TextBox();
             this.proxyUsernameBox = new System.Windows.Forms.TextBox();
             this.proxyPortTextBox = new System.Windows.Forms.TextBox();
@@ -117,12 +128,9 @@ namespace SimpleCL.Ui
             this.packetlogRtb = new System.Windows.Forms.RichTextBox();
             this.filterPacketTextBox = new System.Windows.Forms.TextBox();
             this.filteredPacketsListBox = new System.Windows.Forms.ListBox();
-            this.debugAgCheckbox = new System.Windows.Forms.CheckBox();
-            this.debugGwCheckbox = new System.Windows.Forms.CheckBox();
             this.loggerBox = new System.Windows.Forms.ListBox();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripProgressBar2 = new System.Windows.Forms.ToolStripProgressBar();
-            this.clientCheckBox = new System.Windows.Forms.CheckBox();
             serverLabel = new System.Windows.Forms.Label();
             usernameLabel = new System.Windows.Forms.Label();
             passwordLabel = new System.Windows.Forms.Label();
@@ -148,9 +156,16 @@ namespace SimpleCL.Ui
             label4 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
             label6 = new System.Windows.Forms.Label();
+            groupBox2 = new System.Windows.Forms.GroupBox();
+            groupBox3 = new System.Windows.Forms.GroupBox();
+            groupBox4 = new System.Windows.Forms.GroupBox();
             buffsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.buffsDataGridView)).BeginInit();
             statisticsBox.SuspendLayout();
+            groupBox2.SuspendLayout();
+            groupBox3.SuspendLayout();
+            groupBox4.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.credentialsGroup.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.homeTab.SuspendLayout();
@@ -503,7 +518,7 @@ namespace SimpleCL.Ui
             // 
             // label4
             // 
-            label4.Location = new System.Drawing.Point(14, 154);
+            label4.Location = new System.Drawing.Point(14, 245);
             label4.Name = "label4";
             label4.Size = new System.Drawing.Size(142, 15);
             label4.TabIndex = 5;
@@ -525,9 +540,108 @@ namespace SimpleCL.Ui
             label6.TabIndex = 15;
             label6.Text = "Login";
             // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(this.incomingCheckbox);
+            groupBox2.Controls.Add(this.outgoingCheckbox);
+            groupBox2.Location = new System.Drawing.Point(6, 165);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new System.Drawing.Size(162, 68);
+            groupBox2.TabIndex = 11;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "Direction";
+            // 
+            // incomingCheckbox
+            // 
+            this.incomingCheckbox.Location = new System.Drawing.Point(6, 19);
+            this.incomingCheckbox.Name = "incomingCheckbox";
+            this.incomingCheckbox.Size = new System.Drawing.Size(104, 18);
+            this.incomingCheckbox.TabIndex = 9;
+            this.incomingCheckbox.Text = "Incoming";
+            this.incomingCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // outgoingCheckbox
+            // 
+            this.outgoingCheckbox.Location = new System.Drawing.Point(6, 43);
+            this.outgoingCheckbox.Name = "outgoingCheckbox";
+            this.outgoingCheckbox.Size = new System.Drawing.Size(104, 18);
+            this.outgoingCheckbox.TabIndex = 10;
+            this.outgoingCheckbox.Text = "Outgoing";
+            this.outgoingCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            groupBox3.Controls.Add(this.debugClientCheckbox);
+            groupBox3.Controls.Add(this.debugServerCheckbox);
+            groupBox3.Location = new System.Drawing.Point(6, 91);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new System.Drawing.Size(162, 68);
+            groupBox3.TabIndex = 12;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "Target";
+            // 
+            // debugClientCheckbox
+            // 
+            this.debugClientCheckbox.Location = new System.Drawing.Point(6, 19);
+            this.debugClientCheckbox.Name = "debugClientCheckbox";
+            this.debugClientCheckbox.Size = new System.Drawing.Size(104, 18);
+            this.debugClientCheckbox.TabIndex = 7;
+            this.debugClientCheckbox.Text = "Client";
+            this.debugClientCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // debugServerCheckbox
+            // 
+            this.debugServerCheckbox.Location = new System.Drawing.Point(6, 43);
+            this.debugServerCheckbox.Name = "debugServerCheckbox";
+            this.debugServerCheckbox.Size = new System.Drawing.Size(104, 18);
+            this.debugServerCheckbox.TabIndex = 8;
+            this.debugServerCheckbox.Text = "Server";
+            this.debugServerCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(this.debugGwCheckbox);
+            groupBox4.Controls.Add(this.debugAgCheckbox);
+            groupBox4.Location = new System.Drawing.Point(6, 17);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new System.Drawing.Size(162, 68);
+            groupBox4.TabIndex = 13;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "Context";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(groupBox4);
+            this.groupBox1.Controls.Add(groupBox3);
+            this.groupBox1.Controls.Add(groupBox2);
+            this.groupBox1.Location = new System.Drawing.Point(14, 3);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(174, 239);
+            this.groupBox1.TabIndex = 11;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Debugging";
+            // 
+            // debugGwCheckbox
+            // 
+            this.debugGwCheckbox.Location = new System.Drawing.Point(6, 19);
+            this.debugGwCheckbox.Name = "debugGwCheckbox";
+            this.debugGwCheckbox.Size = new System.Drawing.Size(104, 18);
+            this.debugGwCheckbox.TabIndex = 0;
+            this.debugGwCheckbox.Text = "Gateway";
+            this.debugGwCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // debugAgCheckbox
+            // 
+            this.debugAgCheckbox.Location = new System.Drawing.Point(6, 43);
+            this.debugAgCheckbox.Name = "debugAgCheckbox";
+            this.debugAgCheckbox.Size = new System.Drawing.Size(104, 18);
+            this.debugAgCheckbox.TabIndex = 1;
+            this.debugAgCheckbox.Text = "Agent";
+            this.debugAgCheckbox.UseVisualStyleBackColor = true;
+            // 
             // credentialsGroup
             // 
-            this.credentialsGroup.Controls.Add(this.clientCheckBox);
+            this.credentialsGroup.Controls.Add(this.clientCheckbox);
             this.credentialsGroup.Controls.Add(this.proxyPasswordBox);
             this.credentialsGroup.Controls.Add(label6);
             this.credentialsGroup.Controls.Add(this.proxyUsernameBox);
@@ -547,6 +661,15 @@ namespace SimpleCL.Ui
             this.credentialsGroup.TabIndex = 6;
             this.credentialsGroup.TabStop = false;
             this.credentialsGroup.Text = "Credentials";
+            // 
+            // clientCheckbox
+            // 
+            this.clientCheckbox.Location = new System.Drawing.Point(197, 22);
+            this.clientCheckbox.Name = "clientCheckbox";
+            this.clientCheckbox.Size = new System.Drawing.Size(57, 24);
+            this.clientCheckbox.TabIndex = 17;
+            this.clientCheckbox.Text = "Client";
+            this.clientCheckbox.UseVisualStyleBackColor = true;
             // 
             // proxyPasswordBox
             // 
@@ -963,12 +1086,11 @@ namespace SimpleCL.Ui
             // 
             // devTab
             // 
+            this.devTab.Controls.Add(this.groupBox1);
             this.devTab.Controls.Add(this.packetLoggerGroupBox);
             this.devTab.Controls.Add(label4);
             this.devTab.Controls.Add(this.filterPacketTextBox);
             this.devTab.Controls.Add(this.filteredPacketsListBox);
-            this.devTab.Controls.Add(this.debugAgCheckbox);
-            this.devTab.Controls.Add(this.debugGwCheckbox);
             this.devTab.Location = new System.Drawing.Point(4, 22);
             this.devTab.Name = "devTab";
             this.devTab.Size = new System.Drawing.Size(768, 381);
@@ -996,36 +1118,18 @@ namespace SimpleCL.Ui
             // 
             // filterPacketTextBox
             // 
-            this.filterPacketTextBox.Location = new System.Drawing.Point(14, 172);
+            this.filterPacketTextBox.Location = new System.Drawing.Point(14, 263);
             this.filterPacketTextBox.Name = "filterPacketTextBox";
-            this.filterPacketTextBox.Size = new System.Drawing.Size(142, 20);
+            this.filterPacketTextBox.Size = new System.Drawing.Size(174, 20);
             this.filterPacketTextBox.TabIndex = 4;
             // 
             // filteredPacketsListBox
             // 
             this.filteredPacketsListBox.FormattingEnabled = true;
-            this.filteredPacketsListBox.Location = new System.Drawing.Point(14, 198);
+            this.filteredPacketsListBox.Location = new System.Drawing.Point(14, 289);
             this.filteredPacketsListBox.Name = "filteredPacketsListBox";
-            this.filteredPacketsListBox.Size = new System.Drawing.Size(142, 173);
+            this.filteredPacketsListBox.Size = new System.Drawing.Size(174, 82);
             this.filteredPacketsListBox.TabIndex = 3;
-            // 
-            // debugAgCheckbox
-            // 
-            this.debugAgCheckbox.Location = new System.Drawing.Point(14, 43);
-            this.debugAgCheckbox.Name = "debugAgCheckbox";
-            this.debugAgCheckbox.Size = new System.Drawing.Size(104, 24);
-            this.debugAgCheckbox.TabIndex = 1;
-            this.debugAgCheckbox.Text = "Debug agent";
-            this.debugAgCheckbox.UseVisualStyleBackColor = true;
-            // 
-            // debugGwCheckbox
-            // 
-            this.debugGwCheckbox.Location = new System.Drawing.Point(14, 13);
-            this.debugGwCheckbox.Name = "debugGwCheckbox";
-            this.debugGwCheckbox.Size = new System.Drawing.Size(104, 24);
-            this.debugGwCheckbox.TabIndex = 0;
-            this.debugGwCheckbox.Text = "Debug gateway";
-            this.debugGwCheckbox.UseVisualStyleBackColor = true;
             // 
             // loggerBox
             // 
@@ -1046,15 +1150,6 @@ namespace SimpleCL.Ui
             this.toolStripProgressBar2.Name = "toolStripProgressBar2";
             this.toolStripProgressBar2.Size = new System.Drawing.Size(100, 15);
             // 
-            // clientCheckBox
-            // 
-            this.clientCheckBox.Location = new System.Drawing.Point(197, 22);
-            this.clientCheckBox.Name = "clientCheckBox";
-            this.clientCheckBox.Size = new System.Drawing.Size(57, 24);
-            this.clientCheckBox.TabIndex = 17;
-            this.clientCheckBox.Text = "Client";
-            this.clientCheckBox.UseVisualStyleBackColor = true;
-            // 
             // Gui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1070,6 +1165,10 @@ namespace SimpleCL.Ui
             buffsGroupBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize) (this.buffsDataGridView)).EndInit();
             statisticsBox.ResumeLayout(false);
+            groupBox2.ResumeLayout(false);
+            groupBox3.ResumeLayout(false);
+            groupBox4.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
             this.credentialsGroup.ResumeLayout(false);
             this.credentialsGroup.PerformLayout();
             this.tabControl.ResumeLayout(false);
@@ -1093,7 +1192,15 @@ namespace SimpleCL.Ui
             this.ResumeLayout(false);
         }
 
-        private System.Windows.Forms.CheckBox clientCheckBox;
+        private System.Windows.Forms.GroupBox groupBox1;
+
+        private System.Windows.Forms.CheckBox incomingCheckbox;
+        private System.Windows.Forms.CheckBox outgoingCheckbox;
+
+        private System.Windows.Forms.CheckBox debugClientCheckbox;
+        private System.Windows.Forms.CheckBox debugServerCheckbox;
+
+        private System.Windows.Forms.CheckBox clientCheckbox;
 
         private System.Windows.Forms.TextBox proxyPasswordBox;
         private System.Windows.Forms.TextBox proxyUsernameBox;
