@@ -75,7 +75,7 @@ namespace SimpleCL.Models.Entities
             None = 0,
             OnExchange = 2,
             OnStall = 3,
-            OnShop = 6
+            OnShop = 5
         }
     }
 }

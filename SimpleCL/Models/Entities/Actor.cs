@@ -57,7 +57,7 @@ namespace SimpleCL.Models.Entities
         {
             StopMovementTimer();
 
-            _movementTimer = new Timer(50);
+            _movementTimer = new Timer(350);
             
             var oldPos = WorldPoint;
             var newPos = WorldPoint.FromLocal(destination);

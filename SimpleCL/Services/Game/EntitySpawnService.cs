@@ -369,8 +369,6 @@ namespace SimpleCL.Services.Game
                             p.Name = packet.ReadAscii();
                             var inCombat = packet.ReadByte();
 
-                            // no clue how this works but theres 3 extra bytes without any boolean flag
-                            // if player is in job mode
                             if (p.IsWearingJobSuit())
                             {
                                 packet.ReadByte();
@@ -396,12 +394,7 @@ namespace SimpleCL.Services.Game
 
                             var guildName = packet.ReadAscii();
 
-                            if (p.IsWearingJobSuit())
-                            {
-                                byte unknownBytes = 12;
-                                unknownBytes.Repeat(i => { packet.ReadByte(); });
-                            }
-                            else
+                            if (!p.IsWearingJobSuit())
                             {
                                 var guildId = packet.ReadUInt();
                                 var grantName = packet.ReadAscii();
@@ -410,35 +403,38 @@ namespace SimpleCL.Services.Game
                                 var unionLastCrestRev = packet.ReadUInt();
                                 var friendly = packet.ReadBool();
                                 var siegeAuthority = packet.ReadByte();
-
-                                switch (p.InteractionType)
+                            }
+                            
+                            switch (p.InteractionType)
+                            {
+                                case Player.Interaction.OnStall:
                                 {
-                                    case Player.Interaction.OnStall:
+                                    var stallName = packet.ReadUnicode();
+                                    p.Stall = new Stall
                                     {
-                                        var stallName = packet.ReadUnicode();
-                                        p.Stall = new Stall
-                                        {
-                                            Title = stallName,
-                                            PlayerUid = p.Uid
-                                        };
-                                        var decorationItemId = packet.ReadUInt();
-                                        break;
-                                    }
-                                    case Player.Interaction.OnExchange:
-                                        break;
+                                        Title = stallName,
+                                        PlayerUid = p.Uid
+                                    };
+                                    var decorationItemId = packet.ReadUInt();
+                                    break;
                                 }
-
-                                byte unknownBytes = 12;
-                                unknownBytes.Repeat(i =>
-                                {
-                                    packet.ReadByte();
-                                });
+                                case Player.Interaction.OnExchange:
+                                    break;
                             }
 
+                            packet.ReadUShort();
+                            var zerkSkinItemId = packet.ReadUInt();
+                            if (zerkSkinItemId > 0)
+                            {
+                                var timeLeft = packet.ReadUInt();
+                            }
+
+                            packet.ReadUInt();
+                            packet.ReadUShort();
                             break;
                         }
 
-                        case Npc and Monster monster:
+                        case Monster monster:
                         {
                             packet.ReadByte();
                             packet.ReadByte();
@@ -480,7 +476,7 @@ namespace SimpleCL.Services.Game
                                             packet.ReadByte();
                                             break;
                                         }
-                                        
+
                                         var jobType = packet.ReadByte();
                                         if (cos is not PickPet)
                                         {
