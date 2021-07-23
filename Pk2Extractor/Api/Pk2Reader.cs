@@ -161,14 +161,14 @@ namespace Pk2Extractor.Api
         public Pk2File GetFile(string filePath)
         {
             if (filePath == "")
+            {
                 return null;
+            }
 
-            // Normalize to the same dictionary key path format
             filePath = filePath.ToUpper();
             filePath = filePath.Replace("/", "\\");
 
-            Pk2File file = null;
-            _files.TryGetValue(filePath, out file);
+            _files.TryGetValue(filePath, out var file);
             return file;
         }
 

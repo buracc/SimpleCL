@@ -32,23 +32,23 @@ namespace SimpleCL.Models.Skills
 
         public bool IsRecoveryDivision()
         {
-            return Attributes.Contains(SkillData.Attribute.Timed) 
-                   && Attributes.Contains(SkillData.Attribute.OverTime)
-                   && Attributes.Contains(SkillData.Attribute.AreaEffect)
-                   && Attributes.Contains(SkillData.Attribute.HpMpRecovery)
-                   && Attributes.Contains(SkillData.Attribute.HealWeaponReflect);
+            return Attributes.Contains(SkillData.SkillParam.Timed) 
+                   && Attributes.Contains(SkillData.SkillParam.OverTime)
+                   && Attributes.Contains(SkillData.SkillParam.AreaEffect)
+                   && Attributes.Contains(SkillData.SkillParam.HpMpRecovery)
+                   && Attributes.Contains(SkillData.SkillParam.HealWeaponReflect);
         }
 
         public bool IsBardAreaBuff()
         {
-            return Attributes.Contains(SkillData.Attribute.ActiveMpConsumed) 
-                   && Attributes.Contains(SkillData.Attribute.AreaEffect)
-                   && Attributes.Contains(SkillData.Attribute.RequiredItem);
+            return Attributes.Contains(SkillData.SkillParam.ActiveMpConsumed) 
+                   && Attributes.Contains(SkillData.SkillParam.AreaEffect)
+                   && Attributes.Contains(SkillData.SkillParam.RequiredItem);
         }
 
         public bool IsTimed()
         {
-            return Attributes.Contains(SkillData.Attribute.Timed);
+            return Attributes.Contains(SkillData.SkillParam.Timed);
         }
 
         public void Dispose()

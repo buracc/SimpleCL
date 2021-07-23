@@ -31,7 +31,7 @@ namespace SimpleCL.Models.Skills
         public readonly ushort Level;
         public readonly string IconPath;
         public readonly string Description;
-        public readonly List<SkillData.Attribute> Attributes;
+        public readonly List<SkillData.SkillParam> Attributes;
         public readonly ushort RequiredGroupId1;
         public readonly ushort RequiredGroupId2;
         public readonly ushort RequiredGroupId3;
@@ -68,7 +68,7 @@ namespace SimpleCL.Models.Skills
             IconPath = data[Constants.Strings.Icon];
             Description = data[Constants.Strings.Description];
             Attributes = Array.ConvertAll(data[Constants.Strings.Attributes].Split(','), uint.Parse)
-                .Select(x => (SkillData.Attribute) x).ToList();
+                .Select(x => (SkillData.SkillParam) x).ToList();
             RequiredGroupId1 = ushort.Parse(data[Constants.Strings.RequiredLearn1]);
             RequiredGroupId2 = ushort.Parse(data[Constants.Strings.RequiredLearn2]);
             RequiredGroupId3 = ushort.Parse(data[Constants.Strings.RequiredLearn3]);
@@ -113,12 +113,12 @@ namespace SimpleCL.Models.Skills
         
         public bool IsResSkill()
         {
-            return Attributes.Contains(SkillData.Attribute.Resurrection);
+            return Attributes.Contains(SkillData.SkillParam.Resurrection);
         }
         
         public bool IsAttackSkill()
         {
-            return Attributes.Contains(SkillData.Attribute.Attack);
+            return Attributes.Contains(SkillData.SkillParam.Attack);
         }
 
         public override string ToString()

@@ -64,6 +64,8 @@ namespace SimpleCL.Database
 
             var dbFile = DirectoryUtils.GetDbFile(SelectedServer.Name + dbNameExtra);
 
+            Console.WriteLine(dbFile);
+
             if (dbFile == "")
             {
                 throw new SystemException("DB file not found");
