@@ -133,14 +133,11 @@ namespace SimpleCL.Models.Entities
 
             if (DatabaseData != null)
             {
-                var tid2 = TypeId1 == 3 ? Constants.Strings.Tid1 : Constants.Strings.Tid2;
-                var tid3 = TypeId1 == 3 ? Constants.Strings.Tid2 : Constants.Strings.Tid3;
-                var tid4 = TypeId1 == 3 ? Constants.Strings.Tid3 : Constants.Strings.Tid4;
                 ServerName = DatabaseData[Constants.Strings.ServerName];
                 Name = DatabaseData[Constants.Strings.Name];
-                TypeId2 = byte.Parse(DatabaseData[tid2]);
-                TypeId3 = byte.Parse(DatabaseData[tid3]);
-                TypeId4 = byte.Parse(DatabaseData[tid4]);
+                TypeId2 = byte.Parse(DatabaseData[Constants.Strings.Tid2]);
+                TypeId3 = byte.Parse(DatabaseData[Constants.Strings.Tid3]);
+                TypeId4 = byte.Parse(DatabaseData[Constants.Strings.Tid4]);
             }
             else
             {

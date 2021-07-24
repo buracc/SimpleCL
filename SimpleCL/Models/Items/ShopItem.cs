@@ -13,22 +13,13 @@ namespace SimpleCL.Models.Items
 {
     public class ShopItem : InventoryItem
     {
-        public uint Price { get; }
         public readonly byte Tab;
         [Browsable(false)]
         public uint ShopUid { get; set; }
 
         public ShopItem(uint id, NameValueCollection shopData, uint rentTypeId) : base(id, rentTypeId)
         {
-            var nvc = GameDatabase.Get.GetItemPrice(id);
-            if (nvc == null)
-            {
-                Console.WriteLine("Shopitem " + id + " not found");
-                return;
-            }
-
             Quantity = 1;
-            Price = uint.Parse(nvc[Constants.Strings.Price]);
             Tab = byte.Parse(shopData[Constants.Strings.Tab]);
             Slot = byte.Parse(shopData[Constants.Strings.Slot]);
         }

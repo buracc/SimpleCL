@@ -8,26 +8,20 @@ namespace Pk2Extractor.Api
 {
     public class Pk2Reader : IDisposable
     {
-        private readonly Blowfish _blowfish = new Blowfish();
+        private readonly Blowfish _blowfish = new();
         public long Size { get; private set; }
         public byte[] Key { get; private set; }
         public string AsciiKey { get; private set; }
         public string FullPath { get; }
         public SPk2Header Header { get; private set; }
         
-        private Dictionary<string, Pk2File> _files = new Dictionary<string, Pk2File>();
+        private Dictionary<string, Pk2File> _files = new();
 
-        public List<Pk2File> Files
-        {
-            get { return new List<Pk2File>(_files.Values); }
-        }
+        public List<Pk2File> Files => new(_files.Values);
 
-        private Dictionary<string, Pk2Folder> _folders = new Dictionary<string, Pk2Folder>();
+        private Dictionary<string, Pk2Folder> _folders = new();
 
-        public List<Pk2Folder> Folders
-        {
-            get { return new List<Pk2Folder>(_folders.Values); }
-        }
+        public List<Pk2Folder> Folders => new(_folders.Values);
 
         private Pk2Folder _currentFolder;
         private Pk2Folder _mainFolder;

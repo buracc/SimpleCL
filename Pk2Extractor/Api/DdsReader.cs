@@ -4,40 +4,59 @@ using System.IO;
 
 namespace Pk2Extractor.Api
 {
-	public static class DdsReader
-	{
-		public static Bitmap FromFile(string fileName)
-		{
-			return DevIL.DevIL.LoadBitmap(fileName);
+    public static class DdsReader
+    {
+        // public static Bitmap FromFile(string fileName)
+        // {
+        //     return DevIL.DevIL.LoadBitmap(fileName);
+        // }
+
+        // public static Bitmap FromDdj(string fileName)
+        // {
+        //     byte[] ddjStream = File.ReadAllBytes(fileName);
+        //     string tempFile = Path.GetTempFileName();
+        //     byte[] ddsStream = ToDds(ddjStream);
+        //     File.WriteAllBytes(tempFile, ddsStream);
+        //     Bitmap bmp = DevIL.DevIL.LoadBitmap(tempFile);
+        //     File.Delete(tempFile);
+        //     return bmp;
+        // }
+
+        // public static Bitmap FromDdj(byte[] ddjBuffer)
+        // {
+        //     string tempFile = Path.GetTempFileName();
+        //     byte[] ddsBuffer = ToDds(ddjBuffer);
+        //     File.WriteAllBytes(tempFile, ddsBuffer);
+        //     Bitmap bmp = DevIL.DevIL.LoadBitmap(tempFile);
+        //     File.Delete(tempFile);
+        //     return bmp;
+        // }
+
+        private static byte[] ToDds(byte[] ddjBuffer)
+        {
+            if (ddjBuffer.Length <= 0)
+            {
+                return ddjBuffer;
+            }
+
+            byte[] ddsBuffer = new byte[ddjBuffer.Length - 20];
+            Array.Copy(ddjBuffer, 20, ddsBuffer, 0, ddsBuffer.Length);
+            return ddsBuffer;
+        }
+
+        public static Bitmap FromDdj(byte[] ddjBytes)
+        {
+            if (ddjBytes.Length < 20)
+            {
+                return null;
+            }
+
+            string ddsPath = Path.GetTempFileName();
+            var ddsBytes = ToDds(ddjBytes);
+            File.WriteAllBytes(ddsPath, ddsBytes);
+            Bitmap bm = GDImageLibrary._DDS.LoadImage(ddsPath);
+            File.Delete(ddsPath);
+            return new Bitmap(bm);
+        }
     }
-		public static Bitmap FromDdj(string fileName)
-		{
-			byte[] ddjStream = File.ReadAllBytes(fileName);
-			string tempFile = Path.GetTempFileName();
-			byte[] ddsStream = ToDds(ddjStream);
-			File.WriteAllBytes(tempFile, ddsStream);
-			Bitmap bmp = DevIL.DevIL.LoadBitmap(tempFile);
-			File.Delete(tempFile);
-			return bmp;
-		}
-		public static Bitmap FromDdj(byte[] ddjBuffer)
-		{
-			string tempFile = Path.GetTempFileName();
-			byte[] ddsBuffer = ToDds(ddjBuffer);
-			File.WriteAllBytes(tempFile, ddsBuffer);
-			Bitmap bmp = DevIL.DevIL.LoadBitmap(tempFile);
-			File.Delete(tempFile);
-			return bmp;
-		}
-		private static byte[] ToDds(byte[] ddjBuffer)
-		{
-			if (ddjBuffer.Length <= 0)
-			{
-				return ddjBuffer;
-			}
-			byte[] ddsBuffer = new byte[ddjBuffer.Length - 20];
-			Array.Copy(ddjBuffer, 20, ddsBuffer, 0, ddsBuffer.Length);
-			return ddsBuffer;
-		}
-	}
 }

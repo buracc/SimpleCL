@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.Specialized;
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using Pk2Extractor.Database;
 
@@ -16,29 +16,44 @@ namespace Pk2Extractor.Api
         private readonly string _dbPath;
         private readonly Pk2Reader _pk2Reader;
 
-        private readonly Dictionary<string, string> _nameReferences = new Dictionary<string, string>();
-        private readonly Dictionary<string, string> _textReferences = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _nameReferences = new();
+        private readonly Dictionary<string, string> _textReferences = new();
 
-        private readonly Dictionary<string, string[]> _teleportData = new Dictionary<string, string[]>();
-        private readonly Dictionary<string, string[]> _teleportBuildings = new Dictionary<string, string[]>();
+        private readonly Dictionary<string, string[]> _teleportData = new();
+        private readonly Dictionary<string, string[]> _teleportBuildings = new();
 
         private const string EnabledLine = "1\t";
         private static readonly char[] DataSeparator = {'\t'};
 
+        private readonly Blowfish _blowfish = new();
         private readonly int _languageIndex;
 
-        public Pk2Extractor(string pk2Path, string dbPath)
+        public Pk2Extractor(string pk2Path, string dbPath, bool forceUpdate = false)
         {
             _dbPath = dbPath;
             _pk2Reader = new Pk2Reader(pk2Path);
             _languageIndex = ExtractLanguageIdx();
 
+            if (!Outdated() && !forceUpdate)
+            {
+                throw new SystemException("Files are already up to date");
+            }
+            
+            StoreGameVersion();
             LoadNameReferences();
             LoadTeleportData();
             LoadTextReferences();
         }
 
-        #region Language
+        #region Data
+
+        private bool Outdated()
+        {
+            var current = GetGameVersion();
+            var actual = ExtractGameVersion();
+            Console.WriteLine($"Our version: {current}. Actual version: {actual}");
+            return current < actual;
+        }
 
         private int ExtractLanguageIdx()
         {
@@ -66,6 +81,53 @@ namespace Pk2Extractor.Api
             }
 
             return 8;
+        }
+
+        private int ExtractGameVersion()
+        {
+            var bytes = _pk2Reader.GetFileBytes("SV.T");
+            using var data = new BinaryReader(new MemoryStream(bytes));
+            var length = data.ReadUInt32();
+            var version = data.ReadBytes((int) length);
+
+            _blowfish.Initialize(new byte[] {0x53, 0x49, 0x4C, 0x4B, 0x52, 0x4F, 0x41, 0x44});
+            var decoded = _blowfish.Decode(version);
+            var versionString = Encoding.ASCII.GetString(decoded);
+            return int.Parse(versionString);
+        }
+
+        private int GetGameVersion()
+        {
+            var query = new QueryBuilder(_dbPath);
+            try
+            {
+                return int.Parse(query.Query("SELECT * FROM data WHERE k = 'version'").ExecuteSelect()[0]["v"]);
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+        private void StoreGameVersion()
+        {
+            try
+            {
+                var query = new QueryBuilder(_dbPath, true);
+                query.Query("DROP TABLE IF EXISTS data")
+                    .ExecuteUpdate(false);
+                query.Query("CREATE TABLE data (id INTEGER NOT NULL,k VARCHAR(512),v VARCHAR(1024),PRIMARY KEY(id))")
+                    .ExecuteUpdate(false);
+                query.Query("INSERT INTO data (id,k,v) VALUES (0, 'version', ?)")
+                    .Bind("version", ExtractGameVersion())
+                    .ExecuteUpdate(false);
+                query.Finish();
+            }
+            catch
+            {
+                Console.WriteLine("Failed to get extract client version");
+                throw;
+            }
         }
 
         #endregion
@@ -816,6 +878,7 @@ namespace Pk2Extractor.Api
                 // Convert DDJ to DDS to Bitmap
                 var img = DdsReader.FromDdj(_pk2Reader.GetFileBytes(f));
                 img?.Save(saveFilePath, format);
+                img?.Dispose();
             }
 
             foreach (var f in folder.SubFolders)
@@ -1130,6 +1193,8 @@ namespace Pk2Extractor.Api
                             .ExecuteUpdate(false);
                     }
                 }
+
+                File.Delete(tempFile);
             }
 
             query.Finish();

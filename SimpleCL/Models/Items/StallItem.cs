@@ -9,8 +9,6 @@ namespace SimpleCL.Models.Items
 {
     public class StallItem : InventoryItem
     {
-        public ulong Price { get; set; }
-        
         public StallItem(uint id, uint rentTypeId) : base(id, rentTypeId)
         {
         }

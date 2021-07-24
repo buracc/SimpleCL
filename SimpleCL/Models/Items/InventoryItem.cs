@@ -27,6 +27,7 @@ namespace SimpleCL.Models.Items
         [Browsable(false)] public uint Id { get; }
         [Browsable(false)] public string ServerName { get; }
         public string Name { get; }
+        public ulong Price { get; set; }
 
         private ushort _quantity;
 
@@ -36,6 +37,7 @@ namespace SimpleCL.Models.Items
         public readonly byte TypeId4;
         public readonly bool CashItem;
         public readonly ushort Stack;
+        
 
         public ushort Quantity
         {
@@ -64,13 +66,14 @@ namespace SimpleCL.Models.Items
             ServerName = data[Constants.Strings.ServerName];
             Name = data[Constants.Strings.Name];
             TypeId1 = 3;
-            Category = (ItemCategory) byte.Parse(data[Constants.Strings.Tid1]);
-            TypeId3 = byte.Parse(data[Constants.Strings.Tid2]);
-            TypeId4 = byte.Parse(data[Constants.Strings.Tid3]);
+            Category = (ItemCategory) byte.Parse(data[Constants.Strings.Tid2]);
+            TypeId3 = byte.Parse(data[Constants.Strings.Tid3]);
+            TypeId4 = byte.Parse(data[Constants.Strings.Tid4]);
             CashItem = byte.Parse(data[Constants.Strings.CashItem]) == 1;
             Stack = ushort.Parse(data[Constants.Strings.Stack]);
             Icon = Image.FromFile(Directory.GetCurrentDirectory() + Constants.Paths.Icons +
                                   data[Constants.Strings.Icon].Replace(Constants.Strings.Ddj, Constants.Strings.Png));
+            Price = ulong.Parse(data["price"]);
         }
 
         public static InventoryItem FromId(uint id, uint rentTypeId = 0)
