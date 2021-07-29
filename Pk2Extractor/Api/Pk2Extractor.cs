@@ -38,7 +38,7 @@ namespace Pk2Extractor.Api
             {
                 throw new SystemException("Files are already up to date");
             }
-            
+
             StoreGameVersion();
             LoadNameReferences();
             LoadTeleportData();
@@ -127,6 +127,72 @@ namespace Pk2Extractor.Api
             {
                 Console.WriteLine("Failed to get extract client version");
                 throw;
+            }
+        }
+
+        #endregion
+
+        #region Levels
+
+        public void StoreLevelData()
+        {
+            new QueryBuilder(_dbPath)
+                .Query("DROP TABLE IF EXISTS leveldata")
+                .ExecuteUpdate();
+
+            var sql =
+                "CREATE TABLE leveldata (level INTEGER NOT NULL, player INTEGER,sp INTEGER, job INTEGER,fellow INTEGER, PRIMARY KEY(level))";
+
+            new QueryBuilder(_dbPath)
+                .Query(sql)
+                .ExecuteUpdate();
+
+            var query = new QueryBuilder(_dbPath, true);
+
+            using (var reader =
+                new StreamReader(_pk2Reader.GetFileStream("server_dep/silkroad/textdata/leveldata.txt")))
+            {
+                string line;
+                string[] data;
+
+                while (!reader.EndOfStream)
+                {
+                    if ((line = reader.ReadLine()) == null)
+                    {
+                        continue;
+                    }
+
+                    data = line.Split(DataSeparator, StringSplitOptions.None);
+
+                    query.Query("INSERT INTO leveldata (level, player, sp, fellow) VALUES (?, ?, ?, ?)")
+                        .Bind("level", data[0])
+                        .Bind("player", data[1])
+                        .Bind("sp", data[2])
+                        .Bind("fellow", data[9])
+                        .ExecuteUpdate(false);
+                }
+            }
+
+            using (var reader =
+                new StreamReader(_pk2Reader.GetFileStream("server_dep/silkroad/textdata/tradeconflict_joblevel.txt")))
+            {
+                string line;
+                string[] data;
+
+                while (!reader.EndOfStream)
+                {
+                    if ((line = reader.ReadLine()) == null)
+                    {
+                        continue;
+                    }
+
+                    data = line.Split(DataSeparator, StringSplitOptions.None);
+
+                    query.Query("UPDATE leveldata SET job = " + data[1] + " WHERE level = " + data[0])
+                        .ExecuteUpdate(false);
+                }
+
+                query.Finish();
             }
         }
 
@@ -1294,6 +1360,11 @@ namespace Pk2Extractor.Api
         }
 
         #endregion
+
+        public void StoreShops()
+        {
+            
+        }
 
         private string GetNameReference(string serverName)
         {

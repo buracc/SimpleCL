@@ -44,7 +44,7 @@ namespace SimpleCL.Network
             Proxy.Start();
             
             SilkroadClient = new SilkroadClient(@"C:\Program Files (x86)\SilkroadTR", locale);
-            new Injector(SilkroadClient.Launch(), @"C:\Users\burak\Desktop\fuck_burak\Release\fuck_burak.dll").Inject();
+            new Injector(SilkroadClient.Launch(), "simplecl.dll").Inject();
         }
     }
 }
