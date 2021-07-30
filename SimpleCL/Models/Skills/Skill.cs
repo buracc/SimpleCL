@@ -24,8 +24,8 @@ namespace SimpleCL.Models.Skills
         public readonly uint Cooldown;
         public readonly int Duration;
         public readonly ushort MasteryId;
-        public readonly sbyte SkillGroup;
-        public readonly sbyte SkillGroupIndex;
+        public readonly short SkillGroup;
+        public readonly short SkillGroupIndex;
         public readonly uint SpRequired;
         public readonly uint MpRequired;
         public readonly ushort Level;
@@ -60,8 +60,8 @@ namespace SimpleCL.Models.Skills
             Cooldown = uint.Parse(data[Constants.Strings.Cooldown]);
             Duration = int.Parse(data[Constants.Strings.Duration]);
             MasteryId = ushort.Parse(data[Constants.Strings.Mastery]);
-            SkillGroup = sbyte.Parse(data[Constants.Strings.SkillGroup]);
-            SkillGroupIndex = sbyte.Parse(data[Constants.Strings.SkillGroupIndex]);
+            SkillGroup = short.Parse(data[Constants.Strings.SkillGroup]);
+            SkillGroupIndex = short.Parse(data[Constants.Strings.SkillGroupIndex]);
             SpRequired = uint.Parse(data[Constants.Strings.Sp]);
             MpRequired = uint.Parse(data[Constants.Strings.Mp]);
             Level = ushort.Parse(data[Constants.Strings.Level]);

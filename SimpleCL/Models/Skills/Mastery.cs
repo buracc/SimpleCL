@@ -30,7 +30,7 @@ namespace SimpleCL.Models.Skills
             Name = data[Constants.Strings.Name];
             Description = data[Constants.Strings.Name];
             Type = (MasteryType) Enum.Parse(typeof(MasteryType), data["type"]);
-            RequiredWeapons = Array.ConvertAll(data["weapon"].Split(','),
+            RequiredWeapons = Array.ConvertAll(data["weapons"].Split(','),
                 x => (EquipmentType.Weapon) byte.Parse(x));
             IconPath = data["icon"];
         }

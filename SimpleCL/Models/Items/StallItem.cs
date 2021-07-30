@@ -15,7 +15,7 @@ namespace SimpleCL.Models.Items
 
         public void Purchase()
         {
-            Program.Gui.Log("Purchasing: " + Name + " for " + Price);
+            Program.Gui.Log("Purchasing: " + Name);
             var buyPacket = new Packet(Opcode.Agent.Request.STALL_BUY);
             buyPacket.WriteByte(Slot);
             buyPacket.Send();
@@ -23,7 +23,7 @@ namespace SimpleCL.Models.Items
         
         public override string ToString()
         {
-            return Quantity + "x " + Name + " [" + Price.ToString("N") + "]";
+            return Quantity + "x " + Name + " [" + GoldValue.ToString("N") + "]";
         }
         
         // todo: this is a temp solution until i find a better way to do this

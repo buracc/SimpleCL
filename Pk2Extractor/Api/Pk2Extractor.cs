@@ -963,15 +963,15 @@ namespace Pk2Extractor.Api
                 .Query("DROP TABLE IF EXISTS mastery")
                 .ExecuteUpdate();
 
-            string sql = "CREATE TABLE mastery ("
-                         + "id INTEGER,"
-                         + "group_index INTEGER,"
-                         + "name VARCHAR(64),"
-                         + "description VARCHAR(256),"
-                         + "type VARCHAR(64),"
-                         + "weapons VARCHAR(12),"
-                         + "icon VARCHAR(64)"
-                         + ");";
+            var sql = "CREATE TABLE mastery ("
+                      + "id INTEGER,"
+                      + "group_index INTEGER,"
+                      + "name VARCHAR(64),"
+                      + "description VARCHAR(256),"
+                      + "type VARCHAR(64),"
+                      + "weapons VARCHAR(12),"
+                      + "icon VARCHAR(64)"
+                      + ");";
 
             new QueryBuilder(_dbPath)
                 .Query(sql)
@@ -981,7 +981,7 @@ namespace Pk2Extractor.Api
 
             string name, desc, type;
 
-            using (StreamReader reader =
+            using (var reader =
                 new StreamReader(_pk2Reader.GetFileStream("server_dep/silkroad/textdata/skillmasterydata.txt")))
             {
                 string line;
@@ -1361,9 +1361,445 @@ namespace Pk2Extractor.Api
 
         #endregion
 
+        // npc id, tab, slot, item id
         public void StoreShops()
         {
-            
+            var shops = new List<Shop>();
+
+            string line;
+
+            using (var reader =
+                new StreamReader(_pk2Reader.GetFileStream("server_dep/silkroad/textdata/refshopgroup.txt")))
+            {
+                while (!reader.EndOfStream)
+                {
+                    if ((line = reader.ReadLine()) == null)
+                    {
+                        continue;
+                    }
+
+                    if (!line.StartsWith(EnabledLine))
+                    {
+                        continue;
+                    }
+
+                    var data = line.Split(DataSeparator, StringSplitOptions.None);
+
+                    var shop = new Shop
+                    {
+                        StoreGroupName = data[3].StartsWith("GROUP_MALL_") ? data[3].Substring(6) : data[3],
+                        NpcName = data[4]
+                    };
+
+                    if (shop.StoreGroupName.Equals("xxx") || shop.NpcName.Equals("xxx"))
+                    {
+                        continue;
+                    }
+
+                    shops.Add(shop);
+                }
+            }
+
+            using (var reader =
+                new StreamReader(_pk2Reader.GetFileStream("server_dep/silkroad/textdata/refmappingshopgroup.txt")))
+            {
+                while (!reader.EndOfStream)
+                {
+                    if ((line = reader.ReadLine()) == null)
+                    {
+                        continue;
+                    }
+
+                    if (!line.StartsWith(EnabledLine))
+                    {
+                        continue;
+                    }
+
+                    var data = line.Split(DataSeparator, StringSplitOptions.None);
+
+                    foreach (var shop in shops)
+                    {
+                        if (shop.StoreGroupName.StartsWith("MALL"))
+                        {
+                            if (shop.StoreGroupName != data[3])
+                            {
+                                continue;
+                            }
+
+                            shop.StoreName = data[3];
+                            shop.StoreGroupName = data[2];
+                        }
+                        else if (shop.StoreGroupName == data[2])
+                        {
+                            shop.StoreName = data[3];
+                        }
+                    }
+                }
+            }
+
+            using (var reader =
+                new StreamReader(_pk2Reader.GetFileStream("server_dep/silkroad/textdata/refmappingshopwithtab.txt")))
+            {
+                while (!reader.EndOfStream)
+                {
+                    if ((line = reader.ReadLine()) == null)
+                    {
+                        continue;
+                    }
+
+                    if (!line.StartsWith(EnabledLine))
+                    {
+                        continue;
+                    }
+
+                    var data = line.Split(DataSeparator, StringSplitOptions.None);
+
+                    foreach (var shop in shops)
+                    {
+                        if (shop.StoreName != data[2])
+                        {
+                            continue;
+                        }
+
+                        var group = new Shop.Group {Name = data[3]};
+                        shop.Groups.Add(group);
+                    }
+                }
+            }
+
+            var refShopTab = new List<string[]>();
+            using (var reader =
+                new StreamReader(_pk2Reader.GetFileStream("server_dep/silkroad/textdata/refshoptab.txt")))
+            {
+                while (!reader.EndOfStream)
+                {
+                    if ((line = reader.ReadLine()) == null)
+                    {
+                        continue;
+                    }
+
+                    if (!line.StartsWith(EnabledLine))
+                    {
+                        continue;
+                    }
+
+                    var data = line.Split(DataSeparator, StringSplitOptions.None);
+
+                    refShopTab.Add(new[] {data[3], data[4], data[5]});
+                }
+            }
+
+            foreach (var shop in shops)
+            {
+                foreach (var group in shop.Groups)
+                {
+                    foreach (var t in refShopTab)
+                    {
+                        if (group.Name != t[1])
+                        {
+                            continue;
+                        }
+
+                        var tab = new Shop.Group.Tab {Name = t[0], Title = GetTextReference(t[2])};
+                        group.Tabs.Add(tab);
+                    }
+                }
+            }
+
+            var refShopGoods = new List<string[]>();
+
+            foreach (var pk2File in _pk2Reader.GetFolder("server_dep/silkroad/textdata").Files.Where(file =>
+                file.Name.Contains("refshopgoods_")))
+            {
+                using var reader =
+                    new StreamReader(_pk2Reader.GetFileStream("server_dep/silkroad/textdata/" + pk2File.Name));
+                while (!reader.EndOfStream)
+                {
+                    if ((line = reader.ReadLine()) == null)
+                    {
+                        continue;
+                    }
+
+                    if (!line.StartsWith(EnabledLine))
+                    {
+                        continue;
+                    }
+
+                    var data = line.Split(DataSeparator, StringSplitOptions.None);
+                    refShopGoods.Add(new[] {data[2], data[3], data[4]});
+                }
+            }
+
+            var refScrapOfPackageItems = new Dictionary<string, string[]>();
+            foreach (var pk2File in _pk2Reader.GetFolder("server_dep/silkroad/textdata").Files.Where(file =>
+                file.Name.Contains("refscrapofpackageitem_")))
+            {
+                using var reader =
+                    new StreamReader(_pk2Reader.GetFileStream("server_dep/silkroad/textdata/" + pk2File.Name));
+                while (!reader.EndOfStream)
+                {
+                    if ((line = reader.ReadLine()) == null)
+                    {
+                        continue;
+                    }
+
+                    if (!line.StartsWith(EnabledLine))
+                    {
+                        continue;
+                    }
+
+                    var data = line.Split(DataSeparator, StringSplitOptions.None);
+                    var magicOptions = new string[byte.Parse(data[7])];
+                    for (byte j = 0; j < magicOptions.Length; j++)
+                    {
+                        magicOptions[j] = data[j + 8];
+                    }
+
+                    refScrapOfPackageItems[data[2]] = new[]
+                        {data[3], data[4], data[6], string.Join(",", magicOptions)};
+                }
+            }
+
+            var prices = new Dictionary<string, List<Shop.Group.Tab.Item.Price>>();
+            foreach (var pk2File in _pk2Reader.GetFolder("server_dep/silkroad/textdata").Files.Where(file =>
+                file.Name.Contains("refpricepolicyofitem_")))
+            {
+                using var reader =
+                    new StreamReader(
+                        _pk2Reader.GetFileStream("server_dep/silkroad/textdata/" + pk2File.Name));
+                while (!reader.EndOfStream)
+                {
+                    if ((line = reader.ReadLine()) == null)
+                    {
+                        continue;
+                    }
+
+                    if (!line.StartsWith(EnabledLine))
+                    {
+                        continue;
+                    }
+
+                    var data = line.Split(DataSeparator, StringSplitOptions.None);
+
+                    var packageName = data[2];
+                    var price = new Shop.Group.Tab.Item.Price
+                    {
+                        Currency = uint.Parse(data[3]), Value = ulong.Parse(data[5])
+                    };
+
+                    var value = prices.TryGetValue(packageName, out var itemPrices);
+                    if (!value)
+                    {
+                        prices[packageName] = new List<Shop.Group.Tab.Item.Price> {price};
+                    }
+                    else
+                    {
+                        itemPrices.Add(price);
+                    }
+                }
+            }
+
+            foreach (var shop in shops)
+            {
+                foreach (var group in shop.Groups)
+                {
+                    foreach (var tab in group.Tabs)
+                    {
+                        foreach (var goodsData in refShopGoods)
+                        {
+                            if (tab.Name != goodsData[0])
+                            {
+                                continue;
+                            }
+
+                            if (!refScrapOfPackageItems.TryGetValue(goodsData[1], out var scrapOfPackageItemData))
+                            {
+                                continue;
+                            }
+
+                            var item = new Shop.Group.Tab.Item
+                            {
+                                PackageName = goodsData[1],
+                                Name = scrapOfPackageItemData[0],
+                                Slot = goodsData[2],
+                                Plus = scrapOfPackageItemData[1],
+                                Durability = scrapOfPackageItemData[2],
+                                MagicParams = scrapOfPackageItemData[3]
+                            };
+
+                            var value = prices.TryGetValue(item.PackageName, out var itemPrices);
+                            if (!value)
+                            {
+                                continue;
+                            }
+
+                            item.Prices = itemPrices;
+                            tab.Items.Add(item);
+                        }
+                    }
+                }
+            }
+
+            new QueryBuilder(_dbPath)
+                .Query("DROP TABLE IF EXISTS npcgoods")
+                .ExecuteUpdate();
+
+            var sql = "CREATE TABLE npcgoods ("
+                      + "model INTEGER,"
+                      + "model_servername VARCHAR(64),"
+                      + "tab INTEGER,"
+                      + "slot INTEGER,"
+                      + "item INTEGER,"
+                      + "item_servername VARCHAR(64),"
+                      + "plus INTEGER,"
+                      + "durability INTEGER,"
+                      + "magic_params VARCHAR(256),"
+                      + "prices VARCHAR(1024),"
+                      + "PRIMARY KEY (model_servername,tab,slot)"
+                      + ");";
+
+            new QueryBuilder(_dbPath)
+                .Query(sql)
+                .ExecuteUpdate();
+
+            var query = new QueryBuilder(_dbPath, true);
+
+            Console.WriteLine("Storing shopdata (this will take a while)");
+            foreach (var shop in shops)
+            {
+                var tabCount = 0;
+                foreach (var t1 in shop.Groups)
+                {
+                    foreach (var t2 in t1.Tabs)
+                    {
+                        for (var i = 0; i < t2.Items.Count; i++)
+                        {
+                            var item = t2.Items[i];
+                            var itemIds = query
+                                .Query("SELECT * FROM items WHERE servername='" + item.Name + "'")
+                                .ExecuteSelect(false);
+                            if (itemIds.Count > 0)
+                            {
+                                item.Id = uint.Parse(itemIds[0]["id"]);
+                            }
+                            else
+                            {
+                                continue;
+                            }
+
+                            var npcIds = query
+                                .Query("SELECT * FROM models WHERE servername='" + shop.NpcName + "'")
+                                .ExecuteSelect(false);
+                            if (npcIds.Count > 0)
+                            {
+                                shop.Id = uint.Parse(npcIds[0]["id"]);
+                            }
+                            else
+                            {
+                                continue;
+                            }
+
+                            var results = query
+                                .Query("SELECT * FROM npcgoods WHERE model_servername='" + shop.NpcName +
+                                       "' AND tab=" + tabCount + " AND slot=" + i)
+                                .ExecuteSelect(false);
+                            if (results.Count == 0)
+                            {
+                                // New
+                                query.Query(
+                                        "INSERT INTO npcgoods (model,model_servername,tab,slot,item,item_servername,plus,durability,magic_params,prices) VALUES (?,?,?,?,?,?,?,?,?,?)")
+                                    .Bind("model", shop.Id)
+                                    .Bind("model_servername", shop.NpcName)
+                                    .Bind("tab", tabCount)
+                                    .Bind("slot", i);
+                            }
+                            else
+                            {
+                                // Override
+                                query.Query(
+                                    "UPDATE npcgoods SET item=?,item_servername=?,plus=?,durability=?,magic_params=?,prices=? WHERE model_servername='" +
+                                    shop.NpcName + "' AND tab=" + tabCount + " AND slot=" + i);
+                            }
+
+                            query
+                                .Bind("item", item.Id)
+                                .Bind("item_servername", item.Name)
+                                .Bind("plus", item.Plus)
+                                .Bind("durability", item.Durability)
+                                .Bind("magic_params", item.MagicParams)
+                                .Bind("prices", string.Join(",", item.Prices.Select(x => $"{x.Currency}={x.Value}")))
+                                .ExecuteUpdate(false);
+                        }
+
+                        tabCount++;
+                    }
+                }
+            }
+
+            query.Finish();
+        }
+
+        private class Shop
+        {
+            public uint Id { get; set; }
+            public string StoreGroupName { get; set; }
+            public string StoreName { get; set; }
+            public string NpcName { get; set; }
+            public List<Group> Groups { get; } = new();
+
+            public Group.Tab.Item GetItem(string packageName)
+            {
+                return (from grp in Groups from tab in grp.Tabs from item in tab.Items select item).FirstOrDefault(
+                    item =>
+                        string.Equals(item.PackageName, packageName, StringComparison.Ordinal));
+            }
+
+            internal class Group
+            {
+                public string Name { get; set; }
+                public List<Tab> Tabs { get; }
+
+                public Group()
+                {
+                    Tabs = new List<Tab>();
+                }
+
+                internal class Tab
+                {
+                    public string Name { get; set; }
+                    public string Title { get; set; }
+                    public List<Item> Items { get; }
+
+                    public Tab()
+                    {
+                        Items = new List<Item>();
+                    }
+
+                    internal class Item
+                    {
+                        public uint Id { get; set; }
+                        public string PackageName { get; set; }
+                        public string Name { get; set; }
+                        public string Slot { get; set; }
+                        public string Plus { get; set; }
+                        public string RentType { get; set; }
+                        public string Durability { get; set; }
+                        public string MagicParams { get; set; }
+                        public List<Price> Prices { get; set; }
+
+                        internal class Price
+                        {
+                            public uint Currency { get; set; }
+                            public ulong Value { get; set; }
+
+                            public override string ToString()
+                            {
+                                return $"{Currency}={Value}";
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private string GetNameReference(string serverName)

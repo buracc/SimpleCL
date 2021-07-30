@@ -8,11 +8,11 @@ namespace SimpleCL.Client
 {
     public class SilkroadClient
     {
-        private readonly Process _clientProcess;
+        public readonly Process ClientProcess;
 
         public SilkroadClient(string path, Locale srLocale)
         {
-            _clientProcess = new Process
+            ClientProcess = new Process
             {
                 StartInfo =
                 {
@@ -25,29 +25,29 @@ namespace SimpleCL.Client
 
         public Process Launch()
         {
-            if (!File.Exists(_clientProcess.StartInfo.FileName))
+            if (!File.Exists(ClientProcess.StartInfo.FileName))
             {
                 throw new SroClientNotFoundException("SRO_Client.exe file not found");
             }
 
-            if (!_clientProcess.Start())
+            if (!ClientProcess.Start())
             {
                 throw new SroClientLaunchException("Failed to launch Silkroad client");
             }
 
-            return _clientProcess;
+            return ClientProcess;
         }
 
         public bool Kill()
         {
-            if (_clientProcess == null || _clientProcess.HasExited)
+            if (ClientProcess == null || ClientProcess.HasExited)
             {
                 return true;
             }
 
             try
             {
-                _clientProcess.Kill();
+                ClientProcess.Kill();
                 return true;
             }
             catch

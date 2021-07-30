@@ -24,23 +24,24 @@ namespace Pk2Extractor
             
             var pk2Extractor = new Api.Pk2Extractor(pk2Path, dbPath, true);
             pk2Extractor.StoreLevelData();
-            // pk2Extractor.StoreTextReferences();
-            // pk2Extractor.StoreModels();
-            // pk2Extractor.StoreTeleportBuildings();
-            // pk2Extractor.StoreTeleportLinks();
-            // pk2Extractor.StoreItems();
-            // pk2Extractor.StoreMasteries();
-            // pk2Extractor.StoreSkills();
-            //
-            // pk2Extractor.ExtractItemIcons();
-            // pk2Extractor.ExtractSkillIcons();
-            //
-            // pk2Extractor.AddMinimap();
+            pk2Extractor.StoreTextReferences();
+            pk2Extractor.StoreModels();
+            pk2Extractor.StoreTeleportBuildings();
+            pk2Extractor.StoreTeleportLinks();
+            pk2Extractor.StoreItems();
+            pk2Extractor.StoreMasteries();
+            pk2Extractor.StoreSkills();
+            pk2Extractor.StoreShops();
+            
+            pk2Extractor.ExtractItemIcons();
+            pk2Extractor.ExtractSkillIcons();
+            
+            pk2Extractor.AddMinimap();
 
-            // FindUnparsedParams(dbPath);
+            // FindUnparsedSkillParams(dbPath);
         }
 
-        public static void FindUnparsedParams(string dbPath)
+        public static void FindUnparsedSkillParams(string dbPath)
         {
             var attrs = new Dictionary<string, NameValueCollection>();
 

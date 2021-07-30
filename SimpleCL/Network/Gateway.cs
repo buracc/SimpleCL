@@ -43,7 +43,7 @@ namespace SimpleCL.Network
             Proxy = new Proxy(this, "127.0.0.1", 60069);
             Proxy.Start();
             
-            SilkroadClient = new SilkroadClient(@"C:\Program Files (x86)\SilkroadTR", locale);
+            SilkroadClient = new SilkroadClient("C:/Program Files (x86)/SilkroadTR", locale);
             new Injector(SilkroadClient.Launch(), "simplecl.dll").Inject();
         }
     }

@@ -59,8 +59,7 @@ namespace SimpleCL.Enums.Commons {
     {
         public static bool IsInternational(this Locale locale)
         {
-            return locale == Locale.SRO_TR_Official_GameGami
-                   || locale == Locale.SRO_Global_TestBed;
+            return locale is Locale.SRO_TR_Official_GameGami or Locale.SRO_Global_TestBed;
         }
     }
 }

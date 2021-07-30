@@ -60,9 +60,7 @@ namespace SimpleCL.Database
                 throw new SystemException("Current server wasn't set");
             }
 
-            var dbFile = DirectoryUtils.GetDbFile(SelectedServer.Name + dbNameExtra);
-
-            Console.WriteLine(dbFile);
+            var dbFile = SelectedServer.Name + dbNameExtra + ".db3";
 
             if (dbFile == "")
             {

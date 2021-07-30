@@ -51,7 +51,7 @@ namespace SimpleCL.Services.Game
                 stallItem.Slot = slot;
                 var inventorySlot = packet.ReadByte();
                 stallItem.Quantity = packet.ReadUShort();
-                stallItem.Price = packet.ReadULong();
+                stallItem.GoldValue = packet.ReadULong();
                 player.Stall.Items.Add(stallItem);
             }
 

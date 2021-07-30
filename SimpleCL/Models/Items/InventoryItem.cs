@@ -20,14 +20,13 @@ namespace SimpleCL.Models.Items
     public class InventoryItem : IComparable<InventoryItem>, IDisposable
     {
         private uint _rentTypeId;
-        [Browsable(false)]
-        public uint Uid { get; set; }
+        [Browsable(false)] public uint Uid { get; set; }
         public Image Icon { get; set; }
         public byte Slot { get; set; }
         [Browsable(false)] public uint Id { get; }
         [Browsable(false)] public string ServerName { get; }
         public string Name { get; }
-        public ulong Price { get; set; }
+        [Browsable(false)] public ulong GoldValue { get; set; }
 
         private ushort _quantity;
 
@@ -37,7 +36,7 @@ namespace SimpleCL.Models.Items
         public readonly byte TypeId4;
         public readonly bool CashItem;
         public readonly ushort Stack;
-        
+
 
         public ushort Quantity
         {
@@ -73,7 +72,7 @@ namespace SimpleCL.Models.Items
             Stack = ushort.Parse(data[Constants.Strings.Stack]);
             Icon = Image.FromFile(Directory.GetCurrentDirectory() + Constants.Paths.Icons +
                                   data[Constants.Strings.Icon].Replace(Constants.Strings.Ddj, Constants.Strings.Png));
-            Price = ulong.Parse(data["price"]);
+            GoldValue = ulong.Parse(data["price"]);
         }
 
         public static InventoryItem FromId(uint id, uint rentTypeId = 0)
@@ -127,7 +126,7 @@ namespace SimpleCL.Models.Items
                 ItemCategory.Summon => 0x08,
                 _ => 0xFF
             };
-            
+
             if (usageType2 == 0xFF)
             {
                 return;
