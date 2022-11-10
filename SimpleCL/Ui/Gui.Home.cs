@@ -12,11 +12,6 @@ namespace SimpleCL.Ui
     {
         private void InitHome()
         {
-            proxyIpTextBox.Text = Credentials.ProxyIp;
-            proxyPortTextBox.Text = Credentials.ProxyPort.ToString();
-            proxyUsernameBox.Text = Credentials.ProxyUsername;
-            proxyPasswordBox.Text = Credentials.ProxyPassword;
-            
             InitBuffsGrid();
         }
         

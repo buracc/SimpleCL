@@ -38,7 +38,6 @@ namespace SimpleCL.Services.Game
             _gateway?.Dispose();
             Program.Gui.ClearMarkers();
             Program.Gui.ClearTiles();
-
             var serverTime = packet.ReadUInt();
             var refObjId = packet.ReadUInt();
             var scale = packet.ReadByte();
@@ -64,7 +63,7 @@ namespace SimpleCL.Services.Game
 
             if (_silkroadServer.Locale.IsInternational())
             {
-                byte unknownBytes = 25;
+                byte unknownBytes = 13;
                 unknownBytes.Repeat(i => { packet.ReadByte(); });
             }
 
@@ -122,7 +121,7 @@ namespace SimpleCL.Services.Game
             var nextMastery = packet.ReadByte() == 1;
             while (nextMastery)
             {
-                var mastery = new Mastery(packet.ReadUInt()) {Level = packet.ReadByte()};
+                var mastery = new Mastery(packet.ReadUInt()) { Level = packet.ReadByte() };
                 _localPlayer.Masteries.Add(mastery);
                 nextMastery = packet.ReadByte() == 1;
             }
@@ -133,7 +132,7 @@ namespace SimpleCL.Services.Game
 
             while (nextSkill)
             {
-                var skill = new CharacterSkill(packet.ReadUInt()) {Enabled = packet.ReadByte() == 1};
+                var skill = new CharacterSkill(packet.ReadUInt()) { Enabled = packet.ReadByte() == 1 };
                 _localPlayer.Skills.Add(skill);
                 nextSkill = packet.ReadByte() == 1;
             }
@@ -152,7 +151,7 @@ namespace SimpleCL.Services.Game
                 var autoShareRequired = packet.ReadByte();
                 var unk01 = packet.ReadByte();
                 var unk02 = packet.ReadByte();
-                var questType = (QuestType) packet.ReadByte();
+                var questType = (QuestType)packet.ReadByte();
 
                 if (questType == QuestType.TimeLimited)
                 {
@@ -209,7 +208,7 @@ namespace SimpleCL.Services.Game
             _localPlayer.Angle = packet.ReadUShort();
 
             var destinationSet = packet.ReadByte() == 1;
-            _localPlayer.WalkMode = (Actor.Movement.Mode) packet.ReadByte();
+            _localPlayer.WalkMode = (Actor.Movement.Mode)packet.ReadByte();
 
             if (destinationSet)
             {
@@ -236,7 +235,7 @@ namespace SimpleCL.Services.Game
 
             var lifeState = packet.ReadByte();
             packet.ReadByte();
-            _localPlayer.Motion = (Actor.Movement.Motion) packet.ReadByte();
+            _localPlayer.Motion = (Actor.Movement.Motion)packet.ReadByte();
             var status = packet.ReadByte();
 
             packet.ReadByte(); // idk what position, but there is an unknown byte before walkspeed
@@ -248,7 +247,7 @@ namespace SimpleCL.Services.Game
             buffCount.Repeat(i =>
             {
                 var refSkillId = packet.ReadUInt();
-                var buff = new Buff(refSkillId) {RemainingDuration = packet.ReadUInt()};
+                var buff = new Buff(refSkillId) { RemainingDuration = packet.ReadUInt() };
 
                 if (buff.IsRecoveryDivision())
                 {
@@ -314,7 +313,7 @@ namespace SimpleCL.Services.Game
             {
                 return;
             }
-            
+
             server.Inject(new Packet(Opcode.Agent.Request.GAME_READY));
         }
 
